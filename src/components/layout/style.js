@@ -4,11 +4,10 @@ import { NavLink, Link } from "react-router-dom";
 
 /* =====================================================
    HEADER
-
-   É ele que cria o espaço entre o perfil e a navbar.
 ===================================================== */
 
 export const Header = styled.header`
+
   width: 100%;
 
   display: flex;
@@ -31,9 +30,11 @@ export const Header = styled.header`
   ================================================= */
 
   @media (max-width: 1200px) {
+
     gap: 25px;
 
     padding: 0 6%;
+
   }
 
 
@@ -42,9 +43,11 @@ export const Header = styled.header`
   ================================================= */
 
   @media (max-width: 900px) {
+
     gap: 20px;
 
     padding: 0 7%;
+
   }
 
 
@@ -53,20 +56,38 @@ export const Header = styled.header`
   ================================================= */
 
   @media (max-width: 600px) {
-    gap: 15px;
 
-    padding: 0 4%;
+    /*
+      No celular:
+      perfil fica na esquerda
+      menu fica na direita.
+    */
+
+    width: 100%;
+
+    padding: 0 5%;
+
+    margin-top: 15px;
+
+    display: flex;
 
     align-items: center;
+
+    justify-content: space-between;
+
+    gap: 0;
+
   }
+
 `;
 
 
 /* =====================================================
-   NAVBAR AMARELA
+   NAVBAR
 ===================================================== */
 
 export const Navbar = styled.nav`
+
   width: 70%;
 
   height: 50px;
@@ -87,7 +108,12 @@ export const Navbar = styled.nav`
 
   box-shadow:
     0 4px 10px
-    rgba(0, 0, 0, 0.1);
+    rgba(
+      0,
+      0,
+      0,
+      0.1
+    );
 
   flex-shrink: 1;
 
@@ -97,7 +123,9 @@ export const Navbar = styled.nav`
   ================================================= */
 
   @media (max-width: 1200px) {
+
     width: 75%;
+
   }
 
 
@@ -106,9 +134,11 @@ export const Navbar = styled.nav`
   ================================================= */
 
   @media (max-width: 900px) {
+
     width: 80%;
 
     height: 52px;
+
   }
 
 
@@ -117,24 +147,71 @@ export const Navbar = styled.nav`
   ================================================= */
 
   @media (max-width: 600px) {
-    width: 100%;
 
-    height: 55px;
+    /*
+      A navbar deixa de ser uma barra.
+      Ela vira apenas o botão amarelo.
+    */
 
-    border-radius: 30px;
+    width: 45px;
 
-    justify-content: flex-end;
+    height: 45px;
 
-    padding: 0 5%;
+    min-width: 45px;
+
+    min-height: 45px;
+
+    padding: 0;
+
+    margin: 0;
+
+    border-radius: 8px;
+
+    background: #f9be06;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    box-shadow:
+      0 5px 12px
+      rgba(
+        0,
+        0,
+        0,
+        0.15
+      );
+
   }
+
+
+  /* =================================================
+     CELULAR PEQUENO
+  ================================================= */
+
+  @media (max-width: 400px) {
+
+    width: 42px;
+
+    height: 42px;
+
+    min-width: 42px;
+
+    min-height: 42px;
+
+  }
+
 `;
 
 
 /* =====================================================
-   MENU
+   MENU / LINKS
 ===================================================== */
 
 export const NavCenter = styled.div`
+
   width: 100%;
 
   display: flex;
@@ -146,17 +223,25 @@ export const NavCenter = styled.div`
   gap: 25px;
 
 
-  /* NOTEBOOK */
+  /* =================================================
+     NOTEBOOK
+  ================================================= */
 
   @media (max-width: 1200px) {
+
     gap: 18px;
+
   }
 
 
-  /* TABLET */
+  /* =================================================
+     TABLET
+  ================================================= */
 
   @media (max-width: 900px) {
+
     gap: 12px;
+
   }
 
 
@@ -165,21 +250,26 @@ export const NavCenter = styled.div`
   ================================================= */
 
   @media (max-width: 600px) {
+
     position: absolute;
 
     top: calc(100% + 10px);
 
     right: 0;
 
-    width: 100%;
+    width: 180px;
 
     padding: 20px;
 
     background: #f9be06;
 
-    border-radius: 20px;
+    border-radius: 15px;
 
     flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
 
     gap: 20px;
 
@@ -187,33 +277,51 @@ export const NavCenter = styled.div`
 
     box-shadow:
       0 8px 20px
-      rgba(0, 0, 0, 0.15);
+      rgba(
+        0,
+        0,
+        0,
+        0.15
+      );
 
     z-index: 100;
 
-    opacity: ${({ $open }) =>
-      $open ? 1 : 0};
 
-    visibility: ${({ $open }) =>
-      $open
-        ? "visible"
-        : "hidden"};
+    opacity:
+      ${({ $open }) =>
+        $open
+          ? 1
+          : 0};
 
-    transform: ${({ $open }) =>
-      $open
-        ? "translateY(0)"
-        : "translateY(-10px)"};
 
-    pointer-events: ${({ $open }) =>
-      $open
-        ? "auto"
-        : "none"};
+    visibility:
+      ${({ $open }) =>
+        $open
+          ? "visible"
+          : "hidden"};
+
+
+    transform:
+      ${({ $open }) =>
+        $open
+          ? "translateY(0)"
+          : "translateY(-10px)"};
+
+
+    pointer-events:
+      ${({ $open }) =>
+        $open
+          ? "auto"
+          : "none"};
+
 
     transition:
       opacity 0.2s ease,
       transform 0.2s ease,
       visibility 0.2s ease;
+
   }
+
 `;
 
 
@@ -222,6 +330,7 @@ export const NavCenter = styled.div`
 ===================================================== */
 
 export const NavItem = styled(NavLink)`
+
   color: #000;
 
   text-decoration: none;
@@ -240,11 +349,14 @@ export const NavItem = styled(NavLink)`
 
 
   &:hover {
+
     color: white;
+
   }
 
 
   &.active::after {
+
     content: "";
 
     position: absolute;
@@ -263,43 +375,53 @@ export const NavItem = styled(NavLink)`
     background: #000;
 
     border-radius: 10px;
+
   }
 
 
-  /* TABLET */
+  /* =================================================
+     TABLET
+  ================================================= */
 
   @media (max-width: 900px) {
+
     font-size: 14px;
+
   }
 
 
-  /* CELULAR */
+  /* =================================================
+     CELULAR
+  ================================================= */
 
   @media (max-width: 600px) {
+
     font-size: 16px;
 
     padding: 5px 10px;
 
+
     &.active::after {
+
       width: 50%;
 
       height: 2px;
 
       bottom: -5px;
+
     }
+
   }
+
 `;
 
 
 /* =====================================================
    PERFIL
-
-   AGORA ELE NÃO ESTÁ DENTRO DA NAVBAR.
-
-   O GAP DO HEADER cria o espaço REAL.
 ===================================================== */
 
 export const ProfileIcon = styled(Link)`
+
   width: 60px;
 
   height: 60px;
@@ -320,29 +442,41 @@ export const ProfileIcon = styled(Link)`
 
   box-shadow:
     0 8px 20px
-    rgba(0, 0, 0, 0.18);
+    rgba(
+      0,
+      0,
+      0,
+      0.18
+    );
 
   transition: 0.2s;
 
 
   svg {
+
     color: #fff;
 
     font-size: 22px;
 
     transition: 0.2s;
+
   }
 
 
   &:hover {
+
     background: #f9be06;
 
-    transform: translateY(-2px);
+    transform:
+      translateY(-2px);
+
   }
 
 
   &:hover svg {
+
     color: #000;
+
   }
 
 
@@ -351,13 +485,18 @@ export const ProfileIcon = styled(Link)`
   ================================================= */
 
   @media (max-width: 1200px) {
+
     width: 56px;
 
     height: 56px;
 
+
     svg {
+
       font-size: 20px;
+
     }
+
   }
 
 
@@ -366,13 +505,18 @@ export const ProfileIcon = styled(Link)`
   ================================================= */
 
   @media (max-width: 900px) {
+
     width: 52px;
 
     height: 52px;
 
+
     svg {
+
       font-size: 19px;
+
     }
+
   }
 
 
@@ -381,13 +525,18 @@ export const ProfileIcon = styled(Link)`
   ================================================= */
 
   @media (max-width: 600px) {
+
     width: 44px;
 
     height: 44px;
 
+
     svg {
+
       font-size: 17px;
+
     }
+
   }
 
 
@@ -396,14 +545,20 @@ export const ProfileIcon = styled(Link)`
   ================================================= */
 
   @media (max-width: 400px) {
+
     width: 40px;
 
     height: 40px;
 
+
     svg {
+
       font-size: 15px;
+
     }
+
   }
+
 `;
 
 
@@ -412,13 +567,20 @@ export const ProfileIcon = styled(Link)`
 ===================================================== */
 
 export const MenuButton = styled.button`
+
   display: none;
+
+  width: 45px;
+
+  height: 45px;
 
   border: none;
 
   background: transparent;
 
-  padding: 5px;
+  padding: 0;
+
+  margin: 0;
 
   cursor: pointer;
 
@@ -430,9 +592,12 @@ export const MenuButton = styled.button`
 
   gap: 5px;
 
+  box-sizing: border-box;
+
 
   span {
-    width: 25px;
+
+    width: 24px;
 
     height: 3px;
 
@@ -441,11 +606,17 @@ export const MenuButton = styled.button`
     border-radius: 5px;
 
     display: block;
+
+    transition:
+      background 0.2s ease;
+
   }
 
 
   &:hover span {
+
     background: #fff;
+
   }
 
 
@@ -454,6 +625,31 @@ export const MenuButton = styled.button`
   ================================================= */
 
   @media (max-width: 600px) {
+
     display: flex;
+
   }
+
+
+  /* =================================================
+     CELULAR PEQUENO
+  ================================================= */
+
+  @media (max-width: 400px) {
+
+    width: 42px;
+
+    height: 42px;
+
+
+    span {
+
+      width: 22px;
+
+      height: 3px;
+
+    }
+
+  }
+
 `;

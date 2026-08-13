@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 
 export const Page = styled.div`
   min-height: 100vh;
+  width: 100%;
+  box-sizing: border-box;
+
   font-family: "Poppins", sans-serif;
 
   background: linear-gradient(
@@ -13,7 +16,18 @@ export const Page = styled.div`
     #f8f8f8 100%
   );
 
-  padding: 30px;
+  padding: 30px 20px;
+
+  @media (max-width: 600px) {
+    padding: 20px 12px;
+    background: linear-gradient(
+      to bottom,
+      #f9be06 0%,
+      #f9be06 25%,
+      #f8f8f8 25%,
+      #f8f8f8 100%
+    );
+  }
 `;
 
 export const BackButton = styled(Link)`
@@ -48,11 +62,24 @@ export const BackButton = styled(Link)`
     color: #fff;
     transform: translateY(-2px);
   }
+
+  @media (max-width: 600px) {
+    top: 15px;
+    left: 15px;
+
+    width: 45px;
+    height: 45px;
+
+    font-size: 20px;
+  }
 `;
 
 export const Container = styled.div`
-  width: 460px;
-  margin: 70px auto;
+  width: 100%;
+  max-width: 460px;
+  box-sizing: border-box;
+
+  margin: 70px auto 30px;
 
   background: white;
 
@@ -65,20 +92,44 @@ export const Container = styled.div`
   gap: 22px;
 
   box-shadow: 0 18px 45px rgba(0, 0, 0, 0.12);
+
+  @media (max-width: 600px) {
+    width: 100%;
+    max-width: 100%;
+
+    margin: 60px auto 20px;
+
+    padding: 28px 20px;
+
+    border-radius: 22px;
+
+    gap: 18px;
+  }
 `;
 
 export const ProfileBox = styled.div`
   display: flex;
   justify-content: center;
+  width: 100%;
 `;
 
 export const AvatarWrapper = styled.div`
   position: relative;
+
+  width: 170px;
+  height: 170px;
+
+  @media (max-width: 600px) {
+    width: 130px;
+    height: 130px;
+  }
 `;
 
 export const Avatar = styled.img`
   width: 170px;
   height: 170px;
+
+  display: block;
 
   border-radius: 50%;
   object-fit: cover;
@@ -86,6 +137,13 @@ export const Avatar = styled.img`
   border: 6px solid #f9be06;
 
   box-shadow: 0 12px 25px rgba(0, 0, 0, 0.18);
+
+  @media (max-width: 600px) {
+    width: 130px;
+    height: 130px;
+
+    border-width: 5px;
+  }
 `;
 
 export const EditButton = styled.label`
@@ -116,6 +174,15 @@ export const EditButton = styled.label`
   input {
     display: none;
   }
+
+  @media (max-width: 600px) {
+    bottom: 2px;
+    right: -8px;
+
+    padding: 7px 11px;
+
+    font-size: 11px;
+  }
 `;
 
 export const UserName = styled.h2`
@@ -128,6 +195,16 @@ export const UserName = styled.h2`
   font-weight: 700;
 
   color: #111;
+
+  word-break: break-word;
+
+  @media (max-width: 600px) {
+    margin-top: 0;
+    margin-bottom: -10px;
+
+    font-size: 22px;
+    line-height: 1.3;
+  }
 `;
 
 export const UserEmail = styled.p`
@@ -136,21 +213,35 @@ export const UserEmail = styled.p`
   color: #666;
 
   font-size: 15px;
+
+  word-break: break-word;
+
+  @media (max-width: 600px) {
+    font-size: 13px;
+  }
 `;
 
 export const Field = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+
+  width: 100%;
 `;
 
 export const Label = styled.label`
   font-size: 14px;
   font-weight: 600;
   color: #333;
+
+  @media (max-width: 600px) {
+    font-size: 13px;
+  }
 `;
+
 export const Input = styled.input`
   width: 100%;
+  box-sizing: border-box;
 
   padding: 14px 16px;
 
@@ -178,10 +269,17 @@ export const Input = styled.input`
   &::placeholder {
     color: #888;
   }
+
+  @media (max-width: 600px) {
+    padding: 13px 14px;
+    font-size: 14px;
+  }
 `;
 
 export const PasswordBox = styled.div`
   position: relative;
+
+  width: 100%;
 
   span {
     position: absolute;
@@ -230,6 +328,7 @@ export const SaveButton = styled.button`
     transform: translateY(-2px);
   }
 `;
+
 export const LogoutLink = styled.span`
   margin-top: 10px;
 
@@ -247,7 +346,12 @@ export const LogoutLink = styled.span`
   &:hover {
     color: #000;
   }
+
+  @media (max-width: 600px) {
+    font-size: 14px;
+  }
 `;
+
 export const ModalOverlay = styled.div`
   position: fixed;
   inset: 0;
@@ -261,11 +365,14 @@ export const ModalOverlay = styled.div`
   z-index: 9999;
 
   backdrop-filter: blur(3px);
+
+  padding: 20px;
+  box-sizing: border-box;
 `;
 
 export const Modal = styled.div`
   width: 400px;
-  max-width: 90%;
+  max-width: 100%;
 
   background: #fff;
 
@@ -278,6 +385,8 @@ export const Modal = styled.div`
   box-shadow: 0 20px 45px rgba(0, 0, 0, 0.2);
 
   animation: modalAppear 0.25s ease;
+
+  box-sizing: border-box;
 
   h3 {
     margin: 0 0 12px;
@@ -303,12 +412,30 @@ export const Modal = styled.div`
       transform: translateY(0) scale(1);
     }
   }
+
+  @media (max-width: 600px) {
+    padding: 24px 18px;
+
+    h3 {
+      font-size: 20px;
+    }
+
+    p {
+      font-size: 14px;
+      margin-bottom: 22px;
+    }
+  }
 `;
 
 export const ModalButtons = styled.div`
   display: flex;
   justify-content: center;
   gap: 15px;
+
+  @media (max-width: 400px) {
+    flex-direction: column;
+    gap: 10px;
+  }
 `;
 
 export const CancelButton = styled.button`
@@ -331,6 +458,7 @@ export const CancelButton = styled.button`
     background: #d9d9d9;
   }
 `;
+
 export const ConfirmButton = styled.button`
   padding: 12px 22px;
 

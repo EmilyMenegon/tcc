@@ -1,6 +1,11 @@
-import { Link } from 'react-router-dom'
 import Layout from "../../../components/Layout";
-import { FaInstagram, FaEnvelope, FaYoutube } from 'react-icons/fa'
+
+import {
+  FaInstagram,
+  FaEnvelope,
+  FaYoutube
+} from "react-icons/fa";
+
 import {
   Page,
   TitleArea,
@@ -12,72 +17,159 @@ import {
   RightSide,
   Form,
   Input,
-   SocialContainer,
+  SocialContainer,
   Button
-} from './style'
+} from "./style";
+
+
 export default function Inscricao() {
+
   return (
+
     <Page>
 
-        <Layout />
-    
+      <Layout />
 
-      {/* TÍTULO */}
+
+      {/* =================================
+          TÍTULO
+      ================================= */}
+
       <TitleArea>
-        <Title>Faça sua inscrição</Title>
+
+        <Title>
+          Faça sua inscrição
+        </Title>
+
       </TitleArea>
 
-      {/* CONTAINER DIVIDIDO */}
+
+      {/* =================================
+          CONTAINER
+      ================================= */}
+
       <Container>
 
-        {/* LADO ESQUERDO */}
+
+        {/* =================================
+            LADO ESQUERDO
+        ================================= */}
+
         <LeftSide>
-          <SectionTitle>Contatos</SectionTitle>
 
-<SocialContainer>
-       <InfoText>
-  <FaInstagram size={40} />
+          <SectionTitle>
+            Contatos
+          </SectionTitle>
 
-  <div>
-    <strong>Instagram</strong>
-    <p>@seuinstagram</p>
-  </div>
-</InfoText>
 
-<InfoText>
-  <FaEnvelope size={40} />
+          <SocialContainer>
 
-  <div>
-    <strong>Email</strong>
-    <p>contato@email.com</p>
-  </div>
-</InfoText>
 
-<InfoText>
-  <FaYoutube size={40} />
+            {/* INSTAGRAM */}
 
-  <div>
-    <strong>YouTube</strong>
-    <p>Seu Canal</p>
-  </div>
-</InfoText>
-</SocialContainer>
+            <InfoText>
+
+              <FaInstagram />
+
+              <div>
+
+                <strong>
+                  Instagram
+                </strong>
+
+                <p>
+                  @seuinstagram
+                </p>
+
+              </div>
+
+            </InfoText>
+
+
+            {/* EMAIL */}
+
+            <InfoText>
+
+              <FaEnvelope />
+
+              <div>
+
+                <strong>
+                  Email
+                </strong>
+
+                <p>
+                  contato@email.com
+                </p>
+
+              </div>
+
+            </InfoText>
+
+
+            {/* YOUTUBE */}
+
+            <InfoText>
+
+              <FaYoutube />
+
+              <div>
+
+                <strong>
+                  YouTube
+                </strong>
+
+                <p>
+                  Seu Canal
+                </p>
+
+              </div>
+
+            </InfoText>
+
+
+          </SocialContainer>
+
         </LeftSide>
 
-        {/* LADO DIREITO */}
-        <RightSide>
-          <Form>
-            <Input placeholder="Nome completo" />
-            <Input placeholder="Data de nascimento" />
-            <Input placeholder="Curso" />
-            <Input placeholder="Turno" />
 
-            <Button>Enviar</Button>
+        {/* =================================
+            LADO DIREITO
+        ================================= */}
+
+        <RightSide>
+
+          <Form>
+
+            <Input
+              placeholder="Nome completo"
+            />
+
+            <Input
+              placeholder="Data de nascimento"
+            />
+
+            <Input
+              placeholder="Curso"
+            />
+
+            <Input
+              placeholder="Turno"
+            />
+
+            <Button>
+              Enviar
+            </Button>
+
           </Form>
+
         </RightSide>
+
 
       </Container>
 
     </Page>
-  )
+
+  );
+
 }

@@ -10,8 +10,8 @@ import Login from "./pages/login";
 
 import Home from "./pages/usuario/home";
 import Inscricao from "./pages/usuario/inscricao";
+import Mural from "./pages/usuario/mural";
 import Galeria from "./pages/usuario/galeria";
-import Cronograma from "./pages/usuario/cronograma";
 import Profile from "./pages/usuario/profile";
 
 
@@ -84,8 +84,8 @@ export default function App() {
       />
 
       <Route 
-        path="/usuario/cronograma" 
-        element={<Cronograma />} 
+        path="/usuario/mural" 
+        element={<Mural />} 
       />
 
 

@@ -139,10 +139,7 @@ export const Title = styled.h1`
 
 export const Subtitle = styled.p`
 
-  max-width: 600px;
-
-  margin:
-    10px 0 0;
+  margin: 10px 0 0;
 
   color: #777777;
 
@@ -155,10 +152,12 @@ export const Subtitle = styled.p`
 
   line-height: 1.5;
 
+  max-width: 600px;
+
 
   @media (max-width: 600px) {
 
-    width: 90%;
+    max-width: 90%;
 
     font-size: 14px;
 
@@ -168,10 +167,10 @@ export const Subtitle = styled.p`
 
 
 /* ==========================================
-   GALLERY
+   CARDS
 ========================================== */
 
-export const Gallery = styled.section`
+export const Cards = styled.section`
 
   width: 100%;
 
@@ -191,12 +190,15 @@ export const Gallery = styled.section`
   align-items: stretch;
 
 
-  @media (max-width: 1000px) {
+  @media (max-width: 900px) {
 
     grid-template-columns:
       repeat(
-        3,
-        1fr
+        auto-fill,
+        minmax(
+          250px,
+          1fr
+        )
       );
 
     gap: 24px;
@@ -204,20 +206,7 @@ export const Gallery = styled.section`
   }
 
 
-  @media (max-width: 750px) {
-
-    grid-template-columns:
-      repeat(
-        2,
-        1fr
-      );
-
-    gap: 20px;
-
-  }
-
-
-  @media (max-width: 500px) {
+  @media (max-width: 600px) {
 
     grid-template-columns: 1fr;
 
@@ -229,51 +218,85 @@ export const Gallery = styled.section`
 
 
 /* ==========================================
-   CARD
+   POST-IT
 ========================================== */
 
-export const Card = styled.article`
+export const PostIt = styled.article`
 
   position: relative;
 
-  width: 100%;
+  min-width: 0;
 
-  background: #ffffff;
+  min-height: 280px;
 
-  border-radius: 18px;
+  padding:
+    38px
+    25px
+    23px;
 
-  overflow: hidden;
+  box-sizing: border-box;
+
+  background:
+    ${({ $color }) =>
+      $color || "#f9be06"};
 
   cursor: pointer;
 
+  display: flex;
+
+  flex-direction: column;
+
   box-shadow:
-    0 7px 25px
+    0 5px 15px
       rgba(
         0,
         0,
         0,
-        .08
+        .10
       );
 
-  transition:
-    transform .3s ease,
-    box-shadow .3s ease;
+  transform:
+    rotate(
+      ${({ $index }) => {
 
-  aspect-ratio: 4 / 3;
+        if (
+          $index % 3 === 0
+        ) {
+
+          return "-1deg";
+
+        }
+
+        if (
+          $index % 3 === 1
+        ) {
+
+          return "1deg";
+
+        }
+
+        return "-.4deg";
+
+      }}
+    );
+
+  transition:
+    .3s;
 
 
   &:hover {
 
     transform:
-      translateY(-8px);
+      translateY(-8px)
+      rotate(0deg);
 
     box-shadow:
-      0 18px 40px
+      0 15px 35px
         rgba(
           0,
           0,
           0,
-          .15
+          .16
         );
 
   }
@@ -282,7 +305,7 @@ export const Card = styled.article`
   &:focus-visible {
 
     outline:
-      3px solid #f9be06;
+      3px solid #000000;
 
     outline-offset:
       4px;
@@ -290,151 +313,22 @@ export const Card = styled.article`
   }
 
 
-  &:active {
-
-    transform:
-      translateY(-3px);
-
-  }
-
-`;
-
-
-/* ==========================================
-   IMAGE BOX
-========================================== */
-
-export const ImageBox = styled.div`
-
-  width: 100%;
-
-  height: 100%;
-
-  position: relative;
-
-  overflow: hidden;
-
-  background: #eeeeee;
-
-
-  img {
-
-    width: 100%;
-
-    height: 100%;
-
-    display: block;
-
-    object-fit: cover;
-
-    transition:
-      transform .5s ease;
-
-  }
-
-
-  span {
-
-    position: absolute;
-
-    left: 50%;
-
-    bottom: 20px;
-
-    transform:
-      translate(
-        -50%,
-        15px
-      );
-
-    padding:
-      10px
-      18px;
-
-    border-radius: 8px;
-
-    background:
-      #f9be06;
-
-    color: #000000;
-
-    font-size: 13px;
-
-    font-weight: 700;
-
-    opacity: 0;
-
-    transition:
-      .3s;
-
-    white-space: nowrap;
-
-  }
-
-
-  &::after {
-
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    background:
-      linear-gradient(
-        to top,
-        rgba(
-          0,
-          0,
-          0,
-          .45
-        ),
-        transparent 50%
-      );
-
-    opacity: 0;
-
-    transition:
-      .3s;
-
-  }
-
-
-  &:hover img {
-
-    transform:
-      scale(1.07);
-
-  }
-
-
-  &:hover::after {
-
-    opacity: 1;
-
-  }
-
-
-  &:hover span {
-
-    opacity: 1;
-
-    transform:
-      translate(
-        -50%,
-        0
-      );
-
-    z-index: 2;
-
-  }
-
-
   @media (max-width: 600px) {
 
-    span {
+    min-height: 250px;
 
-      display: none;
+    padding:
+      36px
+      22px
+      22px;
+
+    transform: none;
+
+
+    &:hover {
+
+      transform:
+        translateY(-5px);
 
     }
 
@@ -444,7 +338,139 @@ export const ImageBox = styled.div`
 
 
 /* ==========================================
-   EMPTY STATE
+   PIN
+========================================== */
+
+export const PostItPin = styled.span`
+
+  position: absolute;
+
+  top: 13px;
+
+  left: 50%;
+
+  width: 15px;
+
+  height: 15px;
+
+  transform:
+    translateX(-50%);
+
+  border-radius: 50%;
+
+  background: #e44747;
+
+  box-shadow:
+
+    inset
+      2px
+      2px
+      3px
+      rgba(
+        255,
+        255,
+        255,
+        .45
+      ),
+
+    2px
+    3px
+    5px
+    rgba(
+      0,
+      0,
+      0,
+      .22
+    );
+
+`;
+
+
+/* ==========================================
+   POST-IT TITLE
+========================================== */
+
+export const PostItTitle = styled.h2`
+
+  margin: 0 0 15px;
+
+  color: #222222;
+
+  font-size: 22px;
+
+  font-weight: 700;
+
+  line-height: 1.25;
+
+  word-break: break-word;
+
+`;
+
+
+/* ==========================================
+   POST-IT MESSAGE
+========================================== */
+
+export const PostItMessage = styled.p`
+
+  margin: 0;
+
+  color: #333333;
+
+  font-size: 15px;
+
+  line-height: 1.65;
+
+  word-break: break-word;
+
+  display:
+    -webkit-box;
+
+  -webkit-line-clamp: 6;
+
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+
+`;
+
+
+/* ==========================================
+   POST-IT FOOTER
+========================================== */
+
+export const PostItFooter = styled.div`
+
+  margin-top: auto;
+
+  padding-top: 20px;
+
+`;
+
+
+/* ==========================================
+   READ MORE
+========================================== */
+
+export const ReadMore = styled.span`
+
+  color:
+    rgba(
+      0,
+      0,
+      0,
+      .55
+    );
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+`;
+
+
+/* ==========================================
+   ESTADO VAZIO
 ========================================== */
 
 export const EmptyState = styled.div`
@@ -454,8 +480,7 @@ export const EmptyState = styled.div`
 
   min-height: 320px;
 
-  padding:
-    50px 25px;
+  padding: 50px 25px;
 
   box-sizing: border-box;
 
@@ -520,8 +545,7 @@ export const EmptyIcon = styled.div`
 
 export const EmptyTitle = styled.h2`
 
-  margin:
-    0 0 8px;
+  margin: 0 0 8px;
 
   color: #333333;
 
@@ -555,7 +579,7 @@ export const EmptyText = styled.p`
    MODAL
 ========================================== */
 
-export const Modal = styled.div`
+export const ModalOverlay = styled.div`
 
   position: fixed;
 
@@ -578,11 +602,11 @@ export const Modal = styled.div`
       0,
       0,
       0,
-      .88
+      .72
     );
 
   backdrop-filter:
-    blur(5px);
+    blur(4px);
 
   animation:
     fadeIn .2s ease;
@@ -615,37 +639,65 @@ export const Modal = styled.div`
 
 
 /* ==========================================
-   MODAL CONTENT
+   FULL POST IT
 ========================================== */
 
-export const ModalContent = styled.div`
+export const FullPostIt = styled.div`
 
   position: relative;
 
-  max-width: 95vw;
+  width:
+    min(
+      1000px,
+      100%
+    );
 
-  max-height: 95vh;
+  height:
+    min(
+      750px,
+      calc(
+        100vh - 60px
+      )
+    );
 
-  display: flex;
+  padding:
+    85px
+    clamp(
+      30px,
+      8vw,
+      90px
+    )
+    50px;
 
-  flex-direction: column;
+  box-sizing: border-box;
 
-  align-items: center;
+  background:
+    ${({ $color }) =>
+      $color || "#f9be06"};
 
-  justify-content: center;
+  box-shadow:
+    0 25px 80px
+      rgba(
+        0,
+        0,
+        0,
+        .35
+      );
+
+  overflow-y: auto;
 
   animation:
-    zoomIn .25s ease;
+    postOpen .25s ease;
 
 
-  @keyframes zoomIn {
+  @keyframes postOpen {
 
     from {
 
       opacity: 0;
 
       transform:
-        scale(.9);
+        scale(.93);
 
     }
 
@@ -660,48 +712,71 @@ export const ModalContent = styled.div`
 
   }
 
+
+  @media (max-width: 600px) {
+
+    width: 100%;
+
+    height:
+      calc(
+        100vh - 24px
+      );
+
+    padding:
+      75px
+      25px
+      35px;
+
+  }
+
 `;
 
 
 /* ==========================================
-   MODAL IMAGE
+   FULL POST PIN
 ========================================== */
 
-export const ModalImage = styled.img`
+export const FullPostItPin = styled.span`
 
-  display: block;
+  position: absolute;
 
-  max-width: 90vw;
+  top: 22px;
 
-  max-height: 82vh;
+  left: 50%;
 
-  width: auto;
+  width: 18px;
 
-  height: auto;
+  height: 18px;
 
-  object-fit: contain;
+  transform:
+    translateX(-50%);
 
-  border-radius: 15px;
+  border-radius: 50%;
+
+  background: #e44747;
 
   box-shadow:
-    0 20px 60px
+
+    inset
+      2px
+      2px
+      4px
       rgba(
-        0,
-        0,
-        0,
+        255,
+        255,
+        255,
         .4
-      );
+      ),
 
-
-  @media (max-width: 600px) {
-
-    max-width: 94vw;
-
-    max-height: 80vh;
-
-    border-radius: 10px;
-
-  }
+    2px
+    3px
+    6px
+    rgba(
+      0,
+      0,
+      0,
+      .25
+    );
 
 `;
 
@@ -712,19 +787,29 @@ export const ModalImage = styled.img`
 
 export const CloseButton = styled.button`
 
-  position: fixed;
+  position: absolute;
 
-  top: 25px;
+  top: 18px;
 
-  right: 30px;
+  right: 20px;
 
-  width: 50px;
+  width: 42px;
 
-  height: 50px;
+  height: 42px;
 
   border: none;
 
   border-radius: 50%;
+
+  background:
+    rgba(
+      0,
+      0,
+      0,
+      .08
+    );
+
+  color: #222222;
 
   display: flex;
 
@@ -732,38 +817,26 @@ export const CloseButton = styled.button`
 
   justify-content: center;
 
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      .12
-    );
-
-  color: #ffffff;
-
   cursor: pointer;
 
   transition:
     .2s;
 
-  z-index: 10000;
+  z-index: 2;
 
 
   svg {
 
-    width: 28px;
-
-    height: 28px;
+    font-size: 21px;
 
   }
 
 
   &:hover {
 
-    background: #f9be06;
+    background: #000000;
 
-    color: #000000;
+    color: #f9be06;
 
     transform:
       rotate(90deg);
@@ -773,22 +846,13 @@ export const CloseButton = styled.button`
 
   @media (max-width: 600px) {
 
-    top: 15px;
+    top: 14px;
 
-    right: 15px;
+    right: 14px;
 
-    width: 42px;
+    width: 38px;
 
-    height: 42px;
-
-
-    svg {
-
-      width: 24px;
-
-      height: 24px;
-
-    }
+    height: 38px;
 
   }
 
@@ -796,46 +860,95 @@ export const CloseButton = styled.button`
 
 
 /* ==========================================
-   MODAL INFO
+   FULL POST CONTENT
 ========================================== */
 
-export const ModalInfo = styled.div`
+export const FullPostItContent = styled.div`
 
-  width: 100%;
+  width:
+    min(
+      850px,
+      100%
+    );
+
+  min-height: 100%;
+
+  margin: 0 auto;
 
   display: flex;
 
-  justify-content: center;
-
-  margin-top: 15px;
+  flex-direction: column;
 
 `;
 
 
 /* ==========================================
-   MODAL TITLE
+   FULL POST TITLE
 ========================================== */
 
-export const ModalTitle = styled.h2`
+export const FullPostItTitle = styled.h2`
+
+  margin: 0 0 35px;
+
+  color: #222222;
+
+  font-size:
+    clamp(
+      2rem,
+      6vw,
+      4rem
+    );
+
+  line-height: 1.05;
+
+  font-weight: 800;
+
+  letter-spacing: -1px;
+
+  word-break: break-word;
+
+
+  @media (max-width: 600px) {
+
+    margin-bottom: 25px;
+
+    font-size: 32px;
+
+  }
+
+`;
+
+
+/* ==========================================
+   FULL POST MESSAGE
+========================================== */
+
+export const FullPostItMessage = styled.p`
 
   margin: 0;
 
-  padding:
-    8px
-    18px;
+  color: #292929;
 
-  border-radius: 8px;
+  font-size:
+    clamp(
+      1.1rem,
+      3vw,
+      1.8rem
+    );
 
-  background: #f9be06;
+  line-height: 1.75;
 
-  color: #000000;
+  white-space: pre-wrap;
 
-  font-size: 15px;
+  word-break: break-word;
 
-  font-weight: 600;
 
-  text-align: center;
+  @media (max-width: 600px) {
 
-  max-width: 90%;
+    font-size: 18px;
+
+    line-height: 1.65;
+
+  }
 
 `;

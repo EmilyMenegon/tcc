@@ -8,18 +8,35 @@ import styled, { keyframes } from "styled-components";
 const floating = keyframes`
 
   0% {
+
     transform:
-      translate(0, 0);
+      translate(
+        0,
+        0
+      );
+
   }
+
 
   50% {
+
     transform:
-      translate(10%, -18%);
+      translate(
+        10%,
+        -18%
+      );
+
   }
 
+
   100% {
+
     transform:
-      translate(0, 0);
+      translate(
+        0,
+        0
+      );
+
   }
 
 `;
@@ -64,6 +81,7 @@ export const TitleArea = styled.div`
 
 `;
 
+
 export const Title = styled.h1`
 
   width: 90%;
@@ -74,11 +92,12 @@ export const Title = styled.h1`
 
   text-align: center;
 
-  font-size: clamp(
-    1.5rem,
-    3vw,
-    2.5rem
-  );
+  font-size:
+    clamp(
+      1.5rem,
+      3vw,
+      2.5rem
+    );
 
 
   @media (max-width: 600px) {
@@ -89,11 +108,12 @@ export const Title = styled.h1`
 
     margin-bottom: 4%;
 
-    font-size: clamp(
-      1.4rem,
-      7vw,
-      2rem
-    );
+    font-size:
+      clamp(
+        1.4rem,
+        7vw,
+        2rem
+      );
 
   }
 
@@ -180,9 +200,9 @@ export const RightSide = styled.div`
 
     flex-direction: column;
 
-    padding: 8% 5%;
+    padding: 10% 6%;
 
-    gap: 8%;
+    gap: 0;
 
   }
 
@@ -190,7 +210,7 @@ export const RightSide = styled.div`
 
 
 /* ==========================================
-   ÁREA DE TEXTO
+   ÁREA DO TEXTO
 ========================================== */
 
 export const RightContent = styled.div`
@@ -225,7 +245,7 @@ export const RightContent = styled.div`
 
 
 /* ==========================================
-   TÍTULO GRANDE
+   TEXTO GRANDE
 ========================================== */
 
 export const BigText = styled.h2`
@@ -238,11 +258,12 @@ export const BigText = styled.h2`
 
   color: #000000;
 
-  font-size: clamp(
-    1.8rem,
-    4vw,
-    3rem
-  );
+  font-size:
+    clamp(
+      1.8rem,
+      4vw,
+      3rem
+    );
 
   line-height: 1.15;
 
@@ -251,11 +272,12 @@ export const BigText = styled.h2`
 
     margin-bottom: 5%;
 
-    font-size: clamp(
-      1.6rem,
-      4.5vw,
-      2.4rem
-    );
+    font-size:
+      clamp(
+        1.6rem,
+        4.5vw,
+        2.4rem
+      );
 
   }
 
@@ -266,11 +288,12 @@ export const BigText = styled.h2`
 
     margin-bottom: 6%;
 
-    font-size: clamp(
-      1.6rem,
-      8vw,
-      2.3rem
-    );
+    font-size:
+      clamp(
+        1.6rem,
+        8vw,
+        2.3rem
+      );
 
     line-height: 1.2;
 
@@ -302,11 +325,12 @@ export const SmallText = styled.p`
 
   color: #000000;
 
-  font-size: clamp(
-    0.9rem,
-    1.5vw,
-    1.2rem
-  );
+  font-size:
+    clamp(
+      0.9rem,
+      1.5vw,
+      1.2rem
+    );
 
   line-height: 1.5;
 
@@ -337,11 +361,12 @@ export const SmallText = styled.p`
 
     margin-bottom: 5%;
 
-    font-size: clamp(
-      0.85rem,
-      1.8vw,
-      1rem
-    );
+    font-size:
+      clamp(
+        0.85rem,
+        1.8vw,
+        1rem
+      );
 
   }
 
@@ -352,11 +377,12 @@ export const SmallText = styled.p`
 
     margin-bottom: 6%;
 
-    font-size: clamp(
-      0.85rem,
-      4vw,
-      1rem
-    );
+    font-size:
+      clamp(
+        0.85rem,
+        4vw,
+        1rem
+      );
 
   }
 
@@ -387,6 +413,8 @@ export const BottomArea = styled.div`
 
     text-decoration: none;
 
+    display: inline-block;
+
   }
 
 
@@ -397,6 +425,8 @@ export const BottomArea = styled.div`
     display: flex;
 
     justify-content: center;
+
+    margin-top: 5%;
 
   }
 
@@ -415,9 +445,13 @@ export const ArrowButton = styled.button`
 
   justify-content: center;
 
-  gap: 12%;
+  gap: 18px;
 
-  padding: 3% 6%;
+  min-width: 220px;
+
+  min-height: 52px;
+
+  padding: 14px 22px;
 
   border: none;
 
@@ -427,11 +461,7 @@ export const ArrowButton = styled.button`
 
   color: #000000;
 
-  font-size: clamp(
-    0.75rem,
-    1.2vw,
-    1rem
-  );
+  font-size: 16px;
 
   font-weight: bold;
 
@@ -441,16 +471,14 @@ export const ArrowButton = styled.button`
 
   transition: 0.2s;
 
+  box-sizing: border-box;
 
-  /* ======================================
-     SETA
-  ====================================== */
 
   svg {
 
-    width: 1.5em;
+    width: 18px;
 
-    height: 1.5em;
+    height: 18px;
 
     flex-shrink: 0;
 
@@ -459,86 +487,68 @@ export const ArrowButton = styled.button`
   }
 
 
-  /* ======================================
-     HOVER
-  ====================================== */
-
   &:hover {
 
     background: #000000;
 
     color: #f9be06;
 
-    transform:
-      translateY(-2px);
+    transform: translateY(-2px);
 
   }
 
 
   &:hover svg {
 
-    transform:
-      translateX(30%);
+    transform: translateX(5px);
 
   }
 
-
-  /* ======================================
-     CLICK
-  ====================================== */
 
   &:active {
 
-    transform:
-      translateY(1px);
+    transform: translateY(1px);
 
   }
 
-
-  /* ======================================
-     CELULAR
-  ====================================== */
 
   @media (max-width: 600px) {
 
-    padding: 4% 7%;
+    width: 100%;
 
-    font-size: 0.85rem;
+    max-width: 280px;
 
-    gap: 10%;
+    min-width: 0;
+
+    min-height: 50px;
+
+    padding: 13px 18px;
+
+    font-size: 14px;
+
+    gap: 14px;
 
 
     svg {
 
-      width: 1.5em;
+      width: 17px;
 
-      height: 1.5em;
+      height: 17px;
 
     }
 
   }
 
 
-  /* ======================================
-     CELULAR PEQUENO
-  ====================================== */
-
   @media (max-width: 400px) {
 
-    padding: 4% 6%;
+    max-width: 250px;
 
-    font-size: 3.5vw;
+    padding: 12px 16px;
 
-    gap: 8%;
+    font-size: 13px;
 
-
-    svg {
-
-      width: 1.5em;
-
-      height: 1.5em;
-
-    }
+    gap: 12px;
 
   }
 
@@ -546,7 +556,7 @@ export const ArrowButton = styled.button`
 
 
 /* ==========================================
-   IMAGE BOX
+   IMAGEM
 ========================================== */
 
 export const ImageBox = styled.div`
@@ -573,16 +583,7 @@ export const ImageBox = styled.div`
 
   @media (max-width: 600px) {
 
-    width: 75%;
-
-    margin-top: 5%;
-
-  }
-
-
-  @media (max-width: 400px) {
-
-    width: 80%;
+    display: none;
 
   }
 
@@ -618,11 +619,16 @@ export const Circle = styled.span`
 
   position: absolute;
 
-  width: ${({ size }) =>
-    size || "5%"};
 
-  height: ${({ size }) =>
-    size || "5%"};
+  width:
+    ${({ $size }) =>
+      $size || "5%"};
+
+
+  height:
+    ${({ $size }) =>
+      $size || "5%"};
+
 
   aspect-ratio: 1 / 1;
 
@@ -631,30 +637,37 @@ export const Circle = styled.span`
   background: #f9be06;
 
 
-  top: ${({ top }) =>
-    top || "auto"};
+  top:
+    ${({ $top }) =>
+      $top || "auto"};
 
-  left: ${({ left }) =>
-    left || "auto"};
 
-  right: ${({ right }) =>
-    right || "auto"};
+  left:
+    ${({ $left }) =>
+      $left || "auto"};
 
-  bottom: ${({ bottom }) =>
-    bottom || "auto"};
+
+  right:
+    ${({ $right }) =>
+      $right || "auto"};
+
+
+  bottom:
+    ${({ $bottom }) =>
+      $bottom || "auto"};
 
 
   animation:
     ${floating}
-    ${({ duration }) =>
-      duration || "5s"}
+    ${({ $duration }) =>
+      $duration || "5s"}
     ease-in-out
     infinite;
 
 
   animation-delay:
-    ${({ delay }) =>
-      delay || "0s"};
+    ${({ $delay }) =>
+      $delay || "0s"};
 
 
   opacity: 0.9;
