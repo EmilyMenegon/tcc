@@ -1,23 +1,86 @@
-import { Navigate } from 'react-router-dom'
-import { Navbar, NavCenter, NavItem, ProfileIcon } from './style'
-import { FaUser } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
+import { useState } from "react";
+
+import {
+  Header,
+  Navbar,
+  NavCenter,
+  NavItem,
+  ProfileIcon,
+  MenuButton,
+} from "./style";
+
+import { FaUser } from "react-icons/fa";
 
 export default function Layout() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
-    <Navbar>
-<ProfileIcon to="/usuario/profile">
-  <FaUser />
-</ProfileIcon>
-     
+    <Header>
 
-      <NavCenter>
-        <NavItem to="/usuario/home">Início</NavItem>
-        <NavItem to="/usuario/inscricao">Inscrição</NavItem>
-        <NavItem to="/usuario/galeria">Galeria</NavItem>
-        <NavItem to="/usuario/cronograma">Cronograma</NavItem>
-      </NavCenter>
+      {/* PERFIL */}
 
-    </Navbar>
-  )
+      <ProfileIcon to="/usuario/profile">
+        <FaUser />
+      </ProfileIcon>
+
+
+      {/* NAVBAR */}
+
+      <Navbar>
+
+        {/* BOTÃO MOBILE */}
+
+        <MenuButton
+          type="button"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label={
+            menuOpen
+              ? "Fechar menu"
+              : "Abrir menu"
+          }
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </MenuButton>
+
+
+        {/* LINKS */}
+
+        <NavCenter $open={menuOpen}>
+
+          <NavItem
+            to="/usuario/home"
+            onClick={() => setMenuOpen(false)}
+          >
+            Início
+          </NavItem>
+
+          <NavItem
+            to="/usuario/inscricao"
+            onClick={() => setMenuOpen(false)}
+          >
+            Inscrição
+          </NavItem>
+
+          <NavItem
+            to="/usuario/galeria"
+            onClick={() => setMenuOpen(false)}
+          >
+            Galeria
+          </NavItem>
+
+          <NavItem
+            to="/usuario/cronograma"
+            onClick={() => setMenuOpen(false)}
+          >
+            Cronograma
+          </NavItem>
+
+        </NavCenter>
+
+      </Navbar>
+
+    </Header>
+  );
 }
