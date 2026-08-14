@@ -20,8 +20,6 @@ import {
   Modal,
   ModalContent,
   ModalImage,
-  ModalInfo,
-  ModalTitle,
   CloseButton,
 } from "./style";
 
@@ -155,9 +153,7 @@ export default function Galeria() {
 
     function handleKeyDown(event) {
 
-      if (
-        event.key === "Escape"
-      ) {
+      if (event.key === "Escape") {
 
         fecharImagem();
 
@@ -296,16 +292,9 @@ export default function Galeria() {
                   <img
                     src={foto.imagem}
                     alt={
-                      foto.nome ||
                       "Imagem da galeria"
                     }
                   />
-
-                  {/* OVERLAY */}
-
-                  <span>
-                    Visualizar
-                  </span>
 
                 </ImageBox>
 
@@ -321,7 +310,7 @@ export default function Galeria() {
 
 
       {/* =====================================
-          MODAL
+          MODAL DA IMAGEM
       ===================================== */}
 
       {imagemSelecionada && (
@@ -360,40 +349,18 @@ export default function Galeria() {
 
 
             {/* =================================
-                IMAGEM
+                IMAGEM AMPLIADA
             ================================= */}
 
             <ModalImage
               src={
                 imagemSelecionada.imagem
               }
-              alt={
-                imagemSelecionada.nome ||
-                "Imagem ampliada"
-              }
+              alt="Imagem ampliada"
               onClick={(event) =>
                 event.stopPropagation()
               }
             />
-
-
-            {/* =================================
-                INFORMAÇÃO
-            ================================= */}
-
-            {imagemSelecionada.nome && (
-
-              <ModalInfo>
-
-                <ModalTitle>
-
-                  {imagemSelecionada.nome}
-
-                </ModalTitle>
-
-              </ModalInfo>
-
-            )}
 
           </ModalContent>
 

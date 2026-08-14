@@ -339,8 +339,7 @@ export default function Muraladm() {
             </Title>
 
             <Subtitle>
-              Organize suas ideias,
-              lembretes e anotações.
+              Publique avisos e anotações.
             </Subtitle>
 
           </TitleArea>

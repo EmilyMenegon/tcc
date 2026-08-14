@@ -1,119 +1,385 @@
-import { useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Layoutadm from "../../../components/Layoutadm";
-import { FiPlus, FiX, FiTrash2 } from "react-icons/fi";
+
+import {
+  FiPlus,
+  FiX,
+  FiTrash2,
+  FiImage,
+} from "react-icons/fi";
 
 import {
   Page,
   Content,
   Header,
   Title,
+  Subtitle,
   Gallery,
   Card,
-  Image,
+  ImageBox,
+
+  EmptyState,
+  EmptyIcon,
+  EmptyTitle,
+  EmptyText,
+
   FloatingButton,
+
   Modal,
+  ModalContent,
   ModalImage,
   CloseButton,
+
   DeleteButton,
+
+  DeleteModalOverlay,
+  DeleteModal,
+  ModalButtons,
+  CancelButton,
+  ConfirmButton,
 } from "./style";
 
 
 export default function Galeriaadm() {
 
+  // ==========================================
+  // IMAGEM SELECIONADA
+  // ==========================================
 
-  const [imagemSelecionada, setImagemSelecionada] = useState(null);
+  const [imagemSelecionada, setImagemSelecionada] =
+    useState(null);
 
 
- const [fotos, setFotos] = useState([]);
+  // ==========================================
+  // IMAGEM QUE SERÁ EXCLUÍDA
+  // ==========================================
 
+  const [imagemParaExcluir, setImagemParaExcluir] =
+    useState(null);
+
+
+  // ==========================================
+  // FOTOS
+  // ==========================================
+
+  const [fotos, setFotos] = useState([]);
+
+
+  // ==========================================
+  // INPUT DE ARQUIVO
+  // ==========================================
 
   const fileInputRef = useRef(null);
 
 
+  // ==========================================
+  // CARREGAR GALERIA
+  // ==========================================
+
+  useEffect(() => {
+
+    function carregarFotos() {
+
+      const dados =
+        localStorage.getItem("galeria");
+
+
+      if (!dados) {
+
+        setFotos([]);
+
+        return;
+
+      }
+
+
+      try {
+
+        const fotosSalvas =
+          JSON.parse(dados);
+
+
+        if (Array.isArray(fotosSalvas)) {
+
+          setFotos(fotosSalvas);
+
+        } else {
+
+          setFotos([]);
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          "Erro ao carregar a galeria:",
+          error
+        );
+
+        setFotos([]);
+
+      }
+
+    }
+
+
+    carregarFotos();
+
+
+    // Atualiza caso o usuário ou outra aba
+    // altere a galeria.
+
+    function atualizarGaleria() {
+
+      carregarFotos();
+
+    }
+
+
+    window.addEventListener(
+      "storage",
+      atualizarGaleria
+    );
+
+
+    return () => {
+
+      window.removeEventListener(
+        "storage",
+        atualizarGaleria
+      );
+
+    };
+
+  }, []);
+
+
+  // ==========================================
+  // ABRIR SELETOR DE IMAGEM
+  // ==========================================
 
   const abrirGaleria = () => {
 
-    fileInputRef.current.click();
+    fileInputRef.current?.click();
 
   };
 
 
-
-
+  // ==========================================
+  // ADICIONAR IMAGENS
+  // ==========================================
 
   const adicionarImagem = (e) => {
 
-
-    const arquivos = Array.from(e.target.files);
-
-
-    if(!arquivos.length) return;
+    const arquivos =
+      Array.from(e.target.files);
 
 
-
-    const novasFotos = arquivos.map((arquivo,index)=>({
-
-      id:Date.now()+index,
-
-      nome:arquivo.name,
-
-      imagem:URL.createObjectURL(arquivo),
-
-    }));
+    if (!arquivos.length) return;
 
 
+    const novasFotos =
+      arquivos.map((arquivo, index) => ({
 
-    setFotos((prev)=>[
+        id:
+          Date.now() +
+          index,
 
-      ...prev,
+        nome:
+          arquivo.name,
 
-      ...novasFotos
+        imagem:
+          URL.createObjectURL(arquivo),
 
-    ]);
+      }));
 
 
+    setFotos((prev) => {
 
-    // permite selecionar a mesma imagem novamente
+      const atualizadas = [
+        ...prev,
+        ...novasFotos,
+      ];
+
+
+      // Salva no localStorage
+      localStorage.setItem(
+        "galeria",
+        JSON.stringify(atualizadas)
+      );
+
+
+      return atualizadas;
+
+    });
+
+
+    // Permite selecionar novamente
+    // a mesma imagem.
 
     e.target.value = "";
 
   };
 
 
+  // ==========================================
+  // ABRIR IMAGEM
+  // ==========================================
 
+  const abrirImagem = (foto) => {
 
-
-  const removerImagem = (id)=>{
-
-
-    setFotos((prev)=>
-
-      prev.filter((foto)=>
-
-        foto.id !== id
-
-      )
-
-    );
-
+    setImagemSelecionada(foto);
 
   };
 
 
+  // ==========================================
+  // FECHAR IMAGEM
+  // ==========================================
+
+  const fecharImagem = () => {
+
+    setImagemSelecionada(null);
+
+  };
 
 
+  // ==========================================
+  // PEDIR CONFIRMAÇÃO PARA EXCLUIR
+  // ==========================================
+
+  const pedirExclusao = (foto) => {
+
+    setImagemParaExcluir(foto);
+
+  };
+
+
+  // ==========================================
+  // CANCELAR EXCLUSÃO
+  // ==========================================
+
+  const cancelarExclusao = () => {
+
+    setImagemParaExcluir(null);
+
+  };
+
+
+  // ==========================================
+  // CONFIRMAR EXCLUSÃO
+  // ==========================================
+
+  const confirmarExclusao = () => {
+
+    if (!imagemParaExcluir) return;
+
+
+    const novasFotos =
+      fotos.filter(
+        (foto) =>
+          foto.id !== imagemParaExcluir.id
+      );
+
+
+    setFotos(novasFotos);
+
+
+    localStorage.setItem(
+      "galeria",
+      JSON.stringify(novasFotos)
+    );
+
+
+    setImagemParaExcluir(null);
+
+
+    // Caso a imagem excluída esteja aberta
+    // no modal, fecha também.
+
+    if (
+      imagemSelecionada?.id ===
+      imagemParaExcluir.id
+    ) {
+
+      setImagemSelecionada(null);
+
+    }
+
+  };
+
+
+  // ==========================================
+  // TECLA ESC
+  // ==========================================
+
+  useEffect(() => {
+
+    function handleKeyDown(event) {
+
+      if (event.key === "Escape") {
+
+        if (imagemParaExcluir) {
+
+          cancelarExclusao();
+
+        } else if (imagemSelecionada) {
+
+          fecharImagem();
+
+        }
+
+      }
+
+    }
+
+
+    window.addEventListener(
+      "keydown",
+      handleKeyDown
+    );
+
+
+    return () => {
+
+      window.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
+
+    };
+
+  }, [
+    imagemSelecionada,
+    imagemParaExcluir,
+  ]);
+
+
+  // ==========================================
+  // RENDER
+  // ==========================================
 
   return (
 
     <Page>
 
+      {/* =====================================
+          MENU ADM
+      ===================================== */}
 
       <Layoutadm />
 
 
+      {/* =====================================
+          CONTEÚDO
+      ===================================== */}
 
       <Content>
 
+
+        {/* ===================================
+            HEADER
+        =================================== */}
 
         <Header>
 
@@ -121,54 +387,107 @@ export default function Galeriaadm() {
             Galeria
           </Title>
 
+
+          <Subtitle>
+            Confira os melhores momentos
+            registrados durante o evento.
+          </Subtitle>
+
         </Header>
 
 
-
-
+        {/* ===================================
+            GALERIA
+        =================================== */}
 
         <Gallery>
 
 
-          {fotos.map((foto)=>(
+          {fotos.length === 0 ? (
+
+            <EmptyState>
+
+              <EmptyIcon>
+
+                <FiImage />
+
+              </EmptyIcon>
 
 
-            <Card key={foto.id}>
+              <EmptyTitle>
+
+                Nenhuma foto disponível
+
+              </EmptyTitle>
 
 
-              <Image
-                onClick={()=>
-                  setImagemSelecionada(foto.imagem)
+              <EmptyText>
+
+                No momento não existem
+                imagens publicadas na galeria.
+
+              </EmptyText>
+
+            </EmptyState>
+
+          ) : (
+
+            fotos.map((foto, index) => (
+
+              <Card
+                key={
+                  foto.id ||
+                  index
                 }
               >
 
-                <img
-                  src={foto.imagem}
-                  alt={foto.nome}
-                />
+                {/* =================================
+                    IMAGEM
+                ================================= */}
+
+                <ImageBox
+                  onClick={() =>
+                    abrirImagem(foto)
+                  }
+                >
+
+                  <img
+                    src={foto.imagem}
+                    alt={
+                      foto.nome ||
+                      "Imagem da galeria"
+                    }
+                  />
+
+                </ImageBox>
 
 
-              </Image>
+                {/* =================================
+                    BOTÃO EXCLUIR
+                ================================= */}
+
+                <DeleteButton
+                  type="button"
+                  onClick={(event) => {
+
+                    event.stopPropagation();
+
+                    pedirExclusao(foto);
+
+                  }}
+                  aria-label="Excluir imagem"
+                >
+
+                  <FiTrash2 />
+
+                </DeleteButton>
 
 
+              </Card>
 
-              <DeleteButton
-                onClick={()=>
-                  removerImagem(foto.id)
-                }
-              >
+            ))
 
-                <FiTrash2 />
-
-              </DeleteButton>
-
-
-
-            </Card>
-
-
-          ))}
-
+          )}
 
         </Gallery>
 
@@ -176,80 +495,156 @@ export default function Galeriaadm() {
       </Content>
 
 
-
-
+      {/* =====================================
+          BOTÃO +
+      ===================================== */}
 
       <FloatingButton
+        type="button"
         onClick={abrirGaleria}
+        aria-label="Adicionar imagens"
       >
 
-        <FiPlus size={30}/>
+        <FiPlus size={30} />
 
       </FloatingButton>
 
 
-
-
+      {/* =====================================
+          INPUT DE ARQUIVO
+      ===================================== */}
 
       <input
-
         type="file"
-
         accept="image/*"
-
         multiple
-
         ref={fileInputRef}
-
         hidden
-
         onChange={adicionarImagem}
-
       />
 
 
-
-
-
-
+      {/* =====================================
+          MODAL DA IMAGEM
+      ===================================== */}
 
       {imagemSelecionada && (
 
-
         <Modal
-          onClick={()=>
-            setImagemSelecionada(null)
-          }
-        >
+          onClick={(event) => {
 
+            if (
+              event.target ===
+              event.currentTarget
+            ) {
 
-          <CloseButton>
+              fecharImagem();
 
-            <FiX size={35}/>
-
-          </CloseButton>
-
-
-
-
-          <ModalImage
-
-            src={imagemSelecionada}
-
-            onClick={(e)=>
-              e.stopPropagation()
             }
 
-          />
+          }}
+        >
+
+          <ModalContent>
 
 
+            {/* BOTÃO FECHAR */}
+
+            <CloseButton
+              type="button"
+              onClick={fecharImagem}
+              aria-label="Fechar imagem"
+            >
+
+              <FiX />
+
+            </CloseButton>
+
+
+            {/* IMAGEM */}
+
+            <ModalImage
+              src={
+                imagemSelecionada.imagem
+              }
+              alt="Imagem ampliada"
+              onClick={(event) =>
+                event.stopPropagation()
+              }
+            />
+
+          </ModalContent>
 
         </Modal>
-
 
       )}
 
 
+      {/* =====================================
+          MODAL DE CONFIRMAÇÃO
+      ===================================== */}
+
+      {imagemParaExcluir && (
+
+        <DeleteModalOverlay
+          onClick={(event) => {
+
+            if (
+              event.target ===
+              event.currentTarget
+            ) {
+
+              cancelarExclusao();
+
+            }
+
+          }}
+        >
+
+          <DeleteModal>
+
+
+            <h3>
+              Excluir imagem
+            </h3>
+
+
+            <p>
+              Tem certeza que deseja excluir esta imagem?
+            </p>
+
+
+            <ModalButtons>
+
+
+              <CancelButton
+                type="button"
+                onClick={cancelarExclusao}
+              >
+
+                Cancelar
+
+              </CancelButton>
+
+
+              <ConfirmButton
+                type="button"
+                onClick={confirmarExclusao}
+              >
+
+                Sim, excluir
+
+              </ConfirmButton>
+
+
+            </ModalButtons>
+
+
+          </DeleteModal>
+
+        </DeleteModalOverlay>
+
+      )}
 
     </Page>
 

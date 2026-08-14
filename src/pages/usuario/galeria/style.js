@@ -333,110 +333,10 @@ export const ImageBox = styled.div`
   }
 
 
-  span {
-
-    position: absolute;
-
-    left: 50%;
-
-    bottom: 20px;
-
-    transform:
-      translate(
-        -50%,
-        15px
-      );
-
-    padding:
-      10px
-      18px;
-
-    border-radius: 8px;
-
-    background:
-      #f9be06;
-
-    color: #000000;
-
-    font-size: 13px;
-
-    font-weight: 700;
-
-    opacity: 0;
-
-    transition:
-      .3s;
-
-    white-space: nowrap;
-
-  }
-
-
-  &::after {
-
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    background:
-      linear-gradient(
-        to top,
-        rgba(
-          0,
-          0,
-          0,
-          .45
-        ),
-        transparent 50%
-      );
-
-    opacity: 0;
-
-    transition:
-      .3s;
-
-  }
-
-
   &:hover img {
 
     transform:
       scale(1.07);
-
-  }
-
-
-  &:hover::after {
-
-    opacity: 1;
-
-  }
-
-
-  &:hover span {
-
-    opacity: 1;
-
-    transform:
-      translate(
-        -50%,
-        0
-      );
-
-    z-index: 2;
-
-  }
-
-
-  @media (max-width: 600px) {
-
-    span {
-
-      display: none;
-
-    }
 
   }
 
@@ -628,8 +528,6 @@ export const ModalContent = styled.div`
 
   display: flex;
 
-  flex-direction: column;
-
   align-items: center;
 
   justify-content: center;
@@ -673,7 +571,7 @@ export const ModalImage = styled.img`
 
   max-width: 90vw;
 
-  max-height: 82vh;
+  max-height: 90vh;
 
   width: auto;
 
@@ -697,7 +595,7 @@ export const ModalImage = styled.img`
 
     max-width: 94vw;
 
-    max-height: 80vh;
+    max-height: 85vh;
 
     border-radius: 10px;
 
@@ -791,51 +689,5 @@ export const CloseButton = styled.button`
     }
 
   }
-
-`;
-
-
-/* ==========================================
-   MODAL INFO
-========================================== */
-
-export const ModalInfo = styled.div`
-
-  width: 100%;
-
-  display: flex;
-
-  justify-content: center;
-
-  margin-top: 15px;
-
-`;
-
-
-/* ==========================================
-   MODAL TITLE
-========================================== */
-
-export const ModalTitle = styled.h2`
-
-  margin: 0;
-
-  padding:
-    8px
-    18px;
-
-  border-radius: 8px;
-
-  background: #f9be06;
-
-  color: #000000;
-
-  font-size: 15px;
-
-  font-weight: 600;
-
-  text-align: center;
-
-  max-width: 90%;
 
 `;
