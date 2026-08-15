@@ -172,8 +172,9 @@ export const EventCard = styled.div`
 
   min-height: 450px;
 
-  background:
-    #f9be06;
+  background: #fff;
+
+  border-radius: 18px;
 
   cursor: pointer;
 
@@ -183,33 +184,25 @@ export const EventCard = styled.div`
 
   flex-direction: column;
 
+  border: 1px solid #eeeeee;
+
   box-shadow:
-    0 6px 18px
-    rgba(0,0,0,.12);
+    0 5px 18px
+    rgba(0, 0, 0, .09);
 
   transition:
-    .3s;
-
-  transform:
-    rotate(
-      ${({ $index }) =>
-        $index % 3 === 0
-          ? "-1deg"
-          : $index % 3 === 1
-          ? "1deg"
-          : "0deg"}
-    );
+    transform .25s ease,
+    box-shadow .25s ease;
 
 
   &:hover {
 
     transform:
-      translateY(-8px)
-      rotate(0deg);
+      translateY(-5px);
 
     box-shadow:
-      0 18px 35px
-      rgba(0,0,0,.18);
+      0 12px 28px
+      rgba(0, 0, 0, .13);
 
   }
 
@@ -218,54 +211,7 @@ export const EventCard = styled.div`
 
     min-height: 420px;
 
-    transform: none;
-
-
-    &:hover {
-
-      transform:
-        translateY(-5px);
-
-    }
-
   }
-
-`;
-
-
-/* =========================================
-   PIN
-========================================= */
-
-export const EventPin = styled.div`
-
-  position: absolute;
-
-  z-index: 5;
-
-  top: 12px;
-
-  left: 50%;
-
-  transform:
-    translateX(-50%);
-
-  width: 15px;
-
-  height: 15px;
-
-  border-radius: 50%;
-
-  background:
-    #e44747;
-
-  box-shadow:
-
-    inset 2px 2px 3px
-    rgba(255,255,255,.4),
-
-    2px 3px 5px
-    rgba(0,0,0,.25);
 
 `;
 
@@ -303,7 +249,7 @@ export const EventImage = styled.div`
   ${EventCard}:hover & img {
 
     transform:
-      scale(1.05);
+      scale(1.04);
 
   }
 
@@ -318,7 +264,7 @@ export const EventImage = styled.div`
 
 
 /* =========================================
-   PLACEHOLDER IMAGEM
+   PLACEHOLDER
 ========================================= */
 
 export const EventImagePlaceholder = styled.div`
@@ -327,8 +273,7 @@ export const EventImagePlaceholder = styled.div`
 
   height: 210px;
 
-  background:
-    rgba(255,255,255,.25);
+  background: #f5f5f5;
 
   display: flex;
 
@@ -336,8 +281,7 @@ export const EventImagePlaceholder = styled.div`
 
   justify-content: center;
 
-  color:
-    rgba(0,0,0,.35);
+  color: #b5b5b5;
 
   font-size: 50px;
 
@@ -455,7 +399,7 @@ export const InfoItem = styled.div`
 
     flex-shrink: 0;
 
-    color: #222;
+    color: #555;
 
     font-size: 17px;
 
@@ -495,7 +439,7 @@ export const EventFooter = styled.div`
 
 
 /* =========================================
-   BOTÃO ACESSAR
+   BOTÃO VER EVENTO
 ========================================= */
 
 export const AccessButton = styled.button`
@@ -508,11 +452,9 @@ export const AccessButton = styled.button`
 
   border-radius: 9px;
 
-  background:
-    #000;
+  background: #000;
 
-  color:
-    #f9be06;
+  color: #f9be06;
 
   font-family:
     "Poppins",
@@ -529,11 +471,9 @@ export const AccessButton = styled.button`
 
   &:hover {
 
-    background:
-      #fff;
+    background: #f9be06;
 
-    color:
-      #111;
+    color: #111;
 
     transform:
       translateY(-2px);
@@ -561,7 +501,7 @@ export const Actions = styled.div`
     cursor: pointer;
 
     color:
-      rgba(0,0,0,.65);
+      rgba(0,0,0,.55);
 
     font-size: 19px;
 
@@ -576,6 +516,13 @@ export const Actions = styled.div`
 
     transform:
       scale(1.2);
+
+  }
+
+
+  svg:last-child:hover {
+
+    color: #d62828;
 
   }
 
@@ -631,11 +578,9 @@ export const EmptyIcon = styled.div`
 
   border-radius: 50%;
 
-  background:
-    #fff7d6;
+  background: #fff7d6;
 
-  color:
-    #f9be06;
+  color: #f9be06;
 
   font-size: 30px;
 
@@ -691,11 +636,9 @@ export const FloatingButton = styled.button`
 
   border-radius: 50%;
 
-  background:
-    #f9be06;
+  background: #f9be06;
 
-  color:
-    #111;
+  color: #111;
 
   display: flex;
 
@@ -1110,7 +1053,7 @@ export const TextArea = styled.textarea`
 
 
 /* =========================================
-   LINHA DATA / HORÁRIO
+   DATA + HORÁRIO
 ========================================= */
 
 export const FormRow = styled.div`
@@ -1144,7 +1087,7 @@ export const FormGroup = styled.div`
 
 
 /* =========================================
-   UPLOAD DE IMAGEM
+   UPLOAD
 ========================================= */
 
 export const ImageUpload = styled.div`
@@ -1162,10 +1105,6 @@ export const ImageUploadInput = styled.input`
 
 `;
 
-
-/* =========================================
-   ÁREA DE UPLOAD
-========================================= */
 
 export const ImageUploadContent = styled.label`
 
@@ -1243,10 +1182,6 @@ export const ImageUploadContent = styled.label`
 `;
 
 
-/* =========================================
-   ÍCONE
-========================================= */
-
 export const ImageUploadIcon = styled.div`
 
   width: 62px;
@@ -1279,10 +1214,6 @@ export const ImageUploadIcon = styled.div`
 
 `;
 
-
-/* =========================================
-   TEXTO UPLOAD
-========================================= */
 
 export const ImageUploadText = styled.div`
 
@@ -1349,6 +1280,8 @@ export const ImagePreview = styled.div`
   box-shadow:
     0 6px 18px
     rgba(0,0,0,.12);
+
+  margin-bottom: 20px;
 
 
   img {
@@ -1634,6 +1567,251 @@ export const SaveButton = styled.button`
 
 
   @media (max-width: 600px) {
+
+    width: 100%;
+
+  }
+
+`;
+
+
+/* =========================================
+   MODAL DE EXCLUSÃO
+========================================= */
+
+export const DeleteModal = styled.div`
+
+  width: 400px;
+
+  max-width: 100%;
+
+  box-sizing: border-box;
+
+  padding: 30px;
+
+  background: #fff;
+
+  border-radius: 20px;
+
+  text-align: center;
+
+  box-shadow:
+    0 20px 45px
+    rgba(0,0,0,.25);
+
+  animation:
+    deleteModalAppear .25s ease;
+
+
+  @keyframes deleteModalAppear {
+
+    from {
+
+      opacity: 0;
+
+      transform:
+        translateY(15px)
+        scale(.95);
+
+    }
+
+    to {
+
+      opacity: 1;
+
+      transform:
+        translateY(0)
+        scale(1);
+
+    }
+
+  }
+
+
+  @media (max-width: 600px) {
+
+    padding:
+      25px 20px;
+
+    border-radius: 18px;
+
+  }
+
+`;
+
+
+export const DeleteModalTitle = styled.h3`
+
+  margin:
+    0 0 12px;
+
+  color: #111;
+
+  font-size: 24px;
+
+  font-weight: 700;
+
+
+  @media (max-width: 600px) {
+
+    font-size: 21px;
+
+  }
+
+`;
+
+
+export const DeleteModalText = styled.p`
+
+  margin:
+    0 0 10px;
+
+  color: #666;
+
+  font-size: 15px;
+
+  line-height: 1.5;
+
+
+  strong {
+
+    color: #111;
+
+  }
+
+
+  &:last-of-type {
+
+    margin-bottom: 28px;
+
+  }
+
+`;
+
+
+/* =========================================
+   BOTÕES DO MODAL
+========================================= */
+
+export const ModalButtons = styled.div`
+
+  display: flex;
+
+  justify-content: center;
+
+  gap: 15px;
+
+
+  @media (max-width: 400px) {
+
+    flex-direction: column;
+
+    gap: 10px;
+
+  }
+
+`;
+
+
+/* =========================================
+   CANCELAR
+========================================= */
+
+export const CancelButton = styled.button`
+
+  min-height: 45px;
+
+  padding:
+    0 22px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #ececec;
+
+  color: #111;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: .2s;
+
+
+  &:hover {
+
+    background: #d9d9d9;
+
+  }
+
+
+  @media (max-width: 400px) {
+
+    width: 100%;
+
+  }
+
+`;
+
+
+/* =========================================
+   CONFIRMAR EXCLUSÃO
+========================================= */
+
+export const ConfirmButton = styled.button`
+
+  min-height: 45px;
+
+  padding:
+    0 22px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #d62828;
+
+  color: #fff;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+
+  cursor: pointer;
+
+  transition: .2s;
+
+
+  &:hover {
+
+    background: #b71c1c;
+
+    transform:
+      translateY(-2px);
+
+  }
+
+
+  &:active {
+
+    transform:
+      translateY(0);
+
+  }
+
+
+  @media (max-width: 400px) {
 
     width: 100%;
 

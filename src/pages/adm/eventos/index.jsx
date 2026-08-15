@@ -12,7 +12,6 @@ import {
   FiImage,
   FiUpload,
   FiUsers,
-  FiFileText,
 } from "react-icons/fi";
 
 import {
@@ -24,7 +23,6 @@ import {
   Subtitle,
   Cards,
   EventCard,
-  EventPin,
   EventImage,
   EventImagePlaceholder,
   EventContent,
@@ -69,11 +67,17 @@ import {
 
   FormFooter,
   SaveButton,
+
+  DeleteModal,
+  DeleteModalTitle,
+  DeleteModalText,
+  ModalButtons,
+  CancelButton,
+  ConfirmButton,
 } from "./style";
 
 
 export default function Eventos() {
-
 
   // ==========================================
   // EVENTOS
@@ -102,7 +106,7 @@ export default function Eventos() {
 
 
   // ==========================================
-  // MODAL DE CRIAÇÃO
+  // MODAL DO FORMULÁRIO
   // ==========================================
 
   const [modalAberto, setModalAberto] =
@@ -110,10 +114,29 @@ export default function Eventos() {
 
 
   // ==========================================
-  // EVENTO SELECIONADO
+  // EVENTO SELECIONADO PARA VISUALIZAÇÃO
   // ==========================================
 
   const [eventoSelecionado, setEventoSelecionado] =
+    useState(null);
+
+
+  // ==========================================
+  // EVENTO SENDO EDITADO
+  // ==========================================
+
+  const [eventoEditando, setEventoEditando] =
+    useState(null);
+
+
+  // ==========================================
+  // MODAL DE EXCLUSÃO
+  // ==========================================
+
+  const [modalExcluirAberto, setModalExcluirAberto] =
+    useState(false);
+
+  const [eventoParaExcluir, setEventoParaExcluir] =
     useState(null);
 
 
@@ -144,7 +167,7 @@ export default function Eventos() {
 
 
   // ==========================================
-  // SALVAR EVENTOS
+  // SALVAR NO LOCALSTORAGE
   // ==========================================
 
   useEffect(() => {
@@ -158,10 +181,10 @@ export default function Eventos() {
 
 
   // ==========================================
-  // ABRIR MODAL
+  // LIMPAR FORMULÁRIO
   // ==========================================
 
-  function abrirModal() {
+  function limparFormulario() {
 
     setNome("");
     setDescricao("");
@@ -172,18 +195,59 @@ export default function Eventos() {
     setImagem("");
     setImagemPreview("");
 
+  }
+
+
+  // ==========================================
+  // ABRIR MODAL PARA CRIAR
+  // ==========================================
+
+  function abrirModal() {
+
+    setEventoEditando(null);
+
+    limparFormulario();
+
     setModalAberto(true);
 
   }
 
 
   // ==========================================
-  // FECHAR MODAL
+  // ABRIR MODAL PARA EDITAR
+  // ==========================================
+
+  function abrirEdicao(evento) {
+
+    setEventoSelecionado(null);
+
+    setEventoEditando(evento);
+
+    setNome(evento.nome || "");
+    setDescricao(evento.descricao || "");
+    setData(evento.data || "");
+    setHorario(evento.horario || "");
+    setLocal(evento.local || "");
+
+    setImagem(evento.imagem || "");
+    setImagemPreview(evento.imagem || "");
+
+    setModalAberto(true);
+
+  }
+
+
+  // ==========================================
+  // FECHAR MODAL DO FORMULÁRIO
   // ==========================================
 
   function fecharModal() {
 
     setModalAberto(false);
+
+    setEventoEditando(null);
+
+    limparFormulario();
 
   }
 
@@ -202,7 +266,7 @@ export default function Eventos() {
     }
 
 
-    // Limita para 5MB
+    // Limite de 5MB
 
     if (arquivo.size > 5 * 1024 * 1024) {
 
@@ -215,7 +279,7 @@ export default function Eventos() {
     }
 
 
-    // Verifica se realmente é imagem
+    // Verifica se é imagem
 
     if (!arquivo.type.startsWith("image/")) {
 
@@ -257,20 +321,16 @@ export default function Eventos() {
   function removerImagem() {
 
     setImagem("");
-
     setImagemPreview("");
 
   }
 
 
   // ==========================================
-  // CADASTRAR EVENTO
+  // VALIDAR FORMULÁRIO
   // ==========================================
 
-  function cadastrarEvento(event) {
-
-    event.preventDefault();
-
+  function validarFormulario() {
 
     if (!nome.trim()) {
 
@@ -278,7 +338,7 @@ export default function Eventos() {
         "Digite o nome do evento."
       );
 
-      return;
+      return false;
 
     }
 
@@ -289,7 +349,7 @@ export default function Eventos() {
         "Digite a descrição do evento."
       );
 
-      return;
+      return false;
 
     }
 
@@ -300,7 +360,7 @@ export default function Eventos() {
         "Informe a data do evento."
       );
 
-      return;
+      return false;
 
     }
 
@@ -311,7 +371,7 @@ export default function Eventos() {
         "Informe o horário do evento."
       );
 
-      return;
+      return false;
 
     }
 
@@ -322,10 +382,92 @@ export default function Eventos() {
         "Informe o local do evento."
       );
 
+      return false;
+
+    }
+
+
+    return true;
+
+  }
+
+
+  // ==========================================
+  // SALVAR / CRIAR / EDITAR
+  // ==========================================
+
+  function salvarEvento(event) {
+
+    event.preventDefault();
+
+
+    if (!validarFormulario()) {
+      return;
+    }
+
+
+    // ========================================
+    // EDITANDO
+    // ========================================
+
+    if (eventoEditando) {
+
+      const eventosAtualizados =
+        eventos.map((evento) => {
+
+          if (
+            evento.id ===
+            eventoEditando.id
+          ) {
+
+            return {
+
+              ...evento,
+
+              nome:
+                nome.trim(),
+
+              descricao:
+                descricao.trim(),
+
+              data,
+
+              horario,
+
+              local:
+                local.trim(),
+
+              imagem:
+                imagem || "",
+
+            };
+
+          }
+
+          return evento;
+
+        });
+
+
+      setEventos(
+        eventosAtualizados
+      );
+
+
+      setModalAberto(false);
+
+      setEventoEditando(null);
+
+      limparFormulario();
+
       return;
 
     }
 
+
+    // ========================================
+    // CRIANDO NOVO EVENTO
+    // ========================================
 
     const novoEvento = {
 
@@ -366,33 +508,48 @@ export default function Eventos() {
     );
 
 
-    setNome("");
-    setDescricao("");
-    setData("");
-    setHorario("");
-    setLocal("");
-
-    setImagem("");
-    setImagemPreview("");
-
     setModalAberto(false);
+
+    limparFormulario();
 
   }
 
 
   // ==========================================
-  // EXCLUIR EVENTO
+  // ABRIR CONFIRMAÇÃO DE EXCLUSÃO
   // ==========================================
 
-  function excluirEvento(id) {
+  function abrirConfirmacaoExclusao(evento) {
 
-    const confirmar =
-      window.confirm(
-        "Deseja realmente excluir este evento?"
-      );
+    setEventoSelecionado(null);
+
+    setEventoParaExcluir(evento);
+
+    setModalExcluirAberto(true);
+
+  }
 
 
-    if (!confirmar) {
+  // ==========================================
+  // CANCELAR EXCLUSÃO
+  // ==========================================
+
+  function cancelarExclusao() {
+
+    setModalExcluirAberto(false);
+
+    setEventoParaExcluir(null);
+
+  }
+
+
+  // ==========================================
+  // CONFIRMAR EXCLUSÃO
+  // ==========================================
+
+  function confirmarExclusao() {
+
+    if (!eventoParaExcluir) {
       return;
     }
 
@@ -400,7 +557,8 @@ export default function Eventos() {
     const novosEventos =
       eventos.filter(
         (evento) =>
-          evento.id !== id
+          evento.id !==
+          eventoParaExcluir.id
       );
 
 
@@ -409,9 +567,11 @@ export default function Eventos() {
     );
 
 
-    setEventoSelecionado(
-      null
-    );
+    setEventoSelecionado(null);
+
+    setModalExcluirAberto(false);
+
+    setEventoParaExcluir(null);
 
   }
 
@@ -457,6 +617,12 @@ export default function Eventos() {
 
         setEventoSelecionado(null);
 
+        setModalExcluirAberto(false);
+
+        setEventoEditando(null);
+
+        setEventoParaExcluir(null);
+
       }
 
     }
@@ -501,7 +667,6 @@ export default function Eventos() {
 
       <Content>
 
-
         <Header>
 
           <TitleArea>
@@ -525,7 +690,6 @@ export default function Eventos() {
 
         <Cards>
 
-
           {eventos.length === 0 ? (
 
             <EmptyState>
@@ -547,160 +711,158 @@ export default function Eventos() {
 
           ) : (
 
-            eventos.map(
-              (evento, index) => (
+            eventos.map((evento) => (
 
-                <EventCard
-                  key={evento.id}
-                  $index={index}
-                  onClick={() =>
-                    setEventoSelecionado(
-                      evento
-                    )
-                  }
-                >
+              <EventCard
+                key={evento.id}
+                onClick={() =>
+                  setEventoSelecionado(
+                    evento
+                  )
+                }
+              >
 
-                  {/* PIN */}
+                {/* IMAGEM */}
 
-                  <EventPin />
+                {evento.imagem ? (
 
+                  <EventImage>
 
-                  {/* IMAGEM */}
+                    <img
+                      src={evento.imagem}
+                      alt={evento.nome}
+                    />
 
-                  {evento.imagem ? (
+                  </EventImage>
 
-                    <EventImage>
+                ) : (
 
-                      <img
-                        src={evento.imagem}
-                        alt={evento.nome}
-                      />
+                  <EventImagePlaceholder>
 
-                    </EventImage>
+                    <FiImage />
 
-                  ) : (
+                  </EventImagePlaceholder>
 
-                    <EventImagePlaceholder>
-
-                      <FiImage />
-
-                    </EventImagePlaceholder>
-
-                  )}
+                )}
 
 
-                  {/* CONTEÚDO */}
+                {/* CONTEÚDO */}
 
-                  <EventContent>
+                <EventContent>
 
-                    <EventTitle>
-                      {evento.nome}
-                    </EventTitle>
-
-
-                    <EventDescription>
-
-                      {evento.descricao}
-
-                    </EventDescription>
+                  <EventTitle>
+                    {evento.nome}
+                  </EventTitle>
 
 
-                    <InfoList>
+                  <EventDescription>
 
-                      <InfoItem>
+                    {evento.descricao}
 
-                        <FiCalendar />
-
-                        <span>
-                          {formatarData(
-                            evento.data
-                          )}
-                        </span>
-
-                      </InfoItem>
+                  </EventDescription>
 
 
-                      <InfoItem>
+                  <InfoList>
 
-                        <FiClock />
+                    <InfoItem>
 
-                        <span>
-                          {evento.horario}
-                        </span>
+                      <FiCalendar />
 
-                      </InfoItem>
+                      <span>
+                        {formatarData(
+                          evento.data
+                        )}
+                      </span>
 
-
-                      <InfoItem>
-
-                        <FiMapPin />
-
-                        <span>
-                          {evento.local}
-                        </span>
-
-                      </InfoItem>
-
-                    </InfoList>
+                    </InfoItem>
 
 
-                    <EventFooter>
+                    <InfoItem>
 
-                      <AccessButton
-                        type="button"
+                      <FiClock />
+
+                      <span>
+                        {evento.horario}
+                      </span>
+
+                    </InfoItem>
+
+
+                    <InfoItem>
+
+                      <FiMapPin />
+
+                      <span>
+                        {evento.local}
+                      </span>
+
+                    </InfoItem>
+
+                  </InfoList>
+
+
+                  <EventFooter>
+
+                    <AccessButton
+                      type="button"
+                      onClick={(event) => {
+
+                        event.stopPropagation();
+
+                        setEventoSelecionado(
+                          evento
+                        );
+
+                      }}
+                    >
+
+                      Ver evento
+
+                    </AccessButton>
+
+
+                    <Actions>
+
+                      {/* EDITAR */}
+
+                      <FiEdit
+                        title="Editar evento"
                         onClick={(event) => {
 
                           event.stopPropagation();
 
-                          setEventoSelecionado(
+                          abrirEdicao(
                             evento
                           );
 
                         }}
-                      >
-
-                        Ver evento
-
-                      </AccessButton>
+                      />
 
 
-                      <Actions>
+                      {/* EXCLUIR */}
 
-                        <FiEdit
-                          onClick={(event) => {
+                      <FiTrash2
+                        title="Excluir evento"
+                        onClick={(event) => {
 
-                            event.stopPropagation();
+                          event.stopPropagation();
 
-                            alert(
-                              "A edição pode continuar na sua página /adm/editarevento."
-                            );
+                          abrirConfirmacaoExclusao(
+                            evento
+                          );
 
-                          }}
-                        />
+                        }}
+                      />
 
+                    </Actions>
 
-                        <FiTrash2
-                          onClick={(event) => {
+                  </EventFooter>
 
-                            event.stopPropagation();
+                </EventContent>
 
-                            excluirEvento(
-                              evento.id
-                            );
+              </EventCard>
 
-                          }}
-                        />
-
-                      </Actions>
-
-                    </EventFooter>
-
-                  </EventContent>
-
-                </EventCard>
-
-              )
-            )
+            ))
 
           )}
 
@@ -725,7 +887,7 @@ export default function Eventos() {
 
 
       {/* ======================================
-          MODAL DE CRIAÇÃO
+          MODAL CRIAR / EDITAR
       ====================================== */}
 
       {modalAberto && (
@@ -747,11 +909,14 @@ export default function Eventos() {
 
           <Modal>
 
-
             <ModalHeader>
 
               <ModalTitle>
-                Novo evento
+
+                {eventoEditando
+                  ? "Editar evento"
+                  : "Novo evento"}
+
               </ModalTitle>
 
 
@@ -769,9 +934,8 @@ export default function Eventos() {
 
 
             <Form
-              onSubmit={cadastrarEvento}
+              onSubmit={salvarEvento}
             >
-
 
               {/* =================================
                   IMAGEM
@@ -865,7 +1029,7 @@ export default function Eventos() {
 
               <Input
                 type="text"
-                placeholder="Ex: Festa Junina"
+                placeholder="Ex: Semifinal"
                 value={nome}
                 onChange={(event) =>
                   setNome(
@@ -952,7 +1116,7 @@ export default function Eventos() {
 
               <Input
                 type="text"
-                placeholder="Ex: Quadra da escola"
+                placeholder="Ex: Auditório"
                 value={local}
                 onChange={(event) =>
                   setLocal(
@@ -1005,9 +1169,15 @@ export default function Eventos() {
                   type="submit"
                 >
 
-                  <FiPlus />
+                  {eventoEditando
+                    ? <FiEdit />
+                    : <FiPlus />
+                  }
 
-                  Criar evento
+                  {eventoEditando
+                    ? "Salvar alterações"
+                    : "Criar evento"
+                  }
 
                 </SaveButton>
 
@@ -1024,6 +1194,7 @@ export default function Eventos() {
 
       {/* ======================================
           VISUALIZAÇÃO DO EVENTO
+          SEM EDITAR / EXCLUIR
       ====================================== */}
 
       {eventoSelecionado && (
@@ -1061,6 +1232,7 @@ export default function Eventos() {
                     null
                   )
                 }
+                aria-label="Fechar"
               >
 
                 <FiX />
@@ -1069,6 +1241,8 @@ export default function Eventos() {
 
             </ModalHeader>
 
+
+            {/* IMAGEM */}
 
             {eventoSelecionado.imagem ? (
 
@@ -1096,10 +1270,16 @@ export default function Eventos() {
             )}
 
 
+            {/* TÍTULO */}
+
             <EventTitle>
+
               {eventoSelecionado.nome}
+
             </EventTitle>
 
+
+            {/* DESCRIÇÃO */}
 
             <EventDescription>
 
@@ -1107,6 +1287,8 @@ export default function Eventos() {
 
             </EventDescription>
 
+
+            {/* INFORMAÇÕES */}
 
             <InfoList>
 
@@ -1150,40 +1332,90 @@ export default function Eventos() {
                 <FiUsers />
 
                 <span>
+
                   {eventoSelecionado.participantes?.length || 0}
+
                   {" "}
+
                   participante(s)
+
                 </span>
 
               </InfoItem>
 
             </InfoList>
 
+          </Modal>
 
-            <FormFooter>
+        </ModalOverlay>
 
-              <SaveButton
+      )}
+
+
+      {/* ======================================
+          MODAL DE CONFIRMAÇÃO DE EXCLUSÃO
+      ====================================== */}
+
+      {modalExcluirAberto && (
+
+        <ModalOverlay>
+
+          <DeleteModal>
+
+            <DeleteModalTitle>
+
+              Excluir evento
+
+            </DeleteModalTitle>
+
+
+            <DeleteModalText>
+
+              Tem certeza que deseja excluir
+              esse evento?
+
+            </DeleteModalText>
+
+
+            {eventoParaExcluir && (
+
+              <DeleteModalText>
+
+                <strong>
+                  {eventoParaExcluir.nome}
+                </strong>
+
+              </DeleteModalText>
+
+            )}
+
+
+            <ModalButtons>
+
+              <CancelButton
                 type="button"
-                onClick={() =>
-                  excluirEvento(
-                    eventoSelecionado.id
-                  )
-                }
-                style={{
-                  background: "#e74c3c",
-                  color: "#fff",
-                }}
+                onClick={cancelarExclusao}
+              >
+
+                Cancelar
+
+              </CancelButton>
+
+
+              <ConfirmButton
+                type="button"
+                onClick={confirmarExclusao}
               >
 
                 <FiTrash2 />
 
-                Excluir evento
+                Sim, excluir
 
-              </SaveButton>
+              </ConfirmButton>
 
-            </FormFooter>
+            </ModalButtons>
 
-          </Modal>
+          </DeleteModal>
 
         </ModalOverlay>
 

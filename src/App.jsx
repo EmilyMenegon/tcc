@@ -19,8 +19,6 @@ import Inscricaoadm from "./pages/adm/inscricaoadm";
 import Profileadm from "./pages/adm/profileadm";
 import Galeriaadm from "./pages/adm/galeriaadm";
 import Eventos from "./pages/adm/eventos";
-import AddLembrete from "./pages/adm/addlembrete";
-import AddEventos from "./pages/adm/addeventos";
 import Muraladm from "./pages/adm/mural";
 import EditarEvento from "./pages/adm/editarevento";
 import AcessarEvento from "./pages/adm/acessarevento";
@@ -110,16 +108,6 @@ export default function App() {
       <Route 
         path="/adm/eventos" 
         element={<Eventos />} 
-      />
-
-      <Route 
-        path="/adm/addlembrete" 
-        element={<AddLembrete />} 
-      />
-
-      <Route 
-        path="/adm/addeventos" 
-        element={<AddEventos />} 
       />
 
       <Route 
