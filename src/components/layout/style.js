@@ -106,14 +106,7 @@ export const Navbar = styled.nav`
 
   box-sizing: border-box;
 
-  box-shadow:
-    0 4px 10px
-    rgba(
-      0,
-      0,
-      0,
-      0.1
-    );
+  /* SEM SOMBRA */
 
   flex-shrink: 1;
 
@@ -175,14 +168,7 @@ export const Navbar = styled.nav`
 
     justify-content: center;
 
-    box-shadow:
-      0 5px 12px
-      rgba(
-        0,
-        0,
-        0,
-        0.15
-      );
+    /* SEM SOMBRA */
 
   }
 
@@ -275,14 +261,7 @@ export const NavCenter = styled.div`
 
     box-sizing: border-box;
 
-    box-shadow:
-      0 8px 20px
-      rgba(
-        0,
-        0,
-        0,
-        0.15
-      );
+    /* SEM SOMBRA */
 
     z-index: 100;
 
@@ -440,14 +419,7 @@ export const ProfileIcon = styled(Link)`
 
   text-decoration: none;
 
-  box-shadow:
-    0 8px 20px
-    rgba(
-      0,
-      0,
-      0,
-      0.18
-    );
+  /* SEM SOMBRA */
 
   transition: 0.2s;
 

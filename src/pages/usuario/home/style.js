@@ -1,50 +1,201 @@
 import styled, { keyframes } from "styled-components";
 
 
-/* ==========================================
-   ANIMAÇÃO
-========================================== */
+/* ============================================================
+   ANIMAÇÕES
+============================================================ */
 
-const floating = keyframes`
+const fadeUp = keyframes`
 
-  0% {
+  from {
+
+    opacity: 0;
 
     transform:
-      translate(
-        0,
-        0
-      );
+      translateY(30px);
 
   }
 
+  to {
 
-  50% {
-
-    transform:
-      translate(
-        10%,
-        -18%
-      );
-
-  }
-
-
-  100% {
+    opacity: 1;
 
     transform:
-      translate(
-        0,
-        0
-      );
+      translateY(0);
 
   }
 
 `;
 
 
-/* ==========================================
+/* ============================================================
+   ANIMAÇÃO DOS ELEMENTOS DECORATIVOS
+============================================================ */
+
+const floating = keyframes`
+
+  0% {
+
+    transform:
+      translate(0, 0);
+
+  }
+
+  50% {
+
+    transform:
+      translate(12px, -18px);
+
+  }
+
+  100% {
+
+    transform:
+      translate(0, 0);
+
+  }
+
+`;
+
+
+/* ============================================================
+   PULSE
+============================================================ */
+
+const pulse = keyframes`
+
+  0% {
+
+    transform:
+      scale(1);
+
+    opacity: .9;
+
+  }
+
+  50% {
+
+    transform:
+      scale(1.12);
+
+    opacity: .6;
+
+  }
+
+  100% {
+
+    transform:
+      scale(1);
+
+    opacity: .9;
+
+  }
+
+`;
+
+
+/* ============================================================
+   PIXEL 01
+============================================================ */
+
+const pixelOneFloat = keyframes`
+
+  0% {
+
+    transform:
+      translate(0, 0)
+      rotate(-4deg);
+
+  }
+
+  50% {
+
+    transform:
+      translate(-8px, -14px)
+      rotate(4deg);
+
+  }
+
+  100% {
+
+    transform:
+      translate(0, 0)
+      rotate(-4deg);
+
+  }
+
+`;
+
+
+/* ============================================================
+   PIXEL 02
+============================================================ */
+
+const pixelTwoFloat = keyframes`
+
+  0% {
+
+    transform:
+      translate(0, 0)
+      rotate(3deg);
+
+  }
+
+  50% {
+
+    transform:
+      translate(10px, -12px)
+      rotate(-5deg);
+
+  }
+
+  100% {
+
+    transform:
+      translate(0, 0)
+      rotate(3deg);
+
+  }
+
+`;
+
+
+/* ============================================================
+   PIXEL 03
+============================================================ */
+
+const pixelThreeFloat = keyframes`
+
+  0% {
+
+    transform:
+      translate(0, 0)
+      rotate(-3deg);
+
+  }
+
+  50% {
+
+    transform:
+      translate(9px, 13px)
+      rotate(5deg);
+
+  }
+
+  100% {
+
+    transform:
+      translate(0, 0)
+      rotate(-3deg);
+
+  }
+
+`;
+
+
+/* ============================================================
    PAGE
-========================================== */
+============================================================ */
 
 export const Page = styled.div`
 
@@ -52,129 +203,74 @@ export const Page = styled.div`
 
   min-height: 100vh;
 
-  background: #ffffff;
+  background: #fff;
 
-  font-family: "Poppins", sans-serif;
+  font-family:
+    "Poppins",
+    sans-serif;
+
+  color: #111;
+
+  overflow-x: hidden;
+
+  margin: 0;
+
+  padding: 0;
+
+  box-sizing: border-box;
+
+
+  *,
+  *::before,
+  *::after {
+
+    box-sizing: border-box;
+
+  }
+
+`;
+
+
+/* ============================================================
+   HERO
+============================================================ */
+
+export const Hero = styled.main`
+
+  width: 100%;
+
+  min-height:
+    calc(100vh - 80px);
+
+  position: relative;
 
   display: flex;
 
   flex-direction: column;
 
-  overflow-x: hidden;
+  overflow: hidden;
+
+  background: #fff;
 
 `;
 
 
-/* ==========================================
-   TITLE
-========================================== */
+/* ============================================================
+   HERO CONTENT
+============================================================ */
 
-export const TitleArea = styled.div`
+export const HeroContent = styled.div`
 
-  width: 100%;
+  width: 85%;
 
-  display: flex;
+  max-width: 1400px;
 
-  justify-content: center;
+  flex: 1;
 
-  align-items: center;
+  margin: 0 auto;
 
-`;
-
-
-export const Title = styled.h1`
-
-  width: 90%;
-
-  margin-top: 5%;
-
-  margin-bottom: 2%;
-
-  text-align: center;
-
-  font-size:
-    clamp(
-      1.5rem,
-      3vw,
-      2.5rem
-    );
-
-
-  @media (max-width: 600px) {
-
-    width: 90%;
-
-    margin-top: 8%;
-
-    margin-bottom: 4%;
-
-    font-size:
-      clamp(
-        1.4rem,
-        7vw,
-        2rem
-      );
-
-  }
-
-`;
-
-
-/* ==========================================
-   CONTAINER
-========================================== */
-
-export const Container = styled.div`
-
-  width: 90%;
-
-  min-height: 70vh;
-
-  margin: 2% auto 0;
-
-  display: flex;
-
-  border-radius: 20px;
-
-  overflow: visible;
-
-
-  @media (max-width: 900px) {
-
-    width: 92%;
-
-    min-height: auto;
-
-  }
-
-
-  @media (max-width: 600px) {
-
-    width: 90%;
-
-    margin-top: 3%;
-
-  }
-
-
-  @media (max-width: 400px) {
-
-    width: 94%;
-
-  }
-
-`;
-
-
-/* ==========================================
-   RIGHT SIDE
-========================================== */
-
-export const RightSide = styled.div`
-
-  width: 100%;
-
-  padding: 4%;
+  padding:
+    40px 0 55px;
 
   display: flex;
 
@@ -182,46 +278,63 @@ export const RightSide = styled.div`
 
   justify-content: space-between;
 
-  gap: 5%;
+  gap: 70px;
 
-  box-sizing: border-box;
+  position: relative;
+
+  z-index: 3;
 
 
-  @media (max-width: 900px) {
+  @media (max-width: 1100px) {
 
-    padding: 5% 3%;
+    width: 88%;
 
-    gap: 4%;
+    gap: 40px;
 
   }
 
 
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
+
+    width: 90%;
+
+    padding:
+      45px 0 40px;
 
     flex-direction: column;
 
-    padding: 10% 6%;
+    justify-content: center;
 
-    gap: 0;
+    text-align: center;
+
+    gap: 30px;
 
   }
 
 `;
 
 
-/* ==========================================
-   ÁREA DO TEXTO
-========================================== */
+/* ============================================================
+   LEFT CONTENT
+============================================================ */
 
-export const RightContent = styled.div`
+export const LeftContent = styled.div`
 
   width: 52%;
+
+  max-width: 680px;
 
   display: flex;
 
   flex-direction: column;
 
-  box-sizing: border-box;
+  justify-content: center;
+
+  animation:
+    ${fadeUp}
+    .8s
+    ease
+    both;
 
 
   @media (max-width: 900px) {
@@ -231,213 +344,274 @@ export const RightContent = styled.div`
   }
 
 
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
 
     width: 100%;
+
+    max-width: 650px;
 
     align-items: center;
 
-    text-align: center;
+  }
+
+`;
+
+
+/* ============================================================
+   BADGE
+============================================================ */
+
+export const EventBadge = styled.div`
+
+  width: fit-content;
+
+  margin-bottom: 22px;
+
+  padding:
+    9px 15px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  border-radius: 30px;
+
+  background: #111;
+
+  color: #fff;
+
+  font-size: .72rem;
+
+  font-weight: 800;
+
+  letter-spacing: 1.2px;
+
+  box-shadow:
+    0 8px 20px
+    rgba(
+      0,
+      0,
+      0,
+      .12
+    );
+
+  animation:
+    ${fadeUp}
+    .7s
+    ease
+    both;
+
+
+  @media (max-width: 768px) {
+
+    font-size: .68rem;
 
   }
 
 `;
 
 
-/* ==========================================
-   TEXTO GRANDE
-========================================== */
+/* ============================================================
+   BADGE DOT
+============================================================ */
 
-export const BigText = styled.h2`
+export const BadgeDot = styled.span`
 
-  width: 100%;
+  width: 8px;
 
-  margin: 0;
+  height: 8px;
 
-  margin-bottom: 4%;
+  border-radius: 50%;
 
-  color: #000000;
+  background: #f9be06;
+
+  animation:
+    ${pulse}
+    1.8s
+    ease
+    infinite;
+
+`;
+
+
+/* ============================================================
+   BIG TEXT
+============================================================ */
+
+export const BigText = styled.h1`
+
+  margin:
+    0 0 25px;
+
+  color: #111;
 
   font-size:
     clamp(
-      1.8rem,
-      4vw,
-      3rem
+      2.8rem,
+      5vw,
+      5rem
     );
 
-  line-height: 1.15;
+  line-height: 1.04;
+
+  font-weight: 900;
+
+  letter-spacing: -2px;
+
+  animation:
+    ${fadeUp}
+    .85s
+    ease
+    .1s
+    both;
 
 
-  @media (max-width: 900px) {
-
-    margin-bottom: 5%;
+  @media (max-width: 1100px) {
 
     font-size:
       clamp(
-        1.6rem,
-        4.5vw,
-        2.4rem
+        2.5rem,
+        5vw,
+        4rem
       );
 
   }
 
 
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
+
+    font-size:
+      clamp(
+        2.4rem,
+        9vw,
+        4rem
+      );
+
+    letter-spacing: -1.5px;
+
+  }
+
+
+  @media (max-width: 480px) {
+
+    font-size: 2.25rem;
+
+  }
+
+`;
+
+
+/* ============================================================
+   HIGHLIGHT
+============================================================ */
+
+export const Highlight = styled.span`
+
+  color: #f9be06;
+
+`;
+
+
+/* ============================================================
+   DESCRIPTION
+============================================================ */
+
+export const Description = styled.p`
+
+  width: 90%;
+
+  margin:
+    0 0 30px;
+
+  color: #444;
+
+  font-size:
+    clamp(
+      1rem,
+      1.25vw,
+      1.18rem
+    );
+
+  line-height: 1.7;
+
+  animation:
+    ${fadeUp}
+    .85s
+    ease
+    .2s
+    both;
+
+
+  strong {
+
+    color: #111;
+
+    font-weight: 800;
+
+  }
+
+
+  @media (max-width: 768px) {
 
     width: 100%;
 
-    margin-bottom: 6%;
-
-    font-size:
-      clamp(
-        1.6rem,
-        8vw,
-        2.3rem
-      );
-
-    line-height: 1.2;
-
-  }
-
-
-  @media (max-width: 400px) {
-
-    margin-bottom: 7%;
-
-    font-size: 8vw;
+    max-width: 550px;
 
   }
 
 `;
 
 
-/* ==========================================
-   TEXTO MENOR
-========================================== */
+/* ============================================================
+   ACTIONS
+============================================================ */
 
-export const SmallText = styled.p`
+export const Actions = styled.div`
 
-  width: 100%;
+  display: flex;
 
-  margin: 0;
+  align-items: center;
 
-  margin-bottom: 4%;
+  gap: 13px;
 
-  color: #000000;
-
-  font-size:
-    clamp(
-      0.9rem,
-      1.5vw,
-      1.2rem
-    );
-
-  line-height: 1.5;
+  animation:
+    ${fadeUp}
+    .85s
+    ease
+    .3s
+    both;
 
 
   a {
 
-    color: #f9be06;
-
-    margin-left: 1%;
-
     text-decoration: none;
-
-    font-weight: 600;
-
-    transition: 0.2s;
-
-  }
-
-
-  a:hover {
-
-    text-decoration: underline;
-
-  }
-
-
-  @media (max-width: 900px) {
-
-    margin-bottom: 5%;
-
-    font-size:
-      clamp(
-        0.85rem,
-        1.8vw,
-        1rem
-      );
 
   }
 
 
   @media (max-width: 600px) {
 
+    flex-direction: column;
+
     width: 100%;
-
-    margin-bottom: 6%;
-
-    font-size:
-      clamp(
-        0.85rem,
-        4vw,
-        1rem
-      );
-
-  }
-
-
-  @media (max-width: 400px) {
-
-    margin-bottom: 7%;
-
-    font-size: 3.8vw;
 
   }
 
 `;
 
 
-/* ==========================================
-   ÁREA DO BOTÃO
-========================================== */
+/* ============================================================
+   PRIMARY BUTTON
+============================================================ */
 
-export const BottomArea = styled.div`
+export const PrimaryLink = styled.button`
 
-  width: 100%;
+  min-height: 56px;
 
-  margin: 0;
-
-
-  a {
-
-    text-decoration: none;
-
-    display: inline-block;
-
-  }
-
-
-  @media (max-width: 600px) {
-
-    width: 100%;
-
-    display: flex;
-
-    justify-content: center;
-
-    margin-top: 5%;
-
-  }
-
-`;
-
-
-/* ==========================================
-   BOTÃO
-========================================== */
-
-export const ArrowButton = styled.button`
+  padding:
+    16px 24px;
 
   display: flex;
 
@@ -445,69 +619,74 @@ export const ArrowButton = styled.button`
 
   justify-content: center;
 
-  gap: 18px;
-
-  min-width: 220px;
-
-  min-height: 52px;
-
-  padding: 14px 22px;
+  gap: 14px;
 
   border: none;
 
-  border-radius: 10px;
+  border-radius: 12px;
 
   background: #f9be06;
 
-  color: #000000;
+  color: #111;
 
-  font-size: 16px;
+  font-family:
+    "Poppins",
+    sans-serif;
 
-  font-weight: bold;
+  font-size: .95rem;
+
+  font-weight: 800;
 
   cursor: pointer;
 
-  white-space: nowrap;
-
-  transition: 0.2s;
-
-  box-sizing: border-box;
+  transition:
+    background .25s ease,
+    color .25s ease,
+    transform .25s ease,
+    box-shadow .25s ease;
 
 
   svg {
 
-    width: 18px;
-
-    height: 18px;
-
-    flex-shrink: 0;
-
-    transition: 0.25s;
+    transition:
+      transform .25s ease;
 
   }
 
 
   &:hover {
 
-    background: #000000;
+    background: #111;
 
     color: #f9be06;
 
-    transform: translateY(-2px);
+    transform:
+      translateY(-4px);
+
+    box-shadow:
+      0 12px 25px
+      rgba(
+        0,
+        0,
+        0,
+        .15
+      );
 
   }
 
 
   &:hover svg {
 
-    transform: translateX(5px);
+    transform:
+      translateX(6px);
 
   }
 
 
   &:active {
 
-    transform: translateY(1px);
+    transform:
+      translateY(-1px);
 
   }
 
@@ -516,52 +695,107 @@ export const ArrowButton = styled.button`
 
     width: 100%;
 
-    max-width: 280px;
-
-    min-width: 0;
-
-    min-height: 50px;
-
-    padding: 13px 18px;
-
-    font-size: 14px;
-
-    gap: 14px;
-
-
-    svg {
-
-      width: 17px;
-
-      height: 17px;
-
-    }
-
-  }
-
-
-  @media (max-width: 400px) {
-
-    max-width: 250px;
-
-    padding: 12px 16px;
-
-    font-size: 13px;
-
-    gap: 12px;
+    min-width: 250px;
 
   }
 
 `;
 
 
-/* ==========================================
-   IMAGEM
-========================================== */
+/* ============================================================
+   SECONDARY BUTTON
+============================================================ */
+
+export const SecondaryLink = styled.div`
+
+  min-height: 56px;
+
+  padding:
+    16px 20px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 9px;
+
+  border:
+    1.5px solid #ddd;
+
+  border-radius: 12px;
+
+  background: #fff;
+
+  color: #111;
+
+  font-family:
+    "Poppins",
+    sans-serif;
+
+  font-size: .9rem;
+
+  font-weight: 700;
+
+  transition:
+    border-color .25s ease,
+    background .25s ease,
+    transform .25s ease;
+
+
+  svg {
+
+    color: #f9be06;
+
+    transition:
+      transform .25s ease;
+
+  }
+
+
+  &:hover {
+
+    border-color: #111;
+
+    background: #f7f7f7;
+
+    transform:
+      translateY(-3px);
+
+  }
+
+
+  &:hover svg {
+
+    transform:
+      translateY(-2px);
+
+  }
+
+
+  @media (max-width: 600px) {
+
+    width: 100%;
+
+    min-width: 250px;
+
+  }
+
+`;
+
+
+/* ============================================================
+   IMAGE BOX
+============================================================ */
 
 export const ImageBox = styled.div`
 
-  width: 43%;
+  width: 46%;
+
+  max-width: 600px;
+
+  min-height: 560px;
 
   display: flex;
 
@@ -571,32 +805,63 @@ export const ImageBox = styled.div`
 
   position: relative;
 
-  overflow: visible;
+  animation:
+    ${fadeUp}
+    .9s
+    ease
+    .15s
+    both;
+
+
+  @media (max-width: 1100px) {
+
+    width: 43%;
+
+    min-height: 500px;
+
+  }
 
 
   @media (max-width: 900px) {
 
     width: 40%;
 
+    min-height: 450px;
+
   }
 
 
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
 
-    display: none;
+    width: 75%;
+
+    min-height: 400px;
+
+    max-width: 500px;
+
+  }
+
+
+  @media (max-width: 500px) {
+
+    width: 90%;
+
+    min-height: 330px;
 
   }
 
 `;
 
 
-/* ==========================================
-   IMAGE
-========================================== */
+/* ============================================================
+   IMAGEM PRINCIPAL
+============================================================ */
 
 export const Image = styled.img`
 
   width: 100%;
+
+  max-width: 650px;
 
   height: auto;
 
@@ -608,54 +873,290 @@ export const Image = styled.img`
 
   z-index: 2;
 
+  filter: none;
+
+  box-shadow: none;
+
 `;
 
 
-/* ==========================================
-   CÍRCULOS
-========================================== */
+/* ============================================================
+   PIXEL 01
+   ESQUERDA DA IMAGEM
+============================================================ */
+
+export const PixelOne = styled.img`
+
+  position: absolute;
+
+  width: 75px;
+
+  height: auto;
+
+  top: 27%;
+
+  left: -9%;
+
+  z-index: 7;
+
+  display: block;
+
+  object-fit: contain;
+
+  pointer-events: none;
+
+  user-select: none;
+
+  animation:
+    ${pixelOneFloat}
+    4.5s
+    ease-in-out
+    infinite;
+
+  will-change: transform;
+
+
+  @media (max-width: 1100px) {
+
+    width: 65px;
+
+    left: -8%;
+
+  }
+
+
+  @media (max-width: 900px) {
+
+    width: 58px;
+
+    left: -8%;
+
+  }
+
+
+  @media (max-width: 768px) {
+
+    width: 52px;
+
+    top: 22%;
+
+    left: -6%;
+
+  }
+
+
+  @media (max-width: 500px) {
+
+    width: 44px;
+
+    left: -3%;
+
+  }
+
+`;
+
+
+/* ============================================================
+   PIXEL 02
+   TOPO DIREITO
+============================================================ */
+
+export const PixelTwo = styled.img`
+
+  position: absolute;
+
+  width: 68px;
+
+  height: auto;
+
+  top: 7%;
+
+  right: -6%;
+
+  z-index: 7;
+
+  display: block;
+
+  object-fit: contain;
+
+  pointer-events: none;
+
+  user-select: none;
+
+  animation:
+    ${pixelTwoFloat}
+    5s
+    ease-in-out
+    infinite;
+
+  animation-delay: .7s;
+
+  will-change: transform;
+
+
+  @media (max-width: 1100px) {
+
+    width: 60px;
+
+    right: -5%;
+
+  }
+
+
+  @media (max-width: 900px) {
+
+    width: 53px;
+
+    right: -6%;
+
+  }
+
+
+  @media (max-width: 768px) {
+
+    width: 48px;
+
+    top: 5%;
+
+    right: -4%;
+
+  }
+
+
+  @media (max-width: 500px) {
+
+    width: 40px;
+
+    right: -2%;
+
+  }
+
+`;
+
+
+/* ============================================================
+   PIXEL 03
+   INFERIOR DIREITO
+============================================================ */
+
+export const PixelThree = styled.img`
+
+  position: absolute;
+
+  width: 78px;
+
+  height: auto;
+
+  bottom: 10%;
+
+  right: -8%;
+
+  z-index: 7;
+
+  display: block;
+
+  object-fit: contain;
+
+  pointer-events: none;
+
+  user-select: none;
+
+  animation:
+    ${pixelThreeFloat}
+    4.8s
+    ease-in-out
+    infinite;
+
+  animation-delay: 1.2s;
+
+  will-change: transform;
+
+
+  @media (max-width: 1100px) {
+
+    width: 68px;
+
+    right: -7%;
+
+  }
+
+
+  @media (max-width: 900px) {
+
+    width: 60px;
+
+    right: -7%;
+
+  }
+
+
+  @media (max-width: 768px) {
+
+    width: 55px;
+
+    bottom: 7%;
+
+    right: -5%;
+
+  }
+
+
+  @media (max-width: 500px) {
+
+    width: 46px;
+
+    right: -3%;
+
+  }
+
+`;
+
+
+/* ============================================================
+   CÍRCULOS DECORATIVOS
+============================================================ */
 
 export const Circle = styled.span`
 
   position: absolute;
 
-
   width:
     ${({ $size }) =>
-      $size || "5%"};
-
+      $size || "50px"};
 
   height:
     ${({ $size }) =>
-      $size || "5%"};
-
-
-  aspect-ratio: 1 / 1;
-
-  border-radius: 50%;
-
-  background: #f9be06;
-
+      $size || "50px"};
 
   top:
     ${({ $top }) =>
       $top || "auto"};
 
-
   left:
     ${({ $left }) =>
       $left || "auto"};
-
 
   right:
     ${({ $right }) =>
       $right || "auto"};
 
-
   bottom:
     ${({ $bottom }) =>
       $bottom || "auto"};
 
+  border-radius: 50%;
+
+  background: #f9be06;
+
+  opacity: 0.9;
+
+  box-shadow: none;
+
+  filter: none;
+
+  z-index: 1;
+
+  pointer-events: none;
 
   animation:
     ${floating}
@@ -664,31 +1165,17 @@ export const Circle = styled.span`
     ease-in-out
     infinite;
 
-
   animation-delay:
     ${({ $delay }) =>
       $delay || "0s"};
 
-
-  opacity: 0.9;
-
-  filter: blur(0.5px);
-
-
-  box-shadow:
-    0 0 20px
-    rgba(
-      249,
-      190,
-      6,
-      0.45
-    );
-
-
-  z-index: 1;
-
-  pointer-events: none;
-
   will-change: transform;
+
+
+  @media (max-width: 768px) {
+
+    display: none;
+
+  }
 
 `;

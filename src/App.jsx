@@ -2,9 +2,7 @@ import { Routes, Route } from "react-router-dom";
 
 
 import TelaInicial from "./pages/inicio/telainicial";
-import CacaPalavras from "./pages/inicio/cacapalavras";
 import Navegacao from "./pages/navegacao";
-
 import Login from "./pages/login";
 
 
@@ -13,6 +11,7 @@ import Inscricao from "./pages/usuario/inscricao";
 import Mural from "./pages/usuario/mural";
 import Galeria from "./pages/usuario/galeria";
 import Profile from "./pages/usuario/profile";
+import EventosUsuario from "./pages/usuario/eventosusuario";
 
 
 import Inscricaoadm from "./pages/adm/inscricaoadm";
@@ -20,9 +19,6 @@ import Profileadm from "./pages/adm/profileadm";
 import Galeriaadm from "./pages/adm/galeriaadm";
 import Eventos from "./pages/adm/eventos";
 import Muraladm from "./pages/adm/mural";
-import EditarEvento from "./pages/adm/editarevento";
-import AcessarEvento from "./pages/adm/acessarevento";
-
 
 import Mat from "./pages/mat";
 
@@ -40,11 +36,6 @@ export default function App() {
       <Route 
         path="/" 
         element={<TelaInicial />} 
-      />
-
-      <Route 
-        path="/cacapalavras" 
-        element={<CacaPalavras />} 
       />
 
       <Route 
@@ -86,6 +77,11 @@ export default function App() {
         element={<Mural />} 
       />
 
+      <Route 
+        path="/usuario/eventosusuario" 
+        element={<EventosUsuario />} 
+      />
+
 
 
       {/* ADMIN */}
@@ -114,17 +110,7 @@ export default function App() {
         path="/adm/mural" 
         element={<Muraladm />} 
       />
-      <Route
-path="/adm/acessarevento/:id"
-element={<AcessarEvento/>}
-/>
-
-
-<Route
-path="/adm/editarevento/:id"
-element={<EditarEvento/>}
-/>
-
+      
 
 
       {/* SISTEMA MAT */}

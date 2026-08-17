@@ -87,6 +87,15 @@ export default function Layout() {
             Inscrição
           </NavItem>
 
+          <NavItem
+            to="/usuario/eventosusuario"
+            onClick={() =>
+              setMenuOpen(false)
+            }
+          >
+            Eventos
+          </NavItem>
+
 
           <NavItem
             to="/usuario/mural"
