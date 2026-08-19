@@ -13,8 +13,9 @@ import Galeria from "./pages/usuario/galeria";
 import Profile from "./pages/usuario/profile";
 import EventosUsuario from "./pages/usuario/eventosusuario";
 
-import Inicioadm from "./pages/adm/inicioadm";
+
 import Inscricaoadm from "./pages/adm/inscricaoadm";
+import Inicioadm from "./pages/adm/inicioadm";
 import Profileadm from "./pages/adm/profileadm";
 import Galeriaadm from "./pages/adm/galeriaadm";
 import Eventos from "./pages/adm/eventos";
@@ -87,13 +88,13 @@ export default function App() {
       {/* ADMIN */}
 
       <Route 
-        path="/adm/inicioadm" 
-        element={<Inicioadm/>} 
+        path="/adm/inscricaoadm" 
+        element={<Inscricaoadm />} 
       />
 
       <Route 
-        path="/adm/inscricaoadm" 
-        element={<Inscricaoadm />} 
+        path="/adm/inicioadm" 
+        element={<Inicioadm />} 
       />
 
       <Route 
@@ -121,9 +122,9 @@ export default function App() {
       {/* SISTEMA MAT */}
 
       <Route
-        path="/mat"
-        element={<Mat />}
-      />
+  path="/mat"
+  element={<Mat />}
+/>
 
 
     </Routes>

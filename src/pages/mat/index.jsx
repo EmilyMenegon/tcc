@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import { FaPen, FaBook, } from "react-icons/fa";
 
 import {
@@ -17,7 +18,12 @@ import Notas from "./Notas";
 
 export default function Mat() {
 
-    const [aba, setAba] = useState("poetas");
+    const location = useLocation();
+
+    const [aba, setAba] = useState(
+        location.state?.aba || "poetas"
+    );
+
     const [search, setSearch] = useState("");
 
     return (
