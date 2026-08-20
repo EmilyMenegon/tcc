@@ -1,23 +1,46 @@
+import bcrypt from "bcryptjs";
 import db from "./database.js";
- 
-const usuariosTeste = [
-  { nome: "Admin Teste", email: "adm@teste.com", senha: "adm12345", tipo: "adm" },
-  { nome: "Matemático Teste", email: "matematico@teste.com", senha: "mat12345", tipo: "matematico" },
-  { nome: "Aluno Teste", email: "aluno@teste.com", senha: "aluno12345", tipo: "aluno" },
-];
- 
-const stmt = db.prepare(
-  "INSERT INTO usuarios (nome, email, senha, tipo) VALUES (?, ?, ?, ?)"
-);
- 
-for (const usuario of usuariosTeste) {
-  try {
-    stmt.run(usuario.nome, usuario.email, usuario.senha, usuario.tipo);
-    console.log(`Criado: ${usuario.email} (${usuario.tipo})`);
-  } catch (err) {
-    console.log(`Já existe: ${usuario.email}`);
+
+async function seed() {
+
+  const usuariosTeste = [
+    { nome: "Organizador Teste", email: "adm@teste.com", senha: "adm12345", tipo: "organizador" },
+  ];
+
+  const stmtUsuario = db.prepare(
+    "INSERT INTO usuario (nome, email, senha, tipo_usuario) VALUES (?, ?, ?, ?)"
+  );
+
+  for (const usuario of usuariosTeste) {
+    try {
+      const senhaHash = await bcrypt.hash(usuario.senha, 10);
+      stmtUsuario.run(usuario.nome, usuario.email, senhaHash, usuario.tipo);
+      console.log(`Criado: ${usuario.email} (${usuario.tipo})`);
+    } catch (err) {
+      console.log(`Já existe: ${usuario.email}`);
+    }
   }
+
+  const matematicosTeste = [
+    { email: "matematico@teste.com", senha: "mat12345" },
+  ];
+
+  const stmtMatematico = db.prepare(
+    "INSERT INTO matematico (email, senha) VALUES (?, ?)"
+  );
+
+  for (const matematico of matematicosTeste) {
+    try {
+      const senhaHash = await bcrypt.hash(matematico.senha, 10);
+      stmtMatematico.run(matematico.email, senhaHash);
+      console.log(`Criado: ${matematico.email} (matematico)`);
+    } catch (err) {
+      console.log(`Já existe: ${matematico.email}`);
+    }
+  }
+
+  console.log("Seed finalizado.");
+
 }
- 
-console.log("Seed finalizado.");
- 
+
+seed();

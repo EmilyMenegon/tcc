@@ -600,3 +600,58 @@ export const LinkText = styled.p`
   }
 
 `;
+
+
+/* ============================================================
+   PASSWORD WRAPPER (para o ícone de olho)
+============================================================ */
+
+export const PasswordWrapper = styled.div`
+
+  position: relative;
+
+  width: 100%;
+
+  margin-bottom: 4%;
+
+`;
+
+
+export const EyeButton = styled.button`
+
+  position: absolute;
+
+  right: 5%;
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  background: none;
+
+  border: none;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #888;
+
+  font-size: 1.1rem;
+
+  padding: 0;
+
+  transition: color 0.2s ease;
+
+
+  &:hover {
+
+    color: #111;
+
+  }
+
+`;

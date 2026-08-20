@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 import { gsap } from "gsap";
 
-import { FaHome } from "react-icons/fa";
+import { FaHome, FaEye, FaEyeSlash } from "react-icons/fa";
 
 import {
   Container,
@@ -24,6 +24,8 @@ import {
   Button,
   LinkText,
   HomeButton,
+  PasswordWrapper,
+  EyeButton,
 } from "./style";
 
 
@@ -40,6 +42,9 @@ export default function Login() {
   const [nome, setNome] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
   const [erro, setErro] = useState("");
+
+  const [mostrarSenha, setMostrarSenha] = useState(false);
+  const [mostrarConfirmarSenha, setMostrarConfirmarSenha] = useState(false);
 
 
   /* ============================================================
@@ -220,15 +225,13 @@ export default function Login() {
           return;
         }
 
-       if (data.tipo === "matematico") {
-  navigate("/mat", { state: { aba: "poetas" } });
-} else if (data.tipo === "adm") {
-  navigate("/adm/inicioadm");
-} else if (data.tipo === "aluno") {
-  navigate("/usuario/home");
-} else {
-  navigate("/navegacao");
-}
+        if (data.tipo === "matematico") {
+          navigate("/mat", { state: { aba: "notas" } });
+        } else if (data.tipo === "organizador") {
+          navigate("/adm/inicioadm");
+        } else {
+          navigate("/usuario/home");
+        }
 
       } catch (err) {
         console.error(err);
@@ -313,22 +316,48 @@ export default function Login() {
               onChange={(e) => setEmail(e.target.value)}
             />
 
-            <Input
-              className="login-input"
-              placeholder="Senha"
-              type="password"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-            />
+            <PasswordWrapper className="login-input">
+
+              <Input
+                placeholder="Senha"
+                type={mostrarSenha ? "text" : "password"}
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+                style={{ marginBottom: 0 }}
+              />
+
+              <EyeButton
+                type="button"
+                onClick={() => setMostrarSenha(!mostrarSenha)}
+                aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+              >
+                {mostrarSenha ? <FaEyeSlash /> : <FaEye />}
+              </EyeButton>
+
+            </PasswordWrapper>
 
             {mode === "cadastro" && (
-              <Input
-                className="login-input"
-                placeholder="Confirmar senha"
-                type="password"
-                value={confirmarSenha}
-                onChange={(e) => setConfirmarSenha(e.target.value)}
-              />
+
+              <PasswordWrapper className="login-input">
+
+                <Input
+                  placeholder="Confirmar senha"
+                  type={mostrarConfirmarSenha ? "text" : "password"}
+                  value={confirmarSenha}
+                  onChange={(e) => setConfirmarSenha(e.target.value)}
+                  style={{ marginBottom: 0 }}
+                />
+
+                <EyeButton
+                  type="button"
+                  onClick={() => setMostrarConfirmarSenha(!mostrarConfirmarSenha)}
+                  aria-label={mostrarConfirmarSenha ? "Ocultar senha" : "Mostrar senha"}
+                >
+                  {mostrarConfirmarSenha ? <FaEyeSlash /> : <FaEye />}
+                </EyeButton>
+
+              </PasswordWrapper>
+
             )}
 
             {erro && (
