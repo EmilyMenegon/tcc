@@ -82,3 +82,47 @@ export async function login(req, res) {
 
   res.status(401).json({ erro: "Email ou senha inválidos." });
 }
+
+export async function redefinirSenha(req, res) {
+  const { email, novaSenha } = req.body;
+
+  if (!email || !novaSenha) {
+    return res.status(400).json({ erro: "Preencha todos os campos." });
+  }
+
+  if (!EMAIL_REGEX.test(email)) {
+    return res.status(400).json({ erro: "Digite um email válido." });
+  }
+
+  if (novaSenha.length < SENHA_MIN || novaSenha.length > SENHA_MAX) {
+    return res.status(400).json({
+      erro: `A senha deve ter entre ${SENHA_MIN} e ${SENHA_MAX} caracteres.`,
+    });
+  }
+
+  const senhaHash = await bcrypt.hash(novaSenha, 10);
+
+  const usuario = db
+    .prepare("SELECT * FROM usuario WHERE email = ?")
+    .get(email);
+
+  if (usuario) {
+    db.prepare("UPDATE usuario SET senha = ? WHERE email = ?")
+      .run(senhaHash, email);
+
+    return res.json({ mensagem: "Senha redefinida com sucesso!" });
+  }
+
+  const matematico = db
+    .prepare("SELECT * FROM matematico WHERE email = ?")
+    .get(email);
+
+  if (matematico) {
+    db.prepare("UPDATE matematico SET senha = ? WHERE email = ?")
+      .run(senhaHash, email);
+
+    return res.json({ mensagem: "Senha redefinida com sucesso!" });
+  }
+
+  res.status(404).json({ erro: "Email não encontrado." });
+}

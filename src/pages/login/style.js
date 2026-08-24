@@ -1,4 +1,36 @@
-import styled from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
+
+
+/* ============================================================
+   RESET GLOBAL
+============================================================ */
+
+export const GlobalStyle = createGlobalStyle`
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body, #root {
+    width: 100%;
+    min-width: 100%;
+    height: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  html, body {
+    overflow: hidden;
+  }
+
+  body {
+    background: #fff;
+  }
+
+`;
 
 
 /* ============================================================
@@ -6,29 +38,18 @@ import styled from "styled-components";
 ============================================================ */
 
 export const Container = styled.div`
-
-  min-height: 100vh;
-
-  width: 100%;
-
-  background: #fff;
-
-  display: flex;
-
-  justify-content: center;
-
-  align-items: center;
-
-  padding: 2%;
-
-  box-sizing: border-box;
-
-  font-family: "Poppins", sans-serif;
-
-  overflow: hidden;
-
   position: relative;
-
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  font-family: "Poppins", sans-serif;
 `;
 
 
@@ -37,57 +58,20 @@ export const Container = styled.div`
 ============================================================ */
 
 export const MusicVisualizer = styled.div`
-
   position: fixed;
-
   left: 0;
-
   bottom: 0;
-
-  width: 100%;
-
-  height: 330px;
-
+  width: 100vw;
+  height: 50vh;
+  margin: 0;
+  padding: 0;
   display: flex;
-
   align-items: flex-end;
-
-  justify-content: center;
-
-  gap: 5px;
-
-  padding: 0 15px;
-
-  box-sizing: border-box;
-
+  justify-content: space-between;
+  gap: 0;
   overflow: hidden;
-
   pointer-events: none;
-
   z-index: 1;
-
-
-  @media (max-width: 768px) {
-
-    height: 230px;
-
-    gap: 4px;
-
-    padding: 0 8px;
-
-  }
-
-
-  @media (max-width: 500px) {
-
-    height: 170px;
-
-    gap: 3px;
-
-    padding: 0 5px;
-
-  }
-
 `;
 
 
@@ -96,45 +80,18 @@ export const MusicVisualizer = styled.div`
 ============================================================ */
 
 export const MusicColumn = styled.div`
-
-  width: 25px;
-
-  height: 300px;
-
+  flex: 1 1 0;
+  width: 0;
+  height: 100%;
+  margin: 0;
+  padding: 0;
   display: flex;
-
   flex-direction: column-reverse;
-
   justify-content: flex-start;
-
   align-items: center;
-
-  gap: 3px;
-
-  flex-shrink: 0;
-
-
-  @media (max-width: 768px) {
-
-    width: 19px;
-
-    height: 210px;
-
-    gap: 3px;
-
-  }
-
-
-  @media (max-width: 500px) {
-
-    width: 15px;
-
-    height: 150px;
-
-    gap: 2px;
-
-  }
-
+  gap: 0.6%;
+  min-width: 0;
+  box-sizing: border-box;
 `;
 
 
@@ -143,58 +100,17 @@ export const MusicColumn = styled.div`
 ============================================================ */
 
 export const Pixel = styled.div`
-
-  width: 25px;
-
-  height: 25px;
-
-  min-width: 25px;
-
-  min-height: 25px;
-
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  margin: 0;
+  padding: 0;
   flex-shrink: 0;
-
-  background: #f9be06;
-
-  border-radius: 2px;
-
-  opacity: 0.08;
-
-  box-shadow:
-    0 0 8px
-    rgba(249, 190, 6, 0.04);
-
+  background: #ffdb53;
+  border: none;
+  border-radius: 0;
+  opacity: 0;
+  box-shadow: 0 0.5vw rgba(249, 190, 6, 0.04);
   will-change: opacity;
-
-  transition:
-    opacity 0.3s ease;
-
-
-  @media (max-width: 768px) {
-
-    width: 19px;
-
-    height: 19px;
-
-    min-width: 19px;
-
-    min-height: 19px;
-
-  }
-
-
-  @media (max-width: 500px) {
-
-    width: 15px;
-
-    height: 15px;
-
-    min-width: 15px;
-
-    min-height: 15px;
-
-  }
-
 `;
 
 
@@ -203,101 +119,48 @@ export const Pixel = styled.div`
 ============================================================ */
 
 export const HomeButton = styled.button`
-
   position: fixed;
-
   top: 2%;
-
   left: 2%;
-
   width: 4.5%;
-
   aspect-ratio: 1;
-
   min-width: 50px;
-
   max-width: 65px;
-
   border: none;
-
   border-radius: 50%;
-
-  background: #f9be06;
-
+  background: #831614;
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
   cursor: pointer;
-
-  transition:
-    background 0.25s ease,
-    transform 0.25s ease;
-
+  transition: background 0.25s ease, transform 0.25s ease;
   z-index: 999;
-
-  box-shadow:
-    0 0.6vw 1.5vw
-    rgba(0, 0, 0, 0.2);
-
+  box-shadow: 0 0.6vw 1.5vw rgba(0, 0, 0, 0.2);
 
   svg {
-
-    font-size:
-      clamp(
-        20px,
-        1.5vw,
-        28px
-      );
-
-    color: #111;
-
-    transition:
-      color 0.25s ease,
-      transform 0.25s ease;
-
+    font-size: clamp(20px, 1.5vw, 28px);
+    color: #fff;
+    transition: color 0.25s ease, transform 0.25s ease;
   }
-
 
   &:hover {
-
-    background: #111;
-
-    transform:
-      translateY(-3px);
-
+    background: #000;
+    transform: translateY(-3px);
   }
-
 
   &:hover svg {
-
-    color: #f9be06;
-
-    transform:
-      scale(1.08);
-
+    color: #fff;
+    transform: scale(1.08);
   }
-
 
   &:active {
-
-    transform:
-      translateY(0)
-      scale(0.95);
-
+    transform: translateY(0) scale(0.95);
   }
-
 
   @media (max-width: 768px) {
-
     width: 12%;
-
     min-width: 48px;
-
   }
-
 `;
 
 
@@ -306,47 +169,31 @@ export const HomeButton = styled.button`
 ============================================================ */
 
 export const Card = styled.div`
-
   width: 78%;
-
-  min-height: 78vh;
-
+  height: auto;
+  max-height: 92vh;
+  min-height: 0;
   display: flex;
-
   background: #fff;
-
-  border-radius: 2%;
-
-  overflow: hidden;
-
-  box-shadow:
-    0 1vw 2.5vw
-    rgba(0, 0, 0, 0.2);
-
-  will-change:
-    transform,
-    opacity;
-
+  border-radius: 28px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-shadow: 0 1vw 2.5vw rgba(0, 0, 0, 0.2);
+  will-change: transform, opacity;
   position: relative;
-
   z-index: 5;
 
-
   @media (max-width: 1000px) {
-
     width: 92%;
-
+    max-height: 92vh;
   }
-
 
   @media (max-width: 768px) {
-
     width: 96%;
-
+    max-height: 94vh;
     flex-direction: column;
-
+    border-radius: 24px;
   }
-
 `;
 
 
@@ -355,32 +202,22 @@ export const Card = styled.div`
 ============================================================ */
 
 export const LeftSide = styled.div`
-
   width: 50%;
-
-  background: #f9be06;
-
+  background: #fff7d0;
   display: flex;
-
   flex-direction: column;
-
   justify-content: center;
-
   align-items: center;
-
   padding: 5%;
-
   box-sizing: border-box;
-
+  position: relative;
+  overflow: hidden;
 
   @media (max-width: 768px) {
-
     width: 100%;
-
-    padding: 8%;
-
+    padding: 4% 8%;
+    flex-shrink: 0;
   }
-
 `;
 
 
@@ -389,46 +226,31 @@ export const LeftSide = styled.div`
 ============================================================ */
 
 export const LogoImage = styled.div`
-
-  width: 55%;
-
+  width: 62%;
   display: flex;
-
   justify-content: center;
-
   align-items: center;
-
-  will-change:
-    transform,
-    opacity;
-
+  will-change: transform, opacity;
+  position: relative;
+  top: -6%;
+  z-index: 2;
 
   img {
-
     width: 100%;
-
     height: auto;
-
     object-fit: contain;
-
     display: block;
-
   }
-
 
   @media (max-width: 768px) {
-
-    width: 35%;
-
+    width: 32%;
+    top: 0;
   }
-
 
   @media (max-width: 500px) {
-
-    width: 45%;
-
+    width: 38%;
+    top: 0;
   }
-
 `;
 
 
@@ -437,24 +259,87 @@ export const LogoImage = styled.div`
 ============================================================ */
 
 export const Welcome = styled.h1`
-
-  margin-top: 8%;
-
-  font-size:
-    clamp(
-      2rem,
-      3vw,
-      2.6rem
-    );
-
-  color: #111;
-
+  margin-top: 2%;
+  position: relative;
+  top: -6%;
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  color: #831614;
   text-align: center;
+  will-change: transform, opacity;
+  z-index: 2;
+`;
 
-  will-change:
-    transform,
-    opacity;
 
+/* ============================================================
+   CÍRCULOS DECORATIVOS
+============================================================ */
+
+export const DecorativeCircles = styled.div`
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 25%;
+  pointer-events: none;
+  z-index: 1;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+`;
+
+
+/* ============================================================
+   CÍRCULO VERMELHO
+============================================================ */
+
+export const CircleOne = styled.div`
+  position: absolute;
+  width: 100vw;
+  height: 100vw;
+  max-width: 560px;
+  max-height: 560px;
+  border-radius: 50%;
+  background: #831614;
+  left: -30%;
+  bottom: -150%;
+  z-index: 3;
+`;
+
+
+/* ============================================================
+   CÍRCULO PRETO
+============================================================ */
+
+export const CircleTwo = styled.div`
+  position: absolute;
+  width: 100vw;
+  height: 100vw;
+  max-width: 350px;
+  max-height: 270px;
+  border-radius: 50%;
+  background: #383131;
+  left: 20%;
+  bottom: -97%;
+  z-index: 2;
+`;
+
+
+/* ============================================================
+   CÍRCULO AMARELO
+============================================================ */
+
+export const CircleThree = styled.div`
+  position: absolute;
+  width: 100vw;
+  height: 100vw;
+  max-width: 600px;
+  max-height: 500px;
+  border-radius: 50%;
+  background: #ffdb53;
+  right: -3%;
+  bottom: -150%;
+  z-index: 1;
 `;
 
 
@@ -463,30 +348,19 @@ export const Welcome = styled.h1`
 ============================================================ */
 
 export const RightSide = styled.div`
-
   width: 50%;
-
   display: flex;
-
   flex-direction: column;
-
   justify-content: center;
-
   padding: 6%;
-
   box-sizing: border-box;
-
-  overflow: hidden;
-
+  overflow: visible;
 
   @media (max-width: 768px) {
-
     width: 100%;
-
-    padding: 8%;
-
+    padding: 5% 8%;
+    flex-shrink: 0;
   }
-
 `;
 
 
@@ -495,21 +369,12 @@ export const RightSide = styled.div`
 ============================================================ */
 
 export const Tabs = styled.div`
-
   display: flex;
-
   justify-content: center;
-
   align-items: center;
-
   gap: 8%;
-
   margin-bottom: 8%;
-
-  will-change:
-    transform,
-    opacity;
-
+  will-change: transform, opacity;
 `;
 
 
@@ -518,54 +383,16 @@ export const Tabs = styled.div`
 ============================================================ */
 
 export const Tab = styled.button`
-
   border: none;
-
   cursor: pointer;
-
   padding: 3% 8%;
-
   border-radius: 999px;
-
-  font-size:
-    clamp(
-      0.9rem,
-      1vw,
-      1rem
-    );
-
+  font-size: clamp(0.9rem, 1vw, 1rem);
   font-weight: bold;
-
-  color:
-    ${({ $active }) =>
-      $active
-        ? "#111"
-        : "#999"};
-
-  background:
-    ${({ $active }) =>
-      $active
-        ? "#f9be06"
-        : "transparent"};
-
-  transform:
-    ${({ $active }) =>
-      $active
-        ? "scale(1.05)"
-        : "scale(1)"};
-
-  transition:
-    color 0.25s ease,
-    background 0.25s ease,
-    transform 0.25s ease;
-
-
-  &:hover {
-
-    color: #111;
-
-  }
-
+  color: ${({ $active }) => ($active ? "#fff" : "#999")};
+  background: ${({ $active }) => ($active ? "#831617" : "transparent")};
+  transform: ${({ $active }) => ($active ? "scale(1.05)" : "scale(1)")};
+  transition: color 0.25s ease, background 0.25s ease, transform 0.25s ease;
 `;
 
 
@@ -574,19 +401,40 @@ export const Tab = styled.button`
 ============================================================ */
 
 export const Form = styled.form`
-
   display: flex;
-
   flex-direction: column;
-
-  gap: 20px;
-
+  gap: 16px;
   width: 100%;
+  will-change: transform, opacity;
+`;
 
-  will-change:
-    transform,
-    opacity;
 
+/* ============================================================
+   INPUT WRAPPER
+============================================================ */
+
+export const InputWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  height: 4.2rem;
+  margin-bottom: 2%;
+`;
+
+
+/* ============================================================
+   INPUT LABEL
+============================================================ */
+
+export const InputLabel = styled.label`
+  position: absolute;
+  top: 8px;
+  left: 5%;
+  z-index: 2;
+  color: #a09870;
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1;
+  pointer-events: none;
 `;
 
 
@@ -595,66 +443,23 @@ export const Form = styled.form`
 ============================================================ */
 
 export const Input = styled.input`
-
   width: 100%;
-
-  height: 3.2rem;
-
-  border: none;
-
+  height: 100%;
+  border: 2px solid #ffdb53;
   outline: none;
-
-  border-radius: 999px;
-
-  background: #ececec;
-
-  padding: 0 5%;
-
+  border-radius: 15px;
+  background: #fff7d0;
+  padding: 1.35rem 12% 0.45rem 5%;
   box-sizing: border-box;
-
-  font-size:
-    clamp(
-      0.9rem,
-      1vw,
-      1rem
-    );
-
-  margin-bottom: 4%;
-
-  transition:
-    background 0.25s ease,
-    box-shadow 0.25s ease,
-    transform 0.2s ease;
-
-  will-change:
-    transform,
-    opacity;
-
-
-  &::placeholder {
-
-    color: #888;
-
-  }
-
+  font-size: 0.95rem;
+  line-height: 1.2;
+  color: #111;
+  transition: background 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease, border-color 0.25s ease;
+  will-change: transform, opacity;
 
   &:hover {
-
-    background: #e8e8e8;
-
+    background: #fff7d0;
   }
-
-
-  &:focus {
-
-    background: #e3e3e3;
-
-    box-shadow:
-      0 0 0 3px
-      rgba(249, 190, 6, 0.18);
-
-  }
-
 `;
 
 
@@ -663,13 +468,15 @@ export const Input = styled.input`
 ============================================================ */
 
 export const PasswordWrapper = styled.div`
-
   position: relative;
-
   width: 100%;
+  height: 4.2rem;
+  margin-bottom: 2%;
 
-  margin-bottom: 4%;
-
+  ${Input} {
+    height: 100%;
+    margin-bottom: 0;
+  }
 `;
 
 
@@ -678,99 +485,51 @@ export const PasswordWrapper = styled.div`
 ============================================================ */
 
 export const EyeButton = styled.button`
-
   position: absolute;
-
   right: 5%;
-
   top: 50%;
-
-  transform:
-    translateY(-50%);
-
+  transform: translateY(-50%);
   background: none;
-
   border: none;
-
   cursor: pointer;
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
   color: #888;
-
   font-size: 1.1rem;
-
   padding: 0;
-
-  transition:
-    color 0.2s ease;
-
+  transition: color 0.2s ease;
 
   &:hover {
-
     color: #111;
-
   }
-
 `;
 
 
 /* ============================================================
    ESQUECI MINHA SENHA
-   MESMO TAMANHO DO LINK INFERIOR
 ============================================================ */
 
 export const ForgotPassword = styled.button`
-
   display: block;
-
   width: 100%;
-
   border: none;
-
   background: transparent;
-
   padding: 0;
-
   margin-top: -10px;
-
   margin-bottom: 2px;
-
   text-align: center;
-
-  color: #008cff;
-
+  color: #831614;
   font-family: inherit;
-
-  font-size:
-    clamp(
-      0.85rem,
-      0.95vw,
-      1rem
-    );
-
+  font-size: clamp(0.85rem, 0.95vw, 1rem);
   cursor: pointer;
-
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease;
-
+  transition: color 0.2s ease, transform 0.2s ease;
 
   &:hover {
-
-    color: #006dcc;
-
+    color: #000;
     text-decoration: underline;
-
-    transform:
-      translateY(-1px);
-
+    transform: translateY(-1px);
   }
-
 `;
 
 
@@ -779,35 +538,16 @@ export const ForgotPassword = styled.button`
 ============================================================ */
 
 export const LinkText = styled.p`
-
-  margin-top: 5%;
-
+  margin-top: 3%;
   text-align: center;
-
-  font-size:
-    clamp(
-      0.85rem,
-      0.95vw,
-      1rem
-    );
-
+  font-size: clamp(0.85rem, 0.95vw, 1rem);
   cursor: pointer;
-
-  transition:
-    transform 0.2s ease;
-
-  will-change:
-    transform,
-    opacity;
-
+  transition: transform 0.2s ease;
+  will-change: transform, opacity;
 
   &:hover {
-
-    transform:
-      translateY(-1px);
-
+    transform: translateY(-1px);
   }
-
 `;
 
 
@@ -816,32 +556,22 @@ export const LinkText = styled.p`
 ============================================================ */
 
 export const LinkNormal = styled.span`
-
   color: #111;
-
 `;
 
 
 /* ============================================================
-   PARTE AZUL DO LINK
+   PARTE VERMELHA DO LINK
 ============================================================ */
 
 export const LinkAction = styled.span`
-
-  color: #008cff;
-
-  transition:
-    color 0.2s ease;
-
+  color: #831614;
+  transition: color 0.2s ease;
 
   &:hover {
-
-    color: #006dcc;
-
+    color: #000;
     text-decoration: underline;
-
   }
-
 `;
 
 
@@ -850,71 +580,36 @@ export const LinkAction = styled.span`
 ============================================================ */
 
 export const Button = styled.button`
-
   width: 100%;
-
-  height: 45px;
-
+  height: 58px;
   flex-shrink: 0;
-
   border: none;
-
-  border-radius: 25px;
-
-  background: #f9be06;
-
-  color: #111;
-
-  font-size:
-    clamp(
-      0.95rem,
-      1vw,
-      1rem
-    );
-
+  border-radius: 18px;
+  background: #831614;
+  color: #fff;
+  font-size: clamp(1rem, 1.1vw, 1.1rem);
   font-weight: bold;
-
   cursor: pointer;
-
-  transition:
-    background 0.25s ease,
-    color 0.25s ease,
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
-
+  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
-  will-change:
-    transform,
-    opacity;
-
+  will-change: transform, opacity;
 
   &:hover {
-
     background: #000;
-
-    color: #f9be06;
-
-    transform:
-      translateY(-3px);
-
-    box-shadow:
-      0 8px 18px
-      rgba(0, 0, 0, 0.16);
-
+    color: #fff;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16);
   }
-
 
   &:active {
-
-    transform:
-      translateY(1px)
-      scale(0.98);
-
+    transform: translateY(1px) scale(0.98);
   }
 
+  @media (max-width: 768px) {
+    height: 62px;
+    border-radius: 18px;
+    font-size: 1.05rem;
+  }
 `;

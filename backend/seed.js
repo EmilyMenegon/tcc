@@ -4,7 +4,7 @@ import db from "./database.js";
 async function seed() {
 
   const usuariosTeste = [
-    { nome: "Organizador Teste", email: "adm@teste.com", senha: "adm12345", tipo: "organizador" },
+    { nome: "Organizador", email: "organizador@gmail.com", senha: "organizador1234", tipo: "organizador" },
   ];
 
   const stmtUsuario = db.prepare(
@@ -22,7 +22,7 @@ async function seed() {
   }
 
   const matematicosTeste = [
-    { email: "matematico@teste.com", senha: "mat12345" },
+    { email: "mat@gmail.com", senha: "matematico1234" },
   ];
 
   const stmtMatematico = db.prepare(
