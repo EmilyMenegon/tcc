@@ -669,27 +669,6 @@ export default function Inicioadm() {
           }}
         >
 
-          <FaCog
-            size={18}
-            color="#f9be06"
-            style={{
-              marginRight: "8px",
-            }}
-          />
-
-
-          <span
-            style={{
-              color: "#777",
-              fontSize: ".82rem",
-              fontWeight: 600,
-            }}
-          >
-
-            Área exclusiva para administração
-
-          </span>
-
         </div>
 
 

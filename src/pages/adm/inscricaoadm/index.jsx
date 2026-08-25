@@ -77,22 +77,35 @@ export default function Inscricaoadm() {
 
   const [alunoExcluir, setAlunoExcluir] = useState(null);
 
+  // CONFIRMAÇÃO DA EXCLUSÃO
+  const [confirmacaoExclusao, setConfirmacaoExclusao] = useState("");
 
 
-function excluirAluno() {
-  const novos = alunos.filter(
-    aluno => aluno.id !== alunoExcluir.id
-  );
 
-  setAlunos(novos);
+  function excluirAluno() {
 
-  localStorage.setItem(
-    "alunos",
-    JSON.stringify(novos)
-  );
+    // Só permite excluir se tiver digitado "excluir"
+    if (confirmacaoExclusao !== "excluir") {
+      return;
+    }
 
-  setAlunoExcluir(null);
-}
+    const novos = alunos.filter(
+      aluno => aluno.id !== alunoExcluir.id
+    );
+
+    setAlunos(novos);
+
+    localStorage.setItem(
+      "alunos",
+      JSON.stringify(novos)
+    );
+
+    setAlunoExcluir(null);
+
+    // Limpa o campo de confirmação
+    setConfirmacaoExclusao("");
+  }
+
 
   function salvarEdicao(){
 
@@ -145,13 +158,10 @@ function excluirAluno() {
 return (
 
 
-  
-
 <Page>
 
 
 <Layoutadm/>
-
 
 
 
@@ -186,7 +196,6 @@ onClick={()=>setTurno(item)}
 </FilterButton>
 
 ))
-
 }
 
 
@@ -196,12 +205,10 @@ onClick={()=>setTurno(item)}
 
 
 
-
 <TableContainer>
 
 
 <Table>
-
 
 <thead>
 
@@ -220,7 +227,6 @@ onClick={()=>setTurno(item)}
 </tr>
 
 </thead>
-
 
 
 
@@ -271,7 +277,10 @@ onClick={()=>setAlunoEditando(aluno)}
 
 
 <FiTrash2
-  onClick={() => setAlunoExcluir(aluno)}
+  onClick={() => {
+    setAlunoExcluir(aluno);
+    setConfirmacaoExclusao("");
+  }}
 />
 
 
@@ -302,7 +311,10 @@ onClick={()=>setAlunoEditando(aluno)}
 
 
 
+
+
 </Content>
+
 
 
 
@@ -314,8 +326,6 @@ alunoEditando &&
 
 <ModalOverlay>
 <Modal>
-
-
 
 
 
@@ -343,7 +353,6 @@ nome:e.target.value
 }
 
 />
-
 
 
 
@@ -470,44 +479,101 @@ Salvar
 
 }
 
-{alunoExcluir && (
-  <ModalOverlay>
-  <Modal>
-  
 
-      <h2>Excluir aluno</h2>
+
+{/* CONFIRMAÇÃO DE EXCLUSÃO */}
+
+{alunoExcluir && (
+
+  <ModalOverlay>
+
+    <Modal>
+
+      <h2>
+        Excluir aluno
+      </h2>
+
 
       <p
         style={{
           textAlign: "center",
           color: "#666",
-          marginBottom: "10px",
+          marginBottom: "5px",
         }}
       >
         Tem certeza que deseja excluir{" "}
         <strong>{alunoExcluir.nome}</strong>?
       </p>
 
-   <ModalButtons>
+
+      <p
+        style={{
+          textAlign: "center",
+          color: "#666",
+          fontSize: "14px",
+          marginBottom: "5px",
+        }}
+      >
+        Para confirmar, digite{" "}
+        <strong>excluir</strong> abaixo:
+      </p>
+
+
+      <Input
+
+        type="text"
+
+        placeholder="Digite excluir"
+
+        value={confirmacaoExclusao}
+
+        onChange={(e) =>
+          setConfirmacaoExclusao(e.target.value)
+        }
+
+      />
+
+
+      <ModalButtons>
+
 
         <CancelButton
-          onClick={() => setAlunoExcluir(null)}
+
+          onClick={() => {
+            setAlunoExcluir(null);
+            setConfirmacaoExclusao("");
+          }}
+
         >
+
           Cancelar
+
         </CancelButton>
 
+
+
         <ConfirmButton
+
           onClick={excluirAluno}
+
+          disabled={confirmacaoExclusao !== "excluir"}
+
         >
+
           Excluir
+
         </ConfirmButton>
 
-     </ModalButtons>
 
-   
-  </Modal>
+      </ModalButtons>
+
+
+    </Modal>
+
   </ModalOverlay>
+
 )}
+
 
 
 </Page>
