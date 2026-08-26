@@ -439,12 +439,6 @@ export const PrimaryButton =
       color 0.3s ease,
       transform 0.25s ease;
 
-    /*
-    ==========================================================
-    ÁGUA PRETA
-    ==========================================================
-    */
-
     &::before {
       content: "";
 
@@ -1339,7 +1333,7 @@ export const AboutLetter =
       transform 0.2s ease;
 
     &:hover {
-      background: #111;
+      background: #831614;
 
       color: #fff;
 

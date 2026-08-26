@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+
 import Layoutadm from "../../../components/Layoutadm";
 
 import {
@@ -12,6 +13,7 @@ import {
   FiImage,
   FiUpload,
   FiUsers,
+  FiAward,
 } from "react-icons/fi";
 
 import {
@@ -74,27 +76,125 @@ import {
   ModalButtons,
   CancelButton,
   ConfirmButton,
+
+  RankingSection,
+  RankingHeader,
+  RankingTitle,
+  RankingDescription,
+  RankingTableWrapper,
+  RankingTable,
+  RankingRow,
+  Position,
+  ParticipantName,
+  Score,
+  Average,
+  Penalty,
+  Time,
+  FinalScore,
+  RankingEmpty,
 } from "./style";
 
 
+// ======================================================
+// FUNÇÕES AUXILIARES DO RANKING
+// ======================================================
+
+function numeroSeguro(valor) {
+  const numero = Number(valor);
+
+  return Number.isFinite(numero)
+    ? numero
+    : 0;
+}
+
+
+// ======================================================
+// NORMALIZAR PARTICIPANTE
+// ======================================================
+
+function normalizarParticipante(participante) {
+  if (!participante) {
+    return {
+      nome: "Participante",
+      notas: [0, 0, 0, 0, 0],
+      tempo: 0,
+    };
+  }
+
+  let notas = [];
+
+  // Formato principal:
+  // notas: [8, 9, 10, 7, 9]
+
+  if (Array.isArray(participante.notas)) {
+    notas = participante.notas;
+  }
+
+  // Caso venha como nota1, nota2...
+  else {
+    notas = [
+      participante.nota1,
+      participante.nota2,
+      participante.nota3,
+      participante.nota4,
+      participante.nota5,
+    ];
+  }
+
+  notas = Array.from(
+    { length: 5 },
+    (_, index) => numeroSeguro(notas[index])
+  );
+
+  return {
+    ...participante,
+
+    nome:
+      participante.nome ||
+      participante.name ||
+      participante.nomeParticipante ||
+      participante.participante ||
+      "Participante",
+
+    notas,
+
+    tempo:
+      numeroSeguro(
+        participante.tempo ??
+        participante.tempoSegundos ??
+        participante.tempoRecitacao
+      ),
+  };
+}
+
+
+// ======================================================
+// COMPONENTE
+// ======================================================
+
 export default function Eventos() {
 
-  // ==========================================
+  // ====================================================
   // EVENTOS
-  // ==========================================
+  // ====================================================
 
   const [eventos, setEventos] = useState(() => {
 
-    const dadosSalvos =
-      localStorage.getItem("eventos");
-
-    if (!dadosSalvos) {
-      return [];
-    }
-
     try {
 
-      return JSON.parse(dadosSalvos);
+      const dados =
+        localStorage.getItem("eventos");
+
+      if (!dados) {
+        return [];
+      }
+
+      const parsed =
+        JSON.parse(dados);
+
+      return Array.isArray(parsed)
+        ? parsed
+        : [];
 
     } catch {
 
@@ -105,33 +205,18 @@ export default function Eventos() {
   });
 
 
-  // ==========================================
-  // MODAL DO FORMULÁRIO
-  // ==========================================
+  // ====================================================
+  // MODAIS
+  // ====================================================
 
   const [modalAberto, setModalAberto] =
     useState(false);
 
-
-  // ==========================================
-  // EVENTO SELECIONADO PARA VISUALIZAÇÃO
-  // ==========================================
-
-  const [eventoSelecionado, setEventoSelecionado] =
+  const [eventoSelecionadoId, setEventoSelecionadoId] =
     useState(null);
-
-
-  // ==========================================
-  // EVENTO SENDO EDITADO
-  // ==========================================
 
   const [eventoEditando, setEventoEditando] =
     useState(null);
-
-
-  // ==========================================
-  // MODAL DE EXCLUSÃO
-  // ==========================================
 
   const [modalExcluirAberto, setModalExcluirAberto] =
     useState(false);
@@ -140,9 +225,9 @@ export default function Eventos() {
     useState(null);
 
 
-  // ==========================================
+  // ====================================================
   // FORMULÁRIO
-  // ==========================================
+  // ====================================================
 
   const [imagem, setImagem] =
     useState("");
@@ -166,9 +251,33 @@ export default function Eventos() {
     useState("");
 
 
-  // ==========================================
-  // SALVAR NO LOCALSTORAGE
-  // ==========================================
+  // ====================================================
+  // EVENTO SELECIONADO ATUALIZADO
+  // ====================================================
+
+  const eventoSelecionado = useMemo(() => {
+
+    if (!eventoSelecionadoId) {
+      return null;
+    }
+
+    return (
+      eventos.find(
+        (evento) =>
+          String(evento.id) ===
+          String(eventoSelecionadoId)
+      ) || null
+    );
+
+  }, [
+    eventos,
+    eventoSelecionadoId,
+  ]);
+
+
+  // ====================================================
+  // SALVAR EVENTOS
+  // ====================================================
 
   useEffect(() => {
 
@@ -177,12 +286,83 @@ export default function Eventos() {
       JSON.stringify(eventos)
     );
 
+    window.dispatchEvent(
+      new Event("eventosAtualizados")
+    );
+
   }, [eventos]);
 
 
-  // ==========================================
+  // ====================================================
+  // CARREGAR EVENTOS DO LOCALSTORAGE
+  // ====================================================
+
+  useEffect(() => {
+
+    function carregarEventos() {
+
+      try {
+
+        const dados =
+          localStorage.getItem("eventos");
+
+        if (!dados) {
+
+          setEventos([]);
+
+          return;
+
+        }
+
+        const parsed =
+          JSON.parse(dados);
+
+        setEventos(
+          Array.isArray(parsed)
+            ? parsed
+            : []
+        );
+
+      } catch {
+
+        setEventos([]);
+
+      }
+
+    }
+
+
+    window.addEventListener(
+      "storage",
+      carregarEventos
+    );
+
+    window.addEventListener(
+      "eventosAtualizados",
+      carregarEventos
+    );
+
+
+    return () => {
+
+      window.removeEventListener(
+        "storage",
+        carregarEventos
+      );
+
+      window.removeEventListener(
+        "eventosAtualizados",
+        carregarEventos
+      );
+
+    };
+
+  }, []);
+
+
+  // ====================================================
   // LIMPAR FORMULÁRIO
-  // ==========================================
+  // ====================================================
 
   function limparFormulario() {
 
@@ -198,9 +378,9 @@ export default function Eventos() {
   }
 
 
-  // ==========================================
-  // ABRIR MODAL PARA CRIAR
-  // ==========================================
+  // ====================================================
+  // NOVO EVENTO
+  // ====================================================
 
   function abrirModal() {
 
@@ -213,33 +393,52 @@ export default function Eventos() {
   }
 
 
-  // ==========================================
-  // ABRIR MODAL PARA EDITAR
-  // ==========================================
+  // ====================================================
+  // EDITAR EVENTO
+  // ====================================================
 
   function abrirEdicao(evento) {
 
-    setEventoSelecionado(null);
+    setEventoSelecionadoId(null);
 
     setEventoEditando(evento);
 
-    setNome(evento.nome || "");
-    setDescricao(evento.descricao || "");
-    setData(evento.data || "");
-    setHorario(evento.horario || "");
-    setLocal(evento.local || "");
+    setNome(
+      evento.nome || ""
+    );
 
-    setImagem(evento.imagem || "");
-    setImagemPreview(evento.imagem || "");
+    setDescricao(
+      evento.descricao || ""
+    );
+
+    setData(
+      evento.data || ""
+    );
+
+    setHorario(
+      evento.horario || ""
+    );
+
+    setLocal(
+      evento.local || ""
+    );
+
+    setImagem(
+      evento.imagem || ""
+    );
+
+    setImagemPreview(
+      evento.imagem || ""
+    );
 
     setModalAberto(true);
 
   }
 
 
-  // ==========================================
-  // FECHAR MODAL DO FORMULÁRIO
-  // ==========================================
+  // ====================================================
+  // FECHAR MODAL
+  // ====================================================
 
   function fecharModal() {
 
@@ -252,23 +451,23 @@ export default function Eventos() {
   }
 
 
-  // ==========================================
-  // SELECIONAR IMAGEM
-  // ==========================================
+  // ====================================================
+  // IMAGEM
+  // ====================================================
 
   function handleImagem(event) {
 
     const arquivo =
-      event.target.files[0];
+      event.target.files?.[0];
 
     if (!arquivo) {
       return;
     }
 
-
-    // Limite de 5MB
-
-    if (arquivo.size > 5 * 1024 * 1024) {
+    if (
+      arquivo.size >
+      5 * 1024 * 1024
+    ) {
 
       alert(
         "A imagem deve ter no máximo 5MB."
@@ -278,10 +477,11 @@ export default function Eventos() {
 
     }
 
-
-    // Verifica se é imagem
-
-    if (!arquivo.type.startsWith("image/")) {
+    if (
+      !arquivo.type.startsWith(
+        "image/"
+      )
+    ) {
 
       alert(
         "Selecione um arquivo de imagem."
@@ -309,14 +509,16 @@ export default function Eventos() {
     };
 
 
-    reader.readAsDataURL(arquivo);
+    reader.readAsDataURL(
+      arquivo
+    );
 
   }
 
 
-  // ==========================================
+  // ====================================================
   // REMOVER IMAGEM
-  // ==========================================
+  // ====================================================
 
   function removerImagem() {
 
@@ -326,9 +528,9 @@ export default function Eventos() {
   }
 
 
-  // ==========================================
-  // VALIDAR FORMULÁRIO
-  // ==========================================
+  // ====================================================
+  // VALIDAR
+  // ====================================================
 
   function validarFormulario() {
 
@@ -342,7 +544,6 @@ export default function Eventos() {
 
     }
 
-
     if (!descricao.trim()) {
 
       alert(
@@ -352,7 +553,6 @@ export default function Eventos() {
       return false;
 
     }
-
 
     if (!data) {
 
@@ -364,7 +564,6 @@ export default function Eventos() {
 
     }
 
-
     if (!horario) {
 
       alert(
@@ -374,7 +573,6 @@ export default function Eventos() {
       return false;
 
     }
-
 
     if (!local.trim()) {
 
@@ -386,92 +584,87 @@ export default function Eventos() {
 
     }
 
-
     return true;
 
   }
 
 
-  // ==========================================
-  // SALVAR / CRIAR / EDITAR
-  // ==========================================
+  // ====================================================
+  // SALVAR EVENTO
+  // ====================================================
 
   function salvarEvento(event) {
 
     event.preventDefault();
-
 
     if (!validarFormulario()) {
       return;
     }
 
 
-    // ========================================
-    // EDITANDO
-    // ========================================
+    // ==================================================
+    // EDITAR
+    // ==================================================
 
     if (eventoEditando) {
 
-      const eventosAtualizados =
-        eventos.map((evento) => {
-
-          if (
-            evento.id ===
-            eventoEditando.id
-          ) {
-
-            return {
-
-              ...evento,
-
-              nome:
-                nome.trim(),
-
-              descricao:
-                descricao.trim(),
-
-              data,
-
-              horario,
-
-              local:
-                local.trim(),
-
-              imagem:
-                imagem || "",
-
-            };
-
-          }
-
-          return evento;
-
-        });
-
-
       setEventos(
-        eventosAtualizados
+        (eventosAtuais) =>
+          eventosAtuais.map(
+            (evento) => {
+
+              if (
+                String(evento.id) !==
+                String(eventoEditando.id)
+              ) {
+
+                return evento;
+
+              }
+
+
+              return {
+
+                ...evento,
+
+                nome:
+                  nome.trim(),
+
+                descricao:
+                  descricao.trim(),
+
+                data,
+
+                horario,
+
+                local:
+                  local.trim(),
+
+                imagem:
+                  imagem || "",
+
+              };
+
+            }
+          )
       );
 
 
-      setModalAberto(false);
-
-      setEventoEditando(null);
-
-      limparFormulario();
+      fecharModal();
 
       return;
 
     }
 
 
-    // ========================================
-    // CRIANDO NOVO EVENTO
-    // ========================================
+    // ==================================================
+    // NOVO
+    // ==================================================
 
     const novoEvento = {
 
-      id: Date.now(),
+      id:
+        Date.now(),
 
       nome:
         nome.trim(),
@@ -499,29 +692,26 @@ export default function Eventos() {
 
     setEventos(
       (eventosAtuais) => [
-
         novoEvento,
-
         ...eventosAtuais,
-
       ]
     );
 
 
-    setModalAberto(false);
-
-    limparFormulario();
+    fecharModal();
 
   }
 
 
-  // ==========================================
-  // ABRIR CONFIRMAÇÃO DE EXCLUSÃO
-  // ==========================================
+  // ====================================================
+  // EXCLUSÃO
+  // ====================================================
 
-  function abrirConfirmacaoExclusao(evento) {
+  function abrirConfirmacaoExclusao(
+    evento
+  ) {
 
-    setEventoSelecionado(null);
+    setEventoSelecionadoId(null);
 
     setEventoParaExcluir(evento);
 
@@ -529,10 +719,6 @@ export default function Eventos() {
 
   }
 
-
-  // ==========================================
-  // CANCELAR EXCLUSÃO
-  // ==========================================
 
   function cancelarExclusao() {
 
@@ -543,10 +729,6 @@ export default function Eventos() {
   }
 
 
-  // ==========================================
-  // CONFIRMAR EXCLUSÃO
-  // ==========================================
-
   function confirmarExclusao() {
 
     if (!eventoParaExcluir) {
@@ -554,20 +736,19 @@ export default function Eventos() {
     }
 
 
-    const novosEventos =
-      eventos.filter(
-        (evento) =>
-          evento.id !==
-          eventoParaExcluir.id
-      );
-
-
     setEventos(
-      novosEventos
+      (eventosAtuais) =>
+        eventosAtuais.filter(
+          (evento) =>
+            String(evento.id) !==
+            String(
+              eventoParaExcluir.id
+            )
+        )
     );
 
 
-    setEventoSelecionado(null);
+    setEventoSelecionadoId(null);
 
     setModalExcluirAberto(false);
 
@@ -576,54 +757,338 @@ export default function Eventos() {
   }
 
 
-  // ==========================================
-  // FORMATAR DATA
-  // ==========================================
+  // ====================================================
+  // DATA
+  // ====================================================
 
-  function formatarData(dataEvento) {
+  function formatarData(
+    dataEvento
+  ) {
 
     if (!dataEvento) {
       return "";
     }
 
-
     const partes =
       dataEvento.split("-");
 
+    if (
+      partes.length !== 3
+    ) {
 
-    if (partes.length !== 3) {
       return dataEvento;
-    }
 
+    }
 
     return `${partes[2]}/${partes[1]}/${partes[0]}`;
 
   }
 
 
-  // ==========================================
-  // ESC FECHA MODAIS
-  // ==========================================
+  // ====================================================
+  // TEMPO
+  // ====================================================
+
+  function formatarTempo(
+    segundos
+  ) {
+
+    const total =
+      Math.max(
+        0,
+        Math.floor(
+          numeroSeguro(segundos)
+        )
+      );
+
+
+    const minutos =
+      Math.floor(
+        total / 60
+      );
+
+
+    const segundosRestantes =
+      total % 60;
+
+
+    return `${String(
+      minutos
+    ).padStart(
+      2,
+      "0"
+    )}:${String(
+      segundosRestantes
+    ).padStart(
+      2,
+      "0"
+    )}`;
+
+  }
+
+
+  // ====================================================
+  // PENALIDADE
+  // ====================================================
+
+  function calcularPenalidade(
+    tempo
+  ) {
+
+    const segundos =
+      numeroSeguro(tempo);
+
+    // Até 3 minutos e 10 segundos
+    // não existe penalidade.
+
+    const tolerancia =
+      190;
+
+
+    if (
+      segundos <=
+      tolerancia
+    ) {
+
+      return 0;
+
+    }
+
+
+    const excesso =
+      segundos -
+      tolerancia;
+
+
+    // 0,1 ponto por segundo excedido
+
+    return (
+      excesso *
+      0.1
+    );
+
+  }
+
+
+  // ====================================================
+  // MÉDIA
+  // ====================================================
+
+  function calcularMedia(
+    notas
+  ) {
+
+    if (
+      !Array.isArray(notas)
+    ) {
+
+      return 0;
+
+    }
+
+
+    const notasValidas =
+      notas
+        .slice(0, 5)
+        .map(numeroSeguro);
+
+
+    if (
+      notasValidas.length ===
+      0
+    ) {
+
+      return 0;
+
+    }
+
+
+    const soma =
+      notasValidas.reduce(
+        (
+          total,
+          nota
+        ) =>
+          total + nota,
+        0
+      );
+
+
+    return (
+      soma /
+      notasValidas.length
+    );
+
+  }
+
+
+  // ====================================================
+  // RESULTADO
+  // ====================================================
+
+  function calcularResultado(
+    participante
+  ) {
+
+    const participanteNormalizado =
+      normalizarParticipante(
+        participante
+      );
+
+
+    const media =
+      calcularMedia(
+        participanteNormalizado.notas
+      );
+
+
+    const penalidade =
+      calcularPenalidade(
+        participanteNormalizado.tempo
+      );
+
+
+    const notaFinal =
+      Math.max(
+        0,
+        media -
+          penalidade
+      );
+
+
+    return {
+
+      ...participanteNormalizado,
+
+      media,
+
+      penalidade,
+
+      notaFinal,
+
+    };
+
+  }
+
+
+  // ====================================================
+  // RANKING
+  // ====================================================
+
+  function gerarRanking(
+    evento
+  ) {
+
+    if (
+      !evento
+    ) {
+
+      return [];
+
+    }
+
+
+    const participantes =
+      Array.isArray(
+        evento.participantes
+      )
+        ? evento.participantes
+        : [];
+
+
+    return participantes
+
+      .map(
+        calcularResultado
+      )
+
+      .sort(
+        (
+          a,
+          b
+        ) => {
+
+          // Primeiro:
+          // maior nota final.
+
+          if (
+            b.notaFinal !==
+            a.notaFinal
+          ) {
+
+            return (
+              b.notaFinal -
+              a.notaFinal
+            );
+
+          }
+
+
+          // Desempate:
+          // menor tempo.
+
+          return (
+            a.tempo -
+            b.tempo
+          );
+
+        }
+      )
+
+      .map(
+        (
+          participante,
+          index
+        ) => ({
+
+          ...participante,
+
+          colocacao:
+            index + 1,
+
+        })
+      );
+
+  }
+
+
+  // ====================================================
+  // ESC
+  // ====================================================
 
   useEffect(() => {
 
-    function handleKeyDown(event) {
+    function handleKeyDown(
+      event
+    ) {
 
       if (
-        event.key === "Escape"
+        event.key !==
+        "Escape"
       ) {
 
-        setModalAberto(false);
-
-        setEventoSelecionado(null);
-
-        setModalExcluirAberto(false);
-
-        setEventoEditando(null);
-
-        setEventoParaExcluir(null);
+        return;
 
       }
+
+
+      setModalAberto(false);
+
+      setEventoSelecionadoId(
+        null
+      );
+
+      setModalExcluirAberto(
+        false
+      );
+
+      setEventoEditando(
+        null
+      );
+
+      setEventoParaExcluir(
+        null
+      );
 
     }
 
@@ -646,24 +1111,29 @@ export default function Eventos() {
   }, []);
 
 
-  // ==========================================
+  // ====================================================
+  // RANKING ATUAL
+  // ====================================================
+
+  const ranking =
+    useMemo(
+      () =>
+        gerarRanking(
+          eventoSelecionado
+        ),
+      [eventoSelecionado]
+    );
+
+
+  // ====================================================
   // RENDER
-  // ==========================================
+  // ====================================================
 
   return (
 
     <Page>
 
-      {/* ======================================
-          MENU
-      ====================================== */}
-
       <Layoutadm />
-
-
-      {/* ======================================
-          CONTEÚDO
-      ====================================== */}
 
       <Content>
 
@@ -684,9 +1154,9 @@ export default function Eventos() {
         </Header>
 
 
-        {/* ====================================
-            EVENTOS
-        ==================================== */}
+        {/* ==================================================
+            CARDS DOS EVENTOS
+        ================================================== */}
 
         <Cards>
 
@@ -711,158 +1181,196 @@ export default function Eventos() {
 
           ) : (
 
-            eventos.map((evento) => (
+            eventos.map(
+              (evento) => (
 
-              <EventCard
-                key={evento.id}
-                onClick={() =>
-                  setEventoSelecionado(
-                    evento
-                  )
-                }
-              >
+                <EventCard
+                  key={evento.id}
+                  onClick={() =>
+                    setEventoSelecionadoId(
+                      evento.id
+                    )
+                  }
+                  tabIndex={0}
+                  role="button"
+                  onKeyDown={
+                    (event) => {
 
-                {/* IMAGEM */}
+                      if (
+                        event.key ===
+                          "Enter" ||
+                        event.key ===
+                          " "
+                      ) {
 
-                {evento.imagem ? (
+                        event.preventDefault();
 
-                  <EventImage>
-
-                    <img
-                      src={evento.imagem}
-                      alt={evento.nome}
-                    />
-
-                  </EventImage>
-
-                ) : (
-
-                  <EventImagePlaceholder>
-
-                    <FiImage />
-
-                  </EventImagePlaceholder>
-
-                )}
-
-
-                {/* CONTEÚDO */}
-
-                <EventContent>
-
-                  <EventTitle>
-                    {evento.nome}
-                  </EventTitle>
-
-
-                  <EventDescription>
-
-                    {evento.descricao}
-
-                  </EventDescription>
-
-
-                  <InfoList>
-
-                    <InfoItem>
-
-                      <FiCalendar />
-
-                      <span>
-                        {formatarData(
-                          evento.data
-                        )}
-                      </span>
-
-                    </InfoItem>
-
-
-                    <InfoItem>
-
-                      <FiClock />
-
-                      <span>
-                        {evento.horario}
-                      </span>
-
-                    </InfoItem>
-
-
-                    <InfoItem>
-
-                      <FiMapPin />
-
-                      <span>
-                        {evento.local}
-                      </span>
-
-                    </InfoItem>
-
-                  </InfoList>
-
-
-                  <EventFooter>
-
-                    <AccessButton
-                      type="button"
-                      onClick={(event) => {
-
-                        event.stopPropagation();
-
-                        setEventoSelecionado(
-                          evento
+                        setEventoSelecionadoId(
+                          evento.id
                         );
 
-                      }}
-                    >
+                      }
 
-                      Ver evento
+                    }
+                  }
+                >
 
-                    </AccessButton>
+                  {/* IMAGEM */}
 
+                  {evento.imagem ? (
 
-                    <Actions>
+                    <EventImage>
 
-                      {/* EDITAR */}
-
-                      <FiEdit
-                        title="Editar evento"
-                        onClick={(event) => {
-
-                          event.stopPropagation();
-
-                          abrirEdicao(
-                            evento
-                          );
-
-                        }}
+                      <img
+                        src={
+                          evento.imagem
+                        }
+                        alt={
+                          evento.nome
+                        }
                       />
 
+                    </EventImage>
 
-                      {/* EXCLUIR */}
+                  ) : (
 
-                      <FiTrash2
-                        title="Excluir evento"
-                        onClick={(event) => {
+                    <EventImagePlaceholder>
 
-                          event.stopPropagation();
+                      <FiImage />
 
-                          abrirConfirmacaoExclusao(
-                            evento
-                          );
+                    </EventImagePlaceholder>
 
-                        }}
-                      />
+                  )}
 
-                    </Actions>
 
-                  </EventFooter>
+                  {/* CONTEÚDO */}
 
-                </EventContent>
+                  <EventContent>
 
-              </EventCard>
+                    <EventTitle>
+                      {evento.nome}
+                    </EventTitle>
 
-            ))
+                    <EventDescription>
+                      {evento.descricao}
+                    </EventDescription>
+
+
+                    <InfoList>
+
+                      <InfoItem>
+
+                        <FiCalendar />
+
+                        <span>
+                          {formatarData(
+                            evento.data
+                          )}
+                        </span>
+
+                      </InfoItem>
+
+
+                      <InfoItem>
+
+                        <FiClock />
+
+                        <span>
+                          {evento.horario}
+                        </span>
+
+                      </InfoItem>
+
+
+                      <InfoItem>
+
+                        <FiMapPin />
+
+                        <span>
+                          {evento.local}
+                        </span>
+
+                      </InfoItem>
+
+
+                      <InfoItem>
+
+                        <FiUsers />
+
+                        <span>
+                          {evento.participantes
+                            ?.length || 0}{" "}
+                          participante(s)
+                        </span>
+
+                      </InfoItem>
+
+                    </InfoList>
+
+
+                    <EventFooter>
+
+                      <AccessButton
+                        type="button"
+                        onClick={
+                          (event) => {
+
+                            event.stopPropagation();
+
+                            setEventoSelecionadoId(
+                              evento.id
+                            );
+
+                          }
+                        }
+                      >
+                        Ver evento
+                      </AccessButton>
+
+
+                      <Actions>
+
+                        <FiEdit
+                          title="Editar evento"
+                          onClick={
+                            (event) => {
+
+                              event.stopPropagation();
+
+                              abrirEdicao(
+                                evento
+                              );
+
+                            }
+                          }
+                        />
+
+
+                        <FiTrash2
+                          title="Excluir evento"
+                          onClick={
+                            (event) => {
+
+                              event.stopPropagation();
+
+                              abrirConfirmacaoExclusao(
+                                evento
+                              );
+
+                            }
+                          }
+                        />
+
+                      </Actions>
+
+                    </EventFooter>
+
+                  </EventContent>
+
+                </EventCard>
+
+              )
+            )
 
           )}
 
@@ -871,40 +1379,40 @@ export default function Eventos() {
       </Content>
 
 
-      {/* ======================================
+      {/* ==================================================
           BOTÃO +
-      ====================================== */}
+      ================================================== */}
 
       <FloatingButton
         type="button"
         onClick={abrirModal}
         aria-label="Adicionar evento"
       >
-
         <FiPlus />
-
       </FloatingButton>
 
 
-      {/* ======================================
+      {/* ==================================================
           MODAL CRIAR / EDITAR
-      ====================================== */}
+      ================================================== */}
 
       {modalAberto && (
 
         <ModalOverlay
-          onClick={(event) => {
+          onClick={
+            (event) => {
 
-            if (
-              event.target ===
-              event.currentTarget
-            ) {
+              if (
+                event.target ===
+                event.currentTarget
+              ) {
 
-              fecharModal();
+                fecharModal();
+
+              }
 
             }
-
-          }}
+          }
         >
 
           <Modal>
@@ -912,34 +1420,28 @@ export default function Eventos() {
             <ModalHeader>
 
               <ModalTitle>
-
                 {eventoEditando
                   ? "Editar evento"
                   : "Novo evento"}
-
               </ModalTitle>
-
 
               <CloseButton
                 type="button"
-                onClick={fecharModal}
-                aria-label="Fechar"
+                onClick={
+                  fecharModal
+                }
               >
-
                 <FiX />
-
               </CloseButton>
 
             </ModalHeader>
 
 
             <Form
-              onSubmit={salvarEvento}
+              onSubmit={
+                salvarEvento
+              }
             >
-
-              {/* =================================
-                  IMAGEM
-              ================================= */}
 
               <Label>
                 Imagem do evento
@@ -951,7 +1453,9 @@ export default function Eventos() {
                 <ImageUploadInput
                   type="file"
                   accept="image/*"
-                  onChange={handleImagem}
+                  onChange={
+                    handleImagem
+                  }
                   id="imagem-evento"
                 />
 
@@ -961,19 +1465,19 @@ export default function Eventos() {
                   <ImagePreview>
 
                     <img
-                      src={imagemPreview}
-                      alt="Prévia do evento"
+                      src={
+                        imagemPreview
+                      }
+                      alt="Prévia"
                     />
-
 
                     <RemoveImageButton
                       type="button"
-                      onClick={removerImagem}
-                      aria-label="Remover imagem"
+                      onClick={
+                        removerImagem
+                      }
                     >
-
                       <FiX />
-
                     </RemoveImageButton>
 
                   </ImagePreview>
@@ -985,11 +1489,8 @@ export default function Eventos() {
                   >
 
                     <ImageUploadIcon>
-
                       <FiImage />
-
                     </ImageUploadIcon>
-
 
                     <ImageUploadText>
 
@@ -1009,7 +1510,6 @@ export default function Eventos() {
 
                     </ImageUploadText>
 
-
                     <FiUpload />
 
                   </ImageUploadContent>
@@ -1019,10 +1519,6 @@ export default function Eventos() {
               </ImageUpload>
 
 
-              {/* =================================
-                  TÍTULO
-              ================================= */}
-
               <Label>
                 Título
               </Label>
@@ -1031,18 +1527,15 @@ export default function Eventos() {
                 type="text"
                 placeholder="Ex: Semifinal"
                 value={nome}
-                onChange={(event) =>
-                  setNome(
-                    event.target.value
-                  )
+                onChange={
+                  (event) =>
+                    setNome(
+                      event.target.value
+                    )
                 }
                 maxLength={100}
               />
 
-
-              {/* =================================
-                  DESCRIÇÃO
-              ================================= */}
 
               <Label>
                 Descrição
@@ -1051,18 +1544,15 @@ export default function Eventos() {
               <TextArea
                 placeholder="Digite a descrição do evento..."
                 value={descricao}
-                onChange={(event) =>
-                  setDescricao(
-                    event.target.value
-                  )
+                onChange={
+                  (event) =>
+                    setDescricao(
+                      event.target.value
+                    )
                 }
                 maxLength={500}
               />
 
-
-              {/* =================================
-                  DATA + HORÁRIO
-              ================================= */}
 
               <FormRow>
 
@@ -1075,10 +1565,11 @@ export default function Eventos() {
                   <Input
                     type="date"
                     value={data}
-                    onChange={(event) =>
-                      setData(
-                        event.target.value
-                      )
+                    onChange={
+                      (event) =>
+                        setData(
+                          event.target.value
+                        )
                     }
                   />
 
@@ -1094,10 +1585,11 @@ export default function Eventos() {
                   <Input
                     type="time"
                     value={horario}
-                    onChange={(event) =>
-                      setHorario(
-                        event.target.value
-                      )
+                    onChange={
+                      (event) =>
+                        setHorario(
+                          event.target.value
+                        )
                     }
                   />
 
@@ -1105,10 +1597,6 @@ export default function Eventos() {
 
               </FormRow>
 
-
-              {/* =================================
-                  LOCAL
-              ================================= */}
 
               <Label>
                 Local
@@ -1118,18 +1606,15 @@ export default function Eventos() {
                 type="text"
                 placeholder="Ex: Auditório"
                 value={local}
-                onChange={(event) =>
-                  setLocal(
-                    event.target.value
-                  )
+                onChange={
+                  (event) =>
+                    setLocal(
+                      event.target.value
+                    )
                 }
                 maxLength={150}
               />
 
-
-              {/* =================================
-                  PARTICIPANTES
-              ================================= */}
 
               <Label>
                 Participantes
@@ -1142,26 +1627,22 @@ export default function Eventos() {
                   <FiUsers />
                 </ParticipantsIcon>
 
-
                 <ParticipantsText>
 
                   <strong>
-                    Selecionar participantes
+                    Participantes do evento
                   </strong>
 
                   <span>
                     Os participantes cadastrados
-                    poderão ser adicionados aqui.
+                    poderão ser avaliados durante
+                    o evento.
                   </span>
 
                 </ParticipantsText>
 
               </ParticipantsBox>
 
-
-              {/* =================================
-                  BOTÃO
-              ================================= */}
 
               <FormFooter>
 
@@ -1171,13 +1652,11 @@ export default function Eventos() {
 
                   {eventoEditando
                     ? <FiEdit />
-                    : <FiPlus />
-                  }
+                    : <FiPlus />}
 
                   {eventoEditando
                     ? "Salvar alterações"
-                    : "Criar evento"
-                  }
+                    : "Criar evento"}
 
                 </SaveButton>
 
@@ -1192,28 +1671,29 @@ export default function Eventos() {
       )}
 
 
-      {/* ======================================
-          VISUALIZAÇÃO DO EVENTO
-          SEM EDITAR / EXCLUIR
-      ====================================== */}
+      {/* ==================================================
+          MODAL DO EVENTO + PLANILHA DO RANKING
+      ================================================== */}
 
       {eventoSelecionado && (
 
         <ModalOverlay
-          onClick={(event) => {
+          onClick={
+            (event) => {
 
-            if (
-              event.target ===
-              event.currentTarget
-            ) {
+              if (
+                event.target ===
+                event.currentTarget
+              ) {
 
-              setEventoSelecionado(
-                null
-              );
+                setEventoSelecionadoId(
+                  null
+                );
+
+              }
 
             }
-
-          }}
+          }
         >
 
           <Modal>
@@ -1221,22 +1701,18 @@ export default function Eventos() {
             <ModalHeader>
 
               <ModalTitle>
-                Evento
+                {eventoSelecionado.nome}
               </ModalTitle>
-
 
               <CloseButton
                 type="button"
                 onClick={() =>
-                  setEventoSelecionado(
+                  setEventoSelecionadoId(
                     null
                   )
                 }
-                aria-label="Fechar"
               >
-
                 <FiX />
-
               </CloseButton>
 
             </ModalHeader>
@@ -1270,25 +1746,15 @@ export default function Eventos() {
             )}
 
 
-            {/* TÍTULO */}
-
             <EventTitle>
-
               {eventoSelecionado.nome}
-
             </EventTitle>
 
 
-            {/* DESCRIÇÃO */}
-
             <EventDescription>
-
               {eventoSelecionado.descricao}
-
             </EventDescription>
 
-
-            {/* INFORMAÇÕES */}
 
             <InfoList>
 
@@ -1332,18 +1798,284 @@ export default function Eventos() {
                 <FiUsers />
 
                 <span>
-
-                  {eventoSelecionado.participantes?.length || 0}
-
-                  {" "}
-
+                  {eventoSelecionado.participantes
+                    ?.length || 0}{" "}
                   participante(s)
-
                 </span>
 
               </InfoItem>
 
             </InfoList>
+
+
+            {/* ==================================================
+                PLANILHA DO RANKING
+            ================================================== */}
+
+            <RankingSection>
+
+              <RankingHeader>
+
+                <RankingTitle>
+
+                  <FiAward />
+
+                  Ranking do evento
+
+                </RankingTitle>
+
+
+                <RankingDescription>
+
+                  Classificação dos participantes
+                  com todas as notas, média,
+                  penalidade, tempo e nota final.
+
+                </RankingDescription>
+
+              </RankingHeader>
+
+
+              {ranking.length === 0 ? (
+
+                <RankingEmpty>
+
+                  <FiUsers />
+
+                  <strong>
+                    Nenhum participante no ranking
+                  </strong>
+
+                  <span>
+                    Os participantes aparecerão
+                    nesta planilha quando estiverem
+                    cadastrados e avaliados.
+                  </span>
+
+                </RankingEmpty>
+
+              ) : (
+
+                <RankingTableWrapper>
+
+                  <RankingTable>
+
+                    <thead>
+
+                      <tr>
+
+                        <th>
+                          #
+                        </th>
+
+                        <th>
+                          Participante
+                        </th>
+
+                        <th>
+                          Nota 1
+                        </th>
+
+                        <th>
+                          Nota 2
+                        </th>
+
+                        <th>
+                          Nota 3
+                        </th>
+
+                        <th>
+                          Nota 4
+                        </th>
+
+                        <th>
+                          Nota 5
+                        </th>
+
+                        <th>
+                          Média
+                        </th>
+
+                        <th>
+                          Penalidade
+                        </th>
+
+                        <th>
+                          Tempo
+                        </th>
+
+                        <th>
+                          Nota final
+                        </th>
+
+                      </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                      {ranking.map(
+                        (
+                          participante
+                        ) => (
+
+                          <RankingRow
+                            key={
+                              participante.id ||
+                              `${participante.nome}-${participante.colocacao}`
+                            }
+                            $primeiro={
+                              participante.colocacao ===
+                              1
+                            }
+                          >
+
+                            {/* COLOCAÇÃO */}
+
+                            <td>
+
+                              <Position>
+
+                                {participante.colocacao ===
+                                  1 && (
+                                  <FiAward />
+                                )}
+
+                                {participante.colocacao}º
+
+                              </Position>
+
+                            </td>
+
+
+                            {/* NOME */}
+
+                            <td>
+
+                              <ParticipantName>
+
+                                {
+                                  participante.nome
+                                }
+
+                              </ParticipantName>
+
+                            </td>
+
+
+                            {/* NOTAS */}
+
+                            {[0, 1, 2, 3, 4].map(
+                              (
+                                indice
+                              ) => (
+
+                                <td
+                                  key={
+                                    indice
+                                  }
+                                >
+
+                                  <Score>
+
+                                    {numeroSeguro(
+                                      participante
+                                        .notas[
+                                          indice
+                                        ]
+                                    ).toFixed(
+                                      1
+                                    )}
+
+                                  </Score>
+
+                                </td>
+
+                              )
+                            )}
+
+
+                            {/* MÉDIA */}
+
+                            <td>
+
+                              <Average>
+
+                                {participante.media.toFixed(
+                                  2
+                                )}
+
+                              </Average>
+
+                            </td>
+
+
+                            {/* PENALIDADE */}
+
+                            <td>
+
+                              <Penalty
+                                $penalidade={
+                                  participante.penalidade >
+                                  0
+                                }
+                              >
+
+                                {participante.penalidade.toFixed(
+                                  2
+                                )}
+
+                              </Penalty>
+
+                            </td>
+
+
+                            {/* TEMPO */}
+
+                            <td>
+
+                              <Time>
+
+                                <FiClock />
+
+                                {formatarTempo(
+                                  participante.tempo
+                                )}
+
+                              </Time>
+
+                            </td>
+
+
+                            {/* NOTA FINAL */}
+
+                            <td>
+
+                              <FinalScore>
+
+                                {participante.notaFinal.toFixed(
+                                  2
+                                )}
+
+                              </FinalScore>
+
+                            </td>
+
+                          </RankingRow>
+
+                        )
+                      )}
+
+                    </tbody>
+
+                  </RankingTable>
+
+                </RankingTableWrapper>
+
+              )}
+
+            </RankingSection>
 
           </Modal>
 
@@ -1352,9 +2084,9 @@ export default function Eventos() {
       )}
 
 
-      {/* ======================================
-          MODAL DE CONFIRMAÇÃO DE EXCLUSÃO
-      ====================================== */}
+      {/* ==================================================
+          MODAL EXCLUSÃO
+      ================================================== */}
 
       {modalExcluirAberto && (
 
@@ -1363,17 +2095,13 @@ export default function Eventos() {
           <DeleteModal>
 
             <DeleteModalTitle>
-
               Excluir evento
-
             </DeleteModalTitle>
 
 
             <DeleteModalText>
-
-              Tem certeza que deseja excluir
-              esse evento?
-
+              Tem certeza que deseja
+              excluir esse evento?
             </DeleteModalText>
 
 
@@ -1382,7 +2110,9 @@ export default function Eventos() {
               <DeleteModalText>
 
                 <strong>
-                  {eventoParaExcluir.nome}
+                  {
+                    eventoParaExcluir.nome
+                  }
                 </strong>
 
               </DeleteModalText>
@@ -1394,17 +2124,19 @@ export default function Eventos() {
 
               <CancelButton
                 type="button"
-                onClick={cancelarExclusao}
+                onClick={
+                  cancelarExclusao
+                }
               >
-
                 Cancelar
-
               </CancelButton>
 
 
               <ConfirmButton
                 type="button"
-                onClick={confirmarExclusao}
+                onClick={
+                  confirmarExclusao
+                }
               >
 
                 <FiTrash2 />

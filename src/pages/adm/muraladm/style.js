@@ -1,3 +1,4 @@
+
 import styled from "styled-components";
 
 
@@ -116,6 +117,18 @@ export const Title = styled.h1`
 
   line-height: 1.2;
 
+
+  @media (max-width: 600px) {
+
+    font-size:
+      clamp(
+        1.8rem,
+        8vw,
+        2.2rem
+      );
+
+  }
+
 `;
 
 
@@ -143,6 +156,8 @@ export const Subtitle = styled.p`
 
   @media (max-width: 600px) {
 
+    width: 90%;
+
     max-width: 90%;
 
     font-size: 14px;
@@ -154,6 +169,7 @@ export const Subtitle = styled.p`
 
 /* =====================================================
    MURAL
+   MESMAS DIMENSÕES DA GALLERY
 ===================================================== */
 
 export const Mural = styled.section`
@@ -175,20 +191,13 @@ export const Mural = styled.section`
 
   align-items: stretch;
 
-  padding: 10px;
 
-  box-sizing: border-box;
-
-
-  @media (max-width: 900px) {
+  @media (max-width: 1000px) {
 
     grid-template-columns:
       repeat(
-        auto-fill,
-        minmax(
-          250px,
-          1fr
-        )
+        3,
+        1fr
       );
 
     gap: 24px;
@@ -196,7 +205,20 @@ export const Mural = styled.section`
   }
 
 
-  @media (max-width: 600px) {
+  @media (max-width: 750px) {
+
+    grid-template-columns:
+      repeat(
+        2,
+        1fr
+      );
+
+    gap: 20px;
+
+  }
+
+
+  @media (max-width: 500px) {
 
     grid-template-columns: 1fr;
 
@@ -315,16 +337,20 @@ export const EmptyText = styled.p`
 
 /* =====================================================
    POST IT
-   MESMO DESIGN DO USUÁRIO
+   MESMA PROPORÇÃO DOS CARDS DA GALLERY
 ===================================================== */
 
 export const PostIt = styled.article`
 
   position: relative;
 
+  width: 100%;
+
   min-width: 0;
 
-  min-height: 280px;
+  aspect-ratio: 4 / 3;
+
+  min-height: 0;
 
   padding:
     38px
@@ -487,9 +513,9 @@ export const PostIt = styled.article`
   }
 
 
-  @media (max-width: 600px) {
+  @media (max-width: 500px) {
 
-    min-height: 250px;
+    aspect-ratio: 4 / 3;
 
     padding:
       36px
@@ -2092,3 +2118,4 @@ export const ConfirmButton = styled.button`
   }
 
 `;
+

@@ -1,175 +1,238 @@
+
 import styled from "styled-components";
 
-/* =========================================
+
+/* =====================================================
    PAGE
-========================================= */
+   MESMAS MEDIDAS DA GALERIA
+===================================================== */
 
 export const Page = styled.div`
   width: 100%;
+
   min-height: 100vh;
 
   background: #ffffff;
 
-  font-family: "Poppins", sans-serif;
+  font-family:
+    "Poppins",
+    sans-serif;
+
   color: #000000;
 
   overflow-x: hidden;
 `;
 
-/* =========================================
+
+/* =====================================================
    CONTENT
-========================================= */
+   IGUAL À GALERIA
+===================================================== */
 
 export const Content = styled.main`
   width: 90%;
+
   max-width: 1400px;
 
   margin: 0 auto;
 
-  padding: 35px 0 100px;
+  padding:
+    35px 0
+    100px;
 
   box-sizing: border-box;
 
+
   @media (max-width: 768px) {
     width: 92%;
-    padding: 25px 0 80px;
+
+    padding:
+      25px 0
+      80px;
   }
+
 
   @media (max-width: 480px) {
     width: 90%;
-    padding: 20px 0 70px;
+
+    padding:
+      20px 0
+      70px;
   }
 `;
 
-/* =========================================
+
+/* =====================================================
    HEADER
-========================================= */
+   IGUAL À GALERIA
+===================================================== */
 
 export const Header = styled.header`
   width: 100%;
 
   display: flex;
+
   flex-direction: column;
 
   align-items: center;
+
   justify-content: center;
 
   text-align: center;
 
   margin-bottom: 40px;
 
+
   @media (max-width: 600px) {
     margin-bottom: 28px;
   }
 `;
 
+
 export const TitleArea = styled.div`
   width: 100%;
 
   display: flex;
+
   flex-direction: column;
 
   align-items: center;
+
   justify-content: center;
 
   text-align: center;
 `;
+
+
+/* =====================================================
+   TITLE
+   IGUAL À GALERIA
+===================================================== */
 
 export const Title = styled.h1`
   margin: 0;
 
   color: #000000;
 
-  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-size:
+    clamp(
+      2rem,
+      4vw,
+      2.8rem
+    );
 
   font-weight: 700;
 
   line-height: 1.2;
 
+
   @media (max-width: 600px) {
-    font-size: clamp(1.8rem, 8vw, 2.2rem);
+    font-size:
+      clamp(
+        1.8rem,
+        8vw,
+        2.2rem
+      );
   }
 `;
+
+
+/* =====================================================
+   SUBTITLE
+   IGUAL À GALERIA
+===================================================== */
 
 export const Subtitle = styled.p`
   max-width: 600px;
 
-  margin: 10px 0 0;
+  margin:
+    10px 0 0;
 
   color: #777777;
 
-  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  font-size:
+    clamp(
+      .85rem,
+      1.5vw,
+      1rem
+    );
 
   line-height: 1.5;
 
+
   @media (max-width: 600px) {
     width: 90%;
+
     font-size: 14px;
   }
 `;
 
-/* =========================================
-   GRID DOS EVENTOS
-========================================= */
+
+/* =====================================================
+   CARDS
+   MESMA ESTRUTURA DE GRID DA GALERIA
+===================================================== */
 
 export const Cards = styled.section`
   width: 100%;
 
   display: grid;
 
-  /*
-    IMPORTANTE:
-    O minmax foi reduzido para permitir
-    cards verticais.
-  */
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(250px, 1fr)
-  );
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(
+        280px,
+        1fr
+      )
+    );
 
   gap: 30px;
 
-  align-items: start;
+  align-items: stretch;
 
-  box-sizing: border-box;
 
-  @media (max-width: 1100px) {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  @media (max-width: 1000px) {
+    grid-template-columns:
+      repeat(
+        3,
+        1fr
+      );
+
     gap: 24px;
   }
 
-  @media (max-width: 800px) {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  @media (max-width: 750px) {
+    grid-template-columns:
+      repeat(
+        2,
+        1fr
+      );
+
     gap: 20px;
   }
 
-  @media (max-width: 550px) {
+
+  @media (max-width: 500px) {
     grid-template-columns: 1fr;
+
     gap: 20px;
   }
 `;
 
-/* =========================================
-   CARD DO EVENTO
-========================================= */
+
+/* =====================================================
+   EVENT CARD
+   DIMENSÕES ALINHADAS AO PADRÃO DA GALERIA
+===================================================== */
 
 export const EventCard = styled.article`
   position: relative;
 
   width: 100%;
 
-  /*
-    REMOVIDO:
-    height: 100%;
-    aspect-ratio: 4 / 3;
-
-    Essas propriedades estavam forçando
-    o card para ficar quadrado/horizontal.
-
-    Agora a altura é determinada pelo conteúdo.
-  */
-
-  min-width: 0;
+  min-height: 0;
 
   background: #ffffff;
 
@@ -183,96 +246,92 @@ export const EventCard = styled.article`
 
   flex-direction: column;
 
-  box-sizing: border-box;
-
   border: 1px solid #eeeeee;
 
   box-shadow:
-    0 7px 25px rgba(0, 0, 0, 0.08);
+    0 7px 25px
+    rgba(
+      0,
+      0,
+      0,
+      .08
+    );
 
   transition:
-    transform 0.3s ease,
-    box-shadow 0.3s ease;
+    transform .3s ease,
+    box-shadow .3s ease;
 
-  /*
-    Garante que o card tenha formato vertical.
-  */
-  min-height: 500px;
 
   &:hover {
-    transform: translateY(-8px);
+    transform:
+      translateY(-8px);
 
     box-shadow:
-      0 18px 40px rgba(0, 0, 0, 0.15);
+      0 18px 40px
+      rgba(
+        0,
+        0,
+        0,
+        .15
+      );
   }
 
-  &:active {
-    transform: translateY(-3px);
-  }
 
-  @media (max-width: 800px) {
-    min-height: 470px;
-  }
+  &:focus-visible {
+    outline:
+      3px solid #f9be06;
 
-  @media (max-width: 550px) {
-    min-height: auto;
+    outline-offset: 4px;
   }
 `;
 
-/* =========================================
-   IMAGEM DO EVENTO
-========================================= */
+
+/* =====================================================
+   EVENT IMAGE
+   PADRÃO PROPORCIONAL DA GALERIA
+===================================================== */
 
 export const EventImage = styled.div`
   width: 100%;
 
-  /*
-    Agora a imagem tem altura fixa/proporcional
-    independente do restante do card.
-  */
-  height: 230px;
+  height: auto;
 
-  flex-shrink: 0;
-
-  position: relative;
+  aspect-ratio: 4 / 3;
 
   overflow: hidden;
 
   background: #eeeeee;
 
+  flex-shrink: 0;
+
+
   img {
     width: 100%;
-    height: 100%;
 
-    display: block;
+    height: 100%;
 
     object-fit: cover;
 
+    display: block;
+
     transition:
-      transform 0.5s ease;
+      transform .5s ease;
   }
 
-  &:hover img {
-    transform: scale(1.07);
-  }
 
-  @media (max-width: 800px) {
-    height: 210px;
-  }
-
-  @media (max-width: 550px) {
-    height: 220px;
+  ${EventCard}:hover & img {
+    transform:
+      scale(1.07);
   }
 `;
 
-/* =========================================
-   PLACEHOLDER DA IMAGEM
-========================================= */
 
 export const EventImagePlaceholder = styled.div`
   width: 100%;
 
-  height: 230px;
+  height: auto;
+
+  aspect-ratio: 4 / 3;
 
   flex-shrink: 0;
 
@@ -281,35 +340,23 @@ export const EventImagePlaceholder = styled.div`
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   color: #b5b5b5;
 
   font-size: 45px;
-
-  box-sizing: border-box;
-
-  @media (max-width: 800px) {
-    height: 210px;
-  }
-
-  @media (max-width: 550px) {
-    height: 220px;
-  }
 `;
 
-/* =========================================
-   CONTEÚDO DO EVENTO
-========================================= */
+
+/* =====================================================
+   EVENT CONTENT
+===================================================== */
 
 export const EventContent = styled.div`
   width: 100%;
 
-  /*
-    Padding separado para garantir
-    que o conteúdo nunca fique escondido.
-  */
-  padding: 18px 18px 20px;
+  padding: 18px;
 
   display: flex;
 
@@ -317,25 +364,19 @@ export const EventContent = styled.div`
 
   box-sizing: border-box;
 
-  /*
-    Não usar overflow:hidden aqui.
-    Isso poderia esconder informações.
-  */
-  overflow: visible;
-
   flex: 1;
-
-  min-width: 0;
 `;
 
-/* =========================================
-   TÍTULO
-========================================= */
+
+/* =====================================================
+   EVENT TITLE
+===================================================== */
 
 export const EventTitle = styled.h2`
   width: 100%;
 
-  margin: 0 0 8px;
+  margin:
+    0 0 8px;
 
   color: #222222;
 
@@ -346,53 +387,45 @@ export const EventTitle = styled.h2`
   font-weight: 700;
 
   word-break: break-word;
-
-  overflow-wrap: anywhere;
-
-  /*
-    Limita somente o título.
-  */
-  display: -webkit-box;
-
-  -webkit-line-clamp: 2;
-
-  -webkit-box-orient: vertical;
-
-  overflow: hidden;
 `;
 
-/* =========================================
-   DESCRIÇÃO
-========================================= */
+
+/* =====================================================
+   DESCRIPTION
+===================================================== */
 
 export const EventDescription = styled.p`
   width: 100%;
 
-  margin: 0 0 14px;
+  margin:
+    0 0 14px;
 
-  color: rgba(0, 0, 0, 0.65);
+  color:
+    rgba(
+      0,
+      0,
+      0,
+      .65
+    );
 
   font-size: 13px;
 
   line-height: 1.5;
 
-  /*
-    A descrição pode ocupar até 3 linhas.
-  */
-  display: -webkit-box;
+  display:
+    -webkit-box;
 
   -webkit-line-clamp: 3;
 
   -webkit-box-orient: vertical;
 
   overflow: hidden;
-
-  overflow-wrap: anywhere;
 `;
 
-/* =========================================
-   LISTA DE INFORMAÇÕES
-========================================= */
+
+/* =====================================================
+   INFO
+===================================================== */
 
 export const InfoList = styled.div`
   width: 100%;
@@ -402,15 +435,8 @@ export const InfoList = styled.div`
   flex-direction: column;
 
   gap: 8px;
-
-  min-width: 0;
-
-  margin-top: 2px;
 `;
 
-/* =========================================
-   ITEM DE INFORMAÇÃO
-========================================= */
 
 export const InfoItem = styled.div`
   width: 100%;
@@ -421,13 +447,12 @@ export const InfoItem = styled.div`
 
   gap: 8px;
 
-  color: rgba(0, 0, 0, 0.72);
+  color: #555555;
 
   font-size: 12px;
 
   min-width: 0;
 
-  box-sizing: border-box;
 
   svg {
     flex-shrink: 0;
@@ -437,9 +462,8 @@ export const InfoItem = styled.div`
     font-size: 15px;
   }
 
-  span {
-    min-width: 0;
 
+  span {
     overflow: hidden;
 
     text-overflow: ellipsis;
@@ -448,40 +472,30 @@ export const InfoItem = styled.div`
   }
 `;
 
-/* =========================================
-   FOOTER DO EVENTO
-========================================= */
+
+/* =====================================================
+   FOOTER
+===================================================== */
 
 export const EventFooter = styled.div`
   width: 100%;
 
-  margin-top: 18px;
+  margin-top: auto;
 
-  padding-top: 14px;
+  padding-top: 18px;
 
   display: flex;
 
   align-items: center;
 
   gap: 10px;
-
-  flex-shrink: 0;
-
-  box-sizing: border-box;
 `;
 
-/* =========================================
-   BOTÃO VER EVENTO
-========================================= */
 
 export const AccessButton = styled.button`
   flex: 1;
 
-  min-width: 0;
-
   min-height: 38px;
-
-  padding: 0 12px;
 
   border: none;
 
@@ -491,75 +505,69 @@ export const AccessButton = styled.button`
 
   color: #f9be06;
 
-  font-family: "Poppins", sans-serif;
-
-  font-size: 11px;
+  font-family: "Poppins";
 
   font-weight: 700;
 
   cursor: pointer;
 
-  transition: 0.2s;
+  transition: .2s;
+
 
   &:hover {
     background: #f9be06;
 
     color: #111111;
-
-    transform: translateY(-2px);
-  }
-
-  &:active {
-    transform: translateY(0);
   }
 `;
 
-/* =========================================
-   AÇÕES
-========================================= */
 
 export const Actions = styled.div`
   display: flex;
 
   align-items: center;
 
-  justify-content: center;
-
   gap: 10px;
 
-  flex-shrink: 0;
 
   svg {
     cursor: pointer;
 
-    color: rgba(0, 0, 0, 0.55);
+    color: #666666;
 
-    font-size: 17px;
+    font-size: 18px;
 
-    transition: 0.2s;
+    transition: .2s;
   }
+
 
   svg:hover {
     color: #000000;
 
-    transform: scale(1.2);
+    transform:
+      scale(1.2);
   }
+
 
   svg:last-child:hover {
     color: #d62828;
   }
 `;
 
-/* =========================================
-   ESTADO VAZIO
-========================================= */
+
+/* =====================================================
+   EMPTY
+   IGUAL À GALERIA
+===================================================== */
 
 export const EmptyState = styled.div`
-  grid-column: 1 / -1;
+  grid-column:
+    1 / -1;
 
   min-height: 320px;
 
-  padding: 50px 25px;
+  padding:
+    50px 25px;
 
   box-sizing: border-box;
 
@@ -573,15 +581,19 @@ export const EmptyState = styled.div`
 
   text-align: center;
 
-  border: 2px dashed #dddddd;
+  border:
+    2px dashed
+    #dddddd;
 
   border-radius: 15px;
 
   background: #fafafa;
 `;
 
+
 export const EmptyIcon = styled.div`
   width: 70px;
+
   height: 70px;
 
   margin-bottom: 18px;
@@ -589,19 +601,28 @@ export const EmptyIcon = styled.div`
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   border-radius: 50%;
 
-  background: rgba(249, 190, 6, 0.15);
+  background:
+    rgba(
+      249,
+      190,
+      6,
+      .15
+    );
 
   color: #f9be06;
 
   font-size: 30px;
 `;
 
+
 export const EmptyTitle = styled.h2`
-  margin: 0 0 8px;
+  margin:
+    0 0 8px;
 
   color: #333333;
 
@@ -609,6 +630,7 @@ export const EmptyTitle = styled.h2`
 
   font-weight: 600;
 `;
+
 
 export const EmptyText = styled.p`
   max-width: 450px;
@@ -622,17 +644,21 @@ export const EmptyText = styled.p`
   line-height: 1.6;
 `;
 
-/* =========================================
-   BOTÃO FLUTUANTE
-========================================= */
+
+/* =====================================================
+   FLOATING BUTTON
+   MESMAS MEDIDAS DA GALERIA
+===================================================== */
 
 export const FloatingButton = styled.button`
   position: fixed;
 
   right: 35px;
+
   bottom: 35px;
 
   width: 70px;
+
   height: 70px;
 
   border: none;
@@ -646,55 +672,69 @@ export const FloatingButton = styled.button`
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   cursor: pointer;
 
   box-shadow:
-    0 10px 25px rgba(0, 0, 0, 0.2);
+    0 10px 25px
+    rgba(
+      0,
+      0,
+      0,
+      .2
+    );
 
-  transition: 0.2s;
+  transition: .2s;
 
   z-index: 100;
 
-  svg {
-    font-size: 30px;
 
-    transition: 0.2s;
+  svg {
+    font-size: 28px;
+
+    transition: .2s;
   }
+
 
   &:hover {
     background: #000000;
 
     color: #f9be06;
 
-    transform: translateY(-2px);
+    transform:
+      translateY(-2px);
   }
+
 
   &:hover svg {
-    transform: rotate(90deg);
+    transform:
+      rotate(90deg);
   }
 
+
   &:active {
-    transform: translateY(1px);
+    transform:
+      translateY(1px);
   }
+
 
   @media (max-width: 600px) {
     width: 60px;
+
     height: 60px;
 
     right: 20px;
-    bottom: 20px;
 
-    svg {
-      font-size: 26px;
-    }
+    bottom: 20px;
   }
 `;
 
-/* =========================================
+
+/* =====================================================
    MODAL OVERLAY
-========================================= */
+===================================================== */
 
 export const ModalOverlay = styled.div`
   position: fixed;
@@ -706,43 +746,40 @@ export const ModalOverlay = styled.div`
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   padding: 20px;
 
   box-sizing: border-box;
 
-  background: rgba(0, 0, 0, 0.7);
+  background:
+    rgba(
+      0,
+      0,
+      0,
+      .7
+    );
 
-  backdrop-filter: blur(4px);
-
-  animation: fadeIn 0.2s ease;
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-
-  @media (max-width: 600px) {
-    padding: 10px;
-  }
+  backdrop-filter:
+    blur(4px);
 `;
 
-/* =========================================
+
+/* =====================================================
    MODAL
-========================================= */
+   MANTIDO, APENAS ORGANIZADO
+===================================================== */
 
 export const Modal = styled.div`
   width: 100%;
 
-  max-width: 600px;
+  max-width: 1100px;
 
-  max-height: calc(100vh - 40px);
+  max-height:
+    calc(
+      100vh - 40px
+    );
 
   overflow-y: auto;
 
@@ -755,40 +792,25 @@ export const Modal = styled.div`
   border-radius: 20px;
 
   box-shadow:
-    0 25px 70px rgba(0, 0, 0, 0.35);
+    0 25px 70px
+    rgba(
+      0,
+      0,
+      0,
+      .35
+    );
 
-  animation: modalOpen 0.25s ease;
-
-  @keyframes modalOpen {
-    from {
-      opacity: 0;
-
-      transform:
-        translateY(20px)
-        scale(0.96);
-    }
-
-    to {
-      opacity: 1;
-
-      transform:
-        translateY(0)
-        scale(1);
-    }
-  }
 
   @media (max-width: 600px) {
-    padding: 22px;
+    padding: 20px;
 
-    max-height: calc(100vh - 20px);
-
-    border-radius: 16px;
+    max-height:
+      calc(
+        100vh - 20px
+      );
   }
 `;
 
-/* =========================================
-   MODAL HEADER
-========================================= */
 
 export const ModalHeader = styled.div`
   display: flex;
@@ -800,6 +822,7 @@ export const ModalHeader = styled.div`
   margin-bottom: 25px;
 `;
 
+
 export const ModalTitle = styled.h2`
   margin: 0;
 
@@ -810,11 +833,11 @@ export const ModalTitle = styled.h2`
   font-weight: 700;
 `;
 
+
 export const CloseButton = styled.button`
   width: 40px;
-  height: 40px;
 
-  flex-shrink: 0;
+  height: 40px;
 
   border: none;
 
@@ -827,36 +850,34 @@ export const CloseButton = styled.button`
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   cursor: pointer;
 
-  transition: 0.2s;
+  transition: .2s;
 
-  svg {
-    font-size: 20px;
-  }
 
   &:hover {
     background: #000000;
 
     color: #f9be06;
-
-    transform: rotate(90deg);
   }
 `;
 
-/* =========================================
+
+/* =====================================================
    FORM
-========================================= */
+===================================================== */
 
 export const Form = styled.form`
+  width: 100%;
+
   display: flex;
 
   flex-direction: column;
-
-  width: 100%;
 `;
+
 
 export const Label = styled.label`
   margin-bottom: 8px;
@@ -867,6 +888,7 @@ export const Label = styled.label`
 
   font-weight: 600;
 `;
+
 
 export const Input = styled.input`
   width: 100%;
@@ -879,88 +901,77 @@ export const Input = styled.input`
 
   padding: 0 15px;
 
-  border: 1px solid #dddddd;
+  border:
+    1px solid
+    #dddddd;
 
   border-radius: 10px;
 
   outline: none;
 
-  color: #222222;
+  font-family: "Poppins";
 
-  background: #ffffff;
-
-  font-family: "Poppins", sans-serif;
-
-  font-size: 14px;
-
-  transition: 0.2s;
 
   &:focus {
     border-color: #f9be06;
 
     box-shadow:
       0 0 0 3px
-      rgba(249, 190, 6, 0.15);
+      rgba(
+        249,
+        190,
+        6,
+        .15
+      );
   }
 `;
+
 
 export const TextArea = styled.textarea`
   width: 100%;
 
   min-height: 130px;
 
-  box-sizing: border-box;
-
   margin-bottom: 20px;
 
-  padding: 14px 15px;
+  padding:
+    14px 15px;
 
   resize: vertical;
 
-  border: 1px solid #dddddd;
+  box-sizing: border-box;
+
+  border:
+    1px solid
+    #dddddd;
 
   border-radius: 10px;
 
   outline: none;
 
-  color: #222222;
+  font-family: "Poppins";
 
-  background: #ffffff;
-
-  font-family: "Poppins", sans-serif;
-
-  font-size: 14px;
-
-  line-height: 1.5;
-
-  transition: 0.2s;
 
   &:focus {
     border-color: #f9be06;
-
-    box-shadow:
-      0 0 0 3px
-      rgba(249, 190, 6, 0.15);
   }
 `;
 
-/* =========================================
-   DATA + HORÁRIO
-========================================= */
 
 export const FormRow = styled.div`
   display: grid;
 
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns:
+    1fr 1fr;
 
   gap: 15px;
 
+
   @media (max-width: 500px) {
     grid-template-columns: 1fr;
-
-    gap: 0;
   }
 `;
+
 
 export const FormGroup = styled.div`
   display: flex;
@@ -968,9 +979,10 @@ export const FormGroup = styled.div`
   flex-direction: column;
 `;
 
-/* =========================================
+
+/* =====================================================
    UPLOAD
-========================================= */
+===================================================== */
 
 export const ImageUpload = styled.div`
   width: 100%;
@@ -978,9 +990,11 @@ export const ImageUpload = styled.div`
   margin-bottom: 22px;
 `;
 
+
 export const ImageUploadInput = styled.input`
   display: none;
 `;
+
 
 export const ImageUploadContent = styled.label`
   width: 100%;
@@ -989,16 +1003,13 @@ export const ImageUploadContent = styled.label`
 
   box-sizing: border-box;
 
-  border: 2px dashed #d8d8d8;
+  border:
+    2px dashed
+    #d8d8d8;
 
   border-radius: 17px;
 
-  background:
-    linear-gradient(
-      145deg,
-      #fafafa,
-      #fffdf5
-    );
+  background: #fafafa;
 
   display: flex;
 
@@ -1012,40 +1023,33 @@ export const ImageUploadContent = styled.label`
 
   cursor: pointer;
 
-  transition: 0.25s;
-
   color: #aaaaaa;
 
   position: relative;
 
-  overflow: hidden;
-
-  & > svg {
-    position: absolute;
-
-    right: 18px;
-    bottom: 18px;
-
-    font-size: 20px;
-
-    color: #f9be06;
-  }
 
   &:hover {
     border-color: #f9be06;
 
     background: #fffaf0;
+  }
 
-    transform: translateY(-2px);
 
-    box-shadow:
-      0 8px 20px
-      rgba(0, 0, 0, 0.08);
+  & > svg {
+    position: absolute;
+
+    right: 18px;
+
+    bottom: 18px;
+
+    color: #f9be06;
   }
 `;
 
+
 export const ImageUploadIcon = styled.div`
   width: 62px;
+
   height: 62px;
 
   border-radius: 50%;
@@ -1055,16 +1059,14 @@ export const ImageUploadIcon = styled.div`
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   color: #f9be06;
 
-  svg {
-    font-size: 30px;
-
-    color: #f9be06;
-  }
+  font-size: 30px;
 `;
+
 
 export const ImageUploadText = styled.div`
   display: flex;
@@ -1077,30 +1079,20 @@ export const ImageUploadText = styled.div`
 
   text-align: center;
 
+
   strong {
     color: #333333;
-
-    font-size: 15px;
   }
 
-  span {
+
+  span,
+  small {
     color: #999999;
 
     font-size: 12px;
   }
-
-  small {
-    margin-top: 3px;
-
-    color: #aaaaaa;
-
-    font-size: 10px;
-  }
 `;
 
-/* =========================================
-   PREVIEW DA IMAGEM
-========================================= */
 
 export const ImagePreview = styled.div`
   position: relative;
@@ -1115,11 +1107,8 @@ export const ImagePreview = styled.div`
 
   background: #f5f5f5;
 
-  box-shadow:
-    0 6px 18px
-    rgba(0, 0, 0, 0.12);
-
   margin-bottom: 20px;
+
 
   img {
     width: 100%;
@@ -1127,91 +1116,66 @@ export const ImagePreview = styled.div`
     height: 100%;
 
     object-fit: cover;
-
-    display: block;
-  }
-
-  &::after {
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    background:
-      linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.02),
-        rgba(0, 0, 0, 0.12)
-      );
-
-    pointer-events: none;
-  }
-
-  @media (max-width: 500px) {
-    height: 190px;
   }
 `;
 
-/* =========================================
-   REMOVER IMAGEM
-========================================= */
 
 export const RemoveImageButton = styled.button`
   position: absolute;
 
   top: 12px;
+
   right: 12px;
 
   z-index: 3;
 
   width: 40px;
+
   height: 40px;
 
   border: none;
 
   border-radius: 50%;
 
-  background: rgba(0, 0, 0, 0.75);
+  background:
+    rgba(
+      0,
+      0,
+      0,
+      .75
+    );
 
   color: #ffffff;
 
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   cursor: pointer;
 
-  transition: 0.2s;
-
-  backdrop-filter: blur(5px);
-
-  svg {
-    font-size: 19px;
-  }
 
   &:hover {
     background: #e74c3c;
-
-    transform: scale(1.08);
   }
 `;
 
-/* =========================================
+
+/* =====================================================
    PARTICIPANTES
-========================================= */
+===================================================== */
 
 export const ParticipantsBox = styled.div`
   min-height: 75px;
-
-  box-sizing: border-box;
 
   margin-bottom: 20px;
 
   padding: 13px;
 
-  border: 1px dashed #d5d5d5;
+  border:
+    1px dashed
+    #d5d5d5;
 
   border-radius: 12px;
 
@@ -1224,8 +1188,10 @@ export const ParticipantsBox = styled.div`
   gap: 12px;
 `;
 
+
 export const ParticipantsIcon = styled.div`
   width: 42px;
+
   height: 42px;
 
   flex-shrink: 0;
@@ -1239,12 +1205,12 @@ export const ParticipantsIcon = styled.div`
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
-  svg {
-    font-size: 20px;
-  }
+  font-size: 20px;
 `;
+
 
 export const ParticipantsText = styled.div`
   display: flex;
@@ -1253,24 +1219,21 @@ export const ParticipantsText = styled.div`
 
   gap: 3px;
 
+
   strong {
     color: #333333;
 
     font-size: 13px;
   }
 
+
   span {
     color: #999999;
 
     font-size: 11px;
-
-    line-height: 1.4;
   }
 `;
 
-/* =========================================
-   FOOTER DO FORMULÁRIO
-========================================= */
 
 export const FormFooter = styled.div`
   display: flex;
@@ -1280,14 +1243,12 @@ export const FormFooter = styled.div`
   margin-top: 8px;
 `;
 
-/* =========================================
-   BOTÃO SALVAR
-========================================= */
 
 export const SaveButton = styled.button`
   min-height: 48px;
 
-  padding: 0 22px;
+  padding:
+    0 22px;
 
   border: none;
 
@@ -1297,126 +1258,74 @@ export const SaveButton = styled.button`
 
   color: #111111;
 
-  font-family: "Poppins", sans-serif;
-
-  font-size: 14px;
+  font-family: "Poppins";
 
   font-weight: 700;
 
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   gap: 8px;
 
   cursor: pointer;
 
-  transition: 0.2s;
-
-  svg {
-    font-size: 18px;
-  }
 
   &:hover {
     background: #000000;
 
     color: #f9be06;
-
-    transform: translateY(-2px);
-  }
-
-  &:active {
-    transform: translateY(1px);
-  }
-
-  @media (max-width: 600px) {
-    width: 100%;
   }
 `;
 
-/* =========================================
-   MODAL EXCLUSÃO
-========================================= */
+
+/* =====================================================
+   DELETE
+===================================================== */
 
 export const DeleteModal = styled.div`
   width: 400px;
 
   max-width: 100%;
 
-  box-sizing: border-box;
-
   padding: 30px;
+
+  box-sizing: border-box;
 
   background: #ffffff;
 
   border-radius: 20px;
 
   text-align: center;
-
-  box-shadow:
-    0 20px 45px
-    rgba(0, 0, 0, 0.25);
-
-  animation:
-    deleteModalAppear 0.25s ease;
-
-  @keyframes deleteModalAppear {
-    from {
-      opacity: 0;
-
-      transform:
-        translateY(15px)
-        scale(0.95);
-    }
-
-    to {
-      opacity: 1;
-
-      transform:
-        translateY(0)
-        scale(1);
-    }
-  }
-
-  @media (max-width: 600px) {
-    padding: 25px 20px;
-
-    border-radius: 18px;
-  }
 `;
 
+
 export const DeleteModalTitle = styled.h3`
-  margin: 0 0 12px;
+  margin:
+    0 0 12px;
 
   color: #111111;
 
   font-size: 24px;
-
-  font-weight: 700;
-
-  @media (max-width: 600px) {
-    font-size: 21px;
-  }
 `;
 
+
 export const DeleteModalText = styled.p`
-  margin: 0 0 10px;
+  margin:
+    0 0 10px;
 
   color: #666666;
 
   font-size: 15px;
 
-  line-height: 1.5;
 
   strong {
     color: #111111;
   }
-
-  &:last-of-type {
-    margin-bottom: 28px;
-  }
 `;
+
 
 export const ModalButtons = styled.div`
   display: flex;
@@ -1425,17 +1334,15 @@ export const ModalButtons = styled.div`
 
   gap: 15px;
 
-  @media (max-width: 400px) {
-    flex-direction: column;
-
-    gap: 10px;
-  }
+  margin-top: 25px;
 `;
+
 
 export const CancelButton = styled.button`
   min-height: 45px;
 
-  padding: 0 22px;
+  padding:
+    0 22px;
 
   border: none;
 
@@ -1445,27 +1352,17 @@ export const CancelButton = styled.button`
 
   color: #111111;
 
-  font-size: 14px;
-
   font-weight: 600;
 
   cursor: pointer;
-
-  transition: 0.2s;
-
-  &:hover {
-    background: #d9d9d9;
-  }
-
-  @media (max-width: 400px) {
-    width: 100%;
-  }
 `;
+
 
 export const ConfirmButton = styled.button`
   min-height: 45px;
 
-  padding: 0 22px;
+  padding:
+    0 22px;
 
   border: none;
 
@@ -1475,32 +1372,500 @@ export const ConfirmButton = styled.button`
 
   color: #ffffff;
 
-  font-size: 14px;
-
   font-weight: 600;
 
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   gap: 7px;
 
   cursor: pointer;
+`;
 
-  transition: 0.2s;
 
-  &:hover {
-    background: #b71c1c;
+/* =====================================================
+   RANKING
+   MANTIDO INTEIRO
+===================================================== */
 
-    transform: translateY(-2px);
-  }
+export const RankingSection = styled.section`
+  width: 100%;
 
-  &:active {
-    transform: translateY(0);
-  }
+  margin-top: 35px;
 
-  @media (max-width: 400px) {
-    width: 100%;
+  padding-top: 30px;
+
+  border-top:
+    1px solid
+    #eeeeee;
+`;
+
+
+export const RankingHeader = styled.div`
+  margin-bottom: 20px;
+`;
+
+
+export const RankingTitle = styled.h3`
+  margin: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  color: #222222;
+
+  font-size: 20px;
+
+  font-weight: 700;
+
+
+  svg {
+    color: #f9be06;
+
+    font-size: 23px;
   }
 `;
+
+
+export const RankingDescription = styled.p`
+  margin:
+    7px 0 0;
+
+  color: #888888;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+`;
+
+
+/* =====================================================
+   PLANILHA
+===================================================== */
+
+export const RankingTableWrapper = styled.div`
+  width: 100%;
+
+  overflow-x: auto;
+
+  overflow-y: hidden;
+
+  border:
+    1px solid
+    #e5e5e5;
+
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 5px 18px
+    rgba(
+      0,
+      0,
+      0,
+      .06
+    );
+
+  scrollbar-width: thin;
+
+  scrollbar-color:
+    #bbbbbb
+    #f5f5f5;
+
+
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+
+  &::-webkit-scrollbar-track {
+    background: #f5f5f5;
+  }
+
+
+  &::-webkit-scrollbar-thumb {
+    background: #bbbbbb;
+
+    border-radius: 10px;
+  }
+`;
+
+
+export const RankingTable = styled.table`
+  width: 100%;
+
+  min-width: 1150px;
+
+  border-collapse: collapse;
+
+  table-layout: auto;
+
+  font-family:
+    "Poppins",
+    sans-serif;
+
+
+  thead {
+    background: #000000;
+  }
+
+
+  th {
+    padding:
+      14px 12px;
+
+    color: #ffffff;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    text-align: center;
+
+    white-space: nowrap;
+
+    border-right:
+      1px solid
+      rgba(
+        255,
+        255,
+        255,
+        .1
+      );
+  }
+
+
+  th:first-child {
+    width: 70px;
+  }
+
+
+  th:nth-child(2) {
+    min-width: 190px;
+
+    text-align: left;
+  }
+
+
+  th:nth-child(n + 3) {
+    min-width: 80px;
+  }
+
+
+  td {
+    padding:
+      13px 12px;
+
+    color: #444444;
+
+    font-size: 12px;
+
+    text-align: center;
+
+    white-space: nowrap;
+
+    border-bottom:
+      1px solid
+      #eeeeee;
+
+    border-right:
+      1px solid
+      #f1f1f1;
+
+    background: inherit;
+  }
+
+
+  td:nth-child(2) {
+    text-align: left;
+
+    min-width: 190px;
+  }
+
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+
+  tbody tr:hover {
+    background:
+      #fffaf0;
+  }
+`;
+
+
+/* =====================================================
+   LINHA DO RANKING
+===================================================== */
+
+export const RankingRow = styled.tr`
+  background:
+    ${({ $primeiro }) =>
+      $primeiro
+        ? "rgba(249, 190, 6, 0.10)"
+        : "#ffffff"};
+
+  transition:
+    background
+    .2s ease;
+
+
+  ${({ $primeiro }) =>
+    $primeiro &&
+    `
+      td {
+        font-weight: 600;
+      }
+    `}
+`;
+
+
+/* =====================================================
+   POSIÇÃO
+===================================================== */
+
+export const Position = styled.div`
+  min-width: 50px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 4px;
+
+  color: #222222;
+
+  font-weight: 700;
+
+  font-size: 13px;
+
+
+  svg {
+    color: #f9be06;
+
+    font-size: 17px;
+  }
+`;
+
+
+/* =====================================================
+   NOME
+===================================================== */
+
+export const ParticipantName = styled.span`
+  display: block;
+
+  max-width: 210px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+
+  color: #222222;
+
+  font-size: 12px;
+
+  font-weight: 600;
+`;
+
+
+/* =====================================================
+   NOTA
+===================================================== */
+
+export const Score = styled.span`
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-width: 38px;
+
+  height: 30px;
+
+  padding:
+    0 6px;
+
+  border-radius: 7px;
+
+  background: #f5f5f5;
+
+  color: #333333;
+
+  font-size: 11px;
+
+  font-weight: 600;
+`;
+
+
+/* =====================================================
+   MÉDIA
+===================================================== */
+
+export const Average = styled.span`
+  color: #222222;
+
+  font-weight: 700;
+
+  font-size: 12px;
+`;
+
+
+/* =====================================================
+   PENALIDADE
+===================================================== */
+
+export const Penalty = styled.span`
+  color:
+    ${({ $penalidade }) =>
+      $penalidade
+        ? "#d62828"
+        : "#3a9d5d"};
+
+  font-weight: 700;
+
+  font-size: 12px;
+`;
+
+
+/* =====================================================
+   TEMPO
+===================================================== */
+
+export const Time = styled.span`
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 5px;
+
+  color: #555555;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+
+  svg {
+    color: #777777;
+
+    font-size: 14px;
+  }
+`;
+
+
+/* =====================================================
+   NOTA FINAL
+===================================================== */
+
+export const FinalScore = styled.span`
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-width: 60px;
+
+  min-height: 32px;
+
+  padding:
+    0 9px;
+
+  border-radius: 7px;
+
+  background: #000000;
+
+  color: #f9be06;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  box-shadow:
+    0 3px 8px
+    rgba(
+      0,
+      0,
+      0,
+      .12
+    );
+`;
+
+
+/* =====================================================
+   RANKING VAZIO
+===================================================== */
+
+export const RankingEmpty = styled.div`
+  min-height: 180px;
+
+  padding: 30px;
+
+  box-sizing: border-box;
+
+  border:
+    1px dashed
+    #d8d8d8;
+
+  border-radius: 14px;
+
+  background: #fafafa;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  gap: 7px;
+
+  color: #999999;
+
+
+  svg {
+    margin-bottom: 5px;
+
+    color: #f9be06;
+
+    font-size: 28px;
+  }
+
+
+  strong {
+    color: #444444;
+
+    font-size: 14px;
+  }
+
+
+  span {
+    max-width: 400px;
+
+    color: #999999;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+  }
+`;
+
