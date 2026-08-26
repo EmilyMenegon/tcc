@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { FaPlus } from "react-icons/fa";
 
 import {
     getAllNotas,
@@ -15,7 +14,6 @@ import EmptyState from "../../components/EmptyState";
 
 import {
     List,
-    Fab,
     Overlay,
     Modal,
     ModalTitle,
@@ -174,18 +172,6 @@ export default function Notas() {
                 )}
 
             </List>
-
-
-            <Fab
-                onClick={() => {
-                    setEditingNota(null);
-                    setFormVisible(true);
-                }}
-            >
-
-                <FaPlus />
-
-            </Fab>
 
 
             {/* 

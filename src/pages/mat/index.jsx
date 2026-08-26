@@ -3,124 +3,121 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FaPen, FaBook, FaHome } from "react-icons/fa";
 
 import {
-    Container,
-    Header,
-    LogoText,
-    Title,
-    Search,
-    Tabs,
-    Tab,
-    Content,
-    BackButton,
+  GlobalStyle,
+  Container,
+  Header,
+  LogoText,
+  Title,
+  Search,
+  Tabs,
+  Tab,
+  Content,
+  BackButton,
 } from "./style";
 
 import Poetas from "./Poetas";
 import Notas from "./Notas";
 
 export default function Mat() {
+  const location = useLocation();
+  const navigate = useNavigate();
 
-    const location = useLocation();
+  const [aba, setAba] = useState(
+    location.state?.aba || "poetas"
+  );
 
-    const navigate = useNavigate();
+  const [search, setSearch] = useState("");
 
-    const [aba, setAba] = useState(
-        location.state?.aba || "poetas"
-    );
+  return (
+    <>
+      {/* Remove a margem padrão do navegador */}
+      <GlobalStyle />
 
-    const [search, setSearch] = useState("");
+      <Container>
 
-    return (
+        {/* ==================================================
+            HEADER
+        ================================================== */}
 
-        <Container>
+        <Header>
 
-            <Header>
+          {/* BOTÃO PARA VOLTAR AO LOGIN */}
 
-                {/* ==================================================
-                    BOTÃO PARA VOLTAR AO LOGIN
-                ================================================== */}
-
-                <BackButton
-                    onClick={() => navigate("/login")}
-                    aria-label="Voltar para a página de login"
-                    title="Voltar para o login"
-                >
-
-                    <FaHome />
-
-                </BackButton>
-
-
-                <LogoText>
-
-                    <Title>
-
-                        {aba === "poetas"
-                            ? "Poetas"
-                            : "Notas"}
-
-                    </Title>
+          <BackButton
+            onClick={() => navigate("/login")}
+            aria-label="Voltar para a página de login"
+            title="Voltar para o login"
+          >
+            <FaHome />
+          </BackButton>
 
 
-                    {aba === "poetas" && (
+          <LogoText>
 
-                        <Search
-                            type="text"
-                            placeholder="Buscar por nome..."
-                            value={search}
-                            onChange={(e) =>
-                                setSearch(e.target.value)
-                            }
-                        />
-
-                    )}
-
-                </LogoText>
-
-            </Header>
+            <Title>
+              {aba === "poetas"
+                ? "Poetas"
+                : "Notas"}
+            </Title>
 
 
-            <Tabs>
+            {aba === "poetas" && (
+              <Search
+                type="text"
+                placeholder="Buscar por nome..."
+                value={search}
+                onChange={(e) =>
+                  setSearch(e.target.value)
+                }
+              />
+            )}
 
-                <Tab
-                    active={aba === "poetas"}
-                    onClick={() => setAba("poetas")}
-                >
+          </LogoText>
 
-                    <FaPen /> Poetas
-
-                </Tab>
-
-
-                <Tab
-                    active={aba === "notas"}
-                    onClick={() => setAba("notas")}
-                >
-
-                    <FaBook /> Notas
-
-                </Tab>
-
-            </Tabs>
+        </Header>
 
 
-            <Content>
+        {/* ==================================================
+            ABAS
+        ================================================== */}
 
-                {aba === "poetas" ? (
+        <Tabs>
 
-                    <Poetas
-                        search={search}
-                    />
+          <Tab
+            active={aba === "poetas"}
+            onClick={() => setAba("poetas")}
+          >
+            <FaPen />
+            Poetas
+          </Tab>
 
-                ) : (
 
-                    <Notas />
+          <Tab
+            active={aba === "notas"}
+            onClick={() => setAba("notas")}
+          >
+            <FaBook />
+            Notas
+          </Tab>
 
-                )}
+        </Tabs>
 
-            </Content>
 
-        </Container>
+        {/* ==================================================
+            CONTEÚDO
+        ================================================== */}
 
-    );
+        <Content>
 
+          {aba === "poetas" ? (
+            <Poetas search={search} />
+          ) : (
+            <Notas />
+          )}
+
+        </Content>
+
+      </Container>
+    </>
+  );
 }
