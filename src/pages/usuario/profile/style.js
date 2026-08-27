@@ -56,8 +56,8 @@ export const Page = styled.div`
 
   background: linear-gradient(
     to bottom,
-    #f9be06 0%,
-    #f9be06 32%,
+    #ffdb53 0%,
+    #ffdb53 32%,
     #f8f8f8 32%,
     #f8f8f8 100%
   );
@@ -75,8 +75,8 @@ export const Page = styled.div`
 
     background: linear-gradient(
       to bottom,
-      #f9be06 0%,
-      #f9be06 25%,
+      #ffdb53 0%,
+      #ffdb53 25%,
       #f8f8f8 25%,
       #f8f8f8 100%
     );
@@ -281,7 +281,7 @@ export const EditButton = styled.label`
   white-space: nowrap;
 
   &:hover {
-    background: #f9be06;
+    background: #ffdb53;
 
     color: #111;
   }
@@ -469,7 +469,7 @@ export const PasswordBox = styled.div`
     transition: 0.2s;
 
     &:hover {
-      color: #f9be06;
+      color: #ffdb53;
     }
   }
 `;
@@ -488,7 +488,7 @@ export const SaveButton = styled.button`
 
   border-radius: 12px;
 
-  background: #f9be06;
+  background: #ffdb53;
 
   color: #111;
 

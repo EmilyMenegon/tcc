@@ -407,7 +407,7 @@ export const EmptyIcon = styled.div`
       .15
     );
 
-  color: #f9be06;
+  color: #ffdb53;
 
   font-size: 30px;
 
@@ -659,7 +659,7 @@ export const CloseButton = styled.button`
 
   &:hover {
 
-    background: #f9be06;
+    background: #ffdb53;
 
     color: #000000;
 

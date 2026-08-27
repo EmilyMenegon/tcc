@@ -149,7 +149,7 @@ export const BadgeDot = styled.span`
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #f9be06;
+  background: #ffdb53;
   animation: ${pulse} 1.8s ease infinite;
 `;
 
@@ -178,7 +178,7 @@ export const BigText = styled.h1`
 `;
 
 export const Highlight = styled.span`
-  color: #f9be06;
+  color: #ffdb53;
 `;
 
 export const Description = styled.p`
@@ -219,7 +219,7 @@ export const PrimaryLink = styled.button`
   gap: 14px;
   border: none;
   border-radius: 12px;
-  background: #f9be06;
+  background: #ffdb53;
   color: #111;
   font-family: "Poppins", sans-serif;
   font-size: .95rem;
@@ -231,7 +231,7 @@ export const PrimaryLink = styled.button`
 
   &:hover {
     background: #111;
-    color: #f9be06;
+    color: #ffdb53;
     transform: translateY(-4px);
     box-shadow: 0 12px 25px rgba(0, 0, 0, .15);
   }
@@ -259,7 +259,7 @@ export const SecondaryLink = styled.div`
   font-weight: 700;
   transition: border-color .25s ease, background .25s ease, transform .25s ease;
 
-  svg { color: #f9be06; transition: transform .25s ease; }
+  svg { color: #ffdb53; transition: transform .25s ease; }
 
   &:hover {
     border-color: #111;
@@ -381,7 +381,7 @@ export const Circle = styled.span`
   right: ${({ $right }) => $right || "auto"};
   bottom: ${({ $bottom }) => $bottom || "auto"};
   border-radius: 50%;
-  background: #f9be06;
+  background: #ffdb53;
   opacity: 0.9;
   box-shadow: none;
   filter: none;

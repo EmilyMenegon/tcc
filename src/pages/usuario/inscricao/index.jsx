@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Layout from "../../../components/Layout";
+
 import {
   FaInstagram,
   FaEnvelope,
@@ -22,7 +23,11 @@ import {
   InfoText,
   RightSide,
   Form,
+  InputWrapper,
+  InputLabel,
   Input,
+  SelectWrapper,
+  SelectLabel,
   Select,
   SocialContainer,
   Button,
@@ -50,7 +55,8 @@ export default function Inscricao() {
   const [jaInscrito, setJaInscrito] = useState(false);
   const [inscricao, setInscricao] = useState(null);
 
-  const [showSubmitModal, setShowSubmitModal] = useState(false);
+  const [showSubmitModal, setShowSubmitModal] =
+    useState(false);
 
   useEffect(() => {
     const usuarioLogado = getUsuarioLogado();
@@ -60,7 +66,9 @@ export default function Inscricao() {
       return;
     }
 
-    fetch(`http://localhost:3001/inscricao/${usuarioLogado.email}`)
+    fetch(
+      `http://localhost:3001/inscricao/${usuarioLogado.email}`
+    )
       .then((res) => {
         if (!res.ok) throw new Error();
         return res.json();
@@ -106,24 +114,31 @@ export default function Inscricao() {
     const usuarioLogado = getUsuarioLogado();
 
     try {
-      const res = await fetch("http://localhost:3001/inscricao", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: usuarioLogado.email,
-          nome_poeta: nomePoeta,
-          turma,
-          turno,
-          curso,
-        }),
-      });
+      const res = await fetch(
+        "http://localhost:3001/inscricao",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            email: usuarioLogado.email,
+            nome_poeta: nomePoeta,
+            turma,
+            turno,
+            curso,
+          }),
+        }
+      );
 
       const data = await res.json();
 
       if (!res.ok) {
-        setErro(data.erro || "Erro ao realizar inscrição.");
+        setErro(
+          data.erro || "Erro ao realizar inscrição."
+        );
         return;
       }
 
@@ -146,7 +161,10 @@ export default function Inscricao() {
       setJaInscrito(true);
     } catch (err) {
       console.error(err);
-      setErro("Não foi possível conectar ao servidor.");
+
+      setErro(
+        "Não foi possível conectar ao servidor."
+      );
     }
   }
 
@@ -155,219 +173,342 @@ export default function Inscricao() {
       <Layout />
 
       <TitleArea>
-        <Title>
-          {jaInscrito ? "Sua inscrição" : "Faça sua inscrição"}
-        </Title>
+        <div>
+
+          <Title>
+            {jaInscrito
+              ? "Sua inscrição"
+              : "Faça sua inscrição"}
+          </Title>
+
+          {!jaInscrito && (
+            <p className="title-description">
+              Preencha seus dados para participar
+              da competição como poeta.
+            </p>
+          )}
+        </div>
       </TitleArea>
 
       <Container>
         <LeftSide>
-          <SectionTitle>
-            Contatos
-          </SectionTitle>
+          <div className="left-content">
+            <div className="contact-header">
+              <span className="contact-line" />
 
-          <SocialContainer>
-            <InfoText>
-              <FaInstagram />
+              <SectionTitle>
+                Contatos
+              </SectionTitle>
 
-              <div>
-                <strong>Instagram</strong>
-                <p>@seuinstagram</p>
-              </div>
-            </InfoText>
+              <span className="contact-line" />
+            </div>
 
-            <InfoText>
-              <FaEnvelope />
+            <p className="contact-description">
+              Acompanhe o Slam Etecamp e fique por
+              dentro das novidades.
+            </p>
 
-              <div>
-                <strong>Email</strong>
-                <p>contato@email.com</p>
-              </div>
-            </InfoText>
+            <SocialContainer>
+              <InfoText>
+                <div className="icon-box">
+                  <FaInstagram />
+                </div>
 
-            <InfoText>
-              <FaYoutube />
+                <div className="info-content">
+                  <strong>Instagram</strong>
+                  <p>@seuinstagram</p>
+                </div>
+              </InfoText>
 
-              <div>
-                <strong>YouTube</strong>
-                <p>Seu Canal</p>
-              </div>
-            </InfoText>
-          </SocialContainer>
+              <InfoText>
+                <div className="icon-box">
+                  <FaEnvelope />
+                </div>
+
+                <div className="info-content">
+                  <strong>Email</strong>
+                  <p>contato@email.com</p>
+                </div>
+              </InfoText>
+
+              <InfoText>
+                <div className="icon-box">
+                  <FaYoutube />
+                </div>
+
+                <div className="info-content">
+                  <strong>YouTube</strong>
+                  <p>Seu Canal</p>
+                </div>
+              </InfoText>
+            </SocialContainer>
+
+            <div className="left-footer">
+
+            </div>
+          </div>
         </LeftSide>
 
         <RightSide>
-          {carregando ? null : jaInscrito ? (
+          {carregando ? (
+            <div className="loading">
+              <div className="loading-spinner" />
+              <p>Carregando...</p>
+            </div>
+          ) : jaInscrito ? (
             <AlreadyBox>
-              <FaCheckCircle />
+              <div className="success-icon">
+                <FaCheckCircle />
+              </div>
 
               <AlreadyTitle>
                 Inscrição já realizada!
               </AlreadyTitle>
 
               <AlreadyText>
-                Você já está inscrito no Slam Etecamp como Poeta.
-                Boa sorte na competição!
+                Você já está inscrito no Slam Etecamp
+                como Poeta. Boa sorte na competição!
               </AlreadyText>
 
               {inscricao && (
                 <AlreadyDetails>
-                  <span>
-                    <strong>Nome:</strong>{" "}
-                    {inscricao.nome_poeta}
-                  </span>
+                  <div className="detail-header">
+                    <span />
+                    <strong>
+                      Dados da inscrição
+                    </strong>
+                    <span />
+                  </div>
 
-                  <span>
-                    <strong>Turma:</strong>{" "}
-                    {inscricao.turma}
-                  </span>
+                  <div className="detail-row">
+                    <span>Nome</span>
+                    <strong>
+                      {inscricao.nome_poeta}
+                    </strong>
+                  </div>
 
-                  <span>
-                    <strong>Curso:</strong>{" "}
-                    {inscricao.curso}
-                  </span>
+                  <div className="detail-row">
+                    <span>Turma</span>
+                    <strong>
+                      {inscricao.turma}
+                    </strong>
+                  </div>
 
-                  <span>
-                    <strong>Turno:</strong>{" "}
-                    {inscricao.turno}
-                  </span>
+                  <div className="detail-row">
+                    <span>Curso</span>
+                    <strong>
+                      {inscricao.curso}
+                    </strong>
+                  </div>
+
+                  <div className="detail-row">
+                    <span>Turno</span>
+                    <strong>
+                      {inscricao.turno}
+                    </strong>
+                  </div>
                 </AlreadyDetails>
               )}
             </AlreadyBox>
           ) : (
-            <Form onSubmit={handleSubmit}>
-              <Input
-                id="nomePoeta"
-                name="nomePoeta"
-                placeholder="Nome completo (poeta)"
-                value={nomePoeta}
-                onChange={(e) =>
-                  setNomePoeta(e.target.value)
-                }
-              />
+            <div className="form-area">
+              <div className="form-header">
+                <span className="form-tag">
+                  INSCRIÇÃO
+                </span>
 
-              <Select
-                id="turma"
-                name="turma"
-                value={turma}
-                onChange={(e) =>
-                  setTurma(e.target.value)
-                }
-              >
-                <option value="">
-                  Selecione a turma
-                </option>
+                <h2>
+                  Dados do poeta
+                </h2>
 
-                <option value="1º ano">
-                  1º ano
-                </option>
-
-                <option value="2º ano">
-                  2º ano
-                </option>
-
-                <option value="3º ano">
-                  3º ano
-                </option>
-              </Select>
-
-              <Select
-                id="curso"
-                name="curso"
-                value={curso}
-                onChange={(e) =>
-                  setCurso(e.target.value)
-                }
-              >
-                <option value="">
-                  Selecione o curso
-                </option>
-
-                <option value="Informática">
-                  Informática
-                </option>
-
-                <option value="Marketing">
-                  Marketing
-                </option>
-
-                <option value="Administração">
-                  Administração
-                </option>
-
-                <option value="Humanas">
-                  Humanas
-                </option>
-              </Select>
-
-              <Select
-                id="turno"
-                name="turno"
-                value={turno}
-                onChange={(e) =>
-                  setTurno(e.target.value)
-                }
-              >
-                <option value="">
-                  Selecione o turno
-                </option>
-
-                <option value="Manhã">
-                  Manhã
-                </option>
-
-                <option value="Tarde">
-                  Tarde
-                </option>
-
-                <option value="Noite">
-                  Noite
-                </option>
-              </Select>
-
-              {erro && (
-                <p
-                  style={{
-                    color: "red",
-                    fontSize: "0.9rem",
-                  }}
-                >
-                  {erro}
+                <p>
+                  Informe seus dados para confirmar
+                  sua participação.
                 </p>
-              )}
+              </div>
 
-              {sucesso && (
-                <p
-                  style={{
-                    color: "#2e7d32",
-                    fontSize: "0.9rem",
-                  }}
-                >
-                  {sucesso}
-                </p>
-              )}
+              <Form onSubmit={handleSubmit}>
+                <InputWrapper>
+                  <InputLabel htmlFor="nomePoeta">
+                    Nome completo
+                  </InputLabel>
 
-              <Button type="submit">
-                Enviar
-              </Button>
-            </Form>
+                  <Input
+                    id="nomePoeta"
+                    name="nomePoeta"
+                    type="text"
+                    placeholder=" "
+                    value={nomePoeta}
+                    onChange={(e) =>
+                      setNomePoeta(e.target.value)
+                    }
+                  />
+                </InputWrapper>
+
+                <div className="form-row">
+                  <SelectWrapper>
+                    <SelectLabel htmlFor="turma">
+                      Turma
+                    </SelectLabel>
+
+                    <Select
+                      id="turma"
+                      name="turma"
+                      value={turma}
+                      onChange={(e) =>
+                        setTurma(e.target.value)
+                      }
+                    >
+                      <option value="">
+                        Selecione a turma
+                      </option>
+
+                      <option value="1º ano">
+                        1º ano
+                      </option>
+
+                      <option value="2º ano">
+                        2º ano
+                      </option>
+
+                      <option value="3º ano">
+                        3º ano
+                      </option>
+                    </Select>
+                  </SelectWrapper>
+
+                  <SelectWrapper>
+                    <SelectLabel htmlFor="curso">
+                      Curso
+                    </SelectLabel>
+
+                    <Select
+                      id="curso"
+                      name="curso"
+                      value={curso}
+                      onChange={(e) =>
+                        setCurso(e.target.value)
+                      }
+                    >
+                      <option value="">
+                        Selecione o curso
+                      </option>
+
+                      <option value="Informática">
+                        Informática
+                      </option>
+
+                      <option value="Marketing">
+                        Marketing
+                      </option>
+
+                      <option value="Administração">
+                        Administração
+                      </option>
+
+                      <option value="Humanas">
+                        Humanas
+                      </option>
+                    </Select>
+                  </SelectWrapper>
+                </div>
+
+                <SelectWrapper>
+                  <SelectLabel htmlFor="turno">
+                    Turno
+                  </SelectLabel>
+
+                  <Select
+                    id="turno"
+                    name="turno"
+                    value={turno}
+                    onChange={(e) =>
+                      setTurno(e.target.value)
+                    }
+                  >
+                    <option value="">
+                      Selecione o turno
+                    </option>
+
+                    <option value="Manhã">
+                      Manhã
+                    </option>
+
+                    <option value="Tarde">
+                      Tarde
+                    </option>
+
+                    <option value="Noite">
+                      Noite
+                    </option>
+                  </Select>
+                </SelectWrapper>
+
+                {erro && (
+                  <div className="form-message error">
+                    {erro}
+                  </div>
+                )}
+
+                {sucesso && (
+                  <div className="form-message success">
+                    {sucesso}
+                  </div>
+                )}
+
+                <Button type="submit">
+                  <span className="button-content">
+                    Enviar inscrição
+                  </span>
+                </Button>
+              </Form>
+            </div>
           )}
         </RightSide>
       </Container>
 
       {showSubmitModal && (
-        <ModalOverlay>
+        <ModalOverlay
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) {
+              setShowSubmitModal(false);
+            }
+          }}
+        >
           <Modal>
+            <div className="modal-icon">
+              <span>?</span>
+            </div>
+
             <h3>
               Confirmar inscrição
             </h3>
 
             <p>
-              Tem certeza de que deseja enviar a inscrição?
+              Tem certeza de que deseja enviar
+              sua inscrição?
             </p>
+
+            <div className="modal-summary">
+              <div>
+                <span>Poeta</span>
+                <strong>{nomePoeta}</strong>
+              </div>
+
+              <div>
+                <span>Turma</span>
+                <strong>{turma}</strong>
+              </div>
+
+              <div>
+                <span>Curso</span>
+                <strong>{curso}</strong>
+              </div>
+            </div>
 
             <ModalButtons>
               <CancelButton
+                type="button"
                 onClick={() =>
                   setShowSubmitModal(false)
                 }
@@ -376,6 +517,7 @@ export default function Inscricao() {
               </CancelButton>
 
               <ConfirmButton
+                type="button"
                 onClick={confirmarInscricao}
               >
                 Sim, enviar

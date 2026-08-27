@@ -228,7 +228,7 @@ export const SocialIcon = styled.a`
     transform 0.25s ease;
 
   &:hover {
-    color: #f9be06;
+    color: #ffdb53;
 
     transform:
       translateY(-3px);
@@ -308,6 +308,7 @@ export const BigText =
     padding: 0;
 
     color: #111;
+    
 
     font-size:
       clamp(
@@ -320,9 +321,9 @@ export const BigText =
 
     font-weight: 900;
 
-    span {
-      color: #f9be06;
-    }
+  span {
+  color: #ffdb53;
+}
 
     @media (max-width: 768px) {
       font-size: 2.2rem;
@@ -408,7 +409,7 @@ export const PrimaryButton =
 
     border-radius: 12px;
 
-    background: #f9be06;
+    background: #ffdb53;
 
     color: #000;
 
@@ -472,12 +473,6 @@ export const PrimaryButton =
         );
     }
 
-    /*
-    ==========================================================
-    CONTEÚDO
-    ==========================================================
-    */
-
     .button-content {
       position: relative;
 
@@ -496,12 +491,6 @@ export const PrimaryButton =
         color 0.3s ease;
     }
 
-    /*
-    ==========================================================
-    HOVER
-    ==========================================================
-    */
-
     &:hover {
       color: #fff;
 
@@ -514,12 +503,6 @@ export const PrimaryButton =
         translate(-50%, -50%)
         scale(18);
     }
-
-    /*
-    ==========================================================
-    SETA
-    ==========================================================
-    */
 
     svg {
       flex-shrink: 0;
@@ -539,23 +522,11 @@ export const PrimaryButton =
         translateX(6px);
     }
 
-    /*
-    ==========================================================
-    CLIQUE
-    ==========================================================
-    */
-
     &:active {
       transform:
         translateY(0)
         scale(0.98);
     }
-
-    /*
-    ==========================================================
-    TABLET / CELULAR
-    ==========================================================
-    */
 
     @media (max-width: 768px) {
       min-height: 58px;
@@ -579,6 +550,7 @@ export const PrimaryButton =
       }
     }
   `;
+
 
 /* ============================================================
    HERO IMAGE
@@ -655,7 +627,7 @@ export const Circle =
 
     border-radius: 50%;
 
-    background: #f9be06;
+    background: #ffdb53;
 
     opacity: 0.9;
 
@@ -764,7 +736,7 @@ export const MarqueeSection =
     align-items: center;
     justify-content: center;
 
-    background: #f9be06;
+    background: #ffdb53;
 
     margin:
       100vh 0 0 !important;
@@ -933,7 +905,7 @@ export const AboutTitle =
     line-height: 1;
 
     span {
-      color: #f9be06;
+      color: #ffdb53;
     }
 
     @media (max-width: 900px) {
@@ -1066,7 +1038,7 @@ export const AboutWord =
     background:
       ${({ $found }) =>
         $found
-          ? "#f9be06"
+          ? "#ffdb53"
           : "#e5e5e5"};
 
     color: #111;
@@ -1148,7 +1120,7 @@ export const AboutBoard =
 
     aspect-ratio: 1;
 
-    background: #f9be06;
+    background: #ffdb53;
 
     padding: 3.5%;
 
@@ -1240,7 +1212,7 @@ export const GameFeedback =
     background:
       ${({ $success }) =>
         $success
-          ? "#f9be06"
+          ? "#ffdb53"
           : "#831614"};
 
     color:
@@ -1410,7 +1382,7 @@ export const SectionTitle =
     line-height: 1.1;
 
     span {
-      color: #f9be06;
+      color: #ffdb53;
     }
   `;
 
@@ -1523,7 +1495,7 @@ export const FeatureIcon =
 
     color: #111;
 
-    background: #f9be06;
+    background: #ffdb53;
 
     border-radius:
       45% 55% 50% 50%;
@@ -1688,7 +1660,7 @@ export const NumberItem =
 
 export const NumberValue =
   styled.div`
-    color: #f9be06;
+    color: #ffdb53;
 
     font-size:
       clamp(
@@ -1727,7 +1699,7 @@ export const NumberDivider =
 
     height: 100px;
 
-    background: #f9be06;
+    background: #ffdb53;
 
     opacity: 0.8;
 
@@ -1746,7 +1718,7 @@ export const CTASection =
 
     padding: 30px 0;
 
-    background: #f9be06;
+    background: #ffdb53;
 
     overflow: hidden;
 
@@ -1858,7 +1830,7 @@ export const CTALink = styled.a`
   border: none;
   border-radius: 12px;
 
-  background: #000;
+  background: #111;
 
   color: #fff;
 
@@ -1958,7 +1930,7 @@ export const CTALink = styled.a`
   ========================================= */
 
   &:hover {
-    color: #fff;
+    color: #ffdb53;
 
     transform:
       translateY(-3px);

@@ -92,7 +92,7 @@ export const Navbar = styled.nav`
 
   height: 50px;
 
-  background: #f9be06;
+  background: #ffdb53;
 
   border-radius: 40px;
 
@@ -160,7 +160,7 @@ export const Navbar = styled.nav`
 
     border-radius: 8px;
 
-    background: #f9be06;
+    background: #ffdb53;
 
     display: flex;
 
@@ -247,7 +247,7 @@ export const NavCenter = styled.div`
 
     padding: 20px;
 
-    background: #f9be06;
+    background: #ffdb53;
 
     border-radius: 15px;
 
@@ -437,7 +437,7 @@ export const ProfileIcon = styled(Link)`
 
   &:hover {
 
-    background: #f9be06;
+    background: #ffdb53;
 
     transform:
       translateY(-2px);

@@ -568,7 +568,7 @@ export const AccessButton = styled.button`
 
   background: #000000;
 
-  color: #f9be06;
+  color: #ffdb53;
 
   font-family:
     "Poppins",
@@ -585,7 +585,7 @@ export const AccessButton = styled.button`
 
   &:hover {
 
-    background: #f9be06;
+    background: #ffdb53;
 
     color: #111111;
 
@@ -661,7 +661,7 @@ export const EmptyIcon = styled.div`
       .15
     );
 
-  color: #f9be06;
+  color: #ffdb53;
 
   font-size: 30px;
 
@@ -923,7 +923,7 @@ export const CloseButton = styled.button`
 
     background: #000000;
 
-    color: #f9be06;
+    color: #ffdb53;
 
     transform:
       rotate(90deg);
@@ -1074,7 +1074,7 @@ export const ModalInfoItem = styled.div`
 
     height: 20px;
 
-    color: #f9be06;
+    color: #ffdb53;
 
   }
 

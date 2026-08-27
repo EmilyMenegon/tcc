@@ -163,7 +163,7 @@ export const Pixel =
 
     flex-shrink: 0;
 
-    background: #f9be06;
+    background: #ffdb53;
 
     opacity: 0;
 
@@ -209,7 +209,7 @@ export const HomeButton =
 
     border-radius: 50%;
 
-    background: #f9be06;
+    background: #ffdb53;
 
     color: #000;
 
@@ -496,7 +496,7 @@ export const SidePanel =
 
     padding: 7%;
 
-    background: #f9be06;
+    background: #ffdb53;
 
     color: #fff;
 
@@ -816,7 +816,7 @@ export const PanelButton =
     }
 
     &:hover {
-      color: #f9be06;
+      color: #ffdb53;
 
       transform:
         translateY(-3px);
@@ -1132,7 +1132,7 @@ export const Input =
 
     border:
       2px solid
-      #f9be06;
+      #ffdb53;
 
     border-radius: 16px;
 
@@ -1153,7 +1153,7 @@ export const Input =
     }
 
     &:focus {
-      border-color: #f9be06;
+      border-color: #ffdb53;
 
       background: #fff5c2;
     }
@@ -1331,7 +1331,7 @@ export const Button =
 
     border-radius: 17px;
 
-    background: #f9be06;
+    background: #ffdb53;
 
     color: #000;
 

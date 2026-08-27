@@ -624,7 +624,7 @@ export const EmptyIcon = styled.div`
       .15
     );
 
-  color: #f9be06;
+  color: #ffdb53;
 
   font-size: 30px;
 
@@ -942,7 +942,7 @@ export const CloseButton = styled.button`
 
     background: #000000;
 
-    color: #f9be06;
+    color: #ffdb53;
 
     transform:
       rotate(90deg);
