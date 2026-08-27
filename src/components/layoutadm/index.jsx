@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Header,
@@ -6,20 +6,41 @@ import {
   NavCenter,
   NavItem,
   ProfileIcon,
+  ProfilePhoto,
   MenuButton,
 } from "./style";
 
 import { FaUser } from "react-icons/fa";
+import { getUsuarioLogado } from "../../utils/auth";
 
 export default function Layoutadm() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [foto, setFoto] = useState(null);
+
+  useEffect(() => {
+
+    const usuarioLogado = getUsuarioLogado();
+    if (!usuarioLogado?.email) return;
+
+    fetch(`http://localhost:3001/perfil/${usuarioLogado.email}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.foto) setFoto(data.foto);
+      })
+      .catch(() => {});
+
+  }, []);
 
   return (
     <Header>
 
       {/* PERFIL */}
-      <ProfileIcon to="/adm/profileadm">
-        <FaUser />
+      <ProfileIcon to="/adm/profileadm" $comFoto={!!foto}>
+        {foto ? (
+          <ProfilePhoto src={foto} alt="Foto de perfil" />
+        ) : (
+          <FaUser />
+        )}
       </ProfileIcon>
 
       {/* NAVBAR */}

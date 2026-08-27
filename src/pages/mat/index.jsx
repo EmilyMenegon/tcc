@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaPen, FaBook, FaHome } from "react-icons/fa";
+import { logout } from "../../utils/auth";
 
 import {
   GlobalStyle,
@@ -13,6 +14,13 @@ import {
   Tab,
   Content,
   BackButton,
+  Overlay,
+  Modal,
+  ModalTitle,
+  ModalText,
+  Buttons,
+  CancelButton,
+  DeleteButton,
 } from "./style";
 
 import Poetas from "./Poetas";
@@ -27,6 +35,12 @@ export default function Mat() {
   );
 
   const [search, setSearch] = useState("");
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  async function handleLogout() {
+    await logout();
+    navigate("/login");
+  }
 
   return (
     <>
@@ -41,12 +55,12 @@ export default function Mat() {
 
         <Header>
 
-          {/* BOTÃO PARA VOLTAR AO LOGIN */}
+          {/* BOTÃO PARA SAIR DA CONTA */}
 
           <BackButton
-            onClick={() => navigate("/login")}
-            aria-label="Voltar para a página de login"
-            title="Voltar para o login"
+            onClick={() => setShowLogoutModal(true)}
+            aria-label="Sair da conta"
+            title="Sair da conta"
           >
             <FaHome />
           </BackButton>
@@ -118,6 +132,37 @@ export default function Mat() {
         </Content>
 
       </Container>
+
+
+      {/* ==================================================
+          MODAL DE CONFIRMAÇÃO DE LOGOUT
+      ================================================== */}
+
+      {showLogoutModal && (
+        <Overlay>
+          <Modal>
+
+            <ModalTitle>Sair da conta</ModalTitle>
+
+            <ModalText>
+              Tem certeza que deseja sair da sua conta?
+            </ModalText>
+
+            <Buttons>
+
+              <CancelButton onClick={() => setShowLogoutModal(false)}>
+                Cancelar
+              </CancelButton>
+
+              <DeleteButton onClick={handleLogout}>
+                Sim, sair
+              </DeleteButton>
+
+            </Buttons>
+
+          </Modal>
+        </Overlay>
+      )}
     </>
   );
 }

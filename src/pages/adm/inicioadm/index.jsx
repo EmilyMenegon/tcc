@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import Layoutadm from "../../../components/Layoutadm";
+import Layoutadm from "../../../components/layoutadm";
 
 import {
   FaFileAlt,
@@ -347,7 +347,7 @@ export default function Inicioadm() {
 
           <Title>
 
-            Olá, <Highlight>Administrador!</Highlight>
+            Olá, <Highlight>Organizador!</Highlight>
 
           </Title>
 

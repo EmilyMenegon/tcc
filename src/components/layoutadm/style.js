@@ -341,7 +341,7 @@ export const ProfileIcon = styled(Link)`
 
   border-radius: 50%;
 
-  background: #000;
+  background: ${({ $comFoto }) => ($comFoto ? "transparent" : "#000")};
 
   display: flex;
 
@@ -364,7 +364,7 @@ export const ProfileIcon = styled(Link)`
 
 
   &:hover {
-    background: #f9be06;
+    background: ${({ $comFoto }) => ($comFoto ? "transparent" : "#f9be06")};
 
     transform:
       translateY(-2px);
@@ -437,6 +437,37 @@ export const ProfileIcon = styled(Link)`
     svg {
       font-size: 15px;
     }
+  }
+`;
+
+
+/* =====================================================
+   FOTO DE PERFIL (dentro do ProfileIcon)
+===================================================== */
+
+export const ProfilePhoto = styled.img`
+  width: 100%;
+
+  height: 100%;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+
+  display: block;
+
+  box-sizing: border-box;
+
+  border: 3px solid #f9be06;
+
+  transition: 0.2s;
+
+
+  ${ProfileIcon}:hover & {
+    border-color: #000;
+
+    transform:
+      scale(1.04);
   }
 `;
 

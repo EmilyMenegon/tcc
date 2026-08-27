@@ -62,3 +62,90 @@ export function buscarInscricaoPorEmail(req, res) {
   res.json(inscricao);
 
 }
+
+
+/* ============================================================
+   LISTAR TODAS AS INSCRIÇÕES (PARA O ADMIN)
+============================================================ */
+
+export function listarInscricoes(req, res) {
+
+  const inscricoes = db
+    .prepare("SELECT * FROM inscricoes ORDER BY id_inscricoes DESC")
+    .all();
+
+  res.json(inscricoes);
+
+}
+
+
+/* ============================================================
+   ATUALIZAR UMA INSCRIÇÃO (PARA O ADMIN)
+============================================================ */
+
+export function atualizarInscricao(req, res) {
+
+  const { id } = req.params;
+  const { nome_poeta, turma, turno, curso } = req.body;
+
+  if (!nome_poeta || !turma || !turno || !curso) {
+    return res.status(400).json({ erro: "Preencha todos os campos." });
+  }
+
+  const inscricao = db
+    .prepare("SELECT * FROM inscricoes WHERE id_inscricoes = ?")
+    .get(id);
+
+  if (!inscricao) {
+    return res.status(404).json({ erro: "Inscrição não encontrada." });
+  }
+
+  try {
+
+    db.prepare(
+      "UPDATE inscricoes SET nome_poeta = ?, turma = ?, turno = ?, curso = ? WHERE id_inscricoes = ?"
+    ).run(nome_poeta, turma, turno, curso, id);
+
+    res.json({ mensagem: "Inscrição atualizada com sucesso!" });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: "Erro ao atualizar inscrição." });
+  }
+
+}
+
+
+/* ============================================================
+   EXCLUIR UMA INSCRIÇÃO (PARA O ADMIN)
+   O usuário volta a ser do tipo "aluno"
+============================================================ */
+
+export function excluirInscricao(req, res) {
+
+  const { id } = req.params;
+
+  const inscricao = db
+    .prepare("SELECT * FROM inscricoes WHERE id_inscricoes = ?")
+    .get(id);
+
+  if (!inscricao) {
+    return res.status(404).json({ erro: "Inscrição não encontrada." });
+  }
+
+  try {
+
+    db.prepare(
+      "UPDATE usuario SET tipo_usuario = 'aluno', inscricao_id = NULL WHERE inscricao_id = ?"
+    ).run(id);
+
+    db.prepare("DELETE FROM inscricoes WHERE id_inscricoes = ?").run(id);
+
+    res.json({ mensagem: "Inscrição excluída com sucesso!" });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: "Erro ao excluir inscrição." });
+  }
+
+}
