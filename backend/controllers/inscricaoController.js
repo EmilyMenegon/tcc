@@ -1,0 +1,64 @@
+import db from "../database.js";
+
+export function criarInscricao(req, res) {
+
+  const { email, nome_poeta, turma, turno, curso } = req.body;
+
+  if (!email || !nome_poeta || !turma || !turno || !curso) {
+    return res.status(400).json({ erro: "Preencha todos os campos." });
+  }
+
+  const usuario = db
+    .prepare("SELECT * FROM usuario WHERE email = ?")
+    .get(email);
+
+  if (!usuario) {
+    return res.status(404).json({ erro: "Usuário não encontrado." });
+  }
+
+  if (usuario.inscricao_id) {
+    return res.status(400).json({ erro: "Você já realizou sua inscrição." });
+  }
+
+  try {
+
+    const stmtInscricao = db.prepare(
+      "INSERT INTO inscricoes (nome_poeta, turma, turno, curso) VALUES (?, ?, ?, ?)"
+    );
+    const info = stmtInscricao.run(nome_poeta, turma, turno, curso);
+
+    db.prepare(
+      "UPDATE usuario SET tipo_usuario = 'poeta', inscricao_id = ? WHERE email = ?"
+    ).run(info.lastInsertRowid, email);
+
+    res.status(201).json({
+      mensagem: "Inscrição realizada com sucesso!",
+      tipo: "poeta",
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: "Erro ao realizar inscrição." });
+  }
+
+}
+
+export function buscarInscricaoPorEmail(req, res) {
+
+  const { email } = req.params;
+
+  const usuario = db
+    .prepare("SELECT inscricao_id FROM usuario WHERE email = ?")
+    .get(email);
+
+  if (!usuario || !usuario.inscricao_id) {
+    return res.status(404).json({ erro: "Nenhuma inscrição encontrada." });
+  }
+
+  const inscricao = db
+    .prepare("SELECT * FROM inscricoes WHERE id_inscricoes = ?")
+    .get(usuario.inscricao_id);
+
+  res.json(inscricao);
+
+}

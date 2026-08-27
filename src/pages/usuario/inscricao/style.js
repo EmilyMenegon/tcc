@@ -448,7 +448,7 @@ export const RightSide = styled.div`
    FORM
 ========================================== */
 
-export const Form = styled.div`
+export const Form = styled.form`
 
   display: flex;
 
@@ -503,6 +503,171 @@ export const Input = styled.input`
   transition: .2s;
 
   font-size: 14px;
+
+
+  &:focus {
+
+    box-shadow:
+      0 0 0 2px
+      #f9be06;
+
+  }
+
+
+  @media (max-width: 480px) {
+
+    height: 42px;
+
+    padding:
+      0 15px;
+
+    font-size: 14px;
+
+  }
+
+`;
+
+
+/* ==========================================
+   JÁ INSCRITO
+========================================== */
+
+export const AlreadyBox = styled.div`
+
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  text-align: center;
+
+  gap: 14px;
+
+  padding: 10% 5%;
+
+  background: #fff;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 4px 15px
+    rgba(0, 0, 0, 0.08);
+
+
+  svg {
+
+    font-size: 48px;
+
+    color: #f9be06;
+
+  }
+
+`;
+
+
+export const AlreadyTitle = styled.h3`
+
+  margin: 0;
+
+  font-size:
+    clamp(
+      18px,
+      2vw,
+      22px
+    );
+
+  color: #111;
+
+`;
+
+
+export const AlreadyText = styled.p`
+
+  margin: 0;
+
+  font-size: 14px;
+
+  color: #555;
+
+  line-height: 1.5;
+
+`;
+
+
+export const AlreadyDetails = styled.div`
+
+  width: 100%;
+
+  max-width: 320px;
+
+  margin-top: 6px;
+
+  background: #ecf0f1;
+
+  border-radius: 14px;
+
+  padding: 16px 20px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+
+  text-align: left;
+
+
+  span {
+
+    font-size: 13px;
+
+    color: #333;
+
+  }
+
+
+  strong {
+
+    color: #111;
+
+  }
+
+`;
+
+
+/* ==========================================
+   SELECT
+========================================== */
+
+export const Select = styled.select`
+
+  width: 100%;
+
+  height: 42px;
+
+  padding:
+    0 15px;
+
+  box-sizing: border-box;
+
+  border: none;
+
+  border-radius: 20px;
+
+  outline: none;
+
+  transition: .2s;
+
+  font-size: 14px;
+
+  background: #fff;
+
+  color: #111;
+
+  cursor: pointer;
 
 
   &:focus {

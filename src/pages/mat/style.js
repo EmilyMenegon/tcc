@@ -477,5 +477,3 @@ export const DeleteButton = styled.button`
     transform: scale(0.98);
   }
 `;
-
-

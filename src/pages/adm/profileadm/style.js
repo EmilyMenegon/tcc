@@ -15,8 +15,10 @@ export const GlobalStyle = createGlobalStyle`
   #root {
     margin: 0;
     padding: 0;
+
     width: 100%;
     min-width: 100%;
+
     min-height: 100%;
   }
 
@@ -29,6 +31,7 @@ export const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     padding: 0;
+
     font-family: "Poppins", sans-serif;
   }
 `;
@@ -40,6 +43,7 @@ export const GlobalStyle = createGlobalStyle`
 
 export const Page = styled.div`
   width: 100%;
+
   min-height: 100vh;
   min-height: 100dvh;
 
@@ -62,6 +66,7 @@ export const Page = styled.div`
 
   @media (max-width: 600px) {
     width: 100%;
+
     min-height: 100vh;
     min-height: 100dvh;
 
@@ -97,6 +102,7 @@ export const BackButton = styled(Link)`
   background: #fff;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
@@ -117,7 +123,9 @@ export const BackButton = styled(Link)`
 
   &:hover {
     background: #000;
+
     color: #fff;
+
     transform: translateY(-2px);
   }
 
@@ -152,6 +160,7 @@ export const Container = styled.div`
   padding: 40px;
 
   display: flex;
+
   flex-direction: column;
 
   gap: 22px;
@@ -189,10 +198,11 @@ export const Container = styled.div`
 ========================================== */
 
 export const ProfileBox = styled.div`
-  width: 100%;
-
   display: flex;
+
   justify-content: center;
+
+  width: 100%;
 `;
 
 
@@ -272,6 +282,7 @@ export const EditButton = styled.label`
 
   &:hover {
     background: #f9be06;
+
     color: #111;
   }
 
@@ -307,6 +318,7 @@ export const UserName = styled.h2`
   color: #111;
 
   word-break: break-word;
+
   overflow-wrap: anywhere;
 
   @media (max-width: 600px) {
@@ -336,6 +348,7 @@ export const UserEmail = styled.p`
   font-size: 15px;
 
   word-break: break-word;
+
   overflow-wrap: anywhere;
 
   margin: 0;
@@ -351,12 +364,13 @@ export const UserEmail = styled.p`
 ========================================== */
 
 export const Field = styled.div`
-  width: 100%;
-
   display: flex;
+
   flex-direction: column;
 
   gap: 8px;
+
+  width: 100%;
 
   box-sizing: border-box;
 `;
@@ -406,8 +420,11 @@ export const Input = styled.input`
 
   &:focus {
     outline: none;
+
     background: #f3f3f3;
+
     border: none;
+
     box-shadow: none;
   }
 
@@ -417,6 +434,7 @@ export const Input = styled.input`
 
   @media (max-width: 600px) {
     padding: 13px 14px;
+
     font-size: 14px;
   }
 `;
@@ -459,33 +477,45 @@ export const PasswordBox = styled.div`
 
 /* ==========================================
    SAVE BUTTON
+   (mesmo estilo do botão "Entrar" do Login)
 ========================================== */
 
 export const SaveButton = styled.button`
-  margin-top: 10px;
-
-  height: 50px;
-
+  width: 100%;
+  height: 58px;
+  flex-shrink: 0;
   border: none;
-
-  border-radius: 12px;
-
-  background: #f9be06;
-
-  color: #111;
-
-  font-size: 16px;
-
+  border-radius: 18px;
+  background: #831614;
+  color: #fff;
+  font-size: clamp(1rem, 1.1vw, 1.1rem);
   font-weight: bold;
-
   cursor: pointer;
-
-  transition: 0.2s;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform, opacity;
 
   &:hover {
     background: #000;
     color: #fff;
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16);
+  }
+
+  &:active {
+    transform: translateY(1px) scale(0.98);
+  }
+
+  @media (max-width: 768px) {
+    height: 62px;
+    border-radius: 18px;
+    font-size: 1.05rem;
   }
 `;
 
@@ -511,6 +541,7 @@ export const LogoutLink = styled.span`
 
   &:hover {
     color: #000;
+
     opacity: 0.7;
   }
 
@@ -596,6 +627,7 @@ export const Modal = styled.div`
   @keyframes modalAppear {
     from {
       opacity: 0;
+
       transform:
         translateY(15px)
         scale(0.95);
@@ -603,6 +635,7 @@ export const Modal = styled.div`
 
     to {
       opacity: 1;
+
       transform:
         translateY(0)
         scale(1);
@@ -621,6 +654,7 @@ export const Modal = styled.div`
 
     p {
       font-size: 14px;
+
       margin-bottom: 22px;
     }
   }
@@ -640,6 +674,7 @@ export const ModalButtons = styled.div`
 
   @media (max-width: 400px) {
     flex-direction: column;
+
     gap: 10px;
   }
 `;
@@ -703,6 +738,7 @@ export const ConfirmButton = styled.button`
 
   &:hover {
     background: #b71c1c;
+
     transform: translateY(-2px);
   }
 

@@ -8,6 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 import { gsap } from "gsap";
 
+import { salvarUsuarioLogado } from "../../utils/auth";
+
 import {
   FaHome,
   FaEye,
@@ -645,13 +647,11 @@ export default function Login() {
           return;
         }
 
-        localStorage.setItem(
-          "usuario_logado",
-          JSON.stringify({
-            nome: data.nome,
-            tipo: data.tipo,
-          })
-        );
+        salvarUsuarioLogado({
+          nome: data.nome,
+          tipo: data.tipo,
+          email,
+        });
 
         if (
           data.tipo ===

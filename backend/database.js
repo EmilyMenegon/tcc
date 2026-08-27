@@ -23,4 +23,14 @@ db.exec(`
   )
 `);
 
+db.exec(`
+  CREATE TABLE IF NOT EXISTS inscricoes (
+    id_inscricoes INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome_poeta TEXT NOT NULL,
+    turma TEXT NOT NULL,
+    turno TEXT NOT NULL,
+    curso TEXT NOT NULL
+  )
+`);
+
 export default db;

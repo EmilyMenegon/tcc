@@ -1,10 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 
-
 import TelaInicial from "./pages/inicio/telainicial";
 import Navegacao from "./pages/navegacao";
 import Login from "./pages/login";
-
+import RotaProtegida from "./components/rota/RotaProtegida";
 
 import Home from "./pages/usuario/home";
 import Inscricao from "./pages/usuario/inscricao";
@@ -12,7 +11,6 @@ import Mural from "./pages/usuario/mural";
 import Galeria from "./pages/usuario/galeria";
 import Profile from "./pages/usuario/profile";
 import EventosUsuario from "./pages/usuario/eventosusuario";
-
 
 import Inscricaoadm from "./pages/adm/inscricaoadm";
 import Inicioadm from "./pages/adm/inicioadm";
@@ -24,7 +22,6 @@ import Muraladm from "./pages/adm/muraladm";
 import Mat from "./pages/mat";
 
 
-
 export default function App() {
 
   return (
@@ -32,99 +29,145 @@ export default function App() {
     <Routes>
 
 
-      {/* Páginas iniciais */}
+      {/* Páginas públicas */}
 
-      <Route 
-        path="/" 
-        element={<TelaInicial />} 
-      />
-
-      <Route 
-        path="/navegacao" 
-        element={<Navegacao />} 
-      />
-
-      <Route 
-        path="/login" 
-        element={<Login />} 
-      />
-
-
-
-      {/* USUÁRIO */}
-
-      <Route 
-        path="/usuario/home" 
-        element={<Home />} 
-      />
-
-      <Route 
-        path="/usuario/profile" 
-        element={<Profile />} 
-      />
-
-      <Route 
-        path="/usuario/inscricao" 
-        element={<Inscricao />} 
-      />
-
-      <Route 
-        path="/usuario/galeria" 
-        element={<Galeria />} 
-      />
-
-      <Route 
-        path="/usuario/mural" 
-        element={<Mural />} 
-      />
-
-      <Route 
-        path="/usuario/eventosusuario" 
-        element={<EventosUsuario />} 
-      />
-
-
-
-      {/* ADMIN */}
-
-      <Route 
-        path="/adm/inscricaoadm" 
-        element={<Inscricaoadm />} 
-      />
-
-      <Route 
-        path="/adm/inicioadm" 
-        element={<Inicioadm />} 
-      />
-
-      <Route 
-        path="/adm/profileadm" 
-        element={<Profileadm />} 
-      />
-
-      <Route 
-        path="/adm/galeriaadm" 
-        element={<Galeriaadm />} 
-      />
-
-      <Route 
-        path="/adm/eventos" 
-        element={<Eventos />} 
-      />
-
-      <Route 
-        path="/adm/muraladm" 
-        element={<Muraladm />} 
-      />
-      
-
-
-      {/* SISTEMA MAT */}
+      <Route path="/" element={<TelaInicial />} />
+      <Route path="/login" element={<Login />} />
 
       <Route
-  path="/mat"
-  element={<Mat />}
-/>
+        path="/navegacao"
+        element={
+          <RotaProtegida>
+            <Navegacao />
+          </RotaProtegida>
+        }
+      />
+
+
+      {/* USUÁRIO (aluno e poeta) */}
+
+      <Route
+        path="/usuario/home"
+        element={
+          <RotaProtegida tiposPermitidos={["aluno", "poeta"]}>
+            <Home />
+          </RotaProtegida>
+        }
+      />
+
+      <Route
+        path="/usuario/profile"
+        element={
+          <RotaProtegida tiposPermitidos={["aluno", "poeta"]}>
+            <Profile />
+          </RotaProtegida>
+        }
+      />
+
+      <Route
+        path="/usuario/inscricao"
+        element={
+          <RotaProtegida tiposPermitidos={["aluno", "poeta"]}>
+            <Inscricao />
+          </RotaProtegida>
+        }
+      />
+
+      <Route
+        path="/usuario/galeria"
+        element={
+          <RotaProtegida tiposPermitidos={["aluno", "poeta"]}>
+            <Galeria />
+          </RotaProtegida>
+        }
+      />
+
+      <Route
+        path="/usuario/mural"
+        element={
+          <RotaProtegida tiposPermitidos={["aluno", "poeta"]}>
+            <Mural />
+          </RotaProtegida>
+        }
+      />
+
+      <Route
+        path="/usuario/eventosusuario"
+        element={
+          <RotaProtegida tiposPermitidos={["aluno", "poeta"]}>
+            <EventosUsuario />
+          </RotaProtegida>
+        }
+      />
+
+
+      {/* ADMIN (organizador) */}
+
+      <Route
+        path="/adm/inscricaoadm"
+        element={
+          <RotaProtegida tiposPermitidos={["organizador"]}>
+            <Inscricaoadm />
+          </RotaProtegida>
+        }
+      />
+
+      <Route
+        path="/adm/inicioadm"
+        element={
+          <RotaProtegida tiposPermitidos={["organizador"]}>
+            <Inicioadm />
+          </RotaProtegida>
+        }
+      />
+
+      <Route
+        path="/adm/profileadm"
+        element={
+          <RotaProtegida tiposPermitidos={["organizador"]}>
+            <Profileadm />
+          </RotaProtegida>
+        }
+      />
+
+      <Route
+        path="/adm/galeriaadm"
+        element={
+          <RotaProtegida tiposPermitidos={["organizador"]}>
+            <Galeriaadm />
+          </RotaProtegida>
+        }
+      />
+
+      <Route
+        path="/adm/eventos"
+        element={
+          <RotaProtegida tiposPermitidos={["organizador"]}>
+            <Eventos />
+          </RotaProtegida>
+        }
+      />
+
+      <Route
+        path="/adm/muraladm"
+        element={
+          <RotaProtegida tiposPermitidos={["organizador"]}>
+            <Muraladm />
+          </RotaProtegida>
+        }
+      />
+
+
+      {/* SISTEMA MAT (matemático) */}
+
+      <Route
+        path="/mat"
+        element={
+          <RotaProtegida tiposPermitidos={["matematico"]}>
+            <Mat />
+          </RotaProtegida>
+        }
+      />
 
 
     </Routes>
