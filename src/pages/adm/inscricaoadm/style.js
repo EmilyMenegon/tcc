@@ -89,7 +89,7 @@ export const Title = styled.h1`
 
   margin: 0 0 30px;
 
-  color: #111;
+  color: #831614;
 
 
   /* =================================================
@@ -189,14 +189,14 @@ export const FilterButton = styled.button`
   font-size: 15px;
 
   background: ${({ $active }) =>
-    $active ? "#f9be06" : "#ddd"};
+    $active ? "#ffdb53" : "#ddd"};
 
   color: ${({ $active }) =>
     $active ? "#fff" : "#333"};
 
 
   &:hover {
-    background: #f9be06;
+    background: #ffdb53;
 
     color: white;
   }
@@ -277,7 +277,7 @@ export const TableContainer = styled.div`
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #f9be06;
+    background: #ffdb53;
 
     border-radius: 10px;
   }
@@ -310,7 +310,7 @@ export const Table = styled.table`
 
 
   thead {
-    background: #f9be06;
+    background: #ffdb53;
 
     color: white;
   }
@@ -402,7 +402,7 @@ export const Actions = styled.div`
 
 
   svg:hover {
-    color: #f9be06;
+    color: #ffdb53;
 
     transform: scale(1.2);
   }
@@ -640,7 +640,7 @@ export const Input = styled.input`
 
 
   &:focus {
-    border-color: #f9be06;
+    border-color: #ffdb53;
 
     box-shadow:
       0 0 0 2px
@@ -685,7 +685,7 @@ export const Select = styled.select`
 
 
   &:focus {
-    border-color: #f9be06;
+    border-color: #ffdb53;
 
     box-shadow:
       0 0 0 2px
@@ -738,7 +738,7 @@ export const SaveButton = styled.button`
 
   border-radius: 10px;
 
-  background: #f9be06;
+  background: #ffdb53;
 
   color: #111;
 
@@ -754,7 +754,7 @@ export const SaveButton = styled.button`
   &:hover {
     background: #000;
 
-    color: #f9be06;
+    color: #ffdb53;
   }
 
 

@@ -1388,7 +1388,7 @@ export default function Eventos() {
         onClick={abrirModal}
         aria-label="Adicionar evento"
       >
-        <FiPlus />
+        <FiPlus size={30} />
       </FloatingButton>
 
 

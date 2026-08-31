@@ -64,7 +64,7 @@ export const EditButton = styled.button`
     border: none;
     border-radius: 8px;
 
-    background: #f4c430;
+    background: #ffdb53;
     color: #111;
 
     display: flex;
@@ -78,21 +78,21 @@ export const EditButton = styled.button`
     transition: all 0.2s ease;
 
     &:hover {
-        background: #e5b500;
+        background: #ffdb53;
         color: #000;
 
         transform: scale(1.05);
     }
 
     &:focus {
-        background: #f4c430;
+        background: #ffdb53;
         color: #111;
 
         outline: none;
     }
 
     &:active {
-        background: #d9aa00;
+        background: #ffdb53;
         color: #111;
 
         transform: scale(0.98);

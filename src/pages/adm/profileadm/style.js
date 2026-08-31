@@ -56,7 +56,7 @@ export const Page = styled.div`
 
   background: linear-gradient(
     to bottom,
-    #f9be06 0%,
+    #ffdb53 0%,
     #f9be06 32%,
     #f8f8f8 32%,
     #f8f8f8 100%
@@ -75,7 +75,7 @@ export const Page = styled.div`
 
     background: linear-gradient(
       to bottom,
-      #f9be06 0%,
+      #ffdb53 0%,
       #f9be06 25%,
       #f8f8f8 25%,
       #f8f8f8 100%
@@ -94,13 +94,6 @@ export const BackButton = styled(Link)`
   top: 25px;
   left: 25px;
 
-  width: 60px;
-  height: 60px;
-
-  border-radius: 50%;
-
-  background: #fff;
-
   display: flex;
 
   align-items: center;
@@ -113,28 +106,19 @@ export const BackButton = styled(Link)`
   font-size: 28px;
   font-weight: bold;
 
-  box-shadow:
-    0 8px 20px
-    rgba(0, 0, 0, 0.15);
-
-  transition: 0.2s;
+  transition: 0.25s ease;
 
   z-index: 999;
 
   &:hover {
-    background: #000;
+    color: #000;
 
-    color: #fff;
-
-    transform: translateY(-2px);
+    transform: translateX(-5px);
   }
 
   @media (max-width: 600px) {
     top: 15px;
     left: 15px;
-
-    width: 45px;
-    height: 45px;
 
     font-size: 20px;
   }
@@ -237,7 +221,7 @@ export const Avatar = styled.img`
 
   object-fit: cover;
 
-  border: 6px solid #f9be06;
+  border: 6px solid #ffdb53;
 
   box-shadow:
     0 12px 25px
@@ -281,7 +265,7 @@ export const EditButton = styled.label`
   white-space: nowrap;
 
   &:hover {
-    background: #f9be06;
+    background: #ffdb53;
 
     color: #111;
   }
@@ -469,7 +453,7 @@ export const PasswordBox = styled.div`
     transition: 0.2s;
 
     &:hover {
-      color: #f9be06;
+      color: #ffdb53;
     }
   }
 `;
@@ -486,8 +470,8 @@ export const SaveButton = styled.button`
   flex-shrink: 0;
   border: none;
   border-radius: 18px;
-  background: #831614;
-  color: #fff;
+  background: #ffdb53;
+  color: #111;
   font-size: clamp(1rem, 1.1vw, 1.1rem);
   font-weight: bold;
   cursor: pointer;

@@ -102,7 +102,7 @@ export const BackButton = styled.button`
   border: none;
   border-radius: 50%;
 
-  background: #f9be06;
+  background: #ffdb53;
   color: #111;
 
   display: flex;
@@ -173,7 +173,7 @@ export const Search = styled.input`
   &:focus {
     background: #fff;
 
-    border-color: #f9be06;
+    border-color: #ffdb53;
 
     box-shadow: 0 0 0 5px rgba(249, 190, 6, 0.18);
   }
@@ -213,7 +213,7 @@ export const Tab = styled.button`
   border-radius: 14px;
 
   background: ${({ active }) =>
-    active ? "#f9be06" : "transparent"};
+    active ? "#ffdb53" : "transparent"};
 
   color: ${({ active }) =>
     active ? "#111" : "#666"};
@@ -231,7 +231,7 @@ export const Tab = styled.button`
 
   &:hover {
     background: ${({ active }) =>
-      active ? "#f9be06" : "#f3f3f3"};
+      active ? "#ffdb53" : "#f3f3f3"};
 
     transform: translateY(-2px);
   }
@@ -291,7 +291,7 @@ export const Fab = styled.button`
   border: none;
   border-radius: 50%;
 
-  background: #f9be06;
+  background: #ffdb53;
   color: #111;
 
   display: flex;
@@ -318,7 +318,7 @@ export const Fab = styled.button`
 
   &:hover {
     background: #000;
-    color: #f9be06;
+    color: #ffdb53;
 
     transform: translateY(-2px);
   }
@@ -449,7 +449,7 @@ export const DeleteButton = styled.button`
 
   background: linear-gradient(135deg, #111, #2a2a2a);
 
-  color: #f9be06;
+  color: #ffdb53;
 
   font-size: 15px;
   font-weight: 600;
@@ -461,7 +461,7 @@ export const DeleteButton = styled.button`
   &:hover {
     background: linear-gradient(
       135deg,
-      #f9be06,
+      #ffdb53,
       #ffd54f
     );
 

@@ -12,8 +12,7 @@ export const Page = styled.div`
   flex-direction: column;
   align-items: center;
 
-  background:
-    #ffffff;
+  background: #ffffff;
 
   color: #111;
 
@@ -38,36 +37,14 @@ export const TitleArea = styled.div`
   display: flex;
   justify-content: center;
 
-  padding:
-    34px
-    20px
-    25px;
+  padding: 34px 20px 25px;
 
   text-align: center;
-
-  .title-decoration {
-    display: block;
-
-    margin-bottom: 7px;
-
-    color: #831614;
-
-    font-size: 0.67rem;
-
-    font-weight: 700;
-
-    letter-spacing: 0.24em;
-
-    opacity: 0.75;
-  }
 
   .title-description {
     max-width: 520px;
 
-    margin:
-      9px
-      auto
-      0;
+    margin: 9px auto 0;
 
     color: #777;
 
@@ -77,10 +54,7 @@ export const TitleArea = styled.div`
   }
 
   @media (max-width: 768px) {
-    padding:
-      28px
-      18px
-      20px;
+    padding: 28px 18px 20px;
 
     .title-description {
       font-size: 0.8rem;
@@ -88,14 +62,7 @@ export const TitleArea = styled.div`
   }
 
   @media (max-width: 480px) {
-    padding:
-      23px
-      14px
-      16px;
-
-    .title-decoration {
-      font-size: 0.58rem;
-    }
+    padding: 23px 14px 16px;
 
     .title-description {
       font-size: 0.74rem;
@@ -112,12 +79,11 @@ export const Title = styled.h1`
 
   color: #831614;
 
-  font-size:
-    clamp(
-      1.8rem,
-      3.3vw,
-      2.8rem
-    );
+  font-size: clamp(
+    1.8rem,
+    3.3vw,
+    2.8rem
+  );
 
   font-weight: 700;
 
@@ -133,19 +99,15 @@ export const Title = styled.h1`
 export const Container = styled.div`
   position: relative;
 
-  width: min(
-    1120px,
-    91%
-  );
+  width: min(1120px, 91%);
 
   min-height: 535px;
 
   display: flex;
 
-  margin:
-    12px
-    auto
-    55px;
+  align-items: stretch;
+
+  margin: 12px auto 55px;
 
   overflow: hidden;
 
@@ -154,20 +116,8 @@ export const Container = styled.div`
   background: #fff;
 
   box-shadow:
-    0 35px 90px
-      rgba(
-        0,
-        0,
-        0,
-        0.13
-      ),
-    0 10px 30px
-      rgba(
-        0,
-        0,
-        0,
-        0.06
-      );
+    0 35px 90px rgba(0, 0, 0, 0.13),
+    0 10px 30px rgba(0, 0, 0, 0.06);
 
   @media (max-width: 900px) {
     width: 93%;
@@ -180,10 +130,7 @@ export const Container = styled.div`
 
     flex-direction: column;
 
-    margin:
-      8px
-      auto
-      35px;
+    margin: 8px auto 35px;
 
     border-radius: 23px;
   }
@@ -206,70 +153,25 @@ export const LeftSide = styled.div`
 
   min-height: 535px;
 
-  padding:
-    52px
-    46px;
+  padding: 52px 46px;
 
   display: flex;
 
   justify-content: center;
 
-  background:
-    linear-gradient(
-      145deg,
-      #ffdb53 0%,
-      #ffd442 100%
-    );
+  background: linear-gradient(
+    145deg,
+    #ffdb53 0%,
+    #ffd442 100%
+  );
 
   color: #831614;
 
   overflow: hidden;
 
-  &::before {
-    content: "";
-
-    position: absolute;
-
-    width: 280px;
-    height: 280px;
-
-    right: -130px;
-    bottom: -140px;
-
-    border:
-      1px solid
-      rgba(
-        131,
-        22,
-        20,
-        0.12
-      );
-
-    border-radius: 50%;
-  }
-
-  &::after {
-    content: "";
-
-    position: absolute;
-
-    width: 180px;
-    height: 180px;
-
-    left: -100px;
-    top: -100px;
-
-    border:
-      1px solid
-      rgba(
-        131,
-        22,
-        20,
-        0.1
-      );
-
-    border-radius: 50%;
-  }
+  /*
+    Círculos decorativos removidos.
+  */
 
   .left-content {
     position: relative;
@@ -283,44 +185,10 @@ export const LeftSide = styled.div`
     flex-direction: column;
   }
 
-  .contact-header {
-    width: 100%;
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 12px;
-
-    margin-bottom: 12px;
-  }
-
-  .contact-line {
-    flex: 1;
-
-    height: 1px;
-
-    background:
-      rgba(
-        131,
-        22,
-        20,
-        0.25
-      );
-  }
-
   .contact-description {
-    margin:
-      0
-      0
-      32px;
+    margin: 0 0 32px;
 
-    color: rgba(
-      131,
-      22,
-      20,
-      0.72
-    );
+    color: rgba(131, 22, 20, 0.72);
 
     font-size: 0.76rem;
 
@@ -329,51 +197,8 @@ export const LeftSide = styled.div`
     text-align: center;
   }
 
-  .left-footer {
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    margin-top: auto;
-    padding-top: 30px;
-
-    span {
-      flex: 1;
-
-      height: 1px;
-
-      background:
-        rgba(
-          131,
-          22,
-          20,
-          0.2
-        );
-    }
-
-    small {
-      color:
-        rgba(
-          131,
-          22,
-          20,
-          0.65
-        );
-
-      font-size: 0.58rem;
-
-      white-space: nowrap;
-
-      letter-spacing: 0.04em;
-    }
-  }
-
   @media (max-width: 1000px) {
-    padding:
-      45px
-      34px;
+    padding: 45px 34px;
   }
 
   @media (max-width: 768px) {
@@ -381,30 +206,17 @@ export const LeftSide = styled.div`
 
     min-height: 0;
 
-    padding:
-      34px
-      30px
-      30px;
+    padding: 34px 30px 30px;
 
     .contact-description {
       max-width: 450px;
 
-      margin:
-        0
-        auto
-        25px;
-    }
-
-    .left-footer {
-      display: none;
+      margin: 0 auto 25px;
     }
   }
 
   @media (max-width: 480px) {
-    padding:
-      28px
-      20px
-      25px;
+    padding: 28px 20px 25px;
 
     .contact-description {
       margin-bottom: 20px;
@@ -419,21 +231,29 @@ export const LeftSide = styled.div`
 ============================================================ */
 
 export const SectionTitle = styled.h2`
-  margin: 0 0 8%;
+  /*
+    Mantemos exatamente o mesmo tamanho,
+    altura de linha e margem do título
+    "Dados do poeta".
+  */
 
-  display: block;
+  margin: 0 0 26px;
 
   width: 100%;
 
-  font-size: clamp(20px, 2.5vw, 30px);
+  color: #831614;
+
+  font-size: clamp(
+    1.35rem,
+    2.2vw,
+    1.8rem
+  );
 
   font-weight: 700;
 
-  color: #831614;
+  line-height: 1.2;
 
   text-align: center;
-
-  line-height: 1.2;
 
   border: none;
 
@@ -446,11 +266,15 @@ export const SectionTitle = styled.h2`
   }
 
   @media (max-width: 768px) {
-    margin-bottom: 6%;
+    margin-bottom: 20px;
+
+    font-size: 1.5rem;
   }
 
   @media (max-width: 480px) {
-    margin-bottom: 8%;
+    margin-bottom: 20px;
+
+    font-size: 1.3rem;
   }
 `;
 
@@ -483,28 +307,19 @@ export const InfoText = styled.div`
 
   gap: 15px;
 
-  padding:
-    11px
-    13px;
+  padding: 11px 13px;
 
-  border:
-    1px solid
-    rgba(
-      131,
-      22,
-      20,
-      0.1
-    );
+  border: 1px solid
+    rgba(131, 22, 20, 0.1);
 
   border-radius: 14px;
 
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      0.16
-    );
+  background: rgba(
+    255,
+    255,
+    255,
+    0.16
+  );
 
   transition:
     transform 0.25s ease,
@@ -524,13 +339,12 @@ export const InfoText = styled.div`
 
     border-radius: 12px;
 
-    background:
-      rgba(
-        255,
-        255,
-        255,
-        0.38
-      );
+    background: rgba(
+      255,
+      255,
+      255,
+      0.38
+    );
 
     svg {
       width: 21px;
@@ -557,18 +371,14 @@ export const InfoText = styled.div`
   }
 
   p {
-    margin:
-      3px
-      0
-      0;
+    margin: 3px 0 0;
 
-    color:
-      rgba(
-        131,
-        22,
-        20,
-        0.65
-      );
+    color: rgba(
+      131,
+      22,
+      20,
+      0.65
+    );
 
     font-size: 0.7rem;
 
@@ -578,24 +388,21 @@ export const InfoText = styled.div`
   }
 
   &:hover {
-    transform:
-      translateY(-2px);
+    transform: translateY(-2px);
 
-    border-color:
-      rgba(
-        131,
-        22,
-        20,
-        0.18
-      );
+    border-color: rgba(
+      131,
+      22,
+      20,
+      0.18
+    );
 
-    background:
-      rgba(
-        255,
-        255,
-        255,
-        0.3
-      );
+    background: rgba(
+      255,
+      255,
+      255,
+      0.3
+    );
   }
 
   @media (max-width: 768px) {
@@ -616,9 +423,7 @@ export const InfoText = styled.div`
 
     gap: 12px;
 
-    padding:
-      9px
-      10px;
+    padding: 9px 10px;
 
     border-radius: 12px;
 
@@ -655,13 +460,11 @@ export const RightSide = styled.div`
 
   display: flex;
 
-  align-items: center;
+  align-items: flex-start;
 
   justify-content: center;
 
-  padding:
-    52px
-    70px;
+  padding: 52px 70px;
 
   background: #fff;
 
@@ -671,43 +474,32 @@ export const RightSide = styled.div`
     max-width: 620px;
   }
 
+  /*
+    O título começa exatamente no mesmo
+    ponto vertical que "Contatos".
+  */
+
   .form-header {
-    margin-bottom: 26px;
-
-    .form-tag {
-      display: inline-block;
-
-      margin-bottom: 7px;
-
-      color: #a09870;
-
-      font-size: 0.62rem;
-
-      font-weight: 700;
-
-      letter-spacing: 0.16em;
-    }
+    margin: 0 0 26px;
 
     h2 {
       margin: 0;
 
       color: #831614;
 
-      font-size:
-        clamp(
-          1.35rem,
-          2.2vw,
-          1.8rem
-        );
+      font-size: clamp(
+        1.35rem,
+        2.2vw,
+        1.8rem
+      );
+
+      font-weight: 700;
 
       line-height: 1.2;
     }
 
     p {
-      margin:
-        7px
-        0
-        0;
+      margin: 7px 0 0;
 
       color: #777;
 
@@ -720,9 +512,7 @@ export const RightSide = styled.div`
   .form-row {
     display: grid;
 
-    grid-template-columns:
-      1fr
-      1fr;
+    grid-template-columns: 1fr 1fr;
 
     gap: 13px;
   }
@@ -749,9 +539,7 @@ export const RightSide = styled.div`
     width: 30px;
     height: 30px;
 
-    border:
-      3px solid
-      #fff0a6;
+    border: 3px solid #fff0a6;
 
     border-top-color: #831614;
 
@@ -770,17 +558,13 @@ export const RightSide = styled.div`
   }
 
   @media (max-width: 1000px) {
-    padding:
-      45px
-      40px;
+    padding: 45px 40px;
   }
 
   @media (max-width: 768px) {
     width: 100%;
 
-    padding:
-      38px
-      30px;
+    padding: 38px 30px;
 
     .form-area {
       max-width: 560px;
@@ -788,9 +572,7 @@ export const RightSide = styled.div`
   }
 
   @media (max-width: 600px) {
-    padding:
-      32px
-      22px;
+    padding: 32px 22px;
 
     .form-row {
       grid-template-columns: 1fr;
@@ -800,16 +582,10 @@ export const RightSide = styled.div`
   }
 
   @media (max-width: 480px) {
-    padding:
-      28px
-      17px;
+    padding: 28px 17px;
 
     .form-header {
       margin-bottom: 20px;
-
-      .form-tag {
-        font-size: 0.55rem;
-      }
 
       h2 {
         font-size: 1.3rem;
@@ -838,9 +614,7 @@ export const Form = styled.form`
   .form-message {
     width: 100%;
 
-    padding:
-      10px
-      13px;
+    padding: 10px 13px;
 
     border-radius: 10px;
 
@@ -858,16 +632,14 @@ export const Form = styled.form`
   .form-message.error {
     color: #a51d1d;
 
-    background:
-      rgba(
-        198,
-        40,
-        40,
-        0.07
-      );
+    background: rgba(
+      198,
+      40,
+      40,
+      0.07
+    );
 
-    border:
-      1px solid
+    border: 1px solid
       rgba(
         198,
         40,
@@ -879,16 +651,14 @@ export const Form = styled.form`
   .form-message.success {
     color: #2e7d32;
 
-    background:
-      rgba(
-        46,
-        125,
-        50,
-        0.07
-      );
+    background: rgba(
+      46,
+      125,
+      50,
+      0.07
+    );
 
-    border:
-      1px solid
+    border: 1px solid
       rgba(
         46,
         125,
@@ -900,14 +670,14 @@ export const Form = styled.form`
   @keyframes messageAppear {
     from {
       opacity: 0;
-      transform:
-        translateY(-4px);
+
+      transform: translateY(-4px);
     }
 
     to {
       opacity: 1;
-      transform:
-        translateY(0);
+
+      transform: translateY(0);
     }
   }
 
@@ -964,8 +734,7 @@ export const InputLabel = styled.label`
 
   pointer-events: none;
 
-  transition:
-    color 0.25s ease;
+  transition: color 0.25s ease;
 
   @media (max-width: 768px) {
     top: 8px;
@@ -992,14 +761,9 @@ export const Input = styled.input`
   width: 100%;
   height: 68px;
 
-  padding:
-    27px
-    24px
-    8px;
+  padding: 27px 24px 8px;
 
-  border:
-    2px solid
-    #ffdb53;
+  border: 2px solid #ffdb53;
 
   border-radius: 16px;
 
@@ -1043,17 +807,10 @@ export const Input = styled.input`
         );
   }
 
-  &:focus + * {
-    color: #831614;
-  }
-
   @media (max-width: 768px) {
     height: 60px;
 
-    padding:
-      23px
-      19px
-      7px;
+    padding: 23px 19px 7px;
 
     border-radius: 13px;
 
@@ -1063,10 +820,7 @@ export const Input = styled.input`
   @media (max-width: 480px) {
     height: 57px;
 
-    padding:
-      21px
-      17px
-      6px;
+    padding: 21px 17px 6px;
 
     border-radius: 12px;
 
@@ -1143,15 +897,9 @@ export const Select = styled.select`
   width: 100%;
   height: 68px;
 
-  padding:
-    27px
-    42px
-    8px
-    24px;
+  padding: 27px 42px 8px 24px;
 
-  border:
-    2px solid
-    #ffdb53;
+  border: 2px solid #ffdb53;
 
   border-radius: 16px;
 
@@ -1228,11 +976,7 @@ export const Select = styled.select`
   @media (max-width: 768px) {
     height: 60px;
 
-    padding:
-      23px
-      38px
-      7px
-      19px;
+    padding: 23px 38px 7px 19px;
 
     border-radius: 13px;
 
@@ -1246,11 +990,7 @@ export const Select = styled.select`
   @media (max-width: 480px) {
     height: 57px;
 
-    padding:
-      21px
-      36px
-      6px
-      17px;
+    padding: 21px 36px 6px 17px;
 
     border-radius: 12px;
 
@@ -1275,9 +1015,7 @@ export const Button = styled.button`
 
   margin-top: 4px;
 
-  padding:
-    0
-    24px;
+  padding: 0 24px;
 
   border: 0;
 
@@ -1320,10 +1058,7 @@ export const Button = styled.button`
     background: #831614;
 
     transform:
-      translate(
-        -50%,
-        -50%
-      )
+      translate(-50%, -50%)
       scale(0);
 
     pointer-events: none;
@@ -1357,8 +1092,7 @@ export const Button = styled.button`
   &:hover {
     color: #fff;
 
-    transform:
-      translateY(-3px);
+    transform: translateY(-3px);
 
     box-shadow:
       0 12px 28px
@@ -1372,10 +1106,7 @@ export const Button = styled.button`
 
   &:hover::before {
     transform:
-      translate(
-        -50%,
-        -50%
-      )
+      translate(-50%, -50%)
       scale(18);
   }
 
@@ -1417,12 +1148,9 @@ export const AlreadyBox = styled.div`
 
   align-items: center;
 
-  padding:
-    35px
-    40px;
+  padding: 35px 40px;
 
-  border:
-    1px solid
+  border: 1px solid
     rgba(
       255,
       219,
@@ -1467,17 +1195,13 @@ export const AlreadyBox = styled.div`
   }
 
   @media (max-width: 768px) {
-    padding:
-      32px
-      25px;
+    padding: 32px 25px;
 
     border-radius: 19px;
   }
 
   @media (max-width: 480px) {
-    padding:
-      27px
-      17px;
+    padding: 27px 17px;
 
     .success-icon {
       width: 55px;
@@ -1500,12 +1224,11 @@ export const AlreadyTitle = styled.h3`
 
   color: #831614;
 
-  font-size:
-    clamp(
-      1.1rem,
-      2vw,
-      1.4rem
-    );
+  font-size: clamp(
+    1.1rem,
+    2vw,
+    1.4rem
+  );
 
   font-weight: 700;
 
@@ -1519,10 +1242,7 @@ export const AlreadyTitle = styled.h3`
 export const AlreadyText = styled.p`
   max-width: 430px;
 
-  margin:
-    8px
-    0
-    23px;
+  margin: 8px 0 23px;
 
   color: #6d6d6d;
 
@@ -1546,12 +1266,9 @@ export const AlreadyDetails = styled.div`
 
   max-width: 400px;
 
-  padding:
-    17px
-    20px;
+  padding: 17px 20px;
 
-  border:
-    1px solid
+  border: 1px solid
     rgba(
       255,
       219,
@@ -1577,13 +1294,12 @@ export const AlreadyDetails = styled.div`
 
       height: 1px;
 
-      background:
-        rgba(
-          131,
-          22,
-          20,
-          0.14
-        );
+      background: rgba(
+        131,
+        22,
+        20,
+        0.14
+      );
     }
 
     strong {
@@ -1606,12 +1322,9 @@ export const AlreadyDetails = styled.div`
 
     gap: 20px;
 
-    padding:
-      8px
-      0;
+    padding: 8px 0;
 
-    border-bottom:
-      1px solid
+    border-bottom: 1px solid
       rgba(
         131,
         22,
@@ -1647,9 +1360,7 @@ export const AlreadyDetails = styled.div`
   }
 
   @media (max-width: 480px) {
-    padding:
-      14px
-      15px;
+    padding: 14px 15px;
 
     .detail-row {
       span,
@@ -1682,13 +1393,12 @@ export const ModalOverlay = styled.div`
 
   padding: 20px;
 
-  background:
-    rgba(
-      17,
-      17,
-      17,
-      0.55
-    );
+  background: rgba(
+    17,
+    17,
+    17,
+    0.55
+  );
 
   backdrop-filter: blur(6px);
 
@@ -1718,8 +1428,7 @@ export const Modal = styled.div`
 
   max-width: 100%;
 
-  padding:
-    32px;
+  padding: 32px;
 
   border-radius: 22px;
 
@@ -1755,10 +1464,7 @@ export const Modal = styled.div`
     align-items: center;
     justify-content: center;
 
-    margin:
-      0
-      auto
-      15px;
+    margin: 0 auto 15px;
 
     border-radius: 50%;
 
@@ -1786,10 +1492,7 @@ export const Modal = styled.div`
   }
 
   h3 {
-    margin:
-      0
-      0
-      8px;
+    margin: 0 0 8px;
 
     color: #831614;
 
@@ -1799,10 +1502,7 @@ export const Modal = styled.div`
   }
 
   > p {
-    margin:
-      0
-      0
-      20px;
+    margin: 0 0 20px;
 
     color: #777;
 
@@ -1816,9 +1516,7 @@ export const Modal = styled.div`
 
     margin-bottom: 23px;
 
-    padding:
-      13px
-      15px;
+    padding: 13px 15px;
 
     display: flex;
 
@@ -1880,9 +1578,7 @@ export const Modal = styled.div`
   }
 
   @media (max-width: 600px) {
-    padding:
-      27px
-      20px;
+    padding: 27px 20px;
 
     border-radius: 19px;
 
@@ -1903,9 +1599,7 @@ export const Modal = styled.div`
 export const ModalButtons = styled.div`
   display: grid;
 
-  grid-template-columns:
-    1fr
-    1fr;
+  grid-template-columns: 1fr 1fr;
 
   gap: 10px;
 
@@ -1921,13 +1615,9 @@ export const ModalButtons = styled.div`
 export const CancelButton = styled.button`
   height: 47px;
 
-  padding:
-    0
-    20px;
+  padding: 0 20px;
 
-  border:
-    1px solid
-    #ddd;
+  border: 1px solid #ddd;
 
   border-radius: 12px;
 
@@ -1953,13 +1643,11 @@ export const CancelButton = styled.button`
 
     background: #f5f5f5;
 
-    transform:
-      translateY(-2px);
+    transform: translateY(-2px);
   }
 
   &:active {
-    transform:
-      translateY(0);
+    transform: translateY(0);
   }
 
   @media (max-width: 400px) {
@@ -1974,9 +1662,7 @@ export const CancelButton = styled.button`
 export const ConfirmButton = styled.button`
   height: 47px;
 
-  padding:
-    0
-    20px;
+  padding: 0 20px;
 
   border: 0;
 
@@ -2002,8 +1688,7 @@ export const ConfirmButton = styled.button`
   &:hover {
     background: #68110f;
 
-    transform:
-      translateY(-2px);
+    transform: translateY(-2px);
 
     box-shadow:
       0 9px 20px
@@ -2016,8 +1701,7 @@ export const ConfirmButton = styled.button`
   }
 
   &:active {
-    transform:
-      translateY(0);
+    transform: translateY(0);
   }
 
   @media (max-width: 400px) {

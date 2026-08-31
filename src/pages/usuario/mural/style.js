@@ -103,7 +103,7 @@ export const Title = styled.h1`
 
   margin: 0;
 
-  color: #000000;
+  color: #831614;
 
   font-size:
     clamp(

@@ -112,7 +112,7 @@ export const TitleArea = styled.div`
 export const Title = styled.h1`
   margin: 0;
 
-  color: #000000;
+  color: #831614;
 
   font-size:
     clamp(
@@ -644,12 +644,6 @@ export const EmptyText = styled.p`
   line-height: 1.6;
 `;
 
-
-/* =====================================================
-   FLOATING BUTTON
-   MESMAS MEDIDAS DA GALERIA
-===================================================== */
-
 export const FloatingButton = styled.button`
   position: fixed;
 
@@ -665,7 +659,7 @@ export const FloatingButton = styled.button`
 
   border-radius: 50%;
 
-  background: #f9be06;
+  background: #ffdb53;
 
   color: #111111;
 

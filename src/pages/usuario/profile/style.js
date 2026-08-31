@@ -57,7 +57,7 @@ export const Page = styled.div`
   background: linear-gradient(
     to bottom,
     #ffdb53 0%,
-    #ffdb53 32%,
+    #f9be06 32%,
     #f8f8f8 32%,
     #f8f8f8 100%
   );
@@ -237,7 +237,7 @@ export const Avatar = styled.img`
 
   object-fit: cover;
 
-  border: 6px solid #f9be06;
+  border: 6px solid #ffdb53;
 
   box-shadow:
     0 12px 25px

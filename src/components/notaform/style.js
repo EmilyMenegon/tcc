@@ -47,7 +47,7 @@ export const Fab = styled.button`
   border: none;
   border-radius: 50%;
 
-  background: #f9be06;
+  background: #ffdb53;
   color: #111;
 
   display: flex;
@@ -76,7 +76,7 @@ export const Fab = styled.button`
 
   &:hover {
     background: #111;
-    color: #f9be06;
+    color: #ffdb53;
 
     transform: translateY(-3px);
   }
@@ -311,7 +311,7 @@ export const CloseButton = styled.button`
 
     border-color: #111;
 
-    color: #f9be06;
+    color: #ffdb53;
 
     transform: translateY(-2px);
   }
@@ -554,7 +554,7 @@ export const TimerButton = styled.button`
 
   border-radius: 14px;
 
-  background: #f9be06;
+  background: #ffdb53;
 
   color: #111;
 
@@ -579,7 +579,7 @@ export const TimerButton = styled.button`
   &:hover {
     background: #111;
 
-    color: #f9be06;
+    color: #ffdb53;
 
     transform: translateY(-2px);
 
@@ -647,7 +647,7 @@ export const ResetButton = styled.button`
 
     border-color: #111;
 
-    color: #f9be06;
+    color: #ffdb53;
 
     transform: translateY(-2px);
   }
@@ -791,13 +791,13 @@ export const Select = styled.select`
   transition: .25s;
 
   &:hover {
-    border-color: #f9be06;
+    border-color: #ffdb53;
 
     background: #fff;
   }
 
   &:focus {
-    border-color: #f9be06;
+    border-color: #ffdb53;
 
     background: #fff;
 
@@ -899,13 +899,13 @@ export const NoteInput = styled.input`
   transition: .25s;
 
   &:hover {
-    border-color: #f9be06;
+    border-color: #ffdb53;
 
     background: #fff;
   }
 
   &:focus {
-    border-color: #f9be06;
+    border-color: #ffdb53;
 
     background: #fff;
 
@@ -935,7 +935,7 @@ export const CalculateButton = styled.button`
 
   border-radius: 14px;
 
-  background: #f9be06;
+  background: #ffdb53;
 
   color: #111;
 
@@ -960,7 +960,7 @@ export const CalculateButton = styled.button`
   &:hover {
     background: #111;
 
-    color: #f9be06;
+    color: #ffdb53;
 
     transform: translateY(-2px);
 
@@ -1223,7 +1223,7 @@ export const SaveButton = styled.button`
 
   border-radius: 14px;
 
-  background: #f9be06;
+  background: #ffdb53;
 
   color: #111;
 
@@ -1248,7 +1248,7 @@ export const SaveButton = styled.button`
   &:hover {
     background: #111;
 
-    color: #f9be06;
+    color: #ffdb53;
 
     transform: translateY(-2px);
 

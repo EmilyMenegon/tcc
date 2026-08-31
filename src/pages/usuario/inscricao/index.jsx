@@ -55,8 +55,7 @@ export default function Inscricao() {
   const [jaInscrito, setJaInscrito] = useState(false);
   const [inscricao, setInscricao] = useState(null);
 
-  const [showSubmitModal, setShowSubmitModal] =
-    useState(false);
+  const [showSubmitModal, setShowSubmitModal] = useState(false);
 
   useEffect(() => {
     const usuarioLogado = getUsuarioLogado();
@@ -118,11 +117,9 @@ export default function Inscricao() {
         "http://localhost:3001/inscricao",
         {
           method: "POST",
-
           headers: {
             "Content-Type": "application/json",
           },
-
           body: JSON.stringify({
             email: usuarioLogado.email,
             nome_poeta: nomePoeta,
@@ -174,7 +171,6 @@ export default function Inscricao() {
 
       <TitleArea>
         <div>
-
           <Title>
             {jaInscrito
               ? "Sua inscrição"
@@ -193,15 +189,9 @@ export default function Inscricao() {
       <Container>
         <LeftSide>
           <div className="left-content">
-            <div className="contact-header">
-              <span className="contact-line" />
-
-              <SectionTitle>
-                Contatos
-              </SectionTitle>
-
-              <span className="contact-line" />
-            </div>
+            <SectionTitle>
+              Contatos
+            </SectionTitle>
 
             <p className="contact-description">
               Acompanhe o Slam Etecamp e fique por
@@ -242,10 +232,6 @@ export default function Inscricao() {
                 </div>
               </InfoText>
             </SocialContainer>
-
-            <div className="left-footer">
-
-            </div>
           </div>
         </LeftSide>
 
@@ -313,10 +299,6 @@ export default function Inscricao() {
           ) : (
             <div className="form-area">
               <div className="form-header">
-                <span className="form-tag">
-                  INSCRIÇÃO
-                </span>
-
                 <h2>
                   Dados do poeta
                 </h2>

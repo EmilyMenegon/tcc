@@ -85,11 +85,11 @@ export const Input = styled.input`
         transform 0.25s ease;
 
     &:hover {
-        border-color: #f9be06;
+        border-color: #ffdb53;
     }
 
     &:focus {
-        border-color: #f9be06;
+        border-color: #ffdb53;
 
         box-shadow:
             0 0 0 3px
@@ -143,7 +143,7 @@ export const CancelButton = styled.button`
     &:hover {
         background: #111 !important;
 
-        color: #f9be06 !important;
+        color: #ffdb53 !important;
 
         transform: translateY(-3px);
     }
@@ -170,7 +170,7 @@ export const SaveButton = styled.button`
 
     border-radius: 12px;
 
-    background: #f9be06 !important;
+    background: #ffdb53 !important;
 
     color: #111 !important;
 
@@ -194,7 +194,7 @@ export const SaveButton = styled.button`
     &:hover {
         background: #111111 !important;
 
-        color: #f9be06 !important;
+        color: #ffdb53 !important;
 
         transform: translateY(-3px);
 
@@ -250,7 +250,7 @@ export const CloseButton = styled.button`
     &:hover {
         background: #111111 !important;
 
-        color: #f9be06 !important;
+        color: #ffdb53 !important;
 
         transform: translateY(-3px);
     }

@@ -33,12 +33,39 @@ import {
   CardAction,
   DecorativeCircle,
   Pixel,
+  RegulationButton,
 } from "./style";
 
 
 export default function Inicioadm() {
 
   const fileInputRef = useRef(null);
+
+
+  /* ============================================================
+     BOTÃO LÍQUIDO
+  ============================================================ */
+
+  function handleButtonMove(event) {
+
+    const button = event.currentTarget;
+
+    const rect = button.getBoundingClientRect();
+
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    button.style.setProperty(
+      "--mouse-x",
+      `${x}px`
+    );
+
+    button.style.setProperty(
+      "--mouse-y",
+      `${y}px`
+    );
+
+  }
 
 
   /* ============================================================
@@ -469,42 +496,23 @@ export default function Inicioadm() {
                         }}
                       >
 
-                        <button
+                        <RegulationButton
                           type="button"
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            gap: "8px",
-
-                            padding:
-                              "10px 14px",
-
-                            border: "none",
-
-                            borderRadius:
-                              "10px",
-
-                            background: "#111",
-
-                            color: "#fff",
-
-                            fontFamily:
-                              "Poppins, sans-serif",
-
-                            fontSize: "13px",
-
-                            fontWeight: 700,
-
-                            cursor: "pointer",
-                          }}
+                          $variant="dark"
+                          onPointerMove={
+                            handleButtonMove
+                          }
                         >
 
-                          <FaEye />
+                          <span className="button-content">
 
-                          Ver atual
+                            <FaEye />
 
-                        </button>
+                            Ver atual
+
+                          </span>
+
+                        </RegulationButton>
 
                       </a>
 
@@ -513,43 +521,24 @@ export default function Inicioadm() {
                           TROCAR REGULAMENTO
                       ================================================== */}
 
-                      <button
+                      <RegulationButton
                         type="button"
+                        $variant="yellow"
                         onClick={abrirSeletor}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          gap: "8px",
-
-                          padding:
-                            "10px 14px",
-
-                          border: "none",
-
-                          borderRadius:
-                            "10px",
-
-                          background: "#f9be06",
-
-                          color: "#111",
-
-                          fontFamily:
-                            "Poppins, sans-serif",
-
-                          fontSize: "13px",
-
-                          fontWeight: 800,
-
-                          cursor: "pointer",
-                        }}
+                        onPointerMove={
+                          handleButtonMove
+                        }
                       >
 
-                        <FaUpload />
+                        <span className="button-content">
 
-                        Trocar PDF
+                          <FaUpload />
 
-                      </button>
+                          Trocar PDF
+
+                        </span>
+
+                      </RegulationButton>
 
                     </div>
 

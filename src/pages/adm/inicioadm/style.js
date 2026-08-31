@@ -179,7 +179,7 @@ export const BadgeDot = styled.span`
 
   border-radius: 50%;
 
-  background: #f9be06;
+  background: #ffdb53;
 
   animation:
     pulse
@@ -227,7 +227,7 @@ export const Title = styled.h1`
 ============================================================ */
 
 export const Highlight = styled.span`
-  color: #f9be06;
+  color: #ffdb53;
 `;
 
 /* ============================================================
@@ -361,7 +361,7 @@ export const Card = styled.div`
     1.5px solid
     ${({ $featured }) =>
       $featured
-        ? "#f9be06"
+        ? "#ffdb53"
         : "#e5e5e5"};
 
   border-radius: 18px;
@@ -410,7 +410,7 @@ export const Card = styled.div`
     background:
       ${({ $featured }) =>
         $featured
-          ? "#f9be06"
+          ? "#ffdb53"
           : "#f5f5f5"};
 
     opacity: .65;
@@ -475,12 +475,12 @@ export const CardIcon = styled.div`
     ${({ $featured }) =>
       $featured
         ? "#111"
-        : "#f9be06"};
+        : "#ffdb53"};
 
   color:
     ${({ $featured }) =>
       $featured
-        ? "#f9be06"
+        ? "#ffdb53"
         : "#111"};
 
   font-size: 1.25rem;
@@ -497,7 +497,7 @@ export const CardIcon = styled.div`
 
     background: #111;
 
-    color: #f9be06;
+    color: #ffdb53;
   }
 `;
 
@@ -594,7 +594,7 @@ export const CardAction = styled.div`
     color .25s ease;
 
   svg {
-    color: #f9be06;
+    color: #ffdb53;
 
     transition:
       transform .25s ease;
@@ -607,6 +607,154 @@ export const CardAction = styled.div`
   ${Card}:hover & svg {
     transform:
       translateX(5px);
+  }
+`;
+
+/* ============================================================
+   BOTÕES DO REGULAMENTO
+   MESMA ANIMAÇÃO LÍQUIDA DA PÁGINA INICIAL
+============================================================ */
+
+export const RegulationButton = styled.button`
+  position: relative;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 10px 14px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background:
+    ${({ $variant }) =>
+      $variant === "yellow"
+        ? "#f9be06"
+        : "#111"};
+
+  color:
+    ${({ $variant }) =>
+      $variant === "yellow"
+        ? "#111"
+        : "#fff"};
+
+  font-family:
+    "Poppins",
+    sans-serif;
+
+  font-size: 13px;
+
+  font-weight:
+    ${({ $variant }) =>
+      $variant === "yellow"
+        ? 800
+        : 700};
+
+  cursor: pointer;
+
+  overflow: hidden;
+
+  isolation: isolate;
+
+  transform: translateZ(0);
+
+  transition:
+    color 0.3s ease,
+    transform 0.25s ease;
+
+  &::before {
+    content: "";
+
+    position: absolute;
+
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+
+    width: 40px;
+    height: 40px;
+
+    border-radius: 50%;
+
+    background: #831614;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    pointer-events: none;
+
+    z-index: 0;
+
+    transition:
+      transform 0.65s
+      cubic-bezier(
+        0.16,
+        1,
+        0.3,
+        1
+      );
+  }
+
+  .button-content {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    color: inherit;
+
+    transition:
+      color 0.3s ease;
+  }
+
+  &:hover {
+    color: #fff;
+
+    transform:
+      translateY(-3px);
+  }
+
+  &:hover::before {
+    transform:
+      translate(-50%, -50%)
+      scale(18);
+  }
+
+  svg {
+    flex-shrink: 0;
+
+    transition:
+      transform 0.3s
+      cubic-bezier(
+        0.16,
+        1,
+        0.3,
+        1
+      );
+  }
+
+  &:hover svg {
+    transform:
+      translateX(6px);
+  }
+
+  &:active {
+    transform:
+      translateY(0)
+      scale(0.98);
   }
 `;
 
@@ -643,7 +791,7 @@ export const DecorativeCircle = styled.span`
 
   border-radius: 50%;
 
-  background: #f9be06;
+  background: #ffdb53;
 
   opacity: .9;
 

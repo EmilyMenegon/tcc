@@ -49,7 +49,7 @@ export const Eyebrow = styled.div`
 
     text-transform:uppercase;
 
-    color:#f9be06;
+    color: #ffdb53;
 
     text-align:center;
 
@@ -304,7 +304,7 @@ export const Button = styled.button`
     background:
         ${({ primary }) =>
             primary
-                ? "#f9be06"
+                ? "#ffdb53"
                 : "#111111"
         };
 
@@ -331,13 +331,13 @@ export const Button = styled.button`
             ${({ primary }) =>
                 primary
                     ? "#111111"
-                    : "#f9be06"
+                    : "#ffdb53"
             };
 
         color:
             ${({ primary }) =>
                 primary
-                    ? "#f9be06"
+                    ? "#ffdb53"
                     : "#111111"
             };
 
@@ -550,7 +550,7 @@ export const NoteField = styled.div`
 
     input:hover{
 
-        border-color:#f9be06;
+        border-color: #ffdb53;
 
         background:#fffdf5;
 

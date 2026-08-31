@@ -105,7 +105,7 @@ export const Title = styled.h1`
 
   margin: 0;
 
-  color: #000000;
+  color: #831614;
 
   font-size:
     clamp(
@@ -567,7 +567,7 @@ export const FloatingButton = styled.button`
 
   border-radius: 50%;
 
-  background: #f9be06;
+  background: #ffdb53;
 
   color: #111111;
 

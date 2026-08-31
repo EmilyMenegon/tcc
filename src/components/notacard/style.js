@@ -111,9 +111,9 @@ export const EditButton = styled.button`
 
     border-radius: 8px !important;
 
-    background-color: #f4c430 !important;
+    background-color: #ffdb53 !important;
 
-    background: #f4c430 !important;
+    background: #ffdb53 !important;
 
     color: #111111 !important;
 

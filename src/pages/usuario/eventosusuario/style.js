@@ -104,15 +104,10 @@ export const Header = styled.header`
 export const TitleArea = styled.div`
 
   width: 100%;
-
   display: flex;
-
   flex-direction: column;
-
   align-items: center;
-
   justify-content: center;
-
   text-align: center;
 
 `;
@@ -126,7 +121,7 @@ export const Title = styled.h1`
 
   margin: 0;
 
-  color: #000000;
+  color: #831614;
 
   font-size:
     clamp(
