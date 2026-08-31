@@ -263,8 +263,7 @@ export default function EventosUsuario() {
 
               <EmptyText>
                 No momento não há eventos
-                cadastrados. Volte mais tarde
-                para conferir as novidades.
+                cadastrados. 
               </EmptyText>
 
             </EmptyState>

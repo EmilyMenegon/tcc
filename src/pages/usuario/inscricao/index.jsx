@@ -165,6 +165,71 @@ export default function Inscricao() {
     }
   }
 
+  /*
+   * ============================================================
+   * ANIMAÇÃO DO BOTÃO
+   * ============================================================
+   */
+
+  function handleButtonMouseEnter(e) {
+    const button = e.currentTarget;
+
+    const rect = button.getBoundingClientRect();
+
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    button.style.setProperty("--mouse-x", `${x}px`);
+    button.style.setProperty("--mouse-y", `${y}px`);
+
+    button.classList.remove("button-leaving");
+
+    /*
+     * Força o navegador a reconhecer
+     * a posição inicial antes de iniciar
+     * a expansão.
+     */
+    requestAnimationFrame(() => {
+      button.classList.add("button-hovering");
+    });
+  }
+
+  function handleButtonMouseMove(e) {
+    const button = e.currentTarget;
+
+    const rect = button.getBoundingClientRect();
+
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    button.style.setProperty("--mouse-x", `${x}px`);
+    button.style.setProperty("--mouse-y", `${y}px`);
+  }
+
+  function handleButtonMouseLeave(e) {
+    const button = e.currentTarget;
+
+    /*
+     * Mantém exatamente a última posição
+     * do mouse.
+     *
+     * Não colocamos 50% / 50%.
+     */
+    button.classList.remove("button-hovering");
+
+    button.classList.add("button-leaving");
+
+    /*
+     * Depois que a animação de saída terminar,
+     * removemos a classe.
+     */
+    setTimeout(() => {
+      if (button && button.matches(":hover") === false) {
+        button.classList.remove("button-leaving");
+      }
+    }, 500);
+  }
+
   return (
     <Page>
       <Layout />
@@ -438,7 +503,12 @@ export default function Inscricao() {
                   </div>
                 )}
 
-                <Button type="submit">
+                <Button
+                  type="submit"
+                  onMouseEnter={handleButtonMouseEnter}
+                  onMouseMove={handleButtonMouseMove}
+                  onMouseLeave={handleButtonMouseLeave}
+                >
                   <span className="button-content">
                     Enviar inscrição
                   </span>

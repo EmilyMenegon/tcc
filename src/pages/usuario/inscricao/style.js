@@ -1006,11 +1006,17 @@ export const Select = styled.select`
    BUTTON
 ============================================================ */
 
+/* ============================================================
+   BUTTON
+============================================================ */
+
 export const Button = styled.button`
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+
   position: relative;
 
   width: 100%;
-
   height: 62px;
 
   margin-top: 4px;
@@ -1018,7 +1024,6 @@ export const Button = styled.button`
   padding: 0 24px;
 
   border: 0;
-
   border-radius: 17px;
 
   background: #ffdb53;
@@ -1042,38 +1047,87 @@ export const Button = styled.button`
     transform 0.25s ease,
     box-shadow 0.3s ease;
 
+  /*
+   * ==========================================================
+   * CÍRCULO
+   * ==========================================================
+   */
+
   &::before {
     content: "";
 
     position: absolute;
 
-    left: 50%;
-    top: 50%;
+    left: var(--mouse-x);
+    top: var(--mouse-y);
 
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
 
     border-radius: 50%;
 
     background: #831614;
 
-    transform:
-      translate(-50%, -50%)
-      scale(0);
-
     pointer-events: none;
 
     z-index: 0;
 
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    /*
+     * A posição acompanha o mouse
+     * instantaneamente.
+     *
+     * A escala é animada.
+     */
     transition:
-      transform 0.65s
-        cubic-bezier(
-          0.16,
-          1,
-          0.3,
-          1
-        );
+      transform 0.6s
+      cubic-bezier(
+        0.16,
+        1,
+        0.3,
+        1
+      );
   }
+
+  /*
+   * ==========================================================
+   * ENTRANDO / DENTRO DO BOTÃO
+   * ==========================================================
+   */
+
+  &.button-hovering::before {
+    transform:
+      translate(-50%, -50%)
+      scale(18);
+  }
+
+  /*
+   * ==========================================================
+   * SAINDO DO BOTÃO
+   * ==========================================================
+   *
+   * IMPORTANTE:
+   *
+   * Não mudamos --mouse-x nem --mouse-y.
+   *
+   * Portanto o círculo continua exatamente
+   * no último ponto em que o mouse estava.
+   */
+
+  &.button-leaving::before {
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+  }
+
+  /*
+   * ==========================================================
+   * TEXTO
+   * ==========================================================
+   */
 
   .button-content {
     position: relative;
@@ -1087,7 +1141,15 @@ export const Button = styled.button`
     justify-content: center;
 
     color: inherit;
+
+    pointer-events: none;
   }
+
+  /*
+   * ==========================================================
+   * HOVER
+   * ==========================================================
+   */
 
   &:hover {
     color: #fff;
@@ -1096,25 +1158,31 @@ export const Button = styled.button`
 
     box-shadow:
       0 12px 28px
-        rgba(
-          0,
-          0,
-          0,
-          0.16
-        );
+      rgba(
+        0,
+        0,
+        0,
+        0.16
+      );
   }
 
-  &:hover::before {
-    transform:
-      translate(-50%, -50%)
-      scale(18);
-  }
+  /*
+   * ==========================================================
+   * ACTIVE
+   * ==========================================================
+   */
 
   &:active {
     transform:
       translateY(1px)
       scale(0.98);
   }
+
+  /*
+   * ==========================================================
+   * RESPONSIVO
+   * ==========================================================
+   */
 
   @media (max-width: 768px) {
     height: 54px;
@@ -1132,6 +1200,7 @@ export const Button = styled.button`
     font-size: 0.86rem;
   }
 `;
+
 
 /* ============================================================
    ALREADY BOX

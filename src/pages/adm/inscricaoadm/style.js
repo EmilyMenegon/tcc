@@ -310,7 +310,7 @@ export const Table = styled.table`
 
 
   thead {
-    background: #ffdb53;
+    background: #831614;
 
     color: white;
   }

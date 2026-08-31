@@ -1424,6 +1424,8 @@ export const FeaturesGrid =
 
 export const FeatureCard =
   styled.div`
+    width: 100%;
+    min-width: 0;
     min-height: 220px;
 
     padding: 20px 30px;
@@ -1434,52 +1436,74 @@ export const FeatureCard =
 
     align-items: center;
 
-    justify-content:
-      flex-start;
+    justify-content: flex-start;
 
     text-align: center;
 
-    border-right:
-      1px solid
-      #f9be06;
+    position: relative;
 
-    opacity: 1;
+    z-index: 10;
 
-    &:last-child {
-      border-right: none;
+    background: #fff !important;
+
+    border: 0 !important;
+    outline: 0 !important;
+
+    box-shadow: none !important;
+
+    /*
+      DIVISOR VERTICAL
+      Fica exatamente entre os cards,
+      como os divisores da seção "NÚMEROS".
+    */
+    &:not(:last-child)::after {
+      content: "";
+
+      position: absolute;
+
+      top: 50%;
+      right: 0;
+
+      width: 1px;
+      height: 100px;
+
+      transform: translateY(-50%);
+
+      background: #111;
+
+      opacity: 0.8;
+
+      pointer-events: none;
     }
 
+    /*
+      Remove os divisores no tablet,
+      porque os cards passam para 2 colunas.
+    */
     @media (max-width: 900px) {
-      &:nth-child(2) {
-        border-right: none;
-      }
+      min-height: 220px;
 
-      &:nth-child(1),
-      &:nth-child(2) {
-        border-bottom:
-          1px solid
-          #f9be06;
-      }
+      padding: 20px;
 
-      &:nth-child(3),
-      &:nth-child(4) {
-        border-bottom: none;
+      &:not(:last-child)::after {
+        display: none;
       }
     }
 
+    /*
+      Mobile: uma coluna, sem linhas.
+    */
     @media (max-width: 550px) {
-      border-right: none;
+      min-height: auto;
 
-      border-bottom:
-        1px solid
-        #f9be06 !important;
+      padding: 15px 10px;
 
-      &:last-child {
-        border-bottom:
-          none !important;
+      &:not(:last-child)::after {
+        display: none;
       }
     }
   `;
+
 
 export const FeatureIcon =
   styled.div`

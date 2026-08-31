@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
 
-/* =========================================
+/* ==========================================
    PAGE
-========================================= */
+========================================== */
 
 export const Page = styled.div`
 
@@ -24,9 +24,9 @@ export const Page = styled.div`
 `;
 
 
-/* =========================================
+/* ==========================================
    CONTENT
-========================================= */
+========================================== */
 
 export const Content = styled.main`
 
@@ -67,9 +67,9 @@ export const Content = styled.main`
 `;
 
 
-/* =========================================
+/* ==========================================
    HEADER
-========================================= */
+========================================== */
 
 export const Header = styled.header`
 
@@ -97,25 +97,30 @@ export const Header = styled.header`
 `;
 
 
-/* =========================================
+/* ==========================================
    TITLE AREA
-========================================= */
+========================================== */
 
 export const TitleArea = styled.div`
 
   width: 100%;
+
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
   justify-content: center;
+
   text-align: center;
 
 `;
 
 
-/* =========================================
+/* ==========================================
    TITLE
-========================================= */
+========================================== */
 
 export const Title = styled.h1`
 
@@ -149,9 +154,9 @@ export const Title = styled.h1`
 `;
 
 
-/* =========================================
+/* ==========================================
    SUBTITLE
-========================================= */
+========================================== */
 
 export const Subtitle = styled.p`
 
@@ -183,9 +188,9 @@ export const Subtitle = styled.p`
 `;
 
 
-/* =========================================
+/* ==========================================
    CARDS
-========================================= */
+========================================== */
 
 export const Cards = styled.section`
 
@@ -207,12 +212,15 @@ export const Cards = styled.section`
   align-items: stretch;
 
 
-  @media (max-width: 1000px) {
+  @media (max-width: 900px) {
 
     grid-template-columns:
       repeat(
-        3,
-        1fr
+        auto-fill,
+        minmax(
+          250px,
+          1fr
+        )
       );
 
     gap: 24px;
@@ -220,20 +228,7 @@ export const Cards = styled.section`
   }
 
 
-  @media (max-width: 750px) {
-
-    grid-template-columns:
-      repeat(
-        2,
-        1fr
-      );
-
-    gap: 20px;
-
-  }
-
-
-  @media (max-width: 500px) {
+  @media (max-width: 600px) {
 
     grid-template-columns: 1fr;
 
@@ -244,21 +239,21 @@ export const Cards = styled.section`
 `;
 
 
-/* =========================================
+/* ==========================================
    EVENT CARD
-========================================= */
+========================================== */
 
 export const EventCard = styled.article`
 
   position: relative;
 
-  width: 100%;
+  min-width: 0;
 
-  min-height: 0;
+  min-height: 280px;
 
-  background: #ffffff;
+  background: #eeeeee;
 
-  border-radius: 18px;
+  border-radius: 0;
 
   overflow: hidden;
 
@@ -268,35 +263,38 @@ export const EventCard = styled.article`
 
   flex-direction: column;
 
-  border: none;
+  box-sizing: border-box;
 
   box-shadow:
-    0 7px 25px
+    4px 8px 18px
     rgba(
       0,
       0,
       0,
-      .08
+      .14
     );
 
   transition:
-    transform .3s ease,
-    box-shadow .3s ease;
+    transform .25s ease,
+    box-shadow .25s ease;
 
 
   &:hover {
 
     transform:
-      translateY(-8px);
+      translateY(-8px)
+      scale(1.015);
 
     box-shadow:
-      0 18px 40px
+      8px 18px 30px
       rgba(
         0,
         0,
         0,
-        .15
+        .20
       );
+
+    z-index: 5;
 
   }
 
@@ -304,10 +302,9 @@ export const EventCard = styled.article`
   &:focus-visible {
 
     outline:
-      3px solid #f9be06;
+      3px solid #000000;
 
-    outline-offset:
-      4px;
+    outline-offset: 4px;
 
   }
 
@@ -319,20 +316,29 @@ export const EventCard = styled.article`
 
   }
 
+
+  @media (max-width: 600px) {
+
+    min-height: 250px;
+
+  }
+
 `;
 
 
-/* =========================================
+/* ==========================================
    EVENT IMAGE
-========================================= */
+========================================== */
 
 export const EventImage = styled.div`
 
   width: 100%;
 
-  aspect-ratio: 4 / 3;
+  height: 145px;
 
-  background: #eeeeee;
+  flex-shrink: 0;
+
+  background: #d8d8d8;
 
   overflow: hidden;
 
@@ -356,24 +362,33 @@ export const EventImage = styled.div`
   ${EventCard}:hover & img {
 
     transform:
-      scale(1.07);
+      scale(1.05);
+
+  }
+
+
+  @media (max-width: 600px) {
+
+    height: 125px;
 
   }
 
 `;
 
 
-/* =========================================
+/* ==========================================
    IMAGE PLACEHOLDER
-========================================= */
+========================================== */
 
 export const EventImagePlaceholder = styled.div`
 
   width: 100%;
 
-  aspect-ratio: 4 / 3;
+  height: 145px;
 
-  background: #eeeeee;
+  flex-shrink: 0;
+
+  background: #d8d8d8;
 
   display: flex;
 
@@ -381,23 +396,30 @@ export const EventImagePlaceholder = styled.div`
 
   justify-content: center;
 
-  color: #b5b5b5;
+  color: #999999;
 
-  font-size: 50px;
+  font-size: 40px;
+
+
+  @media (max-width: 600px) {
+
+    height: 125px;
+
+  }
 
 `;
 
 
-/* =========================================
+/* ==========================================
    EVENT CONTENT
-========================================= */
+========================================== */
 
 export const EventContent = styled.div`
 
   padding:
-    22px
-    24px
-    24px;
+    18px
+    25px
+    23px;
 
   display: flex;
 
@@ -405,70 +427,88 @@ export const EventContent = styled.div`
 
   flex: 1;
 
+  min-height: 135px;
+
   box-sizing: border-box;
+
+  background: #eeeeee;
 
 `;
 
 
-/* =========================================
+/* ==========================================
    EVENT TITLE
-========================================= */
+========================================== */
 
 export const EventTitle = styled.h2`
 
   margin:
-    0 0 10px;
+    0
+    0
+    15px;
 
   color: #222222;
 
-  font-size: 23px;
+  font-family:
+    "Comic Sans MS",
+    "Trebuchet MS",
+    sans-serif;
 
-  line-height: 1.25;
+  font-size: 22px;
 
   font-weight: 700;
 
+  line-height: 1.25;
+
   word-break: break-word;
+
+  position: relative;
+
+  z-index: 2;
 
 `;
 
 
-/* =========================================
+/* ==========================================
    EVENT DESCRIPTION
-========================================= */
+========================================== */
 
 export const EventDescription = styled.p`
 
-  margin:
-    0 0 18px;
+  margin: 0;
 
-  color:
-    rgba(
-      0,
-      0,
-      0,
-      .65
-    );
+  color: #333333;
 
-  font-size: 14px;
+  font-family:
+    "Comic Sans MS",
+    "Trebuchet MS",
+    sans-serif;
 
-  line-height: 1.6;
+  font-size: 15px;
+
+  line-height: 1.55;
+
+  word-break: break-word;
 
   display:
     -webkit-box;
 
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 2;
 
-  -webkit-box-orient:
-    vertical;
+  -webkit-box-orient: vertical;
 
   overflow: hidden;
+
+  position: relative;
+
+  z-index: 2;
 
 `;
 
 
-/* =========================================
+/* ==========================================
    INFO LIST
-========================================= */
+========================================== */
 
 export const InfoList = styled.div`
 
@@ -478,12 +518,18 @@ export const InfoList = styled.div`
 
   gap: 9px;
 
+  margin-top: 15px;
+
+  position: relative;
+
+  z-index: 2;
+
 `;
 
 
-/* =========================================
+/* ==========================================
    INFO ITEM
-========================================= */
+========================================== */
 
 export const InfoItem = styled.div`
 
@@ -503,6 +549,8 @@ export const InfoItem = styled.div`
 
   font-size: 14px;
 
+  min-width: 0;
+
 
   svg {
 
@@ -517,6 +565,8 @@ export const InfoItem = styled.div`
 
   span {
 
+    min-width: 0;
+
     overflow: hidden;
 
     text-overflow: ellipsis;
@@ -528,9 +578,9 @@ export const InfoItem = styled.div`
 `;
 
 
-/* =========================================
+/* ==========================================
    EVENT FOOTER
-========================================= */
+========================================== */
 
 export const EventFooter = styled.div`
 
@@ -544,22 +594,32 @@ export const EventFooter = styled.div`
 
   gap: 12px;
 
+  position: relative;
+
+  z-index: 2;
+
 `;
 
 
-/* =========================================
+/* ==========================================
    ACCESS BUTTON
-========================================= */
+========================================== */
 
 export const AccessButton = styled.button`
 
   width: 100%;
 
-  min-height: 42px;
+  height: 34px;
+
+  min-height: 34px;
+
+  padding:
+    0
+    12px;
 
   border: none;
 
-  border-radius: 9px;
+  border-radius: 6px;
 
   background: #000000;
 
@@ -569,7 +629,7 @@ export const AccessButton = styled.button`
     "Poppins",
     sans-serif;
 
-  font-size: 13px;
+  font-size: 12px;
 
   font-weight: 700;
 
@@ -589,12 +649,20 @@ export const AccessButton = styled.button`
 
   }
 
+
+  &:active {
+
+    transform:
+      translateY(0);
+
+  }
+
 `;
 
 
-/* =========================================
+/* ==========================================
    EMPTY STATE
-========================================= */
+========================================== */
 
 export const EmptyState = styled.div`
 
@@ -628,9 +696,9 @@ export const EmptyState = styled.div`
 `;
 
 
-/* =========================================
+/* ==========================================
    EMPTY ICON
-========================================= */
+========================================== */
 
 export const EmptyIcon = styled.div`
 
@@ -663,9 +731,9 @@ export const EmptyIcon = styled.div`
 `;
 
 
-/* =========================================
+/* ==========================================
    EMPTY TITLE
-========================================= */
+========================================== */
 
 export const EmptyTitle = styled.h2`
 
@@ -681,9 +749,9 @@ export const EmptyTitle = styled.h2`
 `;
 
 
-/* =========================================
+/* ==========================================
    EMPTY TEXT
-========================================= */
+========================================== */
 
 export const EmptyText = styled.p`
 
@@ -700,9 +768,9 @@ export const EmptyText = styled.p`
 `;
 
 
-/* =========================================
+/* ==========================================
    MODAL OVERLAY
-========================================= */
+========================================== */
 
 export const ModalOverlay = styled.div`
 
@@ -710,17 +778,17 @@ export const ModalOverlay = styled.div`
 
   inset: 0;
 
-  z-index: 1000;
+  z-index: 9999;
+
+  padding: 20px;
+
+  box-sizing: border-box;
 
   display: flex;
 
   align-items: center;
 
   justify-content: center;
-
-  padding: 20px;
-
-  box-sizing: border-box;
 
   background:
     rgba(
@@ -756,46 +824,59 @@ export const ModalOverlay = styled.div`
 
   @media (max-width: 600px) {
 
-    padding: 10px;
+    padding: 12px;
 
   }
 
 `;
 
 
-/* =========================================
+/* ==========================================
    MODAL
-========================================= */
+========================================== */
 
 export const Modal = styled.div`
 
-  width: 100%;
+  position: relative;
 
-  max-width: 600px;
+  width:
+    min(
+      850px,
+      100%
+    );
+
+  min-height: 500px;
 
   max-height:
     calc(
-      100vh - 40px
+      100vh - 60px
     );
 
-  overflow-y: auto;
+  padding:
+    85px
+    clamp(
+      30px,
+      8vw,
+      90px
+    )
+    50px;
 
   box-sizing: border-box;
 
-  padding: 30px;
-
-  background: #ffffff;
-
-  border-radius: 20px;
+  background: #eeeeee;
 
   box-shadow:
-    0 25px 70px
+    10px
+    22px
+    50px
     rgba(
       0,
       0,
       0,
-      .35
+      .30
     );
+
+  overflow-y: auto;
 
   animation:
     modalOpen .25s ease;
@@ -808,8 +889,7 @@ export const Modal = styled.div`
       opacity: 0;
 
       transform:
-        translateY(20px)
-        scale(.96);
+        scale(.93);
 
     }
 
@@ -818,7 +898,6 @@ export const Modal = styled.div`
       opacity: 1;
 
       transform:
-        translateY(0)
         scale(1);
 
     }
@@ -828,25 +907,38 @@ export const Modal = styled.div`
 
   @media (max-width: 600px) {
 
-    padding: 22px;
+    width: 100%;
+
+    min-height: 400px;
 
     max-height:
       calc(
-        100vh - 20px
+        100vh - 24px
       );
 
-    border-radius: 16px;
+    padding:
+      75px
+      25px
+      35px;
 
   }
 
 `;
 
 
-/* =========================================
+/* ==========================================
    MODAL HEADER
-========================================= */
+========================================== */
 
 export const ModalHeader = styled.div`
+
+  position: absolute;
+
+  top: 18px;
+
+  left: 20px;
+
+  right: 20px;
 
   display: flex;
 
@@ -854,20 +946,25 @@ export const ModalHeader = styled.div`
 
   justify-content: space-between;
 
-  margin-bottom: 25px;
+  z-index: 5;
 
 `;
 
 
-/* =========================================
+/* ==========================================
    MODAL TITLE
-========================================= */
+========================================== */
 
 export const ModalTitle = styled.h2`
 
   margin: 0;
 
   color: #222222;
+
+  font-family:
+    "Comic Sans MS",
+    "Trebuchet MS",
+    sans-serif;
 
   font-size: 25px;
 
@@ -876,15 +973,15 @@ export const ModalTitle = styled.h2`
 `;
 
 
-/* =========================================
+/* ==========================================
    CLOSE BUTTON
-========================================= */
+========================================== */
 
 export const CloseButton = styled.button`
 
-  width: 40px;
+  width: 42px;
 
-  height: 40px;
+  height: 42px;
 
   flex-shrink: 0;
 
@@ -892,9 +989,15 @@ export const CloseButton = styled.button`
 
   border-radius: 50%;
 
-  background: #f4f4f4;
+  background:
+    rgba(
+      0,
+      0,
+      0,
+      .08
+    );
 
-  color: #444444;
+  color: #222222;
 
   display: flex;
 
@@ -909,7 +1012,9 @@ export const CloseButton = styled.button`
 
   svg {
 
-    font-size: 20px;
+    width: 21px;
+
+    height: 21px;
 
   }
 
@@ -925,12 +1030,21 @@ export const CloseButton = styled.button`
 
   }
 
+
+  @media (max-width: 600px) {
+
+    width: 38px;
+
+    height: 38px;
+
+  }
+
 `;
 
 
-/* =========================================
+/* ==========================================
    MODAL IMAGE
-========================================= */
+========================================== */
 
 export const ModalImage = styled.div`
 
@@ -940,19 +1054,19 @@ export const ModalImage = styled.div`
 
   margin-bottom: 25px;
 
-  border-radius: 17px;
+  border-radius: 0;
 
   overflow: hidden;
 
-  background: #f5f5f5;
+  background: #d8d8d8;
 
   box-shadow:
-    0 6px 18px
+    4px 8px 18px
     rgba(
       0,
       0,
       0,
-      .12
+      .14
     );
 
 
@@ -978,55 +1092,84 @@ export const ModalImage = styled.div`
 `;
 
 
-/* =========================================
+/* ==========================================
    MODAL EVENT TITLE
-========================================= */
+========================================== */
 
 export const ModalEventTitle = styled.h2`
 
   margin:
-    0 0 12px;
+    0 0 25px;
 
   color: #222222;
 
-  font-size: 27px;
+  font-family:
+    "Comic Sans MS",
+    "Trebuchet MS",
+    sans-serif;
 
-  line-height: 1.25;
+  font-size:
+    clamp(
+      2rem,
+      6vw,
+      4rem
+    );
 
-  font-weight: 700;
+  line-height: 1.05;
+
+  font-weight: 800;
+
+  letter-spacing: -1px;
+
+  word-break: break-word;
+
+
+  @media (max-width: 600px) {
+
+    margin-bottom: 20px;
+
+    font-size: 32px;
+
+  }
 
 `;
 
 
-/* =========================================
+/* ==========================================
    MODAL DESCRIPTION
-========================================= */
+========================================== */
 
 export const ModalDescription = styled.p`
 
   margin:
     0 0 25px;
 
-  color:
-    rgba(
-      0,
-      0,
-      0,
-      .68
+  color: #292929;
+
+  font-family:
+    "Comic Sans MS",
+    "Trebuchet MS",
+    sans-serif;
+
+  font-size:
+    clamp(
+      1.1rem,
+      3vw,
+      1.8rem
     );
 
-  font-size: 15px;
-
-  line-height: 1.7;
+  line-height: 1.65;
 
   white-space: pre-wrap;
+
+  word-break: break-word;
 
 `;
 
 
-/* =========================================
+/* ==========================================
    MODAL INFO LIST
-========================================= */
+========================================== */
 
 export const ModalInfoList = styled.div`
 
@@ -1039,9 +1182,9 @@ export const ModalInfoList = styled.div`
 `;
 
 
-/* =========================================
+/* ==========================================
    MODAL INFO ITEM
-========================================= */
+========================================== */
 
 export const ModalInfoItem = styled.div`
 
@@ -1053,12 +1196,24 @@ export const ModalInfoItem = styled.div`
 
   padding: 13px;
 
-  border-radius: 12px;
+  border-radius: 8px;
 
-  background: #fafafa;
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      .45
+    );
 
   border:
-    1px solid #eeeeee;
+    1px solid
+    rgba(
+      0,
+      0,
+      0,
+      .08
+    );
 
 
   & > svg {
@@ -1069,7 +1224,7 @@ export const ModalInfoItem = styled.div`
 
     height: 20px;
 
-    color: #ffdb53;
+    color: #555555;
 
   }
 
