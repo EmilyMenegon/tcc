@@ -1,415 +1,268 @@
 import styled from "styled-components";
 import { NavLink, Link } from "react-router-dom";
 
-
-/* =====================================================
-   HEADER
-===================================================== */
+// =========================================================
+// HEADER
+// =========================================================
 
 export const Header = styled.header`
-
   width: 100%;
 
   display: flex;
-
   align-items: center;
-
   justify-content: center;
 
-  gap: 30px;
+  gap: 28px;
 
-  margin-top: 20px;
+  padding: 28px 5% 0;
 
   box-sizing: border-box;
 
-  padding: 0 5%;
+  position: relative;
 
+  z-index: 100;
 
-  /* =================================================
-     NOTEBOOK
-  ================================================= */
-
-  @media (max-width: 1200px) {
-
-    gap: 25px;
-
-    padding: 0 6%;
-
-  }
-
-
-  /* =================================================
-     TABLET
-  ================================================= */
-
-  @media (max-width: 900px) {
-
+  @media (max-width: 1000px) {
     gap: 20px;
-
-    padding: 0 7%;
-
+    padding: 24px 4%;
   }
 
-
-  /* =================================================
-     CELULAR
-  ================================================= */
-
-  @media (max-width: 600px) {
-
-    /*
-      No celular:
-      perfil fica na esquerda
-      menu fica na direita.
-    */
-
-    width: 100%;
-
-    padding: 0 5%;
-
-    margin-top: 15px;
-
-    display: flex;
-
-    align-items: center;
-
+  @media (max-width: 700px) {
     justify-content: space-between;
 
-    gap: 0;
+    gap: 15px;
 
+    padding: 20px 4%;
   }
-
 `;
 
-
-/* =====================================================
-   NAVBAR
-===================================================== */
+// =========================================================
+// NAVBAR
+// =========================================================
 
 export const Navbar = styled.nav`
+  width: min(1250px, 82vw);
 
-  width: 70%;
+  height: 86px;
 
-  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
 
   background: #ffdb53;
 
-  border-radius: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
 
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  position: relative;
+  border-radius: 45px;
 
   box-sizing: border-box;
 
-  /* SEM SOMBRA */
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.09),
+    0 5px 14px rgba(0, 0, 0, 0.06);
 
-  flex-shrink: 1;
-
-
-  /* =================================================
-     NOTEBOOK
-  ================================================= */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 
   @media (max-width: 1200px) {
+    width: min(1100px, 82vw);
 
-    width: 75%;
+    height: 82px;
 
+    border-radius: 30px;
   }
 
+  @media (max-width: 1000px) {
+    width: 82vw;
 
-  /* =================================================
-     TABLET
-  ================================================= */
+    height: 76px;
 
-  @media (max-width: 900px) {
-
-    width: 80%;
-
-    height: 52px;
-
+    border-radius: 27px;
   }
 
+  @media (max-width: 700px) {
+    width: calc(100% - 67px);
 
-  /* =================================================
-     CELULAR
-  ================================================= */
+    height: 64px;
 
-  @media (max-width: 600px) {
-
-    /*
-      A navbar deixa de ser uma barra.
-      Ela vira apenas o botão amarelo.
-    */
-
-    width: 45px;
-
-    height: 45px;
-
-    min-width: 45px;
-
-    min-height: 45px;
-
-    padding: 0;
-
-    margin: 0;
-
-    border-radius: 8px;
-
-    background: #ffdb53;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    /* SEM SOMBRA */
-
+    border-radius: 22px;
   }
 
+  @media (max-width: 500px) {
+    width: calc(100% - 63px);
 
-  /* =================================================
-     CELULAR PEQUENO
-  ================================================= */
+    height: 60px;
 
-  @media (max-width: 400px) {
-
-    width: 42px;
-
-    height: 42px;
-
-    min-width: 42px;
-
-    min-height: 42px;
-
+    border-radius: 20px;
   }
-
 `;
 
-
-/* =====================================================
-   MENU / LINKS
-===================================================== */
+// =========================================================
+// NAV CENTER
+// =========================================================
 
 export const NavCenter = styled.div`
-
   width: 100%;
+  height: 100%;
 
   display: flex;
-
   align-items: center;
-
   justify-content: center;
 
-  gap: 25px;
+  gap: 8px;
 
+  padding: 0 18px;
 
-  /* =================================================
-     NOTEBOOK
-  ================================================= */
-
-  @media (max-width: 1200px) {
-
-    gap: 18px;
-
-  }
-
-
-  /* =================================================
-     TABLET
-  ================================================= */
-
-  @media (max-width: 900px) {
-
-    gap: 12px;
-
-  }
-
-
-  /* =================================================
-     CELULAR
-  ================================================= */
-
-  @media (max-width: 600px) {
-
-    position: absolute;
-
-    top: calc(100% + 10px);
-
-    right: 0;
-
-    width: 180px;
-
-    padding: 20px;
-
-    background: #ffdb53;
-
-    border-radius: 15px;
-
-    flex-direction: column;
-
-    align-items: center;
-
-    justify-content: center;
-
-    gap: 20px;
-
-    box-sizing: border-box;
-
-    /* SEM SOMBRA */
-
-    z-index: 100;
-
-
-    opacity:
-      ${({ $open }) =>
-        $open
-          ? 1
-          : 0};
-
-
-    visibility:
-      ${({ $open }) =>
-        $open
-          ? "visible"
-          : "hidden"};
-
-
-    transform:
-      ${({ $open }) =>
-        $open
-          ? "translateY(0)"
-          : "translateY(-10px)"};
-
-
-    pointer-events:
-      ${({ $open }) =>
-        $open
-          ? "auto"
-          : "none"};
-
-
-    transition:
-      opacity 0.2s ease,
-      transform 0.2s ease,
-      visibility 0.2s ease;
-
-  }
-
-`;
-
-
-/* =====================================================
-   LINKS
-===================================================== */
-
-export const NavItem = styled(NavLink)`
-
-  color: #000;
-
-  text-decoration: none;
-
-  font-weight: 500;
-
-  font-size: 16px;
-
-  padding: 5px;
+  box-sizing: border-box;
 
   position: relative;
 
-  white-space: nowrap;
+  /*
+    Cria um novo contexto de composição.
+    Isso ajuda a manter o indicador independente
+    visualmente dos outros elementos.
+  */
+  isolation: isolate;
 
-  transition: 0.2s;
+  // =======================================================
+  // RETÂNGULO PRETO
+  // =======================================================
 
-
-  &:hover {
-
-    color: white;
-
-  }
-
-
-  &.active::after {
-
-    content: "";
-
+  & > span {
     position: absolute;
 
-    left: 50%;
+    top: 0;
+    left: 0;
 
-    bottom: -8px;
+    width: 0;
+    height: 0;
 
-    transform:
-      translateX(-50%);
+    display: block;
 
-    width: 70%;
+    /*
+      COR PRETA TOTALMENTE SÓLIDA
+    */
+    background-color: #111;
 
-    height: 3px;
+    /*
+      Nunca fica transparente.
+    */
+    opacity: 1;
 
-    background: #000;
+    border-radius: 58px;
 
-    border-radius: 10px;
+    z-index: 0;
 
+    pointer-events: none;
+
+    /*
+      O navegador prepara o elemento
+      para a animação do GSAP.
+    */
+    will-change:
+      transform,
+      width,
+      height;
+
+    /*
+      Não usamos transition aqui.
+      O GSAP controla a animação.
+    */
+    transition: none;
+
+    box-shadow:
+      0 8px 20px rgba(0, 0, 0, 0.2);
   }
 
+  // =======================================================
+  // TABLET
+  // =======================================================
 
-  /* =================================================
-     TABLET
-  ================================================= */
+  @media (max-width: 1000px) {
+    gap: 5px;
 
-  @media (max-width: 900px) {
-
-    font-size: 14px;
-
+    padding: 0 12px;
   }
 
+  // =======================================================
+  // MOBILE
+  // =======================================================
 
-  /* =================================================
-     CELULAR
-  ================================================= */
+  @media (max-width: 700px) {
+    position: absolute;
 
-  @media (max-width: 600px) {
+    top: calc(100% + 12px);
 
-    font-size: 16px;
+    right: 0;
 
-    padding: 5px 10px;
+    width: 250px;
 
+    height: auto;
 
-    &.active::after {
+    padding: 12px;
 
-      width: 50%;
+    display: flex;
 
-      height: 2px;
+    flex-direction: column;
 
-      bottom: -5px;
+    align-items: stretch;
 
+    justify-content: flex-start;
+
+    gap: 5px;
+
+    background: #ffdb53;
+
+    border-radius: 22px;
+
+    box-shadow:
+      0 18px 40px rgba(0, 0, 0, 0.14);
+
+    z-index: 1000;
+
+    opacity: ${({ $open }) =>
+      $open ? 1 : 0};
+
+    visibility: ${({ $open }) =>
+      $open ? "visible" : "hidden"};
+
+    pointer-events: ${({ $open }) =>
+      $open ? "auto" : "none"};
+
+    transform: ${({ $open }) =>
+      $open
+        ? "translateY(0)"
+        : "translateY(-10px)"};
+
+    transition:
+      opacity 0.25s ease,
+      transform 0.25s ease,
+      visibility 0.25s ease;
+
+    /*
+      No mobile o indicador preto do desktop
+      não é utilizado.
+    */
+    & > span {
+      display: none;
     }
-
   }
-
 `;
 
+// =========================================================
+// NAV ITEM
+// =========================================================
 
-/* =====================================================
-   PERFIL
-===================================================== */
+export const NavItem = styled(NavLink)`
+  position: relative;
 
-export const ProfileIcon = styled(Link)`
+  z-index: 1;
 
-  width: 60px;
+  min-height: 58px;
 
-  height: 60px;
-
-  flex-shrink: 0;
-
-  border-radius: 50%;
-
-  background: ${({ $comFoto }) => ($comFoto ? "transparent" : "#000")};
+  padding: 0 25px;
 
   display: flex;
 
@@ -417,246 +270,335 @@ export const ProfileIcon = styled(Link)`
 
   justify-content: center;
 
+  box-sizing: border-box;
+
+  border-radius: 18px;
+
+  color: #111;
+
   text-decoration: none;
 
-  /* SEM SOMBRA */
+  font-size: 18px;
 
-  transition: 0.2s;
+  font-weight: 600;
 
+  letter-spacing: 0.1px;
 
-  svg {
+  white-space: nowrap;
 
-    color: #fff;
-
-    font-size: 22px;
-
-    transition: 0.2s;
-
-  }
-
+  /*
+    IMPORTANTE:
+    O GSAP controla color e transform.
+    Não deixamos o CSS disputar essas propriedades.
+  */
+  transition: none;
 
   &:hover {
-
-    background: ${({ $comFoto }) => ($comFoto ? "transparent" : "#ffdb53")};
-
-    transform:
-      translateY(-2px);
-
+    color: #fff;
   }
 
-
-  &:hover svg {
-
-    color: #000;
-
+  &.active {
+    color: #111;
   }
 
+  &:focus-visible {
+    outline: 3px solid rgba(0, 0, 0, 0.35);
 
-  /* =================================================
-     NOTEBOOK
-  ================================================= */
+    outline-offset: 3px;
+  }
 
-  @media (max-width: 1200px) {
+  // =======================================================
+  // 1100px
+  // =======================================================
 
-    width: 56px;
+  @media (max-width: 1100px) {
+    min-height: 54px;
 
-    height: 56px;
+    padding: 0 20px;
 
+    font-size: 17px;
 
-    svg {
+    border-radius: 16px;
+  }
 
-      font-size: 20px;
+  // =======================================================
+  // 1000px
+  // =======================================================
 
+  @media (max-width: 1000px) {
+    min-height: 50px;
+
+    padding: 0 15px;
+
+    font-size: 15px;
+
+    border-radius: 15px;
+  }
+
+  // =======================================================
+  // MOBILE
+  // =======================================================
+
+  @media (max-width: 700px) {
+    width: 100%;
+
+    min-height: 46px;
+
+    padding: 0 17px;
+
+    justify-content: flex-start;
+
+    font-size: 16px;
+
+    border-radius: 13px;
+
+    color: #111;
+
+    /*
+      No mobile o hover não precisa deixar
+      o texto branco.
+    */
+    &:hover {
+      color: #111;
     }
 
+    /*
+      No mobile o item ativo possui seu
+      próprio fundo preto.
+    */
+    &.active {
+      color: #fff;
+
+      background: #111;
+    }
+  }
+`;
+
+// =========================================================
+// PROFILE ICON
+// =========================================================
+
+export const ProfileIcon = styled(Link)`
+  width: 68px;
+
+  height: 68px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+
+  text-decoration: none;
+
+  background: ${({ $comFoto }) =>
+    $comFoto ? "#fff" : "#111"};
+
+  border: 3px solid #111;
+
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.14);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+
+  svg {
+    color: #fff;
+
+    font-size: 25px;
   }
 
+  &:hover {
+    transform: scale(1.08);
 
-  /* =================================================
-     TABLET
-  ================================================= */
+    box-shadow:
+      0 12px 28px rgba(0, 0, 0, 0.18);
+  }
 
-  @media (max-width: 900px) {
+  &:focus-visible {
+    outline: 3px solid #ffdb53;
 
+    outline-offset: 4px;
+  }
+
+  // =======================================================
+  // 1000px
+  // =======================================================
+
+  @media (max-width: 1000px) {
+    width: 62px;
+
+    height: 62px;
+
+    svg {
+      font-size: 22px;
+    }
+  }
+
+  // =======================================================
+  // 700px
+  // =======================================================
+
+  @media (max-width: 700px) {
     width: 52px;
 
     height: 52px;
 
-
     svg {
-
       font-size: 19px;
-
     }
-
   }
 
+  // =======================================================
+  // 500px
+  // =======================================================
 
-  /* =================================================
-     CELULAR
-  ================================================= */
+  @media (max-width: 500px) {
+    width: 48px;
 
-  @media (max-width: 600px) {
-
-    width: 44px;
-
-    height: 44px;
-
+    height: 48px;
 
     svg {
-
       font-size: 17px;
-
     }
-
   }
-
-
-  /* =================================================
-     CELULAR PEQUENO
-  ================================================= */
-
-  @media (max-width: 400px) {
-
-    width: 40px;
-
-    height: 40px;
-
-
-    svg {
-
-      font-size: 15px;
-
-    }
-
-  }
-
 `;
 
-
-/* =====================================================
-   FOTO DE PERFIL (dentro do ProfileIcon)
-===================================================== */
+// =========================================================
+// PROFILE PHOTO
+// =========================================================
 
 export const ProfilePhoto = styled.img`
-
   width: 100%;
 
   height: 100%;
 
-  border-radius: 50%;
+  display: block;
 
   object-fit: cover;
 
-  display: block;
+  border-radius: 50%;
 
-  box-sizing: border-box;
+  user-select: none;
 
-  border: 3px solid #ffdb53;
-
-  transition: 0.2s;
-
-
-  ${ProfileIcon}:hover & {
-
-    border-color: #000;
-
-    transform:
-      scale(1.04);
-
-  }
-
+  pointer-events: none;
 `;
 
-
-/* =====================================================
-   BOTÃO HAMBURGER
-===================================================== */
+// =========================================================
+// MENU BUTTON
+// =========================================================
 
 export const MenuButton = styled.button`
-
   display: none;
 
-  width: 45px;
+  width: 52px;
 
-  height: 45px;
+  height: 52px;
 
-  border: none;
-
-  background: transparent;
+  flex-shrink: 0;
 
   padding: 0;
 
-  margin: 0;
+  border: none;
+
+  border-radius: 15px;
+
+  background: rgba(255, 255, 255, 0.35);
 
   cursor: pointer;
-
-  flex-direction: column;
 
   align-items: center;
 
   justify-content: center;
 
-  gap: 5px;
+  flex-direction: column;
+
+  gap: 6px;
 
   box-sizing: border-box;
 
-
   span {
-
-    width: 24px;
+    width: 25px;
 
     height: 3px;
 
-    background: #000;
-
-    border-radius: 5px;
-
     display: block;
 
+    border-radius: 10px;
+
+    background: #111;
+
     transition:
-      background 0.2s ease;
-
+      transform 0.25s ease,
+      opacity 0.2s ease;
   }
 
+  // =======================================================
+  // MENU ABERTO
+  // =======================================================
 
-  &:hover span {
+  ${({ $open }) =>
+    $open &&
+    `
+      span:nth-child(1) {
+        transform:
+          translateY(9px)
+          rotate(45deg);
+      }
 
-    background: #fff;
+      span:nth-child(2) {
+        opacity: 0;
+      }
 
-  }
+      span:nth-child(3) {
+        transform:
+          translateY(-9px)
+          rotate(-45deg);
+      }
+    `}
 
-
-  /* =================================================
-     CELULAR
-  ================================================= */
-
-  @media (max-width: 600px) {
-
-    display: flex;
-
-  }
-
-
-  /* =================================================
-     CELULAR PEQUENO
-  ================================================= */
-
-  @media (max-width: 400px) {
-
-    width: 42px;
-
-    height: 42px;
-
+  &:hover {
+    background: #111;
 
     span {
-
-      width: 22px;
-
-      height: 3px;
-
+      background: #fff;
     }
-
   }
 
+  &:focus-visible {
+    outline: 3px solid rgba(0, 0, 0, 0.35);
+
+    outline-offset: 3px;
+  }
+
+  // =======================================================
+  // MOBILE
+  // =======================================================
+
+  @media (max-width: 700px) {
+    display: flex;
+  }
+
+  // =======================================================
+  // 500px
+  // =======================================================
+
+  @media (max-width: 500px) {
+    width: 46px;
+
+    height: 46px;
+
+    span {
+      width: 23px;
+    }
+  }
 `;

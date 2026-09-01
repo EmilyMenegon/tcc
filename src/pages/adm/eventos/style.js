@@ -103,12 +103,6 @@ export const TitleArea = styled.div`
   text-align: center;
 `;
 
-
-/* =====================================================
-   TITLE
-   IGUAL À GALERIA
-===================================================== */
-
 export const Title = styled.h1`
   margin: 0;
 
@@ -124,7 +118,6 @@ export const Title = styled.h1`
   font-weight: 700;
 
   line-height: 1.2;
-
 
   @media (max-width: 600px) {
     font-size:

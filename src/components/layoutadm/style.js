@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { NavLink, Link } from "react-router-dom";
 
+
 /* =====================================================
    HEADER
 ===================================================== */
@@ -14,53 +15,30 @@ export const Header = styled.header`
 
   justify-content: center;
 
-  gap: 30px;
+  gap: 28px;
 
-  margin-top: 20px;
+  padding: 28px 5% 0;
 
   box-sizing: border-box;
 
-  padding: 0 5%;
+  position: relative;
+
+  z-index: 100;
 
 
-  /* =================================================
-     NOTEBOOK
-  ================================================= */
-
-  @media (max-width: 1200px) {
-    gap: 25px;
-    padding: 0 6%;
-  }
-
-
-  /* =================================================
-     TABLET
-  ================================================= */
-
-  @media (max-width: 900px) {
+  @media (max-width: 1000px) {
     gap: 20px;
-    padding: 0 7%;
+
+    padding: 24px 4%;
   }
 
 
-  /* =================================================
-     CELULAR
-  ================================================= */
-
-  @media (max-width: 600px) {
-    width: 100%;
-
-    padding: 0 5%;
-
-    margin-top: 15px;
-
-    display: flex;
-
-    align-items: center;
-
+  @media (max-width: 700px) {
     justify-content: space-between;
 
-    gap: 0;
+    gap: 15px;
+
+    padding: 20px 4%;
   }
 `;
 
@@ -70,13 +48,9 @@ export const Header = styled.header`
 ===================================================== */
 
 export const Navbar = styled.nav`
-  width: 70%;
+  width: min(1250px, 82vw);
 
-  height: 50px;
-
-  background: #f9be06;
-
-  border-radius: 40px;
+  height: 86px;
 
   display: flex;
 
@@ -86,81 +60,73 @@ export const Navbar = styled.nav`
 
   position: relative;
 
+  background: #ffdb53;
+
+  border: 1px solid rgba(255, 255, 255, 0.5);
+
+  border-radius: 45px;
+
   box-sizing: border-box;
 
-  flex-shrink: 1;
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.09),
+    0 5px 14px rgba(0, 0, 0, 0.06);
 
+  backdrop-filter: blur(12px);
 
-  /* =================================================
-     NOTEBOOK
-  ================================================= */
+  -webkit-backdrop-filter: blur(12px);
+
 
   @media (max-width: 1200px) {
-    width: 75%;
+    width: min(1100px, 82vw);
+
+    height: 82px;
+
+    border-radius: 30px;
   }
 
 
-  /* =================================================
-     TABLET
-  ================================================= */
+  @media (max-width: 1000px) {
+    width: 82vw;
 
-  @media (max-width: 900px) {
-    width: 80%;
-    height: 52px;
+    height: 76px;
+
+    border-radius: 27px;
   }
 
 
-  /* =================================================
-     CELULAR
-  ================================================= */
+  @media (max-width: 700px) {
+    width: calc(100% - 67px);
 
-  @media (max-width: 600px) {
-    width: 45px;
+    height: 64px;
 
-    height: 45px;
+    border-radius: 22px;
 
-    min-width: 45px;
+    background: #ffdb53;
 
-    min-height: 45px;
-
-    padding: 0;
-
-    margin: 0;
-
-    border-radius: 8px;
-
-    background: #f9be06;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
+    box-shadow:
+      0 10px 25px rgba(0, 0, 0, 0.08);
   }
 
 
-  /* =================================================
-     CELULAR PEQUENO
-  ================================================= */
+  @media (max-width: 500px) {
+    width: calc(100% - 63px);
 
-  @media (max-width: 400px) {
-    width: 42px;
+    height: 60px;
 
-    height: 42px;
-
-    min-width: 42px;
-
-    min-height: 42px;
+    border-radius: 20px;
   }
 `;
 
 
 /* =====================================================
-   MENU / LINKS
+   NAV CENTER
 ===================================================== */
 
 export const NavCenter = styled.div`
   width: 100%;
+
+  height: 100%;
 
   display: flex;
 
@@ -168,83 +134,122 @@ export const NavCenter = styled.div`
 
   justify-content: center;
 
-  gap: 25px;
+  gap: 8px;
+
+  padding: 0 18px;
+
+  box-sizing: border-box;
+
+  position: relative;
+
+  isolation: isolate;
 
 
   /* =================================================
-     NOTEBOOK
+     INDICADOR PRETO
   ================================================= */
 
-  @media (max-width: 1200px) {
-    gap: 18px;
-  }
-
-
-  /* =================================================
-     TABLET
-  ================================================= */
-
-  @media (max-width: 900px) {
-    gap: 12px;
-  }
-
-
-  /* =================================================
-     CELULAR
-  ================================================= */
-
-  @media (max-width: 600px) {
+  & > span {
     position: absolute;
 
-    top: calc(100% + 10px);
+    top: 0;
+
+    left: 0;
+
+    width: 0;
+
+    height: 0;
+
+    display: block;
+
+    background-color: #111;
+
+    opacity: 1;
+
+    border-radius: 58px;
+
+    z-index: 0;
+
+    pointer-events: none;
+
+    will-change:
+      transform,
+      width,
+      height;
+
+    transition: none;
+
+    box-shadow:
+      0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+
+
+  @media (max-width: 1000px) {
+    gap: 5px;
+
+    padding: 0 12px;
+  }
+
+
+  /* =================================================
+     MOBILE
+  ================================================= */
+
+  @media (max-width: 700px) {
+    position: absolute;
+
+    top: calc(100% + 12px);
 
     right: 0;
 
-    width: 180px;
+    width: 250px;
 
-    padding: 20px;
+    height: auto;
 
-    background: #f9be06;
+    padding: 12px;
 
-    border-radius: 15px;
+    display: flex;
 
     flex-direction: column;
 
-    align-items: center;
+    align-items: stretch;
 
-    justify-content: center;
+    justify-content: flex-start;
 
-    gap: 20px;
+    gap: 5px;
 
-    box-sizing: border-box;
+    background: #ffdb53;
 
-    z-index: 100;
+    border-radius: 22px;
 
+    box-shadow:
+      0 18px 40px rgba(0, 0, 0, 0.14);
+
+    z-index: 1000;
 
     opacity: ${({ $open }) =>
       $open ? 1 : 0};
 
-
     visibility: ${({ $open }) =>
       $open ? "visible" : "hidden"};
 
+    pointer-events: ${({ $open }) =>
+      $open ? "auto" : "none"};
 
     transform: ${({ $open }) =>
       $open
         ? "translateY(0)"
         : "translateY(-10px)"};
 
-
-    pointer-events: ${({ $open }) =>
-      $open
-        ? "auto"
-        : "none"};
-
-
     transition:
-      opacity 0.2s ease,
-      transform 0.2s ease,
-      visibility 0.2s ease;
+      opacity 0.25s ease,
+      transform 0.25s ease,
+      visibility 0.25s ease;
+
+
+    & > span {
+      display: none;
+    }
   }
 `;
 
@@ -254,75 +259,105 @@ export const NavCenter = styled.div`
 ===================================================== */
 
 export const NavItem = styled(NavLink)`
-  color: #000;
+  position: relative;
+
+  z-index: 1;
+
+  min-height: 58px;
+
+  padding: 0 25px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  border-radius: 18px;
+
+  color: #111;
 
   text-decoration: none;
 
-  font-weight: 500;
+  font-size: 18px;
 
-  font-size: 16px;
+  font-weight: 600;
 
-  padding: 5px;
-
-  position: relative;
+  letter-spacing: 0.1px;
 
   white-space: nowrap;
 
-  transition: 0.2s;
+  transition: none;
 
 
   &:hover {
-    color: white;
+    color: #fff;
   }
 
 
-  &.active::after {
-    content: "";
-
-    position: absolute;
-
-    left: 50%;
-
-    bottom: -8px;
-
-    transform:
-      translateX(-50%);
-
-    width: 70%;
-
-    height: 3px;
-
-    background: #000;
-
-    border-radius: 10px;
+  &.active {
+    color: #fff;
   }
 
 
-  /* =================================================
-     TABLET
-  ================================================= */
+  &:focus-visible {
+    outline: 3px solid rgba(0, 0, 0, 0.35);
 
-  @media (max-width: 900px) {
-    font-size: 14px;
+    outline-offset: 3px;
   }
 
 
-  /* =================================================
-     CELULAR
-  ================================================= */
+  @media (max-width: 1100px) {
+    min-height: 54px;
 
-  @media (max-width: 600px) {
+    padding: 0 20px;
+
+    font-size: 17px;
+
+    border-radius: 16px;
+  }
+
+
+  @media (max-width: 1000px) {
+    min-height: 50px;
+
+    padding: 0 15px;
+
+    font-size: 15px;
+
+    border-radius: 15px;
+  }
+
+
+  @media (max-width: 700px) {
+    width: 100%;
+
+    min-height: 46px;
+
+    padding: 0 17px;
+
+    justify-content: flex-start;
+
     font-size: 16px;
 
-    padding: 5px 10px;
+    border-radius: 13px;
+
+    color: #111;
 
 
-    &.active::after {
-      width: 50%;
+    &:hover {
+      color: #111;
 
-      height: 2px;
+      transform: none;
+    }
 
-      bottom: -5px;
+
+    &.active {
+      color: #fff;
+
+      background: #111;
     }
   }
 `;
@@ -333,15 +368,11 @@ export const NavItem = styled(NavLink)`
 ===================================================== */
 
 export const ProfileIcon = styled(Link)`
-  width: 60px;
+  width: 68px;
 
-  height: 60px;
+  height: 68px;
 
   flex-shrink: 0;
-
-  border-radius: 50%;
-
-  background: ${({ $comFoto }) => ($comFoto ? "transparent" : "#000")};
 
   display: flex;
 
@@ -349,54 +380,64 @@ export const ProfileIcon = styled(Link)`
 
   justify-content: center;
 
+  border-radius: 50%;
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+
   text-decoration: none;
 
-  transition: 0.2s;
+  background: ${({ $comFoto }) =>
+    $comFoto
+      ? "#fff"
+      : "#111"};
+
+  border: 3px solid #111;
+
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.14);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 
 
   svg {
     color: #fff;
 
-    font-size: 22px;
-
-    transition: 0.2s;
+    font-size: 25px;
   }
 
 
   &:hover {
-    background: ${({ $comFoto }) => ($comFoto ? "transparent" : "#f9be06")};
+    transform: scale(1.08);
 
-    transform:
-      translateY(-2px);
+    box-shadow:
+      0 12px 28px rgba(0, 0, 0, 0.18);
   }
 
 
-  &:hover svg {
-    color: #000;
+  &:focus-visible {
+    outline: 3px solid #ffdb53;
+
+    outline-offset: 4px;
   }
 
 
-  /* =================================================
-     NOTEBOOK
-  ================================================= */
+  @media (max-width: 1000px) {
+    width: 62px;
 
-  @media (max-width: 1200px) {
-    width: 56px;
-
-    height: 56px;
+    height: 62px;
 
 
     svg {
-      font-size: 20px;
+      font-size: 22px;
     }
   }
 
 
-  /* =================================================
-     TABLET
-  ================================================= */
-
-  @media (max-width: 900px) {
+  @media (max-width: 700px) {
     width: 52px;
 
     height: 52px;
@@ -408,41 +449,21 @@ export const ProfileIcon = styled(Link)`
   }
 
 
-  /* =================================================
-     CELULAR
-  ================================================= */
+  @media (max-width: 500px) {
+    width: 48px;
 
-  @media (max-width: 600px) {
-    width: 44px;
-
-    height: 44px;
+    height: 48px;
 
 
     svg {
       font-size: 17px;
     }
   }
-
-
-  /* =================================================
-     CELULAR PEQUENO
-  ================================================= */
-
-  @media (max-width: 400px) {
-    width: 40px;
-
-    height: 40px;
-
-
-    svg {
-      font-size: 15px;
-    }
-  }
 `;
 
 
 /* =====================================================
-   FOTO DE PERFIL (dentro do ProfileIcon)
+   FOTO DE PERFIL
 ===================================================== */
 
 export const ProfilePhoto = styled.img`
@@ -450,104 +471,124 @@ export const ProfilePhoto = styled.img`
 
   height: 100%;
 
-  border-radius: 50%;
+  display: block;
 
   object-fit: cover;
 
-  display: block;
+  border-radius: 50%;
 
-  box-sizing: border-box;
+  user-select: none;
 
-  border: 3px solid #f9be06;
-
-  transition: 0.2s;
-
-
-  ${ProfileIcon}:hover & {
-    border-color: #000;
-
-    transform:
-      scale(1.04);
-  }
+  pointer-events: none;
 `;
 
 
 /* =====================================================
-   BOTÃO HAMBURGER
+   BOTÃO MOBILE
 ===================================================== */
 
 export const MenuButton = styled.button`
   display: none;
 
-  width: 45px;
+  width: 52px;
 
-  height: 45px;
+  height: 52px;
 
-  border: none;
-
-  background: transparent;
+  flex-shrink: 0;
 
   padding: 0;
 
-  margin: 0;
+  border: none;
+
+  border-radius: 15px;
+
+  background: rgba(255, 255, 255, 0.35);
 
   cursor: pointer;
-
-  flex-direction: column;
 
   align-items: center;
 
   justify-content: center;
 
-  gap: 5px;
+  flex-direction: column;
+
+  gap: 6px;
 
   box-sizing: border-box;
 
 
   span {
-    width: 24px;
+    width: 25px;
 
     height: 3px;
 
-    background: #000;
-
-    border-radius: 5px;
-
     display: block;
 
+    border-radius: 10px;
+
+    background: #111;
+
     transition:
+      transform 0.25s ease,
+      opacity 0.2s ease,
       background 0.2s ease;
   }
 
 
-  &:hover span {
-    background: #fff;
+  /* =================================================
+     MENU ABERTO
+  ================================================= */
+
+  ${({ $open }) =>
+    $open &&
+    `
+      span:nth-child(1) {
+        transform:
+          translateY(9px)
+          rotate(45deg);
+      }
+
+      span:nth-child(2) {
+        opacity: 0;
+      }
+
+      span:nth-child(3) {
+        transform:
+          translateY(-9px)
+          rotate(-45deg);
+      }
+    `}
+
+
+  &:hover {
+    background: #111;
+
+    span {
+      background: #fff;
+    }
   }
 
 
-  /* =================================================
-     CELULAR
-  ================================================= */
+  &:focus-visible {
+    outline: 3px solid rgba(0, 0, 0, 0.35);
 
-  @media (max-width: 600px) {
+    outline-offset: 3px;
+  }
+
+
+  @media (max-width: 700px) {
     display: flex;
   }
 
 
-  /* =================================================
-     CELULAR PEQUENO
-  ================================================= */
+  @media (max-width: 500px) {
+    width: 46px;
 
-  @media (max-width: 400px) {
-    width: 42px;
-
-    height: 42px;
+    height: 46px;
 
 
     span {
-      width: 22px;
-
-      height: 3px;
+      width: 23px;
     }
   }
 `;

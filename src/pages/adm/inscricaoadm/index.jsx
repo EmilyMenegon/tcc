@@ -1,29 +1,72 @@
 import { useEffect, useState } from "react";
 import Layoutadm from "../../../components/layoutadm";
-import { FiEdit, FiTrash2 } from "react-icons/fi";
+import {
+  FiEdit,
+  FiTrash2,
+  FiUsers,
+  FiClock,
+  FiBookOpen,
+  FiSearch,
+  FiX,
+  FiAlertTriangle,
+} from "react-icons/fi";
+
 import {
   Page,
   Content,
+  Header,
+  TitleArea,
   Title,
+  Subtitle,
+  Stats,
+  StatCard,
+  StatIcon,
+  StatContent,
+  StatNumber,
+  StatLabel,
   FilterContainer,
   FilterButton,
   TableContainer,
+  TableHeader,
+  TableHeaderInfo,
+  TableTitle,
+  TableDescription,
+  TableWrapper,
   Table,
+  StudentCell,
+  StudentAvatar,
+  StudentInfo,
+  StudentName,
+  Badge,
+  TurnoBadge,
   Actions,
+  ActionButton,
+  EmptyState,
+  EmptyIcon,
+  EmptyTitle,
+  EmptyText,
+  LoadingState,
+  Spinner,
+  ErrorMessage,
+  ModalOverlay,
   Modal,
-  ModalBox,
+  ModalHeader,
+  ModalTitle,
+  ModalClose,
+  ModalDescription,
+  Form,
+  FormGroup,
+  Label,
   Input,
   Select,
+  ModalButtons,
   SaveButton,
   CancelButton,
-  ModalOverlay,
-  ModalButtons,
   ConfirmButton,
+  WarningBox,
 } from "./style";
 
-
 export default function Inscricaoadm() {
-
   const [turno, setTurno] = useState("Manhã");
   const [inscricoes, setInscricoes] = useState([]);
   const [carregando, setCarregando] = useState(true);
@@ -32,44 +75,38 @@ export default function Inscricaoadm() {
   const [inscricaoEditando, setInscricaoEditando] = useState(null);
   const [inscricaoExcluir, setInscricaoExcluir] = useState(null);
 
-  /* CONFIRMAÇÃO DA EXCLUSÃO */
   const [confirmacaoExclusao, setConfirmacaoExclusao] = useState("");
-
-
-  /* ============================================================
-     BUSCAR INSCRIÇÕES DO BANCO
-  ============================================================ */
 
   useEffect(() => {
     buscarInscricoes();
   }, []);
 
   function buscarInscricoes() {
-
     setCarregando(true);
+    setErro("");
 
     fetch("http://localhost:3001/inscricoes")
       .then((res) => res.json())
-      .then((data) => setInscricoes(data))
-      .catch(() => setErro("Não foi possível carregar as inscrições."))
-      .finally(() => setCarregando(false));
-
+      .then((data) => {
+        setInscricoes(data);
+      })
+      .catch(() => {
+        setErro("Não foi possível carregar as inscrições.");
+      })
+      .finally(() => {
+        setCarregando(false);
+      });
   }
 
-
-  /* ============================================================
-     EXCLUIR INSCRIÇÃO
-  ============================================================ */
-
   async function excluirInscricao() {
-
-    if (confirmacaoExclusao !== "excluir") return;
+    if (confirmacaoExclusao.toLowerCase() !== "excluir") return;
 
     try {
-
       const res = await fetch(
         `http://localhost:3001/inscricao/${inscricaoExcluir.id_inscricoes}`,
-        { method: "DELETE" }
+        {
+          method: "DELETE",
+        }
       );
 
       const data = await res.json();
@@ -80,33 +117,30 @@ export default function Inscricaoadm() {
       }
 
       setInscricoes((atual) =>
-        atual.filter((i) => i.id_inscricoes !== inscricaoExcluir.id_inscricoes)
+        atual.filter(
+          (i) =>
+            i.id_inscricoes !== inscricaoExcluir.id_inscricoes
+        )
       );
 
-      setInscricaoExcluir(null);
-      setConfirmacaoExclusao("");
-
+      fecharModalExclusao();
     } catch (err) {
       console.error(err);
       setErro("Não foi possível conectar ao servidor.");
     }
-
   }
 
-
-  /* ============================================================
-     SALVAR EDIÇÃO
-  ============================================================ */
-
   async function salvarEdicao() {
+    if (!inscricaoEditando) return;
 
     try {
-
       const res = await fetch(
         `http://localhost:3001/inscricao/${inscricaoEditando.id_inscricoes}`,
         {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({
             nome_poeta: inscricaoEditando.nome_poeta,
             turma: inscricaoEditando.turma,
@@ -125,242 +159,472 @@ export default function Inscricaoadm() {
 
       setInscricoes((atual) =>
         atual.map((i) =>
-          i.id_inscricoes === inscricaoEditando.id_inscricoes ? inscricaoEditando : i
+          i.id_inscricoes === inscricaoEditando.id_inscricoes
+            ? inscricaoEditando
+            : i
         )
       );
 
       setInscricaoEditando(null);
-
     } catch (err) {
       console.error(err);
       setErro("Não foi possível conectar ao servidor.");
     }
-
   }
 
+  function fecharModalExclusao() {
+    setInscricaoExcluir(null);
+    setConfirmacaoExclusao("");
+  }
+
+  function obterInicial(nome) {
+    if (!nome) return "?";
+
+    return nome
+      .trim()
+      .charAt(0)
+      .toUpperCase();
+  }
+
+  function abrirEdicao(inscricao) {
+    setErro("");
+    setInscricaoEditando({ ...inscricao });
+  }
+
+  function abrirExclusao(inscricao) {
+    setErro("");
+    setInscricaoExcluir(inscricao);
+    setConfirmacaoExclusao("");
+  }
 
   const inscricoesFiltradas = inscricoes.filter(
     (inscricao) => inscricao.turno === turno
   );
 
+  const totalManha = inscricoes.filter(
+    (item) => item.turno === "Manhã"
+  ).length;
+
+  const totalTarde = inscricoes.filter(
+    (item) => item.turno === "Tarde"
+  ).length;
+
+  const totalNoite = inscricoes.filter(
+    (item) => item.turno === "Noite"
+  ).length;
 
   return (
-
     <Page>
-
       <Layoutadm />
 
       <Content>
+        <Header>
+          <TitleArea>
+            <Title>Inscrições dos Alunos</Title>
 
-        <Title>
-          Inscrições dos Alunos
-        </Title>
+            <Subtitle>
+              Gerencie as inscrições e informações dos alunos
+              participantes.
+            </Subtitle>
+          </TitleArea>
+
+          <Stats>
+            <StatCard>
+              <StatIcon $color="#831614">
+                <FiUsers />
+              </StatIcon>
+
+              <StatContent>
+                <StatNumber>{inscricoes.length}</StatNumber>
+                <StatLabel>Total de inscrições</StatLabel>
+              </StatContent>
+            </StatCard>
+          </Stats>
+        </Header>
 
         <FilterContainer>
-          {["Manhã", "Tarde", "Noite"].map((item) => (
+          {[
+            {
+              nome: "Manhã",
+              quantidade: totalManha,
+            },
+            {
+              nome: "Tarde",
+              quantidade: totalTarde,
+            },
+            {
+              nome: "Noite",
+              quantidade: totalNoite,
+            },
+          ].map((item) => (
             <FilterButton
-              key={item}
-              $active={turno === item}
-              onClick={() => setTurno(item)}
+              key={item.nome}
+              $active={turno === item.nome}
+              onClick={() => setTurno(item.nome)}
             >
-              {item}
+              <span>{item.nome}</span>
+
+              <strong>{item.quantidade}</strong>
             </FilterButton>
           ))}
         </FilterContainer>
 
         {erro && (
-          <p style={{ color: "red", textAlign: "center", marginBottom: "15px" }}>
-            {erro}
-          </p>
+          <ErrorMessage>
+            <FiAlertTriangle />
+            <span>{erro}</span>
+          </ErrorMessage>
         )}
 
         {carregando ? (
-          <p style={{ textAlign: "center" }}>Carregando inscrições...</p>
+          <LoadingState>
+            <Spinner />
+            <span>Carregando inscrições...</span>
+          </LoadingState>
         ) : (
-
           <TableContainer>
+            <TableHeader>
+              <TableHeaderInfo>
+                <TableTitle>
+                  Alunos inscritos
+                </TableTitle>
 
-            <Table>
+                <TableDescription>
+                  {inscricoesFiltradas.length === 1
+                    ? "1 aluno encontrado"
+                    : `${inscricoesFiltradas.length} alunos encontrados`}
+                </TableDescription>
+              </TableHeaderInfo>
+            </TableHeader>
 
-              <thead>
-                <tr>
-                  <th>Nome do poeta</th>
-                  <th>Turma</th>
-                  <th>Curso</th>
-                  <th>Turno</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {inscricoesFiltradas.map((inscricao) => (
-                  <tr key={inscricao.id_inscricoes}>
-
-                    <td>{inscricao.nome_poeta}</td>
-                    <td>{inscricao.turma}</td>
-                    <td>{inscricao.curso}</td>
-                    <td>{inscricao.turno}</td>
-
-                    <td>
-                      <Actions>
-
-                        <FiEdit
-                          onClick={() => setInscricaoEditando({ ...inscricao })}
-                        />
-
-                        <FiTrash2
-                          onClick={() => {
-                            setInscricaoExcluir(inscricao);
-                            setConfirmacaoExclusao("");
-                          }}
-                        />
-
-                      </Actions>
-                    </td>
-
-                  </tr>
-                ))}
-
-                {inscricoesFiltradas.length === 0 && (
+            <TableWrapper>
+              <Table>
+                <thead>
                   <tr>
-                    <td colSpan={5} style={{ textAlign: "center", padding: "20px" }}>
-                      Nenhuma inscrição para esse turno.
-                    </td>
+                    <th>Aluno</th>
+                    <th>Turma</th>
+                    <th>Curso</th>
+                    <th>Turno</th>
+                    <th>Ações</th>
                   </tr>
-                )}
-              </tbody>
+                </thead>
 
-            </Table>
+                <tbody>
+                  {inscricoesFiltradas.map((inscricao) => (
+                    <tr key={inscricao.id_inscricoes}>
+                      <td>
+                        <StudentCell>
+                          <StudentAvatar>
+                            {obterInicial(inscricao.nome_poeta)}
+                          </StudentAvatar>
 
+                          <StudentInfo>
+                            <StudentName>
+                              {inscricao.nome_poeta}
+                            </StudentName>
+                          </StudentInfo>
+                        </StudentCell>
+                      </td>
+
+                      <td>
+                        <Badge>
+                          {inscricao.turma}
+                        </Badge>
+                      </td>
+
+                      <td>
+                        <Badge $type="course">
+                          <FiBookOpen />
+                          {inscricao.curso}
+                        </Badge>
+                      </td>
+
+                      <td>
+                        <TurnoBadge $turno={inscricao.turno}>
+                          <span />
+                          {inscricao.turno}
+                        </TurnoBadge>
+                      </td>
+
+                      <td>
+                        <Actions>
+                          <ActionButton
+                            type="button"
+                            $variant="edit"
+                            title="Editar inscrição"
+                            aria-label={`Editar ${inscricao.nome_poeta}`}
+                            onClick={() => abrirEdicao(inscricao)}
+                          >
+                            <FiEdit />
+                          </ActionButton>
+
+                          <ActionButton
+                            type="button"
+                            $variant="delete"
+                            title="Excluir inscrição"
+                            aria-label={`Excluir ${inscricao.nome_poeta}`}
+                            onClick={() => abrirExclusao(inscricao)}
+                          >
+                            <FiTrash2 />
+                          </ActionButton>
+                        </Actions>
+                      </td>
+                    </tr>
+                  ))}
+
+                  {inscricoesFiltradas.length === 0 && (
+                    <tr>
+                      <td colSpan={5}>
+                        <EmptyState>
+                          <EmptyIcon>
+                            <FiSearch />
+                          </EmptyIcon>
+
+                          <EmptyTitle>
+                            Nenhuma inscrição encontrada
+                          </EmptyTitle>
+
+                          <EmptyText>
+                            Não existem alunos inscritos no
+                            turno da {turno.toLowerCase()}.
+                          </EmptyText>
+                        </EmptyState>
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </Table>
+            </TableWrapper>
           </TableContainer>
-
         )}
-
       </Content>
 
-
-      {/* ============================================================
-          MODAL DE EDIÇÃO
-      ============================================================ */}
+      {/* MODAL DE EDIÇÃO */}
 
       {inscricaoEditando && (
-        <ModalOverlay>
+        <ModalOverlay
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) {
+              setInscricaoEditando(null);
+            }
+          }}
+        >
           <Modal>
+            <ModalHeader>
+              <div>
+                <ModalTitle>Editar inscrição</ModalTitle>
 
-            <h2>Editar inscrição</h2>
+                <ModalDescription>
+                  Atualize os dados do aluno abaixo.
+                </ModalDescription>
+              </div>
 
-            <Input
-              value={inscricaoEditando.nome_poeta}
-              onChange={(e) =>
-                setInscricaoEditando({ ...inscricaoEditando, nome_poeta: e.target.value })
-              }
-            />
+              <ModalClose
+                type="button"
+                onClick={() => setInscricaoEditando(null)}
+                aria-label="Fechar"
+              >
+                <FiX />
+              </ModalClose>
+            </ModalHeader>
 
-            <Select
-              value={inscricaoEditando.turma}
-              onChange={(e) =>
-                setInscricaoEditando({ ...inscricaoEditando, turma: e.target.value })
-              }
-            >
-              <option value="">Selecione a turma</option>
-              <option value="1º ano">1º ano</option>
-              <option value="2º ano">2º ano</option>
-              <option value="3º ano">3º ano</option>
-            </Select>
+            <Form>
+              <FormGroup>
+                <Label>Nome do aluno</Label>
 
-            <Select
-              value={inscricaoEditando.curso}
-              onChange={(e) =>
-                setInscricaoEditando({ ...inscricaoEditando, curso: e.target.value })
-              }
-            >
-              <option value="">Selecione o curso</option>
-              <option value="Informática">Informática</option>
-              <option value="Marketing">Marketing</option>
-              <option value="Administração">Administração</option>
-              <option value="Humanas">Humanas</option>
-            </Select>
+                <Input
+                  value={inscricaoEditando.nome_poeta || ""}
+                  onChange={(e) =>
+                    setInscricaoEditando({
+                      ...inscricaoEditando,
+                      nome_poeta: e.target.value,
+                    })
+                  }
+                  placeholder="Nome completo"
+                />
+              </FormGroup>
 
-            <Select
-              value={inscricaoEditando.turno}
-              onChange={(e) =>
-                setInscricaoEditando({ ...inscricaoEditando, turno: e.target.value })
-              }
-            >
-              <option>Manhã</option>
-              <option>Tarde</option>
-              <option>Noite</option>
-            </Select>
+              <FormGroup>
+                <Label>Turma</Label>
 
-            <ModalButtons>
+                <Select
+                  value={inscricaoEditando.turma || ""}
+                  onChange={(e) =>
+                    setInscricaoEditando({
+                      ...inscricaoEditando,
+                      turma: e.target.value,
+                    })
+                  }
+                >
+                  <option value="">
+                    Selecione a turma
+                  </option>
 
-              <CancelButton onClick={() => setInscricaoEditando(null)}>
-                Cancelar
-              </CancelButton>
+                  <option value="1º ano">1º ano</option>
+                  <option value="2º ano">2º ano</option>
+                  <option value="3º ano">3º ano</option>
+                </Select>
+              </FormGroup>
 
-              <SaveButton onClick={salvarEdicao}>
-                Salvar
-              </SaveButton>
+              <FormGroup>
+                <Label>Curso</Label>
 
-            </ModalButtons>
+                <Select
+                  value={inscricaoEditando.curso || ""}
+                  onChange={(e) =>
+                    setInscricaoEditando({
+                      ...inscricaoEditando,
+                      curso: e.target.value,
+                    })
+                  }
+                >
+                  <option value="">
+                    Selecione o curso
+                  </option>
 
+                  <option value="Informática">
+                    Informática
+                  </option>
+
+                  <option value="Marketing">
+                    Marketing
+                  </option>
+
+                  <option value="Administração">
+                    Administração
+                  </option>
+
+                  <option value="Humanas">
+                    Humanas
+                  </option>
+                </Select>
+              </FormGroup>
+
+              <FormGroup>
+                <Label>Turno</Label>
+
+                <Select
+                  value={inscricaoEditando.turno || ""}
+                  onChange={(e) =>
+                    setInscricaoEditando({
+                      ...inscricaoEditando,
+                      turno: e.target.value,
+                    })
+                  }
+                >
+                  <option value="Manhã">Manhã</option>
+                  <option value="Tarde">Tarde</option>
+                  <option value="Noite">Noite</option>
+                </Select>
+              </FormGroup>
+
+              <ModalButtons>
+                <CancelButton
+                  type="button"
+                  onClick={() => setInscricaoEditando(null)}
+                >
+                  Cancelar
+                </CancelButton>
+
+                <SaveButton
+                  type="button"
+                  onClick={salvarEdicao}
+                >
+                  Salvar alterações
+                </SaveButton>
+              </ModalButtons>
+            </Form>
           </Modal>
         </ModalOverlay>
       )}
 
-
-      {/* ============================================================
-          CONFIRMAÇÃO DE EXCLUSÃO
-      ============================================================ */}
+      {/* MODAL DE EXCLUSÃO */}
 
       {inscricaoExcluir && (
-        <ModalOverlay>
+        <ModalOverlay
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) {
+              fecharModalExclusao();
+            }
+          }}
+        >
           <Modal>
+            <ModalHeader>
+              <div>
+                <ModalTitle $danger>
+                  Excluir inscrição
+                </ModalTitle>
 
-            <h2>Excluir inscrição</h2>
+                <ModalDescription>
+                  Esta ação precisa ser confirmada.
+                </ModalDescription>
+              </div>
 
-            <p style={{ textAlign: "center", color: "#666", marginBottom: "5px" }}>
-              Tem certeza que deseja excluir a inscrição de{" "}
-              <strong>{inscricaoExcluir.nome_poeta}</strong>? O usuário voltará a ser aluno comum.
-            </p>
-
-            <p style={{ textAlign: "center", color: "#666", fontSize: "14px", marginBottom: "5px" }}>
-              Para confirmar, digite <strong>excluir</strong> abaixo:
-            </p>
-
-            <Input
-              type="text"
-              placeholder="Digite excluir"
-              value={confirmacaoExclusao}
-              onChange={(e) => setConfirmacaoExclusao(e.target.value)}
-            />
-
-            <ModalButtons>
-
-              <CancelButton
-                onClick={() => {
-                  setInscricaoExcluir(null);
-                  setConfirmacaoExclusao("");
-                }}
+              <ModalClose
+                type="button"
+                onClick={fecharModalExclusao}
+                aria-label="Fechar"
               >
-                Cancelar
-              </CancelButton>
+                <FiX />
+              </ModalClose>
+            </ModalHeader>
 
-              <ConfirmButton
-                onClick={excluirInscricao}
-                disabled={confirmacaoExclusao !== "excluir"}
-              >
-                Excluir
-              </ConfirmButton>
+            <WarningBox>
+              <FiAlertTriangle />
 
-            </ModalButtons>
+              <div>
+                <strong>Atenção</strong>
 
+                <p>
+                  Você está prestes a excluir a inscrição de{" "}
+                  <strong>
+                    {inscricaoExcluir.nome_poeta}
+                  </strong>
+                  . O usuário voltará a ser aluno comum.
+                </p>
+              </div>
+            </WarningBox>
+
+            <Form>
+              <FormGroup>
+                <Label>
+                  Digite <strong>excluir</strong> para confirmar
+                </Label>
+
+                <Input
+                  type="text"
+                  placeholder="Digite excluir"
+                  value={confirmacaoExclusao}
+                  onChange={(e) =>
+                    setConfirmacaoExclusao(e.target.value)
+                  }
+                  autoComplete="off"
+                />
+              </FormGroup>
+
+              <ModalButtons>
+                <CancelButton
+                  type="button"
+                  onClick={fecharModalExclusao}
+                >
+                  Cancelar
+                </CancelButton>
+
+                <ConfirmButton
+                  type="button"
+                  onClick={excluirInscricao}
+                  disabled={
+                    confirmacaoExclusao.toLowerCase() !==
+                    "excluir"
+                  }
+                >
+                  Excluir inscrição
+                </ConfirmButton>
+              </ModalButtons>
+            </Form>
           </Modal>
         </ModalOverlay>
       )}
-
     </Page>
-
   );
-
 }

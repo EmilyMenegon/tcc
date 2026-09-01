@@ -167,9 +167,21 @@ export default function Profile() {
           {erro && <p style={{ color: "red", fontSize: "0.9rem" }}>{erro}</p>}
           {sucesso && <p style={{ color: "#2e7d32", fontSize: "0.9rem" }}>{sucesso}</p>}
 
-          <SaveButton type="button" onClick={handleSalvar}>
-            Salvar alterações
-          </SaveButton>
+       <SaveButton
+  type="button"
+  onClick={handleSalvar}
+  onMouseMove={(e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    e.currentTarget.style.setProperty("--mouse-x", `${x}px`);
+    e.currentTarget.style.setProperty("--mouse-y", `${y}px`);
+  }}
+>
+  Salvar alterações
+</SaveButton>
 
           <LogoutLink onClick={() => setShowLogoutModal(true)}>
             Sair da conta
@@ -183,12 +195,44 @@ export default function Profile() {
               <h3>Sair da conta</h3>
               <p>Tem certeza que deseja sair da sua conta?</p>
               <ModalButtons>
-                <CancelButton onClick={() => setShowLogoutModal(false)}>
-                  Cancelar
-                </CancelButton>
-                <ConfirmButton onClick={handleLogout}>
-                  Sim, sair
-                </ConfirmButton>
+                <CancelButton
+  onClick={() => setShowLogoutModal(false)}
+  onMouseMove={(e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+
+    e.currentTarget.style.setProperty(
+      "--mouse-x",
+      `${e.clientX - rect.left}px`
+    );
+
+    e.currentTarget.style.setProperty(
+      "--mouse-y",
+      `${e.clientY - rect.top}px`
+    );
+  }}
+>
+  Cancelar
+</CancelButton>
+
+              <ConfirmButton
+  onClick={handleLogout}
+  onMouseMove={(e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+
+    e.currentTarget.style.setProperty(
+      "--mouse-x",
+      `${e.clientX - rect.left}px`
+    );
+
+    e.currentTarget.style.setProperty(
+      "--mouse-y",
+      `${e.clientY - rect.top}px`
+    );
+  }}
+>
+  Sair
+</ConfirmButton>
+
               </ModalButtons>
             </Modal>
           </ModalOverlay>

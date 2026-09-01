@@ -1,4 +1,23 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+/* =====================================================
+   CORES
+===================================================== */
+
+const COLORS = {
+  primary: "#831614",
+  primaryDark: "#65100f",
+  yellow: "#ffdb53",
+  yellowDark: "#e3b900",
+  background: "#fff",
+  white: "#ffffff",
+  text: "#1c1c1c",
+  muted: "#777777",
+  border: "#e8e8e8",
+  danger: "#d62828",
+  dangerDark: "#b71c1c",
+};
+
 
 /* =====================================================
    PAGE
@@ -6,10 +25,11 @@ import styled from "styled-components";
 
 export const Page = styled.div`
   min-height: 100vh;
-
   width: 100%;
 
   background: #fff;
+
+  color: ${COLORS.text};
 
   font-family: "Poppins", sans-serif;
 
@@ -23,58 +43,67 @@ export const Page = styled.div`
    CONTENT
 ===================================================== */
 
-export const Content = styled.div`
-  width: 90%;
+export const Content = styled.main`
+  width: min(94%, 1480px);
 
-  max-width: 1400px;
-
-  margin: 40px auto;
+  margin: 42px auto 70px;
 
   box-sizing: border-box;
 
-
-  /* =================================================
-     NOTEBOOK
-  ================================================= */
-
-  @media (max-width: 1200px) {
-    width: 92%;
-
-    margin: 35px auto;
-  }
-
-
-  /* =================================================
-     TABLET
-  ================================================= */
-
-  @media (max-width: 900px) {
+  @media (max-width: 1100px) {
     width: 94%;
-
-    margin: 30px auto;
+    margin-top: 35px;
   }
 
-
-  /* =================================================
-     CELULAR
-  ================================================= */
-
-  @media (max-width: 600px) {
+  @media (max-width: 700px) {
     width: 92%;
-
-    margin: 25px auto;
+    margin: 25px auto 45px;
   }
+`;
 
 
-  /* =================================================
-     CELULAR PEQUENO
-  ================================================= */
+/* =====================================================
+   HEADER
+===================================================== */
 
-  @media (max-width: 400px) {
-    width: 94%;
+export const Header = styled.header`
+  position: relative;
 
-    margin: 20px auto;
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 30px;
+
+  margin-bottom: 30px;
+
+  @media (max-width: 850px) {
+    flex-direction: column;
+
+    align-items: center;
+
+    text-align: center;
+
+    gap: 22px;
   }
+`;
+
+
+/* =====================================================
+   TITLE AREA
+===================================================== */
+
+export const TitleArea = styled.div`
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 8px;
+
+  text-align: center;
 `;
 
 
@@ -83,46 +112,177 @@ export const Content = styled.div`
 ===================================================== */
 
 export const Title = styled.h1`
-  text-align: center;
-
-  font-size: 35px;
-
-  margin: 0 0 30px;
+ margin: 0;
 
   color: #831614;
 
+  font-size:
+    clamp(
+      2rem,
+      4vw,
+      2.8rem
+    );
 
-  /* =================================================
-     TABLET
-  ================================================= */
+  font-weight: 700;
 
-  @media (max-width: 900px) {
-    font-size: 30px;
-
-    margin-bottom: 25px;
-  }
-
-
-  /* =================================================
-     CELULAR
-  ================================================= */
+  line-height: 1.2;
 
   @media (max-width: 600px) {
-    font-size: 25px;
+    font-size:
+      clamp(
+        1.8rem,
+        8vw,
+        2.2rem
+      );
+  }
+`;
 
-    line-height: 1.2;
 
-    margin-bottom: 20px;
+
+/* =====================================================
+   SUBTITLE
+===================================================== */
+
+export const Subtitle = styled.p`
+  margin: 0;
+
+  color: ${COLORS.muted};
+
+  font-size: 14px;
+
+  line-height: 1.5;
+
+  text-align: center;
+`;
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+export const Stats = styled.div`
+  position: absolute;
+
+  right: 0;
+  bottom: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  @media (max-width: 850px) {
+    position: static;
+
+    width: 100%;
+
+    justify-content: center;
   }
 
-
-  /* =================================================
-     CELULAR PEQUENO
-  ================================================= */
-
-  @media (max-width: 400px) {
-    font-size: 22px;
+  @media (max-width: 500px) {
+    width: 100%;
   }
+`;
+
+
+/* =====================================================
+   STAT CARD
+===================================================== */
+
+export const StatCard = styled.div`
+  min-width: 190px;
+
+  padding: 13px 16px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  background: ${COLORS.white};
+
+  border: 1px solid ${COLORS.border};
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 10px 18px rgba(0, 0, 0, 0.045);
+
+  @media (max-width: 500px) {
+    flex: 1;
+
+    min-width: 0;
+  }
+`;
+
+
+/* =====================================================
+   STAT ICON
+===================================================== */
+
+export const StatIcon = styled.div`
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background: ${({ $color }) => `${$color}12`};
+
+  color: ${({ $color }) => $color};
+
+  font-size: 20px;
+`;
+
+
+/* =====================================================
+   STAT CONTENT
+===================================================== */
+
+export const StatContent = styled.div`
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 1px;
+`;
+
+
+/* =====================================================
+   STAT NUMBER
+===================================================== */
+
+export const StatNumber = styled.strong`
+  color: #222;
+
+  font-size: 20px;
+
+  font-weight: 750;
+
+  line-height: 1.2;
+`;
+
+
+/* =====================================================
+   STAT LABEL
+===================================================== */
+
+export const StatLabel = styled.span`
+  color: #888;
+
+  font-size: 11px;
+
+  white-space: nowrap;
 `;
 
 
@@ -131,40 +291,33 @@ export const Title = styled.h1`
 ===================================================== */
 
 export const FilterContainer = styled.div`
-  display: flex;
+  width: fit-content;
 
-  justify-content: center;
+  max-width: 100%;
+
+  margin: 0 auto 25px;
+
+  padding: 5px;
+
+  display: flex;
 
   align-items: center;
 
-  gap: 15px;
+  justify-content: center;
 
-  margin-bottom: 25px;
+  gap: 5px;
 
-  flex-wrap: wrap;
+  background: #ffffff;
 
+  border: 1px solid #e6e6e6;
 
-  /* =================================================
-     TABLET
-  ================================================= */
+  border-radius: 13px;
 
-  @media (max-width: 900px) {
-    gap: 10px;
-
-    margin-bottom: 22px;
-  }
-
-
-  /* =================================================
-     CELULAR
-  ================================================= */
+  box-shadow:
+    0 5px 18px rgba(0, 0, 0, 0.045);
 
   @media (max-width: 600px) {
     width: 100%;
-
-    gap: 8px;
-
-    margin-bottom: 20px;
   }
 `;
 
@@ -174,125 +327,310 @@ export const FilterContainer = styled.div`
 ===================================================== */
 
 export const FilterButton = styled.button`
-  padding: 12px 30px;
+  min-width: 125px;
+
+  height: 43px;
+
+  padding: 0 16px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
 
   border: none;
 
-  border-radius: 8px;
+  border-radius: 9px;
 
-  cursor: pointer;
+  background: ${({ $active }) =>
+    $active ? COLORS.primary : "transparent"};
 
-  transition: 0.3s;
+  color: ${({ $active }) =>
+    $active ? "#ffffff" : "#666666"};
 
   font-family: inherit;
 
-  font-size: 15px;
+  font-size: 13px;
 
-  background: ${({ $active }) =>
-    $active ? "#ffdb53" : "#ddd"};
+  font-weight: 650;
 
-  color: ${({ $active }) =>
-    $active ? "#fff" : "#333"};
+  cursor: pointer;
 
+  transition:
+    background 0.22s ease,
+    color 0.22s ease,
+    transform 0.18s ease;
+
+  strong {
+    min-width: 21px;
+    height: 21px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: ${({ $active }) =>
+      $active ? "rgba(255,255,255,0.16)" : "#f1f1f1"};
+
+    color: ${({ $active }) =>
+      $active ? "#ffffff" : "#777777"};
+
+    font-size: 10px;
+
+    font-weight: 700;
+  }
 
   &:hover {
-    background: #ffdb53;
+    background: ${({ $active }) =>
+      $active ? COLORS.primaryDark : "#fff7d8"};
 
-    color: white;
+    color: ${({ $active }) =>
+      $active ? "#ffffff" : COLORS.primary};
+
+    transform: translateY(-1px);
   }
 
-
-  /* =================================================
-     TABLET
-  ================================================= */
-
-  @media (max-width: 900px) {
-    padding: 11px 25px;
-
-    font-size: 14px;
+  &:active {
+    transform: scale(0.97);
   }
 
+  &:focus {
+    outline: none;
+  }
 
-  /* =================================================
-     CELULAR
-  ================================================= */
+  &:focus-visible {
+    outline: 2px solid ${COLORS.yellow};
+
+    outline-offset: 2px;
+  }
 
   @media (max-width: 600px) {
     flex: 1;
 
-    min-width: 90px;
+    min-width: 0;
 
-    padding: 11px 15px;
+    height: 41px;
 
-    font-size: 14px;
-  }
+    padding: 0 8px;
 
-
-  /* =================================================
-     CELULAR PEQUENO
-  ================================================= */
-
-  @media (max-width: 400px) {
-    min-width: 80px;
-
-    padding: 10px 8px;
-
-    font-size: 13px;
+    font-size: 12px;
   }
 `;
 
 
 /* =====================================================
-   TABELA
+   ERROR
 ===================================================== */
 
-export const TableContainer = styled.div`
+export const ErrorMessage = styled.div`
   width: 100%;
 
-  background: white;
+  max-width: 700px;
 
-  border-radius: 15px;
+  margin: 0 auto 20px;
+
+  padding: 13px 16px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 9px;
+
+  box-sizing: border-box;
+
+  background: #fff1f1;
+
+  border: 1px solid #ffd2d2;
+
+  border-radius: 10px;
+
+  color: ${COLORS.danger};
+
+  font-size: 13px;
+
+  text-align: center;
+
+  svg {
+    flex-shrink: 0;
+
+    font-size: 17px;
+  }
+`;
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+export const LoadingState = styled.div`
+  min-height: 300px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  flex-direction: column;
+
+  gap: 13px;
+
+  color: #777;
+
+  font-size: 13px;
+`;
+
+
+/* =====================================================
+   SPINNER
+===================================================== */
+
+const spin = keyframes`
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+export const Spinner = styled.div`
+  width: 30px;
+  height: 30px;
+
+  border: 3px solid #eeeeee;
+
+  border-top-color: ${COLORS.primary};
+
+  border-radius: 50%;
+
+  animation: ${spin} 0.8s linear infinite;
+`;
+
+
+/* =====================================================
+   TABLE CONTAINER
+===================================================== */
+
+export const TableContainer = styled.section`
+  width: 100%;
+
+  background: #ffffff;
+
+  border: 1px solid ${COLORS.border};
+
+  border-radius: 18px;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.065);
+`;
+
+
+/* =====================================================
+   TABLE HEADER
+===================================================== */
+
+export const TableHeader = styled.div`
+  min-height: 76px;
+
+  padding: 18px 24px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  box-sizing: border-box;
+
+  border-bottom: 1px solid #eeeeee;
+
+  @media (max-width: 600px) {
+    padding: 16px 17px;
+
+    min-height: 68px;
+  }
+`;
+
+
+/* =====================================================
+   TABLE HEADER INFO
+===================================================== */
+
+export const TableHeaderInfo = styled.div`
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 3px;
+`;
+
+
+/* =====================================================
+   TABLE TITLE
+===================================================== */
+
+export const TableTitle = styled.h2`
+  margin: 0;
+
+  color: #252525;
+
+  font-size: 17px;
+
+  font-weight: 700;
+`;
+
+
+/* =====================================================
+   TABLE DESCRIPTION
+===================================================== */
+
+export const TableDescription = styled.p`
+  margin: 0;
+
+  color: #999999;
+
+  font-size: 12px;
+`;
+
+
+/* =====================================================
+   TABLE WRAPPER
+===================================================== */
+
+export const TableWrapper = styled.div`
+  width: 100%;
 
   overflow-x: auto;
 
-  overflow-y: hidden;
-
-  box-shadow:
-    0 5px 15px
-    rgba(0, 0, 0, 0.1);
-
   -webkit-overflow-scrolling: touch;
 
+  scrollbar-width: thin;
 
-  /* =================================================
-     SCROLLBAR
-  ================================================= */
+  scrollbar-color:
+    #d9b72c
+    #f5f5f5;
 
   &::-webkit-scrollbar {
     height: 7px;
   }
 
   &::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: #f5f5f5;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #ffdb53;
+    background: #e1c33a;
 
-    border-radius: 10px;
+    border-radius: 20px;
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background: #d9a500;
-  }
-
-
-  /* =================================================
-     CELULAR
-  ================================================= */
-
-  @media (max-width: 600px) {
-    border-radius: 12px;
+    background: #c9aa1f;
   }
 `;
 
@@ -304,122 +642,486 @@ export const TableContainer = styled.div`
 export const Table = styled.table`
   width: 100%;
 
-  min-width: 700px;
+  min-width: 850px;
 
   border-collapse: collapse;
 
+  table-layout: fixed;
 
   thead {
-    background: #831614;
-
-    color: white;
+    background:
+      linear-gradient(
+        135deg,
+        #8d1a18,
+        #741311
+      );
   }
 
+  th {
+    height: 52px;
 
-  th,
-  td {
-    padding: 15px;
+    padding: 0 22px;
+
+    color: #ffffff;
 
     text-align: left;
 
+    font-size: 11px;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.7px;
+
     white-space: nowrap;
-  }
 
-
-  th {
-    font-weight: 600;
-  }
-
-
-  tbody tr:nth-child(even) {
-    background: #f8f8f8;
-  }
-
-
-  tbody tr:hover {
-    background: #fff6d1;
-  }
-
-
-  /* =================================================
-     TABLET
-  ================================================= */
-
-  @media (max-width: 900px) {
-    min-width: 650px;
-
-
-    th,
-    td {
-      padding: 13px;
-
-      font-size: 14px;
+    &:last-child {
+      text-align: center;
     }
   }
 
+  td {
+    height: 72px;
 
-  /* =================================================
-     CELULAR
-  ================================================= */
+    padding: 10px 22px;
+
+    color: #333333;
+
+    font-size: 13px;
+
+    border-bottom: 1px solid #eeeeee;
+
+    vertical-align: middle;
+
+    white-space: nowrap;
+
+    transition:
+      background 0.2s ease;
+  }
+
+  tbody tr {
+    background: #ffffff;
+
+    transition:
+      background 0.2s ease;
+  }
+
+  tbody tr:nth-child(even) {
+    background: #fdfdfd;
+  }
+
+  tbody tr:hover {
+    background: #fffbed;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  th:nth-child(1),
+  td:nth-child(1) {
+    width: 31%;
+  }
+
+  th:nth-child(2),
+  td:nth-child(2) {
+    width: 15%;
+  }
+
+  th:nth-child(3),
+  td:nth-child(3) {
+    width: 22%;
+  }
+
+  th:nth-child(4),
+  td:nth-child(4) {
+    width: 17%;
+  }
+
+  th:nth-child(5),
+  td:nth-child(5) {
+    width: 15%;
+  }
+
+  @media (max-width: 900px) {
+    min-width: 800px;
+
+    th {
+      padding: 0 16px;
+    }
+
+    td {
+      padding: 9px 16px;
+    }
+  }
 
   @media (max-width: 600px) {
-    min-width: 620px;
+    min-width: 760px;
 
+    th {
+      height: 48px;
 
-    th,
+      padding: 0 13px;
+
+      font-size: 10px;
+    }
+
     td {
-      padding: 12px 10px;
+      height: 66px;
 
-      font-size: 13px;
+      padding: 8px 13px;
+
+      font-size: 12px;
     }
   }
 `;
 
 
 /* =====================================================
-   AÇÕES
+   STUDENT CELL
+===================================================== */
+
+export const StudentCell = styled.div`
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+  min-width: 0;
+`;
+
+
+/* =====================================================
+   STUDENT AVATAR
+===================================================== */
+
+export const StudentAvatar = styled.div`
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      ${COLORS.yellow},
+      #f5c62d
+    );
+
+  color: #5e4900;
+
+  font-size: 14px;
+
+  font-weight: 750;
+
+  box-shadow:
+    inset 0 0 0 1px
+    rgba(0, 0, 0, 0.04);
+`;
+
+
+/* =====================================================
+   STUDENT INFO
+===================================================== */
+
+export const StudentInfo = styled.div`
+  min-width: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 2px;
+`;
+
+
+/* =====================================================
+   STUDENT NAME
+===================================================== */
+
+export const StudentName = styled.span`
+  display: block;
+
+  max-width: 250px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  color: #222;
+
+  font-size: 13px;
+
+  font-weight: 650;
+
+  line-height: 1.3;
+`;
+
+
+/* =====================================================
+   BADGE
+===================================================== */
+
+export const Badge = styled.span`
+  min-height: 28px;
+
+  padding: 0 10px;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  border-radius: 7px;
+
+  background: ${({ $type }) =>
+    $type === "course"
+      ? "#f4f4f5"
+      : "#fff8d9"};
+
+  color: ${({ $type }) =>
+    $type === "course"
+      ? "#555"
+      : "#735c00"};
+
+  border: 1px solid
+    ${({ $type }) =>
+      $type === "course"
+        ? "#e9e9ea"
+        : "#f2df8c"};
+
+  font-size: 11px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  svg {
+    font-size: 13px;
+  }
+`;
+
+
+/* =====================================================
+   TURNO BADGE
+===================================================== */
+
+export const TurnoBadge = styled.span`
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 7px;
+
+  color: #555;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  span {
+    width: 7px;
+    height: 7px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: ${({ $turno }) => {
+      if ($turno === "Manhã") return "#f0b900";
+      if ($turno === "Tarde") return "#e87927";
+      if ($turno === "Noite") return "#6256b7";
+
+      return "#999";
+    }};
+  }
+`;
+
+
+/* =====================================================
+   ACTIONS
 ===================================================== */
 
 export const Actions = styled.div`
   display: flex;
 
   align-items: center;
+  justify-content: center;
 
-  gap: 15px;
+  gap: 14px;
+`;
 
+
+/* =====================================================
+   ACTION BUTTON
+   SEM FUNDO
+   SEM BORDA
+===================================================== */
+
+export const ActionButton = styled.button`
+  width: 32px;
+  height: 32px;
+
+  padding: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  background: transparent;
+
+  border: none;
+
+  border-radius: 0;
+
+  color: ${({ $variant }) =>
+    $variant === "delete"
+      ? "#d62828"
+      : "#831614"};
+
+  cursor: pointer;
+
+  box-shadow: none;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease,
+    opacity 0.2s ease;
+
+  appearance: none;
 
   svg {
-    cursor: pointer;
+    width: 18px;
+    height: 18px;
 
-    font-size: 20px;
-
-    color: #555;
-
-    transition: 0.2s;
-
-    flex-shrink: 0;
+    stroke-width: 2;
   }
 
+  &:hover {
+    background: transparent;
 
-  svg:hover {
-    color: #ffdb53;
+    color: ${({ $variant }) =>
+      $variant === "delete"
+        ? "#a91515"
+        : "#5f0d0c"};
 
-    transform: scale(1.2);
+    transform: translateY(-2px) scale(1.08);
+
+    box-shadow: none;
   }
 
+  &:active {
+    background: transparent;
 
-  /* =================================================
-     CELULAR
-  ================================================= */
+    transform: scale(0.9);
 
-  @media (max-width: 600px) {
-    gap: 12px;
-
-
-    svg {
-      font-size: 19px;
-    }
+    box-shadow: none;
   }
+
+  &:focus {
+    outline: none;
+
+    background: transparent;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${COLORS.yellow};
+
+    outline-offset: 3px;
+
+    border-radius: 5px;
+  }
+`;
+
+
+/* =====================================================
+   EMPTY STATE
+===================================================== */
+
+export const EmptyState = styled.div`
+  min-height: 250px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 35px 20px;
+
+  text-align: center;
+`;
+
+
+/* =====================================================
+   EMPTY ICON
+===================================================== */
+
+export const EmptyIcon = styled.div`
+  width: 58px;
+  height: 58px;
+
+  margin-bottom: 15px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #fff8d9;
+
+  color: #b18a00;
+
+  font-size: 24px;
+`;
+
+
+/* =====================================================
+   EMPTY TITLE
+===================================================== */
+
+export const EmptyTitle = styled.h3`
+  margin: 0 0 5px;
+
+  color: #333;
+
+  font-size: 15px;
+
+  font-weight: 700;
+`;
+
+
+/* =====================================================
+   EMPTY TEXT
+===================================================== */
+
+export const EmptyText = styled.p`
+  max-width: 400px;
+
+  margin: 0;
+
+  color: #999;
+
+  font-size: 12px;
+
+  line-height: 1.5;
 `;
 
 
@@ -432,25 +1134,20 @@ export const ModalOverlay = styled.div`
 
   inset: 0;
 
-  width: 100%;
-
-  height: 100%;
+  z-index: 9999;
 
   padding: 20px;
 
-  box-sizing: border-box;
-
-  background: rgba(0, 0, 0, 0.45);
-
   display: flex;
 
+  align-items: center;
   justify-content: center;
 
-  align-items: center;
+  box-sizing: border-box;
 
-  z-index: 9999;
+  background: rgba(20, 15, 15, 0.58);
 
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(7px);
 
   overflow-y: auto;
 `;
@@ -460,10 +1157,28 @@ export const ModalOverlay = styled.div`
    MODAL
 ===================================================== */
 
-export const Modal = styled.div`
-  width: 450px;
+const modalAppear = keyframes`
+  from {
+    opacity: 0;
 
-  max-width: 100%;
+    transform:
+      translateY(16px)
+      scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+`;
+
+export const Modal = styled.div`
+  width: 100%;
+
+  max-width: 470px;
 
   max-height: calc(100vh - 40px);
 
@@ -471,146 +1186,172 @@ export const Modal = styled.div`
 
   box-sizing: border-box;
 
-  background: white;
+  padding: 28px;
+
+  background: #ffffff;
+
+  border: 1px solid rgba(255, 255, 255, 0.8);
 
   border-radius: 20px;
 
-  padding: 30px;
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 15px;
-
   box-shadow:
-    0 20px 45px
-    rgba(0, 0, 0, 0.2);
+    0 30px 80px rgba(0, 0, 0, 0.25);
 
-  animation: aparecer 0.25s ease;
-
-
-  h2,
-  h3 {
-    margin: 0 0 10px;
-
-    color: #111;
-
-    font-size: 24px;
-
-    text-align: center;
-  }
-
-
-  p {
-    margin: 0 0 15px;
-
-    color: #666;
-
-    text-align: center;
-
-    line-height: 1.5;
-  }
-
-
-  input,
-  select {
-    width: 100%;
-
-    box-sizing: border-box;
-  }
-
-
-  @keyframes aparecer {
-    from {
-      opacity: 0;
-
-      transform: scale(0.9);
-    }
-
-    to {
-      opacity: 1;
-
-      transform: scale(1);
-    }
-  }
-
-
-  /* =================================================
-     TABLET
-  ================================================= */
+  animation:
+    ${modalAppear}
+    0.25s
+    cubic-bezier(0.22, 1, 0.36, 1);
 
   @media (max-width: 600px) {
-    width: 100%;
+    padding: 23px 19px;
 
-    padding: 25px;
-
-    border-radius: 16px;
-
-
-    h2,
-    h3 {
-      font-size: 21px;
-    }
-  }
-
-
-  /* =================================================
-     CELULAR PEQUENO
-  ================================================= */
-
-  @media (max-width: 400px) {
-    padding: 20px;
-
-    gap: 12px;
-
-
-    h2,
-    h3 {
-      font-size: 19px;
-    }
+    border-radius: 17px;
   }
 `;
 
 
 /* =====================================================
-   MODAL BOX
+   MODAL HEADER
 ===================================================== */
 
-export const ModalBox = styled.div`
-  width: 450px;
+export const ModalHeader = styled.div`
+  display: flex;
 
-  max-width: 100%;
+  align-items: flex-start;
+  justify-content: space-between;
 
-  box-sizing: border-box;
+  gap: 15px;
 
-  background: white;
+  margin-bottom: 22px;
+`;
 
-  padding: 35px;
 
-  border-radius: 20px;
+/* =====================================================
+   MODAL TITLE
+===================================================== */
 
+export const ModalTitle = styled.h2`
+  margin: 0 0 5px;
+
+  color: ${({ $danger }) =>
+    $danger ? COLORS.danger : COLORS.primary};
+
+  font-size: 21px;
+
+  font-weight: 750;
+
+  line-height: 1.2;
+`;
+
+
+/* =====================================================
+   MODAL DESCRIPTION
+===================================================== */
+
+export const ModalDescription = styled.p`
+  margin: 0;
+
+  color: #999;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+`;
+
+
+/* =====================================================
+   MODAL CLOSE
+===================================================== */
+
+export const ModalClose = styled.button`
+  width: 32px;
+  height: 32px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  color: #888;
+
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    background: #f4f4f4;
+
+    color: #222;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${COLORS.yellow};
+
+    outline-offset: 2px;
+  }
+`;
+
+
+/* =====================================================
+   FORM
+===================================================== */
+
+export const Form = styled.div`
   display: flex;
 
   flex-direction: column;
 
   gap: 15px;
+`;
 
 
-  h2 {
-    text-align: center;
-  }
+/* =====================================================
+   FORM GROUP
+===================================================== */
+
+export const FormGroup = styled.div`
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 7px;
+`;
 
 
-  @media (max-width: 600px) {
-    width: 100%;
+/* =====================================================
+   LABEL
+===================================================== */
 
-    padding: 25px;
-  }
+export const Label = styled.label`
+  color: #444;
 
+  font-size: 12px;
 
-  @media (max-width: 400px) {
-    padding: 20px;
+  font-weight: 650;
+
+  strong {
+    color: ${COLORS.danger};
   }
 `;
 
@@ -622,36 +1363,47 @@ export const ModalBox = styled.div`
 export const Input = styled.input`
   width: 100%;
 
+  min-height: 47px;
+
+  padding: 0 14px;
+
   box-sizing: border-box;
 
-  padding: 14px;
+  border: 1px solid #dedede;
 
   border-radius: 10px;
 
-  border: 1px solid #ddd;
+  background: #fafafa;
 
-  font-size: 15px;
+  color: #222;
 
   font-family: inherit;
 
+  font-size: 13px;
+
   outline: none;
 
-  transition: 0.2s;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 
-
-  &:focus {
-    border-color: #ffdb53;
-
-    box-shadow:
-      0 0 0 2px
-      rgba(249, 190, 6, 0.15);
+  &::placeholder {
+    color: #aaa;
   }
 
+  &:hover {
+    border-color: #cfcfcf;
+  }
 
-  @media (max-width: 600px) {
-    padding: 12px;
+  &:focus {
+    border-color: ${COLORS.yellowDark};
 
-    font-size: 14px;
+    background: #ffffff;
+
+    box-shadow:
+      0 0 0 3px
+      rgba(255, 219, 83, 0.16);
   }
 `;
 
@@ -663,176 +1415,292 @@ export const Input = styled.input`
 export const Select = styled.select`
   width: 100%;
 
+  min-height: 47px;
+
+  padding: 0 14px;
+
   box-sizing: border-box;
 
-  padding: 14px;
+  border: 1px solid #dedede;
 
   border-radius: 10px;
 
-  border: 1px solid #ddd;
+  background: #fafafa;
 
-  font-size: 15px;
+  color: #222;
 
   font-family: inherit;
 
-  background: white;
+  font-size: 13px;
 
   outline: none;
 
   cursor: pointer;
 
-  transition: 0.2s;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 
-
-  &:focus {
-    border-color: #ffdb53;
-
-    box-shadow:
-      0 0 0 2px
-      rgba(249, 190, 6, 0.15);
+  &:hover {
+    border-color: #cfcfcf;
   }
 
+  &:focus {
+    border-color: ${COLORS.yellowDark};
 
-  @media (max-width: 600px) {
-    padding: 12px;
+    background: #ffffff;
 
-    font-size: 14px;
+    box-shadow:
+      0 0 0 3px
+      rgba(255, 219, 83, 0.16);
   }
 `;
 
 
 /* =====================================================
-   BOTÕES DO MODAL
+   MODAL BUTTONS
 ===================================================== */
 
 export const ModalButtons = styled.div`
   display: flex;
 
-  justify-content: center;
-
   align-items: center;
 
-  gap: 15px;
+  justify-content: flex-end;
 
-  width: 100%;
+  gap: 9px;
 
+  margin-top: 8px;
 
-  @media (max-width: 400px) {
-    flex-direction: column;
+  @media (max-width: 430px) {
+    flex-direction: column-reverse;
 
-    gap: 10px;
+    width: 100%;
   }
 `;
 
 
 /* =====================================================
-   SALVAR
+   SAVE BUTTON
 ===================================================== */
 
 export const SaveButton = styled.button`
-  flex: 1;
+  min-height: 45px;
 
-  padding: 14px;
+  padding: 0 20px;
 
   border: none;
 
-  border-radius: 10px;
+  border-radius: 9px;
 
-  background: #ffdb53;
+  background: ${COLORS.primary};
 
-  color: #111;
-
-  font-weight: bold;
+  color: #ffffff;
 
   font-family: inherit;
 
+  font-size: 13px;
+
+  font-weight: 700;
+
   cursor: pointer;
 
-  transition: 0.2s;
-
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:hover {
-    background: #000;
+    background: ${COLORS.primaryDark};
 
-    color: #ffdb53;
+    transform: translateY(-2px);
+
+    box-shadow:
+      0 7px 16px
+      rgba(131, 22, 20, 0.2);
   }
 
+  &:active {
+    transform: scale(0.97);
+  }
 
-  @media (max-width: 400px) {
+  &:focus {
+    outline: none;
+  }
+
+  @media (max-width: 430px) {
     width: 100%;
   }
 `;
 
 
 /* =====================================================
-   CANCELAR
+   CANCEL BUTTON
 ===================================================== */
 
 export const CancelButton = styled.button`
-  padding: 12px 22px;
+  min-height: 45px;
 
-  border: none;
+  padding: 0 19px;
 
-  border-radius: 10px;
+  border: 1px solid #dedede;
 
-  background: #ececec;
+  border-radius: 9px;
 
-  color: #111;
+  background: #ffffff;
 
-  font-weight: 600;
+  color: #555;
 
   font-family: inherit;
 
+  font-size: 13px;
+
+  font-weight: 600;
+
   cursor: pointer;
 
-  transition: 0.2s;
-
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 
   &:hover {
-    background: #d8d8d8;
+    background: #f5f5f5;
+
+    border-color: #d2d2d2;
+
+    transform: translateY(-2px);
   }
 
+  &:active {
+    transform: scale(0.97);
+  }
 
-  @media (max-width: 400px) {
+  &:focus {
+    outline: none;
+  }
+
+  @media (max-width: 430px) {
     width: 100%;
-
-    padding: 13px;
   }
 `;
 
 
 /* =====================================================
-   CONFIRMAR EXCLUSÃO
+   CONFIRM BUTTON
 ===================================================== */
 
 export const ConfirmButton = styled.button`
-  padding: 12px 22px;
+  min-height: 45px;
+
+  padding: 0 19px;
 
   border: none;
 
-  border-radius: 10px;
+  border-radius: 9px;
 
-  background: #d62828;
+  background: ${COLORS.danger};
 
-  color: white;
-
-  font-weight: 600;
+  color: #ffffff;
 
   font-family: inherit;
 
+  font-size: 13px;
+
+  font-weight: 700;
+
   cursor: pointer;
 
-  transition: 0.2s;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
 
+  &:hover:not(:disabled) {
+    background: ${COLORS.dangerDark};
 
-  &:hover {
-    background: #b71c1c;
+    transform: translateY(-2px);
+
+    box-shadow:
+      0 7px 16px
+      rgba(214, 40, 40, 0.2);
   }
 
+  &:active:not(:disabled) {
+    transform: scale(0.97);
+  }
 
-  @media (max-width: 400px) {
+  &:disabled {
+    opacity: 0.4;
+
+    cursor: not-allowed;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  @media (max-width: 430px) {
     width: 100%;
+  }
+`;
 
-    padding: 13px;
+
+/* =====================================================
+   WARNING BOX
+===================================================== */
+
+export const WarningBox = styled.div`
+  margin-bottom: 4px;
+
+  padding: 14px;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 11px;
+
+  box-sizing: border-box;
+
+  background: #fff6f6;
+
+  border: 1px solid #ffd9d9;
+
+  border-radius: 11px;
+
+  color: ${COLORS.danger};
+
+  svg {
+    width: 19px;
+    height: 19px;
+
+    flex-shrink: 0;
+
+    margin-top: 2px;
+  }
+
+  strong {
+    color: ${COLORS.danger};
+
+    font-size: 12px;
+  }
+
+  p {
+    margin: 3px 0 0;
+
+    color: #777;
+
+    font-size: 11px;
+
+    line-height: 1.55;
+  }
+
+  p strong {
+    color: #555;
+
+    font-size: 11px;
   }
 `;

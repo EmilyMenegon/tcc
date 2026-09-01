@@ -16,41 +16,32 @@ import {
   Header,
   Title,
   Subtitle,
-
   Mural,
-
   EmptyState,
   EmptyIcon,
   EmptyTitle,
   EmptyText,
-
   PostIt,
   PostItPin,
   PostItTitle,
   PostItMessage,
   PostItFooter,
   ReadMore,
-
   FloatingButton,
-
   CreateOverlay,
   CreateModal,
   CreateHeader,
   CreateTitle,
   CreateCloseButton,
-
   CreateForm,
   Field,
   Label,
   TitleInput,
   DescriptionInput,
-
   ColorLabel,
   ColorOptions,
   ColorOption,
-
   CreateButton,
-
   ViewOverlay,
   ViewPostIt,
   ViewPostItPin,
@@ -61,7 +52,6 @@ import {
   ViewContent,
   ViewTitle,
   ViewDescription,
-
   DeleteOverlay,
   DeleteModal,
   ModalButtons,
@@ -85,52 +75,25 @@ const MURAL_EVENT = "muralPostItsUpdated";
 
 export default function Muraladm() {
 
-  // ===================================================
-  // POSTS
-  // ===================================================
-
   const [posts, setPosts] = useState([]);
-
-
-  // ===================================================
-  // MODAL CRIAR / EDITAR
-  // ===================================================
 
   const [showCreateModal, setShowCreateModal] =
     useState(false);
 
-
-  // ===================================================
-  // POST SELECIONADO
-  // ===================================================
-
   const [postSelecionado, setPostSelecionado] =
     useState(null);
-
-
-  // ===================================================
-  // POST SENDO EDITADO
-  // ===================================================
 
   const [postEditando, setPostEditando] =
     useState(null);
 
-
-  // ===================================================
-  // POST PARA EXCLUIR
-  // ===================================================
-
   const [postParaExcluir, setPostParaExcluir] =
     useState(null);
 
+  const [titulo, setTitulo] =
+    useState("");
 
-  // ===================================================
-  // FORMULÁRIO
-  // ===================================================
-
-  const [titulo, setTitulo] = useState("");
-
-  const [descricao, setDescricao] = useState("");
+  const [descricao, setDescricao] =
+    useState("");
 
   const [corSelecionada, setCorSelecionada] =
     useState("#fff176");
@@ -265,6 +228,39 @@ export default function Muraladm() {
     };
 
   }, []);
+
+
+  // ===================================================
+  // EFEITO DO MOUSE NOS BOTÕES
+  // ===================================================
+
+  const handleButtonMouseMove = (event) => {
+
+    const button =
+      event.currentTarget;
+
+    const rect =
+      button.getBoundingClientRect();
+
+    const x =
+      event.clientX - rect.left;
+
+    const y =
+      event.clientY - rect.top;
+
+
+    button.style.setProperty(
+      "--mouse-x",
+      `${x}px`
+    );
+
+
+    button.style.setProperty(
+      "--mouse-y",
+      `${y}px`
+    );
+
+  };
 
 
   // ===================================================
@@ -573,7 +569,6 @@ export default function Muraladm() {
 
     setPosts(novosPosts);
 
-
     setPostParaExcluir(null);
 
     setPostSelecionado(null);
@@ -665,8 +660,6 @@ export default function Muraladm() {
 
       <Content>
 
-        {/* HEADER */}
-
         <Header>
 
           <Title>
@@ -681,8 +674,6 @@ export default function Muraladm() {
 
         </Header>
 
-
-        {/* MURAL */}
 
         <Mural>
 
@@ -741,10 +732,8 @@ export default function Muraladm() {
                   onKeyDown={(event) => {
 
                     if (
-                      event.key ===
-                        "Enter" ||
-                      event.key ===
-                        " "
+                      event.key === "Enter" ||
+                      event.key === " "
                     ) {
 
                       event.preventDefault();
@@ -757,12 +746,8 @@ export default function Muraladm() {
 
                 >
 
-                  {/* PIN */}
-
                   <PostItPin />
 
-
-                  {/* TÍTULO */}
 
                   <PostItTitle>
 
@@ -770,8 +755,6 @@ export default function Muraladm() {
 
                   </PostItTitle>
 
-
-                  {/* MENSAGEM */}
 
                   <PostItMessage>
 
@@ -783,8 +766,6 @@ export default function Muraladm() {
 
                   </PostItMessage>
 
-
-                  {/* FOOTER */}
 
                   <PostItFooter>
 
@@ -807,7 +788,9 @@ export default function Muraladm() {
       </Content>
 
 
-      {/* BOTÃO + */}
+      {/* =================================================
+          BOTÃO FLUTUANTE
+      ================================================= */}
 
       <FloatingButton
 
@@ -817,13 +800,21 @@ export default function Muraladm() {
           abrirCriacao
         }
 
+        onMouseMove={
+          handleButtonMouseMove
+        }
+
         aria-label="Criar post it"
 
         title="Criar post it"
 
       >
 
-        <FiPlus />
+        <span className="buttonContent">
+
+          <FiPlus />
+
+        </span>
 
       </FloatingButton>
 
@@ -872,13 +863,21 @@ export default function Muraladm() {
                   fecharCriacao
                 }
 
+                onMouseMove={
+                  handleButtonMouseMove
+                }
+
                 aria-label="Fechar"
 
                 title="Fechar"
 
               >
 
-                <FiX />
+                <span className="buttonContent">
+
+                  <FiX />
+
+                </span>
 
               </CreateCloseButton>
 
@@ -1004,11 +1003,19 @@ export default function Muraladm() {
                   !titulo.trim()
                 }
 
+                onMouseMove={
+                  handleButtonMouseMove
+                }
+
               >
 
-                {postEditando
-                  ? "Salvar alterações"
-                  : "Criar post it"}
+                <span className="buttonContent">
+
+                  {postEditando
+                    ? "Salvar alterações"
+                    : "Criar post it"}
+
+                </span>
 
               </CreateButton>
 
@@ -1072,13 +1079,21 @@ export default function Muraladm() {
                   )
                 }
 
+                onMouseMove={
+                  handleButtonMouseMove
+                }
+
                 aria-label="Editar post it"
 
                 title="Editar"
 
               >
 
-                <FiEdit3 />
+                <span className="buttonContent">
+
+                  <FiEdit3 />
+
+                </span>
 
               </ViewEditButton>
 
@@ -1093,13 +1108,21 @@ export default function Muraladm() {
                   )
                 }
 
+                onMouseMove={
+                  handleButtonMouseMove
+                }
+
                 aria-label="Excluir post it"
 
                 title="Excluir"
 
               >
 
-                <FiTrash2 />
+                <span className="buttonContent">
+
+                  <FiTrash2 />
+
+                </span>
 
               </ViewDeleteButton>
 
@@ -1112,13 +1135,21 @@ export default function Muraladm() {
                   fecharPost
                 }
 
+                onMouseMove={
+                  handleButtonMouseMove
+                }
+
                 aria-label="Fechar post it"
 
                 title="Fechar"
 
               >
 
-                <FiX />
+                <span className="buttonContent">
+
+                  <FiX />
+
+                </span>
 
               </ViewCloseButton>
 
@@ -1186,8 +1217,18 @@ export default function Muraladm() {
                   cancelarExclusao
                 }
 
+                onMouseMove={
+                  handleButtonMouseMove
+                }
+
               >
-                Cancelar
+
+                <span className="buttonContent">
+
+                  Cancelar
+
+                </span>
+
               </CancelButton>
 
 
@@ -1199,8 +1240,18 @@ export default function Muraladm() {
                   confirmarExclusao
                 }
 
+                onMouseMove={
+                  handleButtonMouseMove
+                }
+
               >
-                Sim, excluir
+
+                <span className="buttonContent">
+
+                  Excluir
+
+                </span>
+
               </ConfirmButton>
 
             </ModalButtons>

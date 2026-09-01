@@ -1,4 +1,3 @@
-
 import styled from "styled-components";
 
 
@@ -169,7 +168,6 @@ export const Subtitle = styled.p`
 
 /* =====================================================
    MURAL
-   MESMAS DIMENSÕES DA GALLERY
 ===================================================== */
 
 export const Mural = styled.section`
@@ -337,7 +335,6 @@ export const EmptyText = styled.p`
 
 /* =====================================================
    POST IT
-   MESMA PROPORÇÃO DOS CARDS DA GALLERY
 ===================================================== */
 
 export const PostIt = styled.article`
@@ -419,8 +416,6 @@ export const PostIt = styled.article`
     box-shadow .25s ease;
 
 
-  /* faixa superior */
-
   &::before {
 
     content: "";
@@ -443,8 +438,6 @@ export const PostIt = styled.article`
 
   }
 
-
-  /* dobrinha */
 
   &::after {
 
@@ -528,7 +521,7 @@ export const PostIt = styled.article`
 
 
 /* =====================================================
-   PIN
+   POST IT PIN
 ===================================================== */
 
 export const PostItPin = styled.span`
@@ -692,10 +685,109 @@ export const ReadMore = styled.span`
 
 
 /* =====================================================
+   ANIMAÇÃO BASE DOS BOTÕES
+===================================================== */
+
+const ButtonEffect = `
+
+  position: relative;
+
+  overflow: hidden;
+
+  isolation: isolate;
+
+  --mouse-x: 50%;
+
+  --mouse-y: 50%;
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    background-color .2s ease,
+    color .2s ease;
+
+  &::before {
+
+    content: "";
+
+    position: absolute;
+
+    left:
+      var(--mouse-x);
+
+    top:
+      var(--mouse-y);
+
+    width: 20px;
+    height: 20px;
+
+    border-radius: 50%;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    transition:
+      transform .5s
+      cubic-bezier(
+        .16,
+        1,
+        .3,
+        1
+      );
+
+    z-index: 0;
+
+    pointer-events: none;
+
+  }
+
+  &:hover::before {
+
+    transform:
+      translate(-50%, -50%)
+      scale(18);
+
+  }
+
+  &:active {
+
+    transform:
+      translateY(1px)
+      scale(.97);
+
+    transition:
+      transform .06s ease;
+
+  }
+
+  .buttonContent {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+  }
+
+`;
+
+
+/* =====================================================
    BOTÃO +
 ===================================================== */
 
 export const FloatingButton = styled.button`
+
+  ${ButtonEffect}
 
   position: fixed;
 
@@ -706,12 +798,13 @@ export const FloatingButton = styled.button`
   width: 70px;
   height: 70px;
 
+  padding: 0;
+
   border: none;
 
   border-radius: 50%;
 
-  background:#ffdb53;
-;
+  background: #ffdb53;
 
   color: #111111;
 
@@ -733,9 +826,35 @@ export const FloatingButton = styled.button`
       .20
     );
 
-  transition: .2s;
-
   z-index: 100;
+
+
+  &::before {
+
+    background: #000000;
+
+  }
+
+
+  &:hover {
+
+    color: #ffdb53;
+
+    transform:
+      translateY(-4px);
+
+    box-shadow:
+      0
+      15px
+      30px
+      rgba(
+        0,
+        0,
+        0,
+        .28
+      );
+
+  }
 
 
   svg {
@@ -743,19 +862,8 @@ export const FloatingButton = styled.button`
     width: 30px;
     height: 30px;
 
-    transition: .2s;
-
-  }
-
-
-  &:hover {
-
-    background: #000000;
-
-    color: #f9be06;
-
-    transform:
-      translateY(-2px);
+    transition:
+      transform .3s ease;
 
   }
 
@@ -771,7 +879,8 @@ export const FloatingButton = styled.button`
   &:active {
 
     transform:
-      translateY(1px);
+      translateY(1px)
+      scale(.96);
 
   }
 
@@ -941,6 +1050,8 @@ export const CreateTitle = styled.h2`
 
 export const CreateCloseButton = styled.button`
 
+  ${ButtonEffect}
+
   width: 38px;
   height: 38px;
 
@@ -961,22 +1072,28 @@ export const CreateCloseButton = styled.button`
 
   cursor: pointer;
 
-  transition: .2s;
 
+  &::before {
 
-  svg {
-
-    width: 21px;
-    height: 21px;
+    background: #111111;
 
   }
 
 
   &:hover {
 
-    background: #111111;
-
     color: #ffffff;
+
+    transform:
+      scale(1.05);
+
+  }
+
+
+  svg {
+
+    width: 21px;
+    height: 21px;
 
   }
 
@@ -1206,7 +1323,8 @@ export const ColorOption = styled.button`
 
   cursor: pointer;
 
-  transition: .2s;
+  transition:
+    transform .2s ease;
 
 
   &:hover {
@@ -1225,11 +1343,15 @@ export const ColorOption = styled.button`
 
 export const CreateButton = styled.button`
 
+  ${ButtonEffect}
+
   width: 100%;
 
   height: 45px;
 
   margin-top: 2px;
+
+  padding: 0;
 
   border: none;
 
@@ -1245,12 +1367,15 @@ export const CreateButton = styled.button`
 
   cursor: pointer;
 
-  transition: .2s;
+
+  &::before {
+
+    background: #111111;
+
+  }
 
 
   &:hover:not(:disabled) {
-
-    background: #111111;
 
     color: #ffffff;
 
@@ -1310,11 +1435,15 @@ export const ViewOverlay = styled.div`
   @keyframes fadeIn {
 
     from {
+
       opacity: 0;
+
     }
 
     to {
+
       opacity: 1;
+
     }
 
   }
@@ -1331,7 +1460,6 @@ export const ViewOverlay = styled.div`
 
 /* =====================================================
    VIEW POST IT
-   MESMO ESTILO DO MODAL DO USUÁRIO
 ===================================================== */
 
 export const ViewPostIt = styled.div`
@@ -1392,8 +1520,6 @@ export const ViewPostIt = styled.div`
     ease;
 
 
-  /* faixa superior */
-
   &::before {
 
     content: "";
@@ -1416,8 +1542,6 @@ export const ViewPostIt = styled.div`
 
   }
 
-
-  /* dobrinha */
 
   &::after {
 
@@ -1584,6 +1708,8 @@ export const ViewTopButtons = styled.div`
 
 export const ViewEditButton = styled.button`
 
+  ${ButtonEffect}
+
   width: 42px;
   height: 42px;
 
@@ -1610,8 +1736,6 @@ export const ViewEditButton = styled.button`
 
   cursor: pointer;
 
-  transition: .2s;
-
   box-shadow:
     0
     4px
@@ -1624,22 +1748,27 @@ export const ViewEditButton = styled.button`
     );
 
 
-  svg {
+  &::before {
 
-    width: 20px;
-    height: 20px;
+    background: #000000;
 
   }
 
 
   &:hover {
 
-    background: #000000;
-
     color: #ffffff;
 
     transform:
       scale(1.08);
+
+  }
+
+
+  svg {
+
+    width: 20px;
+    height: 20px;
 
   }
 
@@ -1652,6 +1781,8 @@ export const ViewEditButton = styled.button`
 
 export const ViewCloseButton = styled.button`
 
+  ${ButtonEffect}
+
   width: 42px;
   height: 42px;
 
@@ -1678,8 +1809,6 @@ export const ViewCloseButton = styled.button`
 
   cursor: pointer;
 
-  transition: .2s;
-
   box-shadow:
     0
     4px
@@ -1692,22 +1821,27 @@ export const ViewCloseButton = styled.button`
     );
 
 
-  svg {
+  &::before {
 
-    width: 22px;
-    height: 22px;
+    background: #000000;
 
   }
 
 
   &:hover {
 
-    background: #000000;
-
     color: #ffffff;
 
     transform:
       rotate(90deg);
+
+  }
+
+
+  svg {
+
+    width: 22px;
+    height: 22px;
 
   }
 
@@ -1719,6 +1853,8 @@ export const ViewCloseButton = styled.button`
 ===================================================== */
 
 export const ViewDeleteButton = styled.button`
+
+  ${ButtonEffect}
 
   width: 42px;
   height: 42px;
@@ -1740,8 +1876,6 @@ export const ViewDeleteButton = styled.button`
 
   cursor: pointer;
 
-  transition: .2s;
-
   box-shadow:
     0
     4px
@@ -1754,20 +1888,27 @@ export const ViewDeleteButton = styled.button`
     );
 
 
-  svg {
+  &::before {
 
-    width: 20px;
-    height: 20px;
+    background: #111;
 
   }
 
 
   &:hover {
 
-    background: #b71c1c;
+    color: #ffffff;
 
     transform:
       scale(1.08);
+
+  }
+
+
+  svg {
+
+    width: 20px;
+    height: 20px;
 
   }
 
@@ -2037,16 +2178,13 @@ export const ModalButtons = styled.div`
 
 `;
 
-
-/* =====================================================
-   CANCEL BUTTON
-===================================================== */
-
 export const CancelButton = styled.button`
+  position: relative;
 
-  padding:
-    12px
-    22px;
+  width: 140px;
+  height: 46px;
+
+  padding: 0;
 
   border: none;
 
@@ -2054,7 +2192,7 @@ export const CancelButton = styled.button`
 
   background: #ececec;
 
-  color: #111111;
+  color: #111;
 
   font-size: 15px;
 
@@ -2062,27 +2200,83 @@ export const CancelButton = styled.button`
 
   cursor: pointer;
 
-  transition: .2s;
+  overflow: hidden;
 
+  isolation: isolate;
 
-  &:hover {
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.25s ease,
+    box-shadow 0.25s ease;
 
-    background: #d9d9d9;
+  &::before {
+    content: "";
 
+    position: absolute;
+
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+
+    width: 20px;
+    height: 20px;
+
+    border-radius: 50%;
+
+    background: #ffdb53;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    transition:
+      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+
+    z-index: -1;
+
+    pointer-events: none;
   }
 
+  &:hover {
+    color: #111;
+
+    transform: translateY(-3px);
+
+    box-shadow:
+      0 10px 22px
+      rgba(123, 30, 58, 0.25);
+
+    &::before {
+      transform:
+        translate(-50%, -50%)
+        scale(15);
+    }
+  }
+
+  &:active {
+    transform:
+      translateY(0)
+      scale(0.97);
+
+    transition:
+      transform 0.08s ease;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  @media (max-width: 400px) {
+    width: 100%;
+  }
 `;
 
-
-/* =====================================================
-   CONFIRM BUTTON
-===================================================== */
-
 export const ConfirmButton = styled.button`
+  position: relative;
 
-  padding:
-    12px
-    22px;
+  width: 140px;
+  height: 46px;
+
+  padding: 0;
 
   border: none;
 
@@ -2090,7 +2284,7 @@ export const ConfirmButton = styled.button`
 
   background: #d62828;
 
-  color: #ffffff;
+  color: #fff;
 
   font-size: 15px;
 
@@ -2098,25 +2292,72 @@ export const ConfirmButton = styled.button`
 
   cursor: pointer;
 
-  transition: .2s;
+  overflow: hidden;
 
+  isolation: isolate;
+
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.25s ease,
+    box-shadow 0.25s ease;
+
+  &::before {
+    content: "";
+
+    position: absolute;
+
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+
+    width: 20px;
+    height: 20px;
+
+    border-radius: 50%;
+
+    background: #111;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    transition:
+      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+
+    z-index: -1;
+
+    pointer-events: none;
+  }
 
   &:hover {
+    color: #fff;
 
-    background: #b71c1c;
+    transform: translateY(-3px);
 
-    transform:
-      translateY(-2px);
+    box-shadow:
+      0 10px 22px
+      rgba(123, 30, 58, 0.3);
 
+    &::before {
+      transform:
+        translate(-50%, -50%)
+        scale(15);
+    }
   }
-
 
   &:active {
-
     transform:
-      translateY(0);
+      translateY(0)
+      scale(0.97);
 
+    transition:
+      transform 0.08s ease;
   }
 
-`;
+  &:focus {
+    outline: none;
+  }
 
+  @media (max-width: 400px) {
+    width: 100%;
+  }
+`;

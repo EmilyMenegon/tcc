@@ -50,8 +50,6 @@ export const Page = styled.div`
   margin: 0;
   padding: 0;
 
-  box-sizing: border-box;
-
   font-family: "Poppins", sans-serif;
 
   background: linear-gradient(
@@ -70,13 +68,10 @@ export const Page = styled.div`
     min-height: 100vh;
     min-height: 100dvh;
 
-    margin: 0;
-    padding: 0;
-
     background: linear-gradient(
       to bottom,
       #ffdb53 0%,
-      #f9be06 25%,
+      #ffdb53 25%,
       #f8f8f8 25%,
       #f8f8f8 100%
     );
@@ -94,6 +89,9 @@ export const BackButton = styled(Link)`
   top: 25px;
   left: 25px;
 
+  width: 60px;
+  height: 60px;
+
   display: flex;
 
   align-items: center;
@@ -106,19 +104,41 @@ export const BackButton = styled(Link)`
   font-size: 28px;
   font-weight: bold;
 
-  transition: 0.25s ease;
+  background: transparent;
+
+  border: none;
+
+  box-shadow: none;
+
+  border-radius: 0;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
 
   z-index: 999;
 
   &:hover {
+    background: transparent;
+
     color: #000;
 
-    transform: translateX(-5px);
+    transform: translateX(-3px);
+  }
+
+  &:focus,
+  &:focus-visible {
+    outline: none;
+
+    background: transparent;
   }
 
   @media (max-width: 600px) {
     top: 15px;
     left: 15px;
+
+    width: 45px;
+    height: 45px;
 
     font-size: 20px;
   }
@@ -132,8 +152,6 @@ export const BackButton = styled(Link)`
 export const Container = styled.div`
   width: 100%;
   max-width: 460px;
-
-  box-sizing: border-box;
 
   margin: 70px auto 30px;
 
@@ -355,8 +373,6 @@ export const Field = styled.div`
   gap: 8px;
 
   width: 100%;
-
-  box-sizing: border-box;
 `;
 
 
@@ -383,8 +399,6 @@ export const Label = styled.label`
 
 export const Input = styled.input`
   width: 100%;
-
-  box-sizing: border-box;
 
   padding: 14px 16px;
 
@@ -461,45 +475,114 @@ export const PasswordBox = styled.div`
 
 /* ==========================================
    SAVE BUTTON
-   (mesmo estilo do botão "Entrar" do Login)
+   MESMA ANIMAÇÃO DO USUÁRIO
 ========================================== */
 
 export const SaveButton = styled.button`
+  position: relative;
+
   width: 100%;
-  height: 58px;
-  flex-shrink: 0;
+  height: 50px;
+
+  margin-top: 10px;
+
   border: none;
-  border-radius: 18px;
+  border-radius: 12px;
+
   background: #ffdb53;
+
   color: #111;
-  font-size: clamp(1rem, 1.1vw, 1.1rem);
+
+  font-size: 16px;
   font-weight: bold;
+
   cursor: pointer;
+
+  overflow: hidden;
+
+  isolation: isolate;
+
   transition:
-    background 0.25s ease,
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
     color 0.25s ease,
-    transform 0.25s ease,
     box-shadow 0.25s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  will-change: transform, opacity;
+
+  &::before {
+    content: "";
+
+    position: absolute;
+
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+
+    width: 20px;
+    height: 20px;
+
+    border-radius: 50%;
+
+    background: #831614;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    transition:
+      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+
+    z-index: -1;
+
+    pointer-events: none;
+  }
+
+  & > * {
+    position: relative;
+
+    z-index: 2;
+  }
 
   &:hover {
-    background: #000;
     color: #fff;
+
     transform: translateY(-3px);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16);
+
+    box-shadow:
+      0 10px 22px
+      rgba(123, 30, 58, 0.25);
+
+    &::before {
+      transform:
+        translate(-50%, -50%)
+        scale(18);
+    }
   }
 
   &:active {
-    transform: translateY(1px) scale(0.98);
+    transform:
+      translateY(0)
+      scale(0.97);
+
+    box-shadow:
+      0 4px 10px
+      rgba(0, 0, 0, 0.15);
+
+    transition:
+      transform 0.08s ease;
   }
 
-  @media (max-width: 768px) {
-    height: 62px;
-    border-radius: 18px;
-    font-size: 1.05rem;
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #7b1e3a;
+
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 600px) {
+    height: 48px;
+
+    font-size: 15px;
   }
 `;
 
@@ -559,8 +642,6 @@ export const ModalOverlay = styled.div`
   backdrop-filter: blur(3px);
 
   padding: 20px;
-
-  box-sizing: border-box;
 `;
 
 
@@ -586,8 +667,6 @@ export const Modal = styled.div`
     rgba(0, 0, 0, 0.2);
 
   animation: modalAppear 0.25s ease;
-
-  box-sizing: border-box;
 
   h2,
   h3 {
@@ -654,7 +733,11 @@ export const ModalButtons = styled.div`
 
   justify-content: center;
 
+  align-items: center;
+
   gap: 15px;
+
+  width: 100%;
 
   @media (max-width: 400px) {
     flex-direction: column;
@@ -663,13 +746,13 @@ export const ModalButtons = styled.div`
   }
 `;
 
-
-/* ==========================================
-   CANCELAR
-========================================== */
-
 export const CancelButton = styled.button`
-  padding: 12px 22px;
+  position: relative;
+
+  width: 140px;
+  height: 46px;
+
+  padding: 0;
 
   border: none;
 
@@ -685,10 +768,69 @@ export const CancelButton = styled.button`
 
   cursor: pointer;
 
-  transition: 0.2s;
+  overflow: hidden;
+
+  isolation: isolate;
+
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.25s ease,
+    box-shadow 0.25s ease;
+
+  &::before {
+    content: "";
+
+    position: absolute;
+
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+
+    width: 20px;
+    height: 20px;
+
+    border-radius: 50%;
+
+    background: #ffdb53;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    transition:
+      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+
+    z-index: -1;
+
+    pointer-events: none;
+  }
 
   &:hover {
-    background: #d9d9d9;
+    color: #111;
+
+    transform: translateY(-3px);
+
+    box-shadow:
+      0 10px 22px
+      rgba(123, 30, 58, 0.25);
+
+    &::before {
+      transform:
+        translate(-50%, -50%)
+        scale(15);
+    }
+  }
+
+  &:active {
+    transform:
+      translateY(0)
+      scale(0.97);
+
+    transition:
+      transform 0.08s ease;
+  }
+
+  &:focus {
+    outline: none;
   }
 
   @media (max-width: 400px) {
@@ -696,13 +838,13 @@ export const CancelButton = styled.button`
   }
 `;
 
-
-/* ==========================================
-   CONFIRMAR
-========================================== */
-
 export const ConfirmButton = styled.button`
-  padding: 12px 22px;
+  position: relative;
+
+  width: 140px;
+  height: 46px;
+
+  padding: 0;
 
   border: none;
 
@@ -718,16 +860,69 @@ export const ConfirmButton = styled.button`
 
   cursor: pointer;
 
-  transition: 0.2s;
+  overflow: hidden;
+
+  isolation: isolate;
+
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.25s ease,
+    box-shadow 0.25s ease;
+
+  &::before {
+    content: "";
+
+    position: absolute;
+
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+
+    width: 20px;
+    height: 20px;
+
+    border-radius: 50%;
+
+    background: #111;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    transition:
+      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+
+    z-index: -1;
+
+    pointer-events: none;
+  }
 
   &:hover {
-    background: #b71c1c;
+    color: #fff;
 
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+
+    box-shadow:
+      0 10px 22px
+      rgba(123, 30, 58, 0.3);
+
+    &::before {
+      transform:
+        translate(-50%, -50%)
+        scale(15);
+    }
   }
 
   &:active {
-    transform: translateY(0);
+    transform:
+      translateY(0)
+      scale(0.97);
+
+    transition:
+      transform 0.08s ease;
+  }
+
+  &:focus {
+    outline: none;
   }
 
   @media (max-width: 400px) {
