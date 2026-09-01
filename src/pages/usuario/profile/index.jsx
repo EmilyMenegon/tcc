@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEye, FaEyeSlash, FaArrowLeft } from "react-icons/fa";
-import { getUsuarioLogado, salvarUsuarioLogado, logout } from "../../../utils/auth";
+import { getUsuarioLogado, salvarUsuarioLogado, logout, getAuthHeaders } from "../../../utils/auth";
 
 import {
   GlobalStyle, Page, Container, BackButton, ProfileBox, AvatarWrapper,
@@ -31,7 +31,9 @@ export default function Profile() {
     const usuarioLogado = getUsuarioLogado();
     if (!usuarioLogado?.email) return;
 
-    fetch(`http://localhost:3001/perfil/${usuarioLogado.email}`)
+    fetch(`http://localhost:3001/perfil/${usuarioLogado.email}`, {
+      headers: getAuthHeaders(),
+    })
       .then((res) => res.json())
       .then((data) => {
         setNome(data.nome);
@@ -71,7 +73,7 @@ export default function Profile() {
 
       const res = await fetch(`http://localhost:3001/perfil/${emailAtual}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
         body: JSON.stringify({
           nome,
           senha: novaSenha || undefined,
@@ -167,21 +169,9 @@ export default function Profile() {
           {erro && <p style={{ color: "red", fontSize: "0.9rem" }}>{erro}</p>}
           {sucesso && <p style={{ color: "#2e7d32", fontSize: "0.9rem" }}>{sucesso}</p>}
 
-       <SaveButton
-  type="button"
-  onClick={handleSalvar}
-  onMouseMove={(e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    e.currentTarget.style.setProperty("--mouse-x", `${x}px`);
-    e.currentTarget.style.setProperty("--mouse-y", `${y}px`);
-  }}
->
-  Salvar alterações
-</SaveButton>
+          <SaveButton type="button" onClick={handleSalvar}>
+            Salvar alterações
+          </SaveButton>
 
           <LogoutLink onClick={() => setShowLogoutModal(true)}>
             Sair da conta
@@ -195,44 +185,12 @@ export default function Profile() {
               <h3>Sair da conta</h3>
               <p>Tem certeza que deseja sair da sua conta?</p>
               <ModalButtons>
-                <CancelButton
-  onClick={() => setShowLogoutModal(false)}
-  onMouseMove={(e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-
-    e.currentTarget.style.setProperty(
-      "--mouse-x",
-      `${e.clientX - rect.left}px`
-    );
-
-    e.currentTarget.style.setProperty(
-      "--mouse-y",
-      `${e.clientY - rect.top}px`
-    );
-  }}
->
-  Cancelar
-</CancelButton>
-
-              <ConfirmButton
-  onClick={handleLogout}
-  onMouseMove={(e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-
-    e.currentTarget.style.setProperty(
-      "--mouse-x",
-      `${e.clientX - rect.left}px`
-    );
-
-    e.currentTarget.style.setProperty(
-      "--mouse-y",
-      `${e.clientY - rect.top}px`
-    );
-  }}
->
-  Sair
-</ConfirmButton>
-
+                <CancelButton onClick={() => setShowLogoutModal(false)}>
+                  Cancelar
+                </CancelButton>
+                <ConfirmButton onClick={handleLogout}>
+                  Sim, sair
+                </ConfirmButton>
               </ModalButtons>
             </Modal>
           </ModalOverlay>

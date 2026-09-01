@@ -33,4 +33,12 @@ db.exec(`
   )
 `);
 
+db.exec(`
+  CREATE TABLE IF NOT EXISTS galeria (
+    id_fotos INTEGER PRIMARY KEY AUTOINCREMENT,
+    anexo TEXT NOT NULL,
+    usuario_id INTEGER NOT NULL
+  )
+`);
+
 export default db;

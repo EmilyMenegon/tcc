@@ -567,7 +567,7 @@ export const FloatingButton = styled.button`
 
   border-radius: 50%;
 
-  background: #ffdb53;
+  background: #f9be06;
 
   color: #111111;
 
@@ -1095,6 +1095,170 @@ export const ConfirmButton = styled.button`
   &:hover {
 
     background: #b71c1c;
+
+  }
+
+`;
+
+/* ==========================================
+   SETA DE NAVEGAÇÃO
+========================================== */
+
+export const ArrowButton = styled.button`
+
+  position: fixed;
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  width: 55px;
+
+  height: 55px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: rgba(255, 255, 255, .12);
+
+  color: #ffffff;
+
+  cursor: pointer;
+
+  transition: .2s;
+
+  z-index: 10000;
+
+
+  &.left {
+    left: 25px;
+  }
+
+  &.right {
+    right: 25px;
+  }
+
+
+  svg {
+    width: 26px;
+    height: 26px;
+  }
+
+
+  &:hover {
+    background: #f9be06;
+    color: #000000;
+  }
+
+
+  @media (max-width: 600px) {
+
+    width: 42px;
+
+    height: 42px;
+
+
+    &.left {
+      left: 10px;
+    }
+
+    &.right {
+      right: 10px;
+    }
+
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+
+  }
+
+`;
+
+
+/* ==========================================
+   BOTÃO NAVEGAR (ANTERIOR / PRÓXIMA)
+========================================== */
+
+export const NavButton = styled.button`
+
+  position: fixed;
+
+  top: 50%;
+
+  ${({ $direction }) => ($direction === "left" ? "left: 30px;" : "right: 30px;")}
+
+  transform: translateY(-50%);
+
+  width: 55px;
+
+  height: 55px;
+
+  border: none;
+
+  border-radius: 50%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  background: rgba(255, 255, 255, .12);
+
+  color: #ffffff;
+
+  cursor: pointer;
+
+  transition: .2s;
+
+  z-index: 10000;
+
+
+  svg {
+
+    width: 26px;
+
+    height: 26px;
+
+  }
+
+
+  &:hover {
+
+    background: #f9be06;
+
+    color: #000000;
+
+    transform: translateY(-50%) scale(1.08);
+
+  }
+
+
+  @media (max-width: 600px) {
+
+    width: 44px;
+
+    height: 44px;
+
+    ${({ $direction }) => ($direction === "left" ? "left: 12px;" : "right: 12px;")}
+
+
+    svg {
+
+      width: 20px;
+
+      height: 20px;
+
+    }
 
   }
 

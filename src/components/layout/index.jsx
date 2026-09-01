@@ -17,7 +17,7 @@ import {
 } from "./style";
 
 import { FaUser } from "react-icons/fa";
-import { getUsuarioLogado } from "../../utils/auth";
+import { getUsuarioLogado, getAuthHeaders } from "../../utils/auth";
 
 export default function Layout() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -61,7 +61,8 @@ export default function Layout() {
     if (!usuarioLogado?.email) return;
 
     fetch(
-      `http://localhost:3001/perfil/${usuarioLogado.email}`
+      `http://localhost:3001/perfil/${usuarioLogado.email}`,
+      { headers: getAuthHeaders() }
     )
       .then((res) => res.json())
       .then((data) => {

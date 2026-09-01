@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import Layoutadm from "../../../components/Layoutadm";
+import { getUsuarioLogado, getAuthHeaders } from "../../../utils/auth";
 
 import {
   FiPlus,
   FiX,
   FiTrash2,
   FiImage,
+  FiChevronLeft,
+  FiChevronRight,
 } from "react-icons/fi";
 
 import {
@@ -29,6 +32,7 @@ import {
   ModalContent,
   ModalImage,
   CloseButton,
+  NavButton,
 
   DeleteButton,
 
@@ -42,446 +46,254 @@ import {
 
 export default function Galeriaadm() {
 
-  // ==========================================
-  // IMAGEM SELECIONADA
-  // ==========================================
-
-  const [imagemSelecionada, setImagemSelecionada] =
-    useState(null);
-
-
-  // ==========================================
-  // IMAGEM QUE SERÁ EXCLUÍDA
-  // ==========================================
-
-  const [imagemParaExcluir, setImagemParaExcluir] =
-    useState(null);
-
-
-  // ==========================================
-  // FOTOS
-  // ==========================================
-
+  const [indiceAtual, setIndiceAtual] = useState(null);
+  const [imagemParaExcluir, setImagemParaExcluir] = useState(null);
   const [fotos, setFotos] = useState([]);
-
-
-  // ==========================================
-  // INPUT DE ARQUIVO
-  // ==========================================
+  const [erro, setErro] = useState("");
+  const [enviando, setEnviando] = useState(false);
 
   const fileInputRef = useRef(null);
 
+  const imagemSelecionada =
+    indiceAtual !== null && fotos[indiceAtual] ? fotos[indiceAtual] : null;
 
-  // ==========================================
-  // CARREGAR GALERIA
-  // ==========================================
+
+  /* ==========================================
+     CARREGAR GALERIA DO BANCO
+  ========================================== */
 
   useEffect(() => {
-
-    function carregarFotos() {
-
-      const dados =
-        localStorage.getItem("galeria");
-
-
-      if (!dados) {
-
-        setFotos([]);
-
-        return;
-
-      }
-
-
-      try {
-
-        const fotosSalvas =
-          JSON.parse(dados);
-
-
-        if (Array.isArray(fotosSalvas)) {
-
-          setFotos(fotosSalvas);
-
-        } else {
-
-          setFotos([]);
-
-        }
-
-      } catch (error) {
-
-        console.error(
-          "Erro ao carregar a galeria:",
-          error
-        );
-
-        setFotos([]);
-
-      }
-
-    }
-
-
     carregarFotos();
-
-
-    // Atualiza caso o usuário ou outra aba
-    // altere a galeria.
-
-    function atualizarGaleria() {
-
-      carregarFotos();
-
-    }
-
-
-    window.addEventListener(
-      "storage",
-      atualizarGaleria
-    );
-
-
-    return () => {
-
-      window.removeEventListener(
-        "storage",
-        atualizarGaleria
-      );
-
-    };
-
   }, []);
 
+  function carregarFotos() {
 
-  // ==========================================
-  // ABRIR SELETOR DE IMAGEM
-  // ==========================================
+    fetch("http://localhost:3001/galeria", {
+      headers: getAuthHeaders(),
+    })
+      .then((res) => res.json())
+      .then((data) => setFotos(Array.isArray(data) ? data : []))
+      .catch(() => setErro("Não foi possível carregar a galeria."));
+
+  }
+
+
+  /* ==========================================
+     ABRIR SELETOR DE IMAGEM
+  ========================================== */
 
   const abrirGaleria = () => {
-
     fileInputRef.current?.click();
-
   };
 
 
-  // ==========================================
-  // ADICIONAR IMAGENS
-  // ==========================================
+  /* ==========================================
+     CONVERTER ARQUIVO PARA BASE64
+  ========================================== */
 
-  const adicionarImagem = (e) => {
+  function arquivoParaBase64(arquivo) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(arquivo);
+    });
+  }
 
-    const arquivos =
-      Array.from(e.target.files);
 
+  /* ==========================================
+     ADICIONAR IMAGENS (salva no banco)
+  ========================================== */
 
+  const adicionarImagem = async (e) => {
+
+    const arquivos = Array.from(e.target.files);
     if (!arquivos.length) return;
 
+    setErro("");
+    setEnviando(true);
 
-    const novasFotos =
-      arquivos.map((arquivo, index) => ({
+    try {
 
-        id:
-          Date.now() +
-          index,
+      const usuarioLogado = getUsuarioLogado();
 
-        nome:
-          arquivo.name,
-
-        imagem:
-          URL.createObjectURL(arquivo),
-
-      }));
-
-
-    setFotos((prev) => {
-
-      const atualizadas = [
-        ...prev,
-        ...novasFotos,
-      ];
-
-
-      // Salva no localStorage
-      localStorage.setItem(
-        "galeria",
-        JSON.stringify(atualizadas)
+      const base64s = await Promise.all(
+        arquivos.map((arquivo) => arquivoParaBase64(arquivo))
       );
 
+      const res = await fetch("http://localhost:3001/galeria", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+        body: JSON.stringify({
+          email: usuarioLogado.email,
+          fotos: base64s,
+        }),
+      });
 
-      return atualizadas;
+      const data = await res.json();
 
-    });
+      if (!res.ok) {
+        setErro(data.erro || "Erro ao enviar as imagens.");
+        return;
+      }
 
+      setFotos((prev) => [...data, ...prev]);
 
-    // Permite selecionar novamente
-    // a mesma imagem.
-
-    e.target.value = "";
-
-  };
-
-
-  // ==========================================
-  // ABRIR IMAGEM
-  // ==========================================
-
-  const abrirImagem = (foto) => {
-
-    setImagemSelecionada(foto);
-
-  };
-
-
-  // ==========================================
-  // FECHAR IMAGEM
-  // ==========================================
-
-  const fecharImagem = () => {
-
-    setImagemSelecionada(null);
+    } catch (err) {
+      console.error(err);
+      setErro("Não foi possível enviar as imagens.");
+    } finally {
+      setEnviando(false);
+      e.target.value = "";
+    }
 
   };
 
 
-  // ==========================================
-  // PEDIR CONFIRMAÇÃO PARA EXCLUIR
-  // ==========================================
+  /* ==========================================
+     ABRIR / FECHAR / NAVEGAR
+  ========================================== */
 
-  const pedirExclusao = (foto) => {
+  function abrirImagem(foto) {
+    const indice = fotos.findIndex((item) => item.id === foto.id);
+    setIndiceAtual(indice);
+  }
 
-    setImagemParaExcluir(foto);
+  function fecharImagem() {
+    setIndiceAtual(null);
+  }
 
-  };
+  function irParaAnterior() {
+    if (indiceAtual === null || fotos.length === 0) return;
+    setIndiceAtual((atual) => (atual === 0 ? fotos.length - 1 : atual - 1));
+  }
+
+  function irParaProxima() {
+    if (indiceAtual === null || fotos.length === 0) return;
+    setIndiceAtual((atual) => (atual === fotos.length - 1 ? 0 : atual + 1));
+  }
 
 
-  // ==========================================
-  // CANCELAR EXCLUSÃO
-  // ==========================================
+  /* ==========================================
+     EXCLUSÃO
+  ========================================== */
 
-  const cancelarExclusao = () => {
+  const pedirExclusao = (foto) => setImagemParaExcluir(foto);
+  const cancelarExclusao = () => setImagemParaExcluir(null);
 
-    setImagemParaExcluir(null);
-
-  };
-
-
-  // ==========================================
-  // CONFIRMAR EXCLUSÃO
-  // ==========================================
-
-  const confirmarExclusao = () => {
+  const confirmarExclusao = async () => {
 
     if (!imagemParaExcluir) return;
 
+    try {
 
-    const novasFotos =
-      fotos.filter(
-        (foto) =>
-          foto.id !== imagemParaExcluir.id
+      const res = await fetch(
+        `http://localhost:3001/galeria/${imagemParaExcluir.id}`,
+        {
+          method: "DELETE",
+          headers: getAuthHeaders(),
+        }
       );
 
+      if (!res.ok) {
+        throw new Error();
+      }
 
-    setFotos(novasFotos);
+      setFotos((prev) => prev.filter((foto) => foto.id !== imagemParaExcluir.id));
 
+      if (imagemSelecionada?.id === imagemParaExcluir.id) {
+        setIndiceAtual(null);
+      }
 
-    localStorage.setItem(
-      "galeria",
-      JSON.stringify(novasFotos)
-    );
-
-
-    setImagemParaExcluir(null);
-
-
-    // Caso a imagem excluída esteja aberta
-    // no modal, fecha também.
-
-    if (
-      imagemSelecionada?.id ===
-      imagemParaExcluir.id
-    ) {
-
-      setImagemSelecionada(null);
-
+    } catch (err) {
+      setErro("Não foi possível excluir a imagem.");
+    } finally {
+      setImagemParaExcluir(null);
     }
 
   };
 
 
-  // ==========================================
-  // TECLA ESC
-  // ==========================================
+  /* ==========================================
+     TECLADO: ESC, SETAS
+  ========================================== */
 
   useEffect(() => {
 
     function handleKeyDown(event) {
 
-      if (event.key === "Escape") {
+      if (imagemParaExcluir) {
+        if (event.key === "Escape") cancelarExclusao();
+        return;
+      }
 
-        if (imagemParaExcluir) {
-
-          cancelarExclusao();
-
-        } else if (imagemSelecionada) {
-
-          fecharImagem();
-
-        }
-
+      if (imagemSelecionada) {
+        if (event.key === "Escape") fecharImagem();
+        if (event.key === "ArrowLeft") irParaAnterior();
+        if (event.key === "ArrowRight") irParaProxima();
       }
 
     }
 
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
 
-    window.addEventListener(
-      "keydown",
-      handleKeyDown
-    );
+  }, [imagemSelecionada, imagemParaExcluir, indiceAtual, fotos]);
 
-
-    return () => {
-
-      window.removeEventListener(
-        "keydown",
-        handleKeyDown
-      );
-
-    };
-
-  }, [
-    imagemSelecionada,
-    imagemParaExcluir,
-  ]);
-
-
-  // ==========================================
-  // RENDER
-  // ==========================================
 
   return (
 
     <Page>
 
-      {/* =====================================
-          MENU ADM
-      ===================================== */}
-
       <Layoutadm />
-
-
-      {/* =====================================
-          CONTEÚDO
-      ===================================== */}
 
       <Content>
 
-
-        {/* ===================================
-            HEADER
-        =================================== */}
-
         <Header>
-
-          <Title>
-            Galeria
-          </Title>
-
-
+          <Title>Galeria</Title>
           <Subtitle>
-            Confira os melhores momentos
-            registrados durante o evento.
+            Confira os melhores momentos registrados durante o evento.
           </Subtitle>
-
         </Header>
 
-
-        {/* ===================================
-            GALERIA
-        =================================== */}
+        {erro && (
+          <p style={{ textAlign: "center", color: "red", marginBottom: 20 }}>
+            {erro}
+          </p>
+        )}
 
         <Gallery>
-
 
           {fotos.length === 0 ? (
 
             <EmptyState>
-
-              <EmptyIcon>
-
-                <FiImage />
-
-              </EmptyIcon>
-
-
-              <EmptyTitle>
-
-                Nenhuma foto disponível
-
-              </EmptyTitle>
-
-
+              <EmptyIcon><FiImage /></EmptyIcon>
+              <EmptyTitle>Nenhuma foto disponível</EmptyTitle>
               <EmptyText>
-
-                No momento não existem
-                imagens publicadas na galeria.
-
+                No momento não existem imagens publicadas na galeria.
               </EmptyText>
-
             </EmptyState>
 
           ) : (
 
-            fotos.map((foto, index) => (
+            fotos.map((foto) => (
 
-              <Card
-                key={
-                  foto.id ||
-                  index
-                }
-              >
+              <Card key={foto.id}>
 
-                {/* =================================
-                    IMAGEM
-                ================================= */}
-
-                <ImageBox
-                  onClick={() =>
-                    abrirImagem(foto)
-                  }
-                >
-
-                  <img
-                    src={foto.imagem}
-                    alt={
-                      foto.nome ||
-                      "Imagem da galeria"
-                    }
-                  />
-
+                <ImageBox onClick={() => abrirImagem(foto)}>
+                  <img src={foto.imagem} alt="Imagem da galeria" />
                 </ImageBox>
-
-
-                {/* =================================
-                    BOTÃO EXCLUIR
-                ================================= */}
 
                 <DeleteButton
                   type="button"
                   onClick={(event) => {
-
                     event.stopPropagation();
-
                     pedirExclusao(foto);
-
                   }}
                   aria-label="Excluir imagem"
                 >
-
                   <FiTrash2 />
-
                 </DeleteButton>
-
 
               </Card>
 
@@ -491,28 +303,16 @@ export default function Galeriaadm() {
 
         </Gallery>
 
-
       </Content>
-
-
-      {/* =====================================
-          BOTÃO +
-      ===================================== */}
 
       <FloatingButton
         type="button"
         onClick={abrirGaleria}
         aria-label="Adicionar imagens"
+        disabled={enviando}
       >
-
         <FiPlus size={30} />
-
       </FloatingButton>
-
-
-      {/* =====================================
-          INPUT DE ARQUIVO
-      ===================================== */}
 
       <input
         type="file"
@@ -523,125 +323,80 @@ export default function Galeriaadm() {
         onChange={adicionarImagem}
       />
 
-
-      {/* =====================================
-          MODAL DA IMAGEM
-      ===================================== */}
-
       {imagemSelecionada && (
 
         <Modal
           onClick={(event) => {
-
-            if (
-              event.target ===
-              event.currentTarget
-            ) {
-
-              fecharImagem();
-
-            }
-
+            if (event.target === event.currentTarget) fecharImagem();
           }}
         >
-
           <ModalContent>
 
-
-            {/* BOTÃO FECHAR */}
-
-            <CloseButton
-              type="button"
-              onClick={fecharImagem}
-              aria-label="Fechar imagem"
-            >
-
+            <CloseButton type="button" onClick={fecharImagem} aria-label="Fechar imagem">
               <FiX />
-
             </CloseButton>
 
-
-            {/* IMAGEM */}
+            {fotos.length > 1 && (
+              <NavButton
+                type="button"
+                $direction="left"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  irParaAnterior();
+                }}
+                aria-label="Imagem anterior"
+              >
+                <FiChevronLeft />
+              </NavButton>
+            )}
 
             <ModalImage
-              src={
-                imagemSelecionada.imagem
-              }
+              src={imagemSelecionada.imagem}
               alt="Imagem ampliada"
-              onClick={(event) =>
-                event.stopPropagation()
-              }
+              onClick={(event) => event.stopPropagation()}
             />
 
-          </ModalContent>
+            {fotos.length > 1 && (
+              <NavButton
+                type="button"
+                $direction="right"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  irParaProxima();
+                }}
+                aria-label="Próxima imagem"
+              >
+                <FiChevronRight />
+              </NavButton>
+            )}
 
+          </ModalContent>
         </Modal>
 
       )}
-
-
-      {/* =====================================
-          MODAL DE CONFIRMAÇÃO
-      ===================================== */}
 
       {imagemParaExcluir && (
 
         <DeleteModalOverlay
           onClick={(event) => {
-
-            if (
-              event.target ===
-              event.currentTarget
-            ) {
-
-              cancelarExclusao();
-
-            }
-
+            if (event.target === event.currentTarget) cancelarExclusao();
           }}
         >
-
           <DeleteModal>
 
-
-            <h3>
-              Excluir imagem
-            </h3>
-
-
-            <p>
-              Tem certeza que deseja excluir esta imagem?
-            </p>
-
+            <h3>Excluir imagem</h3>
+            <p>Tem certeza que deseja excluir esta imagem?</p>
 
             <ModalButtons>
-
-
-              <CancelButton
-                type="button"
-                onClick={cancelarExclusao}
-              >
-
+              <CancelButton type="button" onClick={cancelarExclusao}>
                 Cancelar
-
               </CancelButton>
-
-
-              <ConfirmButton
-                type="button"
-                onClick={confirmarExclusao}
-              >
-
+              <ConfirmButton type="button" onClick={confirmarExclusao}>
                 Sim, excluir
-
               </ConfirmButton>
-
-
             </ModalButtons>
 
-
           </DeleteModal>
-
         </DeleteModalOverlay>
 
       )}

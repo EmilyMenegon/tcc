@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Layout from "../../../components/Layout";
-import { FaArrowRight, FaFileDownload } from "react-icons/fa";
+import { FaArrowRight, FaFileDownload, FaTimes } from "react-icons/fa";
 
 import {
   Page,
@@ -63,6 +63,8 @@ export default function Home() {
       "/regulamento.pdf"
     );
   });
+
+  const [showPdfModal, setShowPdfModal] = useState(false);
 
 
   /* ============================================================
@@ -152,22 +154,20 @@ export default function Home() {
               </Link>
 
 
-              <a
-                href={regulamento}
-                download="Regulamento-Slam-Interescolar.pdf"
+              <SecondaryLink
+                as="button"
+                type="button"
+                onClick={() => setShowPdfModal(true)}
+                style={{ cursor: "pointer" }}
               >
 
-                <SecondaryLink>
+                <FaFileDownload />
 
-                  <FaFileDownload />
+                <span>
+                  Ver regulamento
+                </span>
 
-                  <span>
-                    Ver regulamento
-                  </span>
-
-                </SecondaryLink>
-
-              </a>
+              </SecondaryLink>
 
             </Actions>
 
@@ -244,6 +244,86 @@ export default function Home() {
         </HeroContent>
 
       </Hero>
+
+
+      {/* ============================================================
+          MODAL DO REGULAMENTO (VISUALIZADOR DE PDF)
+      ============================================================ */}
+
+      {showPdfModal && (
+
+        <div
+          onMouseDown={(e) => {
+            if (e.target === e.currentTarget) setShowPdfModal(false);
+          }}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.6)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 9999,
+            padding: "20px",
+            boxSizing: "border-box",
+          }}
+        >
+
+          <div
+            style={{
+              width: "100%",
+              maxWidth: "900px",
+              height: "90vh",
+              background: "#fff",
+              borderRadius: "16px",
+              overflow: "hidden",
+              display: "flex",
+              flexDirection: "column",
+              boxShadow: "0 20px 50px rgba(0,0,0,0.3)",
+            }}
+          >
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "14px 20px",
+                background: "#111",
+                color: "#fff",
+              }}
+            >
+              <strong>Regulamento</strong>
+
+              <button
+                type="button"
+                onClick={() => setShowPdfModal(false)}
+                aria-label="Fechar"
+                style={{
+                  background: "transparent",
+                  border: "none",
+                  color: "#f9be06",
+                  cursor: "pointer",
+                  fontSize: "18px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <FaTimes />
+              </button>
+            </div>
+
+            <iframe
+              src={regulamento}
+              title="Regulamento"
+              style={{ flex: 1, border: "none" }}
+            />
+
+          </div>
+
+        </div>
+
+      )}
 
     </Page>
   );

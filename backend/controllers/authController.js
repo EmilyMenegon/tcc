@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import db from "../database.js";
+import { gerarToken } from "../config/jwt.js";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const SENHA_MIN = 6;
@@ -54,10 +55,14 @@ export async function login(req, res) {
     const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
 
     if (senhaCorreta) {
+
+      const token = gerarToken({ email: usuario.email, tipo: usuario.tipo_usuario });
+
       return res.json({
         mensagem: "Login realizado com sucesso!",
         tipo: usuario.tipo_usuario,
         nome: usuario.nome,
+        token,
       });
     }
 
@@ -72,10 +77,14 @@ export async function login(req, res) {
     const senhaCorreta = await bcrypt.compare(senha, matematico.senha);
 
     if (senhaCorreta) {
+
+      const token = gerarToken({ email: matematico.email, tipo: "matematico" });
+
       return res.json({
         mensagem: "Login realizado com sucesso!",
         tipo: "matematico",
         nome: "Matemático",
+        token,
       });
     }
   }

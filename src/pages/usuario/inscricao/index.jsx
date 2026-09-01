@@ -11,6 +11,7 @@ import {
 import {
   getUsuarioLogado,
   salvarUsuarioLogado,
+  getAuthHeaders,
 } from "../../../utils/auth";
 
 import {
@@ -66,7 +67,8 @@ export default function Inscricao() {
     }
 
     fetch(
-      `http://localhost:3001/inscricao/${usuarioLogado.email}`
+      `http://localhost:3001/inscricao/${usuarioLogado.email}`,
+      { headers: getAuthHeaders() }
     )
       .then((res) => {
         if (!res.ok) throw new Error();
@@ -119,6 +121,7 @@ export default function Inscricao() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            ...getAuthHeaders(),
           },
           body: JSON.stringify({
             email: usuarioLogado.email,

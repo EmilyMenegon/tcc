@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Layoutadm from "../../../components/layoutadm";
+import { getAuthHeaders } from "../../../utils/auth";
 import {
   FiEdit,
   FiTrash2,
@@ -85,7 +86,9 @@ export default function Inscricaoadm() {
     setCarregando(true);
     setErro("");
 
-    fetch("http://localhost:3001/inscricoes")
+    fetch("http://localhost:3001/inscricoes", {
+      headers: getAuthHeaders(),
+    })
       .then((res) => res.json())
       .then((data) => {
         setInscricoes(data);
@@ -106,6 +109,7 @@ export default function Inscricaoadm() {
         `http://localhost:3001/inscricao/${inscricaoExcluir.id_inscricoes}`,
         {
           method: "DELETE",
+          headers: getAuthHeaders(),
         }
       );
 
@@ -140,6 +144,7 @@ export default function Inscricaoadm() {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            ...getAuthHeaders(),
           },
           body: JSON.stringify({
             nome_poeta: inscricaoEditando.nome_poeta,

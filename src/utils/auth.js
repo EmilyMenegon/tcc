@@ -19,6 +19,16 @@ export function getUsuarioLogado() {
 
 }
 
+export function getToken() {
+  const usuario = getUsuarioLogado();
+  return usuario?.token || null;
+}
+
+export function getAuthHeaders() {
+  const token = getToken();
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
 export function logout() {
   localStorage.removeItem(CHAVE_STORAGE);
 }

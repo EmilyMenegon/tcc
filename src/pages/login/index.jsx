@@ -651,6 +651,7 @@ export default function Login() {
           nome: data.nome,
           tipo: data.tipo,
           email,
+          token: data.token,
         });
 
         if (

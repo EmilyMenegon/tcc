@@ -606,10 +606,10 @@ export const SecondaryLink = styled.div`
 
   justify-content: center;
 
+
   gap: 9px;
 
-  border:
-    1.5px solid #ddd;
+  border: 1.5px solid #000;
 
   border-radius: 12px;
 
