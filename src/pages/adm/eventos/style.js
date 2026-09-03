@@ -1856,3 +1856,53 @@ export const RankingEmpty = styled.div`
   }
 `;
 
+export const PoetsSection = styled.div`
+  width: 100%;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eeeeee;
+`;
+
+export const PoetsSectionTitle = styled.h3`
+  margin: 0 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #222222;
+  font-size: 16px;
+  font-weight: 700;
+
+  svg {
+    color: #f9be06;
+    font-size: 18px;
+  }
+`;
+
+export const PoetsList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+export const PoetItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid #eeeeee;
+  border-radius: 10px;
+  background: #fafafa;
+`;
+
+export const PoetName = styled.span`
+  color: #222222;
+  font-size: 13px;
+  font-weight: 600;
+`;
+
+export const PoetDetails = styled.span`
+  color: #888888;
+  font-size: 11px;
+  text-align: right;
+`;

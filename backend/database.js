@@ -41,4 +41,19 @@ db.exec(`
   )
 `);
 
+db.exec(`
+  CREATE TABLE IF NOT EXISTS evento (
+    id_evento INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    descricao TEXT NOT NULL,
+    data_evento TEXT NOT NULL,
+    horario TEXT NOT NULL,
+    local TEXT NOT NULL,
+    imagem TEXT,
+    usuario_id INTEGER NOT NULL,
+    criado_em TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (usuario_id) REFERENCES usuario (id)
+  )
+`);
+
 export default db;

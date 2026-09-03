@@ -5,6 +5,7 @@ import tabelasRoutes from "./routes/tabelasRoutes.js";
 import perfilRoutes from "./routes/perfilRoutes.js";
 import inscricaoRoutes from "./routes/inscricaoRoutes.js";
 import galeriaRoutes from "./routes/galeriaRoutes.js";
+import eventoRoutes from "./routes/eventoRoutes.js";
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(perfilRoutes);
 app.use(inscricaoRoutes);
 app.use(galeriaRoutes);
 app.use(authRoutes);
+app.use(eventoRoutes);
 
 const PORT = 3001;
 app.listen(PORT, () => {
