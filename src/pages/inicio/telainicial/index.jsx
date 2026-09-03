@@ -67,6 +67,21 @@ export default function TelaInicial() {
   const [feedback, setFeedback] = useState("");
 
   /* ============================================================
+     BOTÃO LÍQUIDO
+  ============================================================ */
+  function handleButtonMove(event) {
+    const button = event.currentTarget;
+
+    const rect = button.getBoundingClientRect();
+
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    button.style.setProperty("--mouse-x", `${x}px`);
+    button.style.setProperty("--mouse-y", `${y}px`);
+  }
+
+  /* ============================================================
      MOSTRAR FEEDBACK
   ============================================================ */
   function showFeedback(message, success = false) {
@@ -268,7 +283,7 @@ export default function TelaInicial() {
             ease: "power2.out",
             snap: { value: 1 },
             scrollTrigger: {
-                            trigger: numbersRef.current,
+              trigger: numbersRef.current,
               start: "top 80%",
               toggleActions: "play none none none",
               once: true,
@@ -328,9 +343,11 @@ export default function TelaInicial() {
 
               <Buttons className="hero-buttons">
                 <RouterLink to="/login">
-                  <PrimaryButton>
-                    Participar do Slam Etecamp
-                    <FaArrowRight />
+                  <PrimaryButton onPointerMove={handleButtonMove}>
+                    <span className="button-content">
+                      Participar do Slam Etecamp
+                      <FaArrowRight />
+                    </span>
                   </PrimaryButton>
                 </RouterLink>
               </Buttons>
@@ -527,9 +544,11 @@ export default function TelaInicial() {
             <CTASubtitle>PARTICIPE, PERFORME E TRANSFORME!</CTASubtitle>
           </CTAText>
 
-          <CTALink href="/login">
-            QUERO PARTICIPAR
-            <FaArrowRight />
+          <CTALink href="/login" onPointerMove={handleButtonMove}>
+            <span className="button-content">
+              QUERO PARTICIPAR
+              <FaArrowRight />
+            </span>
           </CTALink>
         </CTAContainer>
       </CTASection>

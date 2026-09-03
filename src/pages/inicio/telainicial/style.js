@@ -492,7 +492,7 @@ export const PrimaryButton =
     }
 
     &:hover {
-      color: #fff;
+      color: #ffffff;
 
       transform:
         translateY(-3px);
@@ -502,6 +502,7 @@ export const PrimaryButton =
       transform:
         translate(-50%, -50%)
         scale(18);
+         color: #ffffff;
     }
 
     svg {
