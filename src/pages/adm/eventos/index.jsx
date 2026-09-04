@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import Layoutadm from "../../../components/Layoutadm";
+import { getAuthHeaders } from "../../../utils/auth";
 
 import {
   FiPlus,
@@ -87,24 +88,16 @@ import {
 const API_URL = "http://localhost:3001";
 
 // ======================================================
-// AUTENTICAÇÃO / FETCH
+// FETCH AUTENTICADO
 // ======================================================
-
-function getToken() {
-  return localStorage.getItem("token");
-}
-
-function authHeaders() {
-  return {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${getToken()}`,
-  };
-}
 
 async function apiFetch(caminho, opcoes = {}) {
   const res = await fetch(`${API_URL}${caminho}`, {
     ...opcoes,
-    headers: authHeaders(),
+    headers: {
+      "Content-Type": "application/json",
+      ...getAuthHeaders(),
+    },
   });
 
   const data = await res.json().catch(() => ({}));

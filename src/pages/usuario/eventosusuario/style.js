@@ -241,19 +241,24 @@ export const Cards = styled.section`
 
 /* ==========================================
    EVENT CARD
+   ESTILO DO ADMIN
 ========================================== */
 
 export const EventCard = styled.article`
 
   position: relative;
 
+  width: 100%;
+
   min-width: 0;
 
-  min-height: 280px;
+  min-height: 0;
 
-  background: #eeeeee;
+  background: #ffffff;
 
-  border-radius: 0;
+  border: 1px solid #eeeeee;
+
+  border-radius: 18px;
 
   overflow: hidden;
 
@@ -266,32 +271,31 @@ export const EventCard = styled.article`
   box-sizing: border-box;
 
   box-shadow:
-    4px 8px 18px
+    0 7px 25px
     rgba(
       0,
       0,
       0,
-      .14
+      .08
     );
 
   transition:
-    transform .25s ease,
-    box-shadow .25s ease;
+    transform .3s ease,
+    box-shadow .3s ease;
 
 
   &:hover {
 
     transform:
-      translateY(-8px)
-      scale(1.015);
+      translateY(-8px);
 
     box-shadow:
-      8px 18px 30px
+      0 18px 40px
       rgba(
         0,
         0,
         0,
-        .20
+        .15
       );
 
     z-index: 5;
@@ -302,24 +306,9 @@ export const EventCard = styled.article`
   &:focus-visible {
 
     outline:
-      3px solid #000000;
+      3px solid #f9be06;
 
     outline-offset: 4px;
-
-  }
-
-
-  &:active {
-
-    transform:
-      translateY(-3px);
-
-  }
-
-
-  @media (max-width: 600px) {
-
-    min-height: 250px;
 
   }
 
@@ -328,19 +317,22 @@ export const EventCard = styled.article`
 
 /* ==========================================
    EVENT IMAGE
+   ESTILO DO ADMIN
 ========================================== */
 
 export const EventImage = styled.div`
 
   width: 100%;
 
-  height: 145px;
+  height: auto;
 
-  flex-shrink: 0;
-
-  background: #d8d8d8;
+  aspect-ratio: 4 / 3;
 
   overflow: hidden;
+
+  background: #eeeeee;
+
+  flex-shrink: 0;
 
 
   img {
@@ -362,14 +354,7 @@ export const EventImage = styled.div`
   ${EventCard}:hover & img {
 
     transform:
-      scale(1.05);
-
-  }
-
-
-  @media (max-width: 600px) {
-
-    height: 125px;
+      scale(1.07);
 
   }
 
@@ -378,17 +363,20 @@ export const EventImage = styled.div`
 
 /* ==========================================
    IMAGE PLACEHOLDER
+   ESTILO DO ADMIN
 ========================================== */
 
 export const EventImagePlaceholder = styled.div`
 
   width: 100%;
 
-  height: 145px;
+  height: auto;
+
+  aspect-ratio: 4 / 3;
 
   flex-shrink: 0;
 
-  background: #d8d8d8;
+  background: #eeeeee;
 
   display: flex;
 
@@ -396,30 +384,23 @@ export const EventImagePlaceholder = styled.div`
 
   justify-content: center;
 
-  color: #999999;
+  color: #b5b5b5;
 
-  font-size: 40px;
-
-
-  @media (max-width: 600px) {
-
-    height: 125px;
-
-  }
+  font-size: 45px;
 
 `;
 
 
 /* ==========================================
    EVENT CONTENT
+   ESTILO DO ADMIN
 ========================================== */
 
 export const EventContent = styled.div`
 
-  padding:
-    18px
-    25px
-    23px;
+  width: 100%;
+
+  padding: 18px;
 
   display: flex;
 
@@ -427,127 +408,122 @@ export const EventContent = styled.div`
 
   flex: 1;
 
-  min-height: 135px;
+  min-height: 0;
 
   box-sizing: border-box;
 
-  background: #eeeeee;
+  background: #ffffff;
 
 `;
 
 
 /* ==========================================
    EVENT TITLE
+   ESTILO DO ADMIN
 ========================================== */
 
 export const EventTitle = styled.h2`
 
+  width: 100%;
+
   margin:
-    0
-    0
-    15px;
+    0 0 8px;
 
   color: #222222;
 
   font-family:
-    "Comic Sans MS",
-    "Trebuchet MS",
+    "Poppins",
     sans-serif;
 
-  font-size: 22px;
+  font-size: 19px;
 
   font-weight: 700;
 
-  line-height: 1.25;
+  line-height: 1.3;
 
   word-break: break-word;
-
-  position: relative;
-
-  z-index: 2;
 
 `;
 
 
 /* ==========================================
    EVENT DESCRIPTION
+   ESTILO DO ADMIN
 ========================================== */
 
 export const EventDescription = styled.p`
 
-  margin: 0;
+  width: 100%;
 
-  color: #333333;
-
-  font-family:
-    "Comic Sans MS",
-    "Trebuchet MS",
-    sans-serif;
-
-  font-size: 15px;
-
-  line-height: 1.55;
-
-  word-break: break-word;
-
-  display:
-    -webkit-box;
-
-  -webkit-line-clamp: 2;
-
-  -webkit-box-orient: vertical;
-
-  overflow: hidden;
-
-  position: relative;
-
-  z-index: 2;
-
-`;
-
-
-/* ==========================================
-   INFO LIST
-========================================== */
-
-export const InfoList = styled.div`
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 9px;
-
-  margin-top: 15px;
-
-  position: relative;
-
-  z-index: 2;
-
-`;
-
-
-/* ==========================================
-   INFO ITEM
-========================================== */
-
-export const InfoItem = styled.div`
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 9px;
+  margin:
+    0 0 14px;
 
   color:
     rgba(
       0,
       0,
       0,
-      .72
+      .65
     );
 
-  font-size: 14px;
+  font-family:
+    "Poppins",
+    sans-serif;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+
+  display:
+    -webkit-box;
+
+  -webkit-line-clamp: 3;
+
+  -webkit-box-orient: vertical;
+
+  overflow: hidden;
+
+`;
+
+
+/* ==========================================
+   INFO LIST
+   ESTILO DO ADMIN
+========================================== */
+
+export const InfoList = styled.div`
+
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+
+  margin-top: 0;
+
+`;
+
+
+/* ==========================================
+   INFO ITEM
+   ESTILO DO ADMIN
+========================================== */
+
+export const InfoItem = styled.div`
+
+  width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  color: #555555;
+
+  font-size: 12px;
 
   min-width: 0;
 
@@ -558,7 +534,7 @@ export const InfoItem = styled.div`
 
     color: #555555;
 
-    font-size: 17px;
+    font-size: 15px;
 
   }
 
@@ -580,80 +556,70 @@ export const InfoItem = styled.div`
 
 /* ==========================================
    EVENT FOOTER
+   ESTILO DO ADMIN
 ========================================== */
 
 export const EventFooter = styled.div`
 
+  width: 100%;
+
   margin-top: auto;
 
-  padding-top: 20px;
+  padding-top: 18px;
 
   display: flex;
 
   align-items: center;
 
-  gap: 12px;
-
-  position: relative;
-
-  z-index: 2;
+  gap: 10px;
 
 `;
 
 
 /* ==========================================
    ACCESS BUTTON
+   ESTILO DO ADMIN
 ========================================== */
 
 export const AccessButton = styled.button`
 
+  flex: 1;
+
   width: 100%;
 
-  height: 34px;
+  min-height: 38px;
 
-  min-height: 34px;
+  height: 38px;
 
   padding:
-    0
-    12px;
+    0 14px;
 
   border: none;
 
-  border-radius: 6px;
+  border-radius: 9px;
 
   background: #000000;
 
-  color: #ffdb53;
+  color: #f9be06;
 
   font-family:
     "Poppins",
     sans-serif;
 
-  font-size: 12px;
+  font-size: 13px;
 
   font-weight: 700;
 
   cursor: pointer;
 
-  transition: .2s;
+  transition: .2s ease;
 
 
   &:hover {
 
-    background: #ffdb53;
+    background: #f9be06;
 
     color: #111111;
-
-    transform:
-      translateY(-2px);
-
-  }
-
-
-  &:active {
-
-    transform:
-      translateY(0);
 
   }
 

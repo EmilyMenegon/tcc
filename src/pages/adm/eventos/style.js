@@ -285,6 +285,7 @@ export const EventCard = styled.article`
 ===================================================== */
 
 export const EventImage = styled.div`
+
   width: 100%;
 
   height: auto;
@@ -299,6 +300,7 @@ export const EventImage = styled.div`
 
 
   img {
+
     width: 100%;
 
     height: 100%;
@@ -309,17 +311,22 @@ export const EventImage = styled.div`
 
     transition:
       transform .5s ease;
+
   }
 
 
-  ${EventCard}:hover & img {
+  ${'${EventCard}'}:hover & img {
+
     transform:
       scale(1.07);
+
   }
+
 `;
 
 
 export const EventImagePlaceholder = styled.div`
+
   width: 100%;
 
   height: auto;
@@ -339,9 +346,8 @@ export const EventImagePlaceholder = styled.div`
   color: #b5b5b5;
 
   font-size: 45px;
+
 `;
-
-
 /* =====================================================
    EVENT CONTENT
 ===================================================== */
