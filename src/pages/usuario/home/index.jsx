@@ -235,7 +235,7 @@ export default function Home() {
 
 
             <Image
-              src="/girl.png"
+              src="/usuarioimg.png"
               alt="Participante do Slam Interescolar"
             />
 

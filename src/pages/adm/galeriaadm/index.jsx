@@ -60,7 +60,27 @@ export default function Galeriaadm() {
   const fileInputRef = useRef(null);
 
   const imagemSelecionada =
-    indiceAtual !== null && fotos[indiceAtual] ? fotos[indiceAtual] : null;
+    indiceAtual !== null && fotos[indiceAtual]
+      ? fotos[indiceAtual]
+      : null;
+
+
+  /* ==========================================
+     ANIMAÇÃO DOS BOTÕES
+  ========================================== */
+
+  const handleButtonMouseMove = (event) => {
+
+    const button = event.currentTarget;
+    const rect = button.getBoundingClientRect();
+
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    button.style.setProperty("--mouse-x", `${x}px`);
+    button.style.setProperty("--mouse-y", `${y}px`);
+
+  };
 
 
   /* ==========================================
@@ -71,14 +91,19 @@ export default function Galeriaadm() {
     carregarFotos();
   }, []);
 
+
   function carregarFotos() {
 
     fetch("http://localhost:3001/galeria", {
       headers: getAuthHeaders(),
     })
       .then((res) => res.json())
-      .then((data) => setFotos(Array.isArray(data) ? data : []))
-      .catch(() => setErro("Não foi possível carregar a galeria."));
+      .then((data) => {
+        setFotos(Array.isArray(data) ? data : []);
+      })
+      .catch(() => {
+        setErro("Não foi possível carregar a galeria.");
+      });
 
   }
 
@@ -97,12 +122,19 @@ export default function Galeriaadm() {
   ========================================== */
 
   function arquivoParaBase64(arquivo) {
+
     return new Promise((resolve, reject) => {
+
       const reader = new FileReader();
+
       reader.onload = () => resolve(reader.result);
+
       reader.onerror = reject;
+
       reader.readAsDataURL(arquivo);
+
     });
+
   }
 
 
@@ -113,6 +145,7 @@ export default function Galeriaadm() {
   const adicionarImagem = async (e) => {
 
     const arquivos = Array.from(e.target.files);
+
     if (!arquivos.length) return;
 
     setErro("");
@@ -123,33 +156,51 @@ export default function Galeriaadm() {
       const usuarioLogado = getUsuarioLogado();
 
       const base64s = await Promise.all(
-        arquivos.map((arquivo) => arquivoParaBase64(arquivo))
+        arquivos.map((arquivo) =>
+          arquivoParaBase64(arquivo)
+        )
       );
 
-      const res = await fetch("http://localhost:3001/galeria", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
-        body: JSON.stringify({
-          email: usuarioLogado.email,
-          fotos: base64s,
-        }),
-      });
+      const res = await fetch(
+        "http://localhost:3001/galeria",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json",
+            ...getAuthHeaders(),
+          },
+
+          body: JSON.stringify({
+            email: usuarioLogado.email,
+            fotos: base64s,
+          }),
+        }
+      );
 
       const data = await res.json();
 
       if (!res.ok) {
         setErro(data.erro || "Erro ao enviar os arquivos.");
         return;
+
       }
 
-      setFotos((prev) => [...data, ...prev]);
+      setFotos((prev) => [
+        ...data,
+        ...prev,
+      ]);
 
     } catch (err) {
+
       console.error(err);
       setErro("Não foi possível enviar os arquivos. Se for um vídeo grande, tente um arquivo menor.");
     } finally {
+
       setEnviando(false);
+
       e.target.value = "";
+
     }
 
   };
@@ -160,22 +211,54 @@ export default function Galeriaadm() {
   ========================================== */
 
   function abrirImagem(foto) {
-    const indice = fotos.findIndex((item) => item.id === foto.id);
+
+    const indice = fotos.findIndex(
+      (item) => item.id === foto.id
+    );
+
     setIndiceAtual(indice);
+
   }
+
 
   function fecharImagem() {
     setIndiceAtual(null);
   }
 
+
   function irParaAnterior() {
-    if (indiceAtual === null || fotos.length === 0) return;
-    setIndiceAtual((atual) => (atual === 0 ? fotos.length - 1 : atual - 1));
+
+    if (
+      indiceAtual === null ||
+      fotos.length === 0
+    ) {
+      return;
+    }
+
+    setIndiceAtual((atual) =>
+      atual === 0
+        ? fotos.length - 1
+        : atual - 1
+    );
+
   }
 
+
   function irParaProxima() {
-    if (indiceAtual === null || fotos.length === 0) return;
-    setIndiceAtual((atual) => (atual === fotos.length - 1 ? 0 : atual + 1));
+
+    if (
+      indiceAtual === null ||
+      fotos.length === 0
+    ) {
+      return;
+    }
+
+    setIndiceAtual((atual) =>
+      atual === fotos.length - 1
+        ? 0
+        : atual + 1
+    );
+
   }
 
 
@@ -183,8 +266,15 @@ export default function Galeriaadm() {
      EXCLUSÃO
   ========================================== */
 
-  const pedirExclusao = (foto) => setImagemParaExcluir(foto);
-  const cancelarExclusao = () => setImagemParaExcluir(null);
+  const pedirExclusao = (foto) => {
+    setImagemParaExcluir(foto);
+  };
+
+
+  const cancelarExclusao = () => {
+    setImagemParaExcluir(null);
+  };
+
 
   const confirmarExclusao = async () => {
 
@@ -204,16 +294,28 @@ export default function Galeriaadm() {
         throw new Error();
       }
 
-      setFotos((prev) => prev.filter((foto) => foto.id !== imagemParaExcluir.id));
+      setFotos((prev) =>
+        prev.filter(
+          (foto) =>
+            foto.id !== imagemParaExcluir.id
+        )
+      );
 
-      if (imagemSelecionada?.id === imagemParaExcluir.id) {
+      if (
+        imagemSelecionada?.id ===
+        imagemParaExcluir.id
+      ) {
+
         setIndiceAtual(null);
+
       }
 
     } catch (err) {
       setErro("Não foi possível excluir o arquivo.");
     } finally {
+
       setImagemParaExcluir(null);
+
     }
 
   };
@@ -228,22 +330,50 @@ export default function Galeriaadm() {
     function handleKeyDown(event) {
 
       if (imagemParaExcluir) {
-        if (event.key === "Escape") cancelarExclusao();
+
+        if (event.key === "Escape") {
+          cancelarExclusao();
+        }
+
         return;
+
       }
 
       if (imagemSelecionada) {
-        if (event.key === "Escape") fecharImagem();
-        if (event.key === "ArrowLeft") irParaAnterior();
-        if (event.key === "ArrowRight") irParaProxima();
+
+        if (event.key === "Escape") {
+          fecharImagem();
+        }
+
+        if (event.key === "ArrowLeft") {
+          irParaAnterior();
+        }
+
+        if (event.key === "ArrowRight") {
+          irParaProxima();
+        }
+
       }
 
     }
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener(
+      "keydown",
+      handleKeyDown
+    );
 
-  }, [imagemSelecionada, imagemParaExcluir, indiceAtual, fotos]);
+    return () =>
+      window.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
+
+  }, [
+    imagemSelecionada,
+    imagemParaExcluir,
+    indiceAtual,
+    fotos,
+  ]);
 
 
   return (
@@ -255,17 +385,32 @@ export default function Galeriaadm() {
       <Content>
 
         <Header>
-          <Title>Galeria</Title>
+
+          <Title>
+            Galeria
+          </Title>
+
           <Subtitle>
             Confira os melhores momentos registrados durante o evento.
           </Subtitle>
+
         </Header>
 
+
         {erro && (
-          <p style={{ textAlign: "center", color: "red", marginBottom: 20 }}>
+
+          <p
+            style={{
+              textAlign: "center",
+              color: "red",
+              marginBottom: 20,
+            }}
+          >
             {erro}
           </p>
+
         )}
+
 
         <Gallery>
 
@@ -277,6 +422,7 @@ export default function Galeriaadm() {
               <EmptyText>
                 No momento não existem arquivos publicados na galeria.
               </EmptyText>
+
             </EmptyState>
 
           ) : (
@@ -293,15 +439,26 @@ export default function Galeriaadm() {
                   )}
                 </ImageBox>
 
+
                 <DeleteButton
                   type="button"
+
+                  onMouseMove={
+                    handleButtonMouseMove
+                  }
+
                   onClick={(event) => {
+
                     event.stopPropagation();
+
                     pedirExclusao(foto);
+
                   }}
                   aria-label="Excluir arquivo"
                 >
+
                   <FiTrash2 />
+
                 </DeleteButton>
 
               </Card>
@@ -314,14 +471,27 @@ export default function Galeriaadm() {
 
       </Content>
 
+
+      {/* ==========================================
+          BOTÃO ADICIONAR
+      ========================================== */}
+
       <FloatingButton
         type="button"
+
+        onMouseMove={
+          handleButtonMouseMove
+        }
+
         onClick={abrirGaleria}
         aria-label="Adicionar imagens ou vídeos"
         disabled={enviando}
       >
+
         <FiPlus size={30} />
+
       </FloatingButton>
+
 
       <input
         type="file"
@@ -332,31 +502,59 @@ export default function Galeriaadm() {
         onChange={adicionarImagem}
       />
 
+
+      {/* ==========================================
+          MODAL DA IMAGEM
+      ========================================== */}
+
       {imagemSelecionada && (
 
         <Modal
           onClick={(event) => {
-            if (event.target === event.currentTarget) fecharImagem();
+
+            if (
+              event.target ===
+              event.currentTarget
+            ) {
+              fecharImagem();
+            }
+
           }}
         >
+
           <ModalContent>
 
             <CloseButton type="button" onClick={fecharImagem} aria-label="Fechar visualização">
               <FiX />
+
             </CloseButton>
 
+
             {fotos.length > 1 && (
+
               <NavButton
                 type="button"
+
                 $direction="left"
+
+                onMouseMove={
+                  handleButtonMouseMove
+                }
+
                 onClick={(event) => {
+
                   event.stopPropagation();
+
                   irParaAnterior();
+
                 }}
                 aria-label="Anterior"
               >
+
                 <FiChevronLeft />
+
               </NavButton>
+
             )}
 
             {ehVideo(imagemSelecionada.imagem) ? (
@@ -379,47 +577,104 @@ export default function Galeriaadm() {
               />
             )}
 
+
             {fotos.length > 1 && (
+
               <NavButton
                 type="button"
+
                 $direction="right"
+
+                onMouseMove={
+                  handleButtonMouseMove
+                }
+
                 onClick={(event) => {
+
                   event.stopPropagation();
+
                   irParaProxima();
+
                 }}
                 aria-label="Próximo"
               >
+
                 <FiChevronRight />
+
               </NavButton>
+
             )}
 
           </ModalContent>
+
         </Modal>
 
       )}
 
+
+      {/* ==========================================
+          MODAL DE EXCLUSÃO
+      ========================================== */}
+
       {imagemParaExcluir && (
 
         <DeleteModalOverlay
+
           onClick={(event) => {
-            if (event.target === event.currentTarget) cancelarExclusao();
+
+            if (
+              event.target ===
+              event.currentTarget
+            ) {
+
+              cancelarExclusao();
+
+            }
+
           }}
+
         >
+
           <DeleteModal>
 
             <h3>Excluir arquivo</h3>
             <p>Tem certeza que deseja excluir este arquivo?</p>
 
             <ModalButtons>
-              <CancelButton type="button" onClick={cancelarExclusao}>
+
+              <CancelButton
+                type="button"
+
+                onMouseMove={
+                  handleButtonMouseMove
+                }
+
+                onClick={
+                  cancelarExclusao
+                }
+              >
                 Cancelar
               </CancelButton>
-              <ConfirmButton type="button" onClick={confirmarExclusao}>
+
+
+              <ConfirmButton
+                type="button"
+
+                onMouseMove={
+                  handleButtonMouseMove
+                }
+
+                onClick={
+                  confirmarExclusao
+                }
+              >
                 Sim, excluir
               </ConfirmButton>
+
             </ModalButtons>
 
           </DeleteModal>
+
         </DeleteModalOverlay>
 
       )}

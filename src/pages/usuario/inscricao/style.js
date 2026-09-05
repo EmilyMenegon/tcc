@@ -70,31 +70,35 @@ export const TitleArea = styled.div`
   }
 `;
 
-/* ============================================================
-   TITLE
-============================================================ */
-
 export const Title = styled.h1`
-  margin: 0;
+  margin: 0 0 18px;
 
   color: #831614;
 
-  font-size: clamp(
-    1.8rem,
-    3.3vw,
-    2.8rem
-  );
+  font-size:
+    clamp(
+      2.6rem,
+      5vw,
+      4.8rem
+    );
 
-  font-weight: 700;
+  font-weight: 900;
 
-  line-height: 1.12;
+  letter-spacing: -2px;
 
-  letter-spacing: -0.025em;
+  line-height: 1.05;
+
+  @media (max-width: 768px) {
+    font-size:
+      clamp(
+        2.4rem,
+        9vw,
+        4rem
+      );
+
+    letter-spacing: -1.5px;
+  }
 `;
-
-/* ============================================================
-   CONTAINER
-============================================================ */
 
 export const Container = styled.div`
   position: relative;

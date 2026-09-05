@@ -1,3 +1,4 @@
+
 import styled, { createGlobalStyle } from "styled-components";
 import { Link } from "react-router-dom";
 
@@ -35,7 +36,6 @@ export const GlobalStyle = createGlobalStyle`
     font-family: "Poppins", sans-serif;
   }
 `;
-
 
 /* ==========================================
    PAGE
@@ -78,9 +78,9 @@ export const Page = styled.div`
   }
 `;
 
-
 /* ==========================================
    BOTÃO VOLTAR
+   SEM ANIMAÇÃO
 ========================================== */
 
 export const BackButton = styled(Link)`
@@ -144,7 +144,6 @@ export const BackButton = styled(Link)`
   }
 `;
 
-
 /* ==========================================
    CONTAINER
 ========================================== */
@@ -194,7 +193,6 @@ export const Container = styled.div`
   }
 `;
 
-
 /* ==========================================
    PROFILE BOX
 ========================================== */
@@ -206,7 +204,6 @@ export const ProfileBox = styled.div`
 
   width: 100%;
 `;
-
 
 /* ==========================================
    AVATAR WRAPPER
@@ -223,7 +220,6 @@ export const AvatarWrapper = styled.div`
     height: 130px;
   }
 `;
-
 
 /* ==========================================
    AVATAR
@@ -253,9 +249,9 @@ export const Avatar = styled.img`
   }
 `;
 
-
 /* ==========================================
    EDITAR FOTO
+   COM ANIMAÇÃO
 ========================================== */
 
 export const EditButton = styled.label`
@@ -278,14 +274,76 @@ export const EditButton = styled.label`
 
   cursor: pointer;
 
-  transition: 0.2s;
-
   white-space: nowrap;
 
-  &:hover {
+  overflow: hidden;
+
+  isolation: isolate;
+
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.25s ease,
+    box-shadow 0.25s ease;
+
+  &::before {
+    content: "";
+
+    position: absolute;
+
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+
+    width: 20px;
+    height: 20px;
+
+    border-radius: 50%;
+
     background: #ffdb53;
 
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    transition:
+      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+
+    z-index: -1;
+
+    pointer-events: none;
+  }
+
+  .buttonContent {
+    position: relative;
+    z-index: 2;
+  }
+
+  &:hover {
     color: #111;
+
+    transform: translateY(-3px);
+
+    box-shadow:
+      0 10px 22px
+      rgba(0, 0, 0, 0.20);
+
+    &::before {
+      transform:
+        translate(-50%, -50%)
+        scale(18);
+    }
+  }
+
+  &:active {
+    transform:
+      translateY(0)
+      scale(0.97);
+
+    transition:
+      transform 0.08s ease;
+  }
+
+  &:focus {
+    outline: none;
   }
 
   input {
@@ -301,7 +359,6 @@ export const EditButton = styled.label`
     font-size: 11px;
   }
 `;
-
 
 /* ==========================================
    NOME
@@ -337,7 +394,6 @@ export const UserName = styled.h2`
   }
 `;
 
-
 /* ==========================================
    EMAIL
 ========================================== */
@@ -360,7 +416,6 @@ export const UserEmail = styled.p`
   }
 `;
 
-
 /* ==========================================
    FIELD
 ========================================== */
@@ -374,7 +429,6 @@ export const Field = styled.div`
 
   width: 100%;
 `;
-
 
 /* ==========================================
    LABEL
@@ -391,7 +445,6 @@ export const Label = styled.label`
     font-size: 13px;
   }
 `;
-
 
 /* ==========================================
    INPUT
@@ -437,7 +490,6 @@ export const Input = styled.input`
   }
 `;
 
-
 /* ==========================================
    PASSWORD
 ========================================== */
@@ -472,10 +524,8 @@ export const PasswordBox = styled.div`
   }
 `;
 
-
 /* ==========================================
    SAVE BUTTON
-   MESMA ANIMAÇÃO DO USUÁRIO
 ========================================== */
 
 export const SaveButton = styled.button`
@@ -529,14 +579,13 @@ export const SaveButton = styled.button`
     transition:
       transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 
-    z-index: -1;
+    z-index: 0;
 
     pointer-events: none;
   }
 
-  & > * {
+  .buttonContent {
     position: relative;
-
     z-index: 2;
   }
 
@@ -552,7 +601,7 @@ export const SaveButton = styled.button`
     &::before {
       transform:
         translate(-50%, -50%)
-        scale(18);
+        scale(25);
     }
   }
 
@@ -586,9 +635,9 @@ export const SaveButton = styled.button`
   }
 `;
 
-
 /* ==========================================
    SAIR DA CONTA
+   SEM ANIMAÇÃO
 ========================================== */
 
 export const LogoutLink = styled.span`
@@ -617,7 +666,6 @@ export const LogoutLink = styled.span`
   }
 `;
 
-
 /* ==========================================
    MODAL OVERLAY
 ========================================== */
@@ -643,7 +691,6 @@ export const ModalOverlay = styled.div`
 
   padding: 20px;
 `;
-
 
 /* ==========================================
    MODAL
@@ -723,7 +770,6 @@ export const Modal = styled.div`
   }
 `;
 
-
 /* ==========================================
    MODAL BUTTONS
 ========================================== */
@@ -745,6 +791,10 @@ export const ModalButtons = styled.div`
     gap: 10px;
   }
 `;
+
+/* ==========================================
+   CANCELAR
+========================================== */
 
 export const CancelButton = styled.button`
   position: relative;
@@ -799,9 +849,14 @@ export const CancelButton = styled.button`
     transition:
       transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 
-    z-index: -1;
+    z-index: 0;
 
     pointer-events: none;
+  }
+
+  .buttonContent {
+    position: relative;
+    z-index: 2;
   }
 
   &:hover {
@@ -837,6 +892,10 @@ export const CancelButton = styled.button`
     width: 100%;
   }
 `;
+
+/* ==========================================
+   CONFIRMAR
+========================================== */
 
 export const ConfirmButton = styled.button`
   position: relative;
@@ -891,9 +950,14 @@ export const ConfirmButton = styled.button`
     transition:
       transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
 
-    z-index: -1;
+    z-index: 0;
 
     pointer-events: none;
+  }
+
+  .buttonContent {
+    position: relative;
+    z-index: 2;
   }
 
   &:hover {
@@ -929,3 +993,4 @@ export const ConfirmButton = styled.button`
     width: 100%;
   }
 `;
+

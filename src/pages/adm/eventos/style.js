@@ -110,33 +110,34 @@ export const Title = styled.h1`
 
   font-size:
     clamp(
-      2rem,
-      4vw,
-      2.8rem
+      2.6rem,
+      5vw,
+      4.8rem
     );
 
-  font-weight: 700;
+  font-weight: 900;
 
-  line-height: 1.2;
+  line-height: 1.05;
 
-  @media (max-width: 600px) {
+  letter-spacing: -2px;
+
+
+  @media (max-width: 768px) {
+
     font-size:
       clamp(
-        1.8rem,
-        8vw,
-        2.2rem
+        2.4rem,
+        9vw,
+        4rem
       );
+
+    letter-spacing: -1.5px;
+
   }
 `;
 
-
-/* =====================================================
-   SUBTITLE
-   IGUAL À GALERIA
-===================================================== */
-
 export const Subtitle = styled.p`
-  max-width: 600px;
+  max-width: 700px;
 
   margin:
     10px 0 0;
@@ -145,26 +146,24 @@ export const Subtitle = styled.p`
 
   font-size:
     clamp(
-      .85rem,
-      1.5vw,
-      1rem
+      .95rem,
+      1.2vw,
+      1.08rem
     );
 
-  line-height: 1.5;
+  line-height: 1.7;
 
 
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
+
     width: 90%;
 
-    font-size: 14px;
+    max-width: 90%;
+
+    font-size: .95rem;
+
   }
 `;
-
-
-/* =====================================================
-   CARDS
-   MESMA ESTRUTURA DE GRID DA GALERIA
-===================================================== */
 
 export const Cards = styled.section`
   width: 100%;

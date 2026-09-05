@@ -308,7 +308,6 @@ export const BigText =
     padding: 0;
 
     color: #111;
-    
 
     font-size:
       clamp(
@@ -321,9 +320,9 @@ export const BigText =
 
     font-weight: 900;
 
-  span {
-  color: #ffdb53;
-}
+    span {
+      color: #ffdb53;
+    }
 
     @media (max-width: 768px) {
       font-size: 2.2rem;
@@ -502,7 +501,8 @@ export const PrimaryButton =
       transform:
         translate(-50%, -50%)
         scale(18);
-         color: #ffffff;
+
+      color: #ffffff;
     }
 
     svg {
@@ -552,7 +552,6 @@ export const PrimaryButton =
     }
   `;
 
-
 /* ============================================================
    HERO IMAGE
 ============================================================ */
@@ -597,6 +596,10 @@ export const Image =
 
     z-index: 2;
   `;
+
+/* ============================================================
+   CÍRCULOS
+============================================================ */
 
 export const Circle =
   styled.span`
@@ -647,6 +650,10 @@ export const Circle =
       display: none;
     }
   `;
+
+/* ============================================================
+   3 PEQUENAS IMAGENS AO REDOR DA INICIALIMG
+============================================================ */
 
 export const PixelImage =
   styled.img`
@@ -1452,11 +1459,6 @@ export const FeatureCard =
 
     box-shadow: none !important;
 
-    /*
-      DIVISOR VERTICAL
-      Fica exatamente entre os cards,
-      como os divisores da seção "NÚMEROS".
-    */
     &:not(:last-child)::after {
       content: "";
 
@@ -1477,10 +1479,6 @@ export const FeatureCard =
       pointer-events: none;
     }
 
-    /*
-      Remove os divisores no tablet,
-      porque os cards passam para 2 colunas.
-    */
     @media (max-width: 900px) {
       min-height: 220px;
 
@@ -1491,9 +1489,6 @@ export const FeatureCard =
       }
     }
 
-    /*
-      Mobile: uma coluna, sem linhas.
-    */
     @media (max-width: 550px) {
       min-height: auto;
 
@@ -1504,7 +1499,6 @@ export const FeatureCard =
       }
     }
   `;
-
 
 export const FeatureIcon =
   styled.div`
@@ -1888,11 +1882,6 @@ export const CTALink = styled.a`
     color 0.3s ease,
     transform 0.25s ease;
 
-
-  /* =========================================
-     EFEITO LÍQUIDO
-  ========================================= */
-
   &::before {
     content: "";
 
@@ -1926,11 +1915,6 @@ export const CTALink = styled.a`
       );
   }
 
-
-  /* =========================================
-     CONTEÚDO DO BOTÃO
-  ========================================= */
-
   .button-content {
     position: relative;
 
@@ -1949,11 +1933,6 @@ export const CTALink = styled.a`
       color 0.3s ease;
   }
 
-
-  /* =========================================
-     HOVER
-  ========================================= */
-
   &:hover {
     color: #ffdb53;
 
@@ -1966,11 +1945,6 @@ export const CTALink = styled.a`
       translate(-50%, -50%)
       scale(18);
   }
-
-
-  /* =========================================
-     SETA
-  ========================================= */
 
   svg {
     flex-shrink: 0;
@@ -1990,21 +1964,11 @@ export const CTALink = styled.a`
       translateX(6px);
   }
 
-
-  /* =========================================
-     CLIQUE
-  ========================================= */
-
   &:active {
     transform:
       translateY(0)
       scale(0.98);
   }
-
-
-  /* =========================================
-     RESPONSIVO
-  ========================================= */
 
   @media (max-width: 768px) {
     width: 280px;

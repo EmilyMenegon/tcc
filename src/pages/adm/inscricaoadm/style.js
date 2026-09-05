@@ -1,3 +1,4 @@
+
 import styled, { keyframes } from "styled-components";
 
 /* =====================================================
@@ -101,64 +102,56 @@ export const TitleArea = styled.div`
 
   align-items: center;
 
-  gap: 8px;
+  gap: 10px;
 
   text-align: center;
 `;
-
-
-/* =====================================================
-   TITLE
-===================================================== */
-
 export const Title = styled.h1`
- margin: 0;
+  margin: 0 0 18px;
 
   color: #831614;
 
   font-size:
     clamp(
-      2rem,
-      4vw,
-      2.8rem
+      2.6rem,
+      5vw,
+      4.8rem
     );
 
-  font-weight: 700;
+  font-weight: 900;
 
-  line-height: 1.2;
+  letter-spacing: -2px;
 
-  @media (max-width: 600px) {
+  line-height: 1.05;
+
+  @media (max-width: 768px) {
     font-size:
       clamp(
-        1.8rem,
-        8vw,
-        2.2rem
+        2.4rem,
+        9vw,
+        4rem
       );
+
+    letter-spacing: -1.5px;
   }
 `;
-
-
-
-/* =====================================================
-   SUBTITLE
-===================================================== */
 
 export const Subtitle = styled.p`
   margin: 0;
 
   color: ${COLORS.muted};
 
-  font-size: 14px;
+  font-size:
+    clamp(
+      .95rem,
+      1.2vw,
+      1.08rem
+    );
 
-  line-height: 1.5;
+  line-height: 1.7;
 
   text-align: center;
 `;
-
-
-/* =====================================================
-   STATS
-===================================================== */
 
 export const Stats = styled.div`
   position: absolute;
@@ -327,6 +320,8 @@ export const FilterContainer = styled.div`
 ===================================================== */
 
 export const FilterButton = styled.button`
+  position: relative;
+
   min-width: 125px;
 
   height: 43px;
@@ -358,12 +353,84 @@ export const FilterButton = styled.button`
 
   cursor: pointer;
 
+  overflow: hidden;
+
+  isolation: isolate;
+
   transition:
-    background 0.22s ease,
-    color 0.22s ease,
-    transform 0.18s ease;
+    color 0.25s ease,
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s ease;
+
+  &::before {
+    content: "";
+
+    position: absolute;
+
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+
+    width: 20px;
+    height: 20px;
+
+    border-radius: 50%;
+
+    background: ${({ $active }) =>
+      $active ? COLORS.primaryDark : COLORS.yellow};
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    transition:
+      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+
+    z-index: -1;
+
+    pointer-events: none;
+  }
+
+  & > * {
+    position: relative;
+
+    z-index: 2;
+  }
+
+  &:hover {
+    color: #ffffff;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+      0 8px 18px
+      rgba(131, 22, 20, 0.18);
+
+    &::before {
+      transform:
+        translate(-50%, -50%)
+        scale(15);
+    }
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${COLORS.yellow};
+
+    outline-offset: 2px;
+  }
 
   strong {
+    position: relative;
+
+    z-index: 2;
+
     min-width: 21px;
     height: 21px;
 
@@ -383,30 +450,6 @@ export const FilterButton = styled.button`
     font-size: 10px;
 
     font-weight: 700;
-  }
-
-  &:hover {
-    background: ${({ $active }) =>
-      $active ? COLORS.primaryDark : "#fff7d8"};
-
-    color: ${({ $active }) =>
-      $active ? "#ffffff" : COLORS.primary};
-
-    transform: translateY(-1px);
-  }
-
-  &:active {
-    transform: scale(0.97);
-  }
-
-  &:focus {
-    outline: none;
-  }
-
-  &:focus-visible {
-    outline: 2px solid ${COLORS.yellow};
-
-    outline-offset: 2px;
   }
 
   @media (max-width: 600px) {
@@ -967,11 +1010,11 @@ export const Actions = styled.div`
 
 /* =====================================================
    ACTION BUTTON
-   SEM FUNDO
-   SEM BORDA
 ===================================================== */
 
 export const ActionButton = styled.button`
+  position: relative;
+
   width: 32px;
   height: 32px;
 
@@ -986,7 +1029,7 @@ export const ActionButton = styled.button`
 
   border: none;
 
-  border-radius: 0;
+  border-radius: 50%;
 
   color: ${({ $variant }) =>
     $variant === "delete"
@@ -997,14 +1040,52 @@ export const ActionButton = styled.button`
 
   box-shadow: none;
 
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease,
-    opacity 0.2s ease;
+  overflow: hidden;
+
+  isolation: isolate;
 
   appearance: none;
 
+  transition:
+    color 0.25s ease,
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s ease;
+
+  &::before {
+    content: "";
+
+    position: absolute;
+
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+
+    width: 10px;
+    height: 10px;
+
+    border-radius: 50%;
+
+    background: ${({ $variant }) =>
+      $variant === "delete"
+        ? "#111"
+        : COLORS.yellow};
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    transition:
+      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+
+    z-index: -1;
+
+    pointer-events: none;
+  }
+
   svg {
+    position: relative;
+
+    z-index: 2;
+
     width: 18px;
     height: 18px;
 
@@ -1012,38 +1093,38 @@ export const ActionButton = styled.button`
   }
 
   &:hover {
-    background: transparent;
-
     color: ${({ $variant }) =>
       $variant === "delete"
-        ? "#a91515"
-        : "#5f0d0c"};
+        ? "#ffffff"
+        : "#111111"};
 
-    transform: translateY(-2px) scale(1.08);
+    transform:
+      translateY(-2px)
+      scale(1.08);
 
-    box-shadow: none;
+    box-shadow:
+      0 7px 16px
+      rgba(0, 0, 0, 0.16);
+
+    &::before {
+      transform:
+        translate(-50%, -50%)
+        scale(5);
+    }
   }
 
   &:active {
-    background: transparent;
-
     transform: scale(0.9);
-
-    box-shadow: none;
   }
 
   &:focus {
     outline: none;
-
-    background: transparent;
   }
 
   &:focus-visible {
     outline: 2px solid ${COLORS.yellow};
 
     outline-offset: 3px;
-
-    border-radius: 5px;
   }
 `;
 
@@ -1264,6 +1345,8 @@ export const ModalDescription = styled.p`
 ===================================================== */
 
 export const ModalClose = styled.button`
+  position: relative;
+
   width: 32px;
   height: 32px;
 
@@ -1286,19 +1369,65 @@ export const ModalClose = styled.button`
 
   cursor: pointer;
 
+  overflow: hidden;
+
+  isolation: isolate;
+
   transition:
-    color 0.2s ease,
-    background 0.2s ease;
+    color 0.25s ease,
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+
+  &::before {
+    content: "";
+
+    position: absolute;
+
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+
+    width: 10px;
+    height: 10px;
+
+    border-radius: 50%;
+
+    background: #eeeeee;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    transition:
+      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+
+    z-index: -1;
+
+    pointer-events: none;
+  }
 
   svg {
+    position: relative;
+
+    z-index: 2;
+
     width: 18px;
     height: 18px;
   }
 
   &:hover {
-    background: #f4f4f4;
-
     color: #222;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+      0 6px 14px
+      rgba(0, 0, 0, 0.12);
+
+    &::before {
+      transform:
+        translate(-50%, -50%)
+        scale(5);
+    }
   }
 
   &:focus {
@@ -1486,6 +1615,8 @@ export const ModalButtons = styled.div`
 ===================================================== */
 
 export const SaveButton = styled.button`
+  position: relative;
+
   min-height: 45px;
 
   padding: 0 20px;
@@ -1506,19 +1637,62 @@ export const SaveButton = styled.button`
 
   cursor: pointer;
 
+  overflow: hidden;
+
+  isolation: isolate;
+
   transition:
-    background 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    color 0.25s ease,
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s ease;
+
+  &::before {
+    content: "";
+
+    position: absolute;
+
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+
+    width: 20px;
+    height: 20px;
+
+    border-radius: 50%;
+
+    background: ${COLORS.yellow};
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    transition:
+      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+
+    z-index: -1;
+
+    pointer-events: none;
+  }
+
+  & > * {
+    position: relative;
+
+    z-index: 2;
+  }
 
   &:hover {
-    background: ${COLORS.primaryDark};
+    color: #111111;
 
     transform: translateY(-2px);
 
     box-shadow:
-      0 7px 16px
+      0 8px 18px
       rgba(131, 22, 20, 0.2);
+
+    &::before {
+      transform:
+        translate(-50%, -50%)
+        scale(15);
+    }
   }
 
   &:active {
@@ -1540,6 +1714,8 @@ export const SaveButton = styled.button`
 ===================================================== */
 
 export const CancelButton = styled.button`
+  position: relative;
+
   min-height: 45px;
 
   padding: 0 19px;
@@ -1560,17 +1736,58 @@ export const CancelButton = styled.button`
 
   cursor: pointer;
 
+  overflow: hidden;
+
+  isolation: isolate;
+
   transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease;
+    color 0.25s ease,
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s ease;
+
+  &::before {
+    content: "";
+
+    position: absolute;
+
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+
+    width: 20px;
+    height: 20px;
+
+    border-radius: 50%;
+
+    background: ${COLORS.yellow};
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    transition:
+      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+
+    z-index: -1;
+
+    pointer-events: none;
+  }
 
   &:hover {
-    background: #f5f5f5;
+    color: #111;
 
-    border-color: #d2d2d2;
+    border-color: ${COLORS.yellow};
 
     transform: translateY(-2px);
+
+    box-shadow:
+      0 8px 18px
+      rgba(0, 0, 0, 0.12);
+
+    &::before {
+      transform:
+        translate(-50%, -50%)
+        scale(15);
+    }
   }
 
   &:active {
@@ -1592,6 +1809,8 @@ export const CancelButton = styled.button`
 ===================================================== */
 
 export const ConfirmButton = styled.button`
+  position: relative;
+
   min-height: 45px;
 
   padding: 0 19px;
@@ -1612,20 +1831,57 @@ export const ConfirmButton = styled.button`
 
   cursor: pointer;
 
+  overflow: hidden;
+
+  isolation: isolate;
+
   transition:
-    background 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
+    color 0.25s ease,
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s ease,
     opacity 0.2s ease;
 
+  &::before {
+    content: "";
+
+    position: absolute;
+
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+
+    width: 20px;
+    height: 20px;
+
+    border-radius: 50%;
+
+    background: #111111;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    transition:
+      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+
+    z-index: -1;
+
+    pointer-events: none;
+  }
+
   &:hover:not(:disabled) {
-    background: ${COLORS.dangerDark};
+    color: #ffffff;
 
     transform: translateY(-2px);
 
     box-shadow:
-      0 7px 16px
+      0 8px 18px
       rgba(214, 40, 40, 0.2);
+
+    &::before {
+      transform:
+        translate(-50%, -50%)
+        scale(15);
+    }
   }
 
   &:active:not(:disabled) {
@@ -1704,3 +1960,4 @@ export const WarningBox = styled.div`
     font-size: 11px;
   }
 `;
+
