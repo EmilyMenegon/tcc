@@ -44,6 +44,11 @@ import {
 } from "./style";
 
 
+function ehVideo(arquivoBase64) {
+  return typeof arquivoBase64 === "string" && arquivoBase64.startsWith("data:video");
+}
+
+
 export default function Galeriaadm() {
 
   const [indiceAtual, setIndiceAtual] = useState(null);
@@ -79,7 +84,7 @@ export default function Galeriaadm() {
 
 
   /* ==========================================
-     ABRIR SELETOR DE IMAGEM
+     ABRIR SELETOR DE ARQUIVO
   ========================================== */
 
   const abrirGaleria = () => {
@@ -102,7 +107,7 @@ export default function Galeriaadm() {
 
 
   /* ==========================================
-     ADICIONAR IMAGENS (salva no banco)
+     ADICIONAR IMAGENS/VÍDEOS (salva no banco)
   ========================================== */
 
   const adicionarImagem = async (e) => {
@@ -133,7 +138,7 @@ export default function Galeriaadm() {
       const data = await res.json();
 
       if (!res.ok) {
-        setErro(data.erro || "Erro ao enviar as imagens.");
+        setErro(data.erro || "Erro ao enviar os arquivos.");
         return;
       }
 
@@ -141,7 +146,7 @@ export default function Galeriaadm() {
 
     } catch (err) {
       console.error(err);
-      setErro("Não foi possível enviar as imagens.");
+      setErro("Não foi possível enviar os arquivos. Se for um vídeo grande, tente um arquivo menor.");
     } finally {
       setEnviando(false);
       e.target.value = "";
@@ -206,7 +211,7 @@ export default function Galeriaadm() {
       }
 
     } catch (err) {
-      setErro("Não foi possível excluir a imagem.");
+      setErro("Não foi possível excluir o arquivo.");
     } finally {
       setImagemParaExcluir(null);
     }
@@ -268,9 +273,9 @@ export default function Galeriaadm() {
 
             <EmptyState>
               <EmptyIcon><FiImage /></EmptyIcon>
-              <EmptyTitle>Nenhuma foto disponível</EmptyTitle>
+              <EmptyTitle>Nenhuma foto ou vídeo disponível</EmptyTitle>
               <EmptyText>
-                No momento não existem imagens publicadas na galeria.
+                No momento não existem arquivos publicados na galeria.
               </EmptyText>
             </EmptyState>
 
@@ -281,7 +286,11 @@ export default function Galeriaadm() {
               <Card key={foto.id}>
 
                 <ImageBox onClick={() => abrirImagem(foto)}>
-                  <img src={foto.imagem} alt="Imagem da galeria" />
+                  {ehVideo(foto.imagem) ? (
+                    <video src={foto.imagem} muted />
+                  ) : (
+                    <img src={foto.imagem} alt="Imagem da galeria" />
+                  )}
                 </ImageBox>
 
                 <DeleteButton
@@ -290,7 +299,7 @@ export default function Galeriaadm() {
                     event.stopPropagation();
                     pedirExclusao(foto);
                   }}
-                  aria-label="Excluir imagem"
+                  aria-label="Excluir arquivo"
                 >
                   <FiTrash2 />
                 </DeleteButton>
@@ -308,7 +317,7 @@ export default function Galeriaadm() {
       <FloatingButton
         type="button"
         onClick={abrirGaleria}
-        aria-label="Adicionar imagens"
+        aria-label="Adicionar imagens ou vídeos"
         disabled={enviando}
       >
         <FiPlus size={30} />
@@ -316,7 +325,7 @@ export default function Galeriaadm() {
 
       <input
         type="file"
-        accept="image/*"
+        accept="image/*,video/*"
         multiple
         ref={fileInputRef}
         hidden
@@ -332,7 +341,7 @@ export default function Galeriaadm() {
         >
           <ModalContent>
 
-            <CloseButton type="button" onClick={fecharImagem} aria-label="Fechar imagem">
+            <CloseButton type="button" onClick={fecharImagem} aria-label="Fechar visualização">
               <FiX />
             </CloseButton>
 
@@ -344,17 +353,31 @@ export default function Galeriaadm() {
                   event.stopPropagation();
                   irParaAnterior();
                 }}
-                aria-label="Imagem anterior"
+                aria-label="Anterior"
               >
                 <FiChevronLeft />
               </NavButton>
             )}
 
-            <ModalImage
-              src={imagemSelecionada.imagem}
-              alt="Imagem ampliada"
-              onClick={(event) => event.stopPropagation()}
-            />
+            {ehVideo(imagemSelecionada.imagem) ? (
+              <video
+                src={imagemSelecionada.imagem}
+                controls
+                autoPlay
+                onClick={(event) => event.stopPropagation()}
+                style={{
+                  maxWidth: "90vw",
+                  maxHeight: "88vh",
+                  borderRadius: "15px",
+                }}
+              />
+            ) : (
+              <ModalImage
+                src={imagemSelecionada.imagem}
+                alt="Imagem ampliada"
+                onClick={(event) => event.stopPropagation()}
+              />
+            )}
 
             {fotos.length > 1 && (
               <NavButton
@@ -364,7 +387,7 @@ export default function Galeriaadm() {
                   event.stopPropagation();
                   irParaProxima();
                 }}
-                aria-label="Próxima imagem"
+                aria-label="Próximo"
               >
                 <FiChevronRight />
               </NavButton>
@@ -384,8 +407,8 @@ export default function Galeriaadm() {
         >
           <DeleteModal>
 
-            <h3>Excluir imagem</h3>
-            <p>Tem certeza que deseja excluir esta imagem?</p>
+            <h3>Excluir arquivo</h3>
+            <p>Tem certeza que deseja excluir este arquivo?</p>
 
             <ModalButtons>
               <CancelButton type="button" onClick={cancelarExclusao}>

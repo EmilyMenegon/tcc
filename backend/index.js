@@ -5,12 +5,13 @@ import tabelasRoutes from "./routes/tabelasRoutes.js";
 import perfilRoutes from "./routes/perfilRoutes.js";
 import inscricaoRoutes from "./routes/inscricaoRoutes.js";
 import galeriaRoutes from "./routes/galeriaRoutes.js";
+import muralRoutes from "./routes/muralRoutes.js";
 import eventoRoutes from "./routes/eventoRoutes.js";
 
 const app = express();
 
 app.use(cors());
-app.use(express.json({ limit: "10mb" }));
+app.use(express.json({ limit: "50mb" }));
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
@@ -22,6 +23,7 @@ app.use(perfilRoutes);
 app.use(inscricaoRoutes);
 app.use(galeriaRoutes);
 app.use(authRoutes);
+app.use(muralRoutes);
 app.use(eventoRoutes);
 
 const PORT = 3001;

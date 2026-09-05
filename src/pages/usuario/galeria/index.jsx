@@ -26,6 +26,11 @@ import {
 } from "./style";
 
 
+function ehVideo(arquivoBase64) {
+  return typeof arquivoBase64 === "string" && arquivoBase64.startsWith("data:video");
+}
+
+
 export default function Galeria() {
 
   const [indiceAtual, setIndiceAtual] = useState(null);
@@ -114,9 +119,9 @@ export default function Galeria() {
 
             <EmptyState>
               <EmptyIcon><FiImage /></EmptyIcon>
-              <EmptyTitle>Nenhuma foto disponível</EmptyTitle>
+              <EmptyTitle>Nenhuma foto ou vídeo disponível</EmptyTitle>
               <EmptyText>
-                No momento não existem imagens publicadas na galeria.
+                No momento não existem arquivos publicados na galeria.
               </EmptyText>
             </EmptyState>
 
@@ -138,7 +143,11 @@ export default function Galeria() {
               >
 
                 <ImageBox>
-                  <img src={foto.imagem} alt="Imagem da galeria" />
+                  {ehVideo(foto.imagem) ? (
+                    <video src={foto.imagem} muted />
+                  ) : (
+                    <img src={foto.imagem} alt="Imagem da galeria" />
+                  )}
                 </ImageBox>
 
               </Card>
@@ -160,7 +169,7 @@ export default function Galeria() {
         >
           <ModalContent>
 
-            <CloseButton type="button" onClick={fecharImagem} aria-label="Fechar imagem">
+            <CloseButton type="button" onClick={fecharImagem} aria-label="Fechar visualização">
               <FiX />
             </CloseButton>
 
@@ -172,17 +181,31 @@ export default function Galeria() {
                   event.stopPropagation();
                   irParaAnterior();
                 }}
-                aria-label="Imagem anterior"
+                aria-label="Anterior"
               >
                 <FiChevronLeft />
               </NavButton>
             )}
 
-            <ModalImage
-              src={imagemSelecionada.imagem}
-              alt="Imagem ampliada"
-              onClick={(event) => event.stopPropagation()}
-            />
+            {ehVideo(imagemSelecionada.imagem) ? (
+              <video
+                src={imagemSelecionada.imagem}
+                controls
+                autoPlay
+                onClick={(event) => event.stopPropagation()}
+                style={{
+                  maxWidth: "90vw",
+                  maxHeight: "88vh",
+                  borderRadius: "15px",
+                }}
+              />
+            ) : (
+              <ModalImage
+                src={imagemSelecionada.imagem}
+                alt="Imagem ampliada"
+                onClick={(event) => event.stopPropagation()}
+              />
+            )}
 
             {fotos.length > 1 && (
               <NavButton
@@ -192,7 +215,7 @@ export default function Galeria() {
                   event.stopPropagation();
                   irParaProxima();
                 }}
-                aria-label="Próxima imagem"
+                aria-label="Próximo"
               >
                 <FiChevronRight />
               </NavButton>

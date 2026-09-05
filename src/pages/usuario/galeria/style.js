@@ -342,6 +342,21 @@ export const ImageBox = styled.div`
 
 `;
 
+export const ImageBoxVideoPatch = `
+  video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform .5s ease;
+    background: #000;
+  }
+ 
+  &:hover video {
+    transform: scale(1.07);
+  }
+`;
+
 
 /* ==========================================
    EMPTY STATE
