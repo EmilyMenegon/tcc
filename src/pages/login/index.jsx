@@ -1,3 +1,4 @@
+
 import {
   useLayoutEffect,
   useRef,
@@ -332,6 +333,34 @@ export default function Login() {
 
   /*
   ============================================================
+  CORREÇÃO DO POSICIONAMENTO DO PAINEL
+  ============================================================
+  */
+
+  useLayoutEffect(() => {
+    const page = pageRef.current;
+
+    if (!page) return;
+
+    const panel =
+      page.querySelector(".panel-side");
+
+    if (!panel) return;
+
+    /*
+      O React já atualizou a classe
+      is-login / is-cadastro.
+
+      Só agora removemos o transform
+      aplicado pelo GSAP.
+    */
+    gsap.set(panel, {
+      clearProps: "transform",
+    });
+  }, [mode]);
+
+  /*
+  ============================================================
   ELEMENTOS ANIMÁVEIS DO FORMULÁRIO
   ============================================================
   */
@@ -428,6 +457,12 @@ export default function Login() {
       },
     });
 
+    /*
+    ------------------------------------------------------------
+    1. Esconde conteúdo do painel
+    ------------------------------------------------------------
+    */
+
     tl.to(
       panelContent,
       {
@@ -437,6 +472,12 @@ export default function Login() {
         ease: "power2.in",
       }
     );
+
+    /*
+    ------------------------------------------------------------
+    2. Esconde formulário atual
+    ------------------------------------------------------------
+    */
 
     tl.to(
       currentElements,
@@ -450,12 +491,24 @@ export default function Login() {
       "<"
     );
 
+    /*
+    ------------------------------------------------------------
+    3. Calcula deslocamento do painel
+    ------------------------------------------------------------
+    */
+
     const travel =
       direction === 1
         ? cardRect.width -
           panelRect.width -
           currentPanelLeft
         : -currentPanelLeft;
+
+    /*
+    ------------------------------------------------------------
+    4. Move o painel
+    ------------------------------------------------------------
+    */
 
     tl.to(
       panel,
@@ -467,20 +520,27 @@ export default function Login() {
       "-=0.01"
     );
 
-    tl.add(() => {
-      gsap.set(panel, {
-        clearProps: "transform",
-      });
+    /*
+    ------------------------------------------------------------
+    5. MUITO IMPORTANTE:
+       troca o modo ANTES de limpar o transform.
+    ------------------------------------------------------------
+    */
 
+    tl.add(() => {
       setMode(newMode);
     });
+
+    /*
+    ------------------------------------------------------------
+    6. Espera o React atualizar o DOM.
+    ------------------------------------------------------------
+    */
 
     tl.call(() => {
       requestAnimationFrame(() => {
         const newElements =
-          getFormAnimatedElements(
-            page
-          );
+          getFormAnimatedElements(page);
 
         gsap.set(newElements, {
           opacity: 0,
@@ -497,6 +557,12 @@ export default function Login() {
         });
       });
     });
+
+    /*
+    ------------------------------------------------------------
+    7. Mostra novamente o conteúdo do painel
+    ------------------------------------------------------------
+    */
 
     tl.to(
       panelContent,
@@ -1033,3 +1099,4 @@ export default function Login() {
     </>
   );
 }
+

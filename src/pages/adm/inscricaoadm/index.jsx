@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import Layoutadm from "../../../components/layoutadm";
 import { getAuthHeaders } from "../../../utils/auth";
@@ -77,6 +78,21 @@ export default function Inscricaoadm() {
   const [inscricaoExcluir, setInscricaoExcluir] = useState(null);
 
   const [confirmacaoExclusao, setConfirmacaoExclusao] = useState("");
+
+  // =====================================================
+  // ANIMAÇÃO DOS BOTÕES
+  // =====================================================
+
+  const handleButtonMouseMove = (e) => {
+    const button = e.currentTarget;
+    const rect = button.getBoundingClientRect();
+
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    button.style.setProperty("--mouse-x", `${x}px`);
+    button.style.setProperty("--mouse-y", `${y}px`);
+  };
 
   useEffect(() => {
     buscarInscricoes();
@@ -266,6 +282,7 @@ export default function Inscricaoadm() {
               key={item.nome}
               $active={turno === item.nome}
               onClick={() => setTurno(item.nome)}
+              onMouseMove={handleButtonMouseMove}
             >
               <span>{item.nome}</span>
 
@@ -359,6 +376,7 @@ export default function Inscricaoadm() {
                             title="Editar inscrição"
                             aria-label={`Editar ${inscricao.nome_poeta}`}
                             onClick={() => abrirEdicao(inscricao)}
+                            onMouseMove={handleButtonMouseMove}
                           >
                             <FiEdit />
                           </ActionButton>
@@ -369,6 +387,7 @@ export default function Inscricaoadm() {
                             title="Excluir inscrição"
                             aria-label={`Excluir ${inscricao.nome_poeta}`}
                             onClick={() => abrirExclusao(inscricao)}
+                            onMouseMove={handleButtonMouseMove}
                           >
                             <FiTrash2 />
                           </ActionButton>
@@ -427,6 +446,7 @@ export default function Inscricaoadm() {
               <ModalClose
                 type="button"
                 onClick={() => setInscricaoEditando(null)}
+                onMouseMove={handleButtonMouseMove}
                 aria-label="Fechar"
               >
                 <FiX />
@@ -527,6 +547,7 @@ export default function Inscricaoadm() {
                 <CancelButton
                   type="button"
                   onClick={() => setInscricaoEditando(null)}
+                  onMouseMove={handleButtonMouseMove}
                 >
                   Cancelar
                 </CancelButton>
@@ -534,6 +555,7 @@ export default function Inscricaoadm() {
                 <SaveButton
                   type="button"
                   onClick={salvarEdicao}
+                  onMouseMove={handleButtonMouseMove}
                 >
                   Salvar alterações
                 </SaveButton>
@@ -568,6 +590,7 @@ export default function Inscricaoadm() {
               <ModalClose
                 type="button"
                 onClick={fecharModalExclusao}
+                onMouseMove={handleButtonMouseMove}
                 aria-label="Fechar"
               >
                 <FiX />
@@ -611,6 +634,7 @@ export default function Inscricaoadm() {
                 <CancelButton
                   type="button"
                   onClick={fecharModalExclusao}
+                  onMouseMove={handleButtonMouseMove}
                 >
                   Cancelar
                 </CancelButton>
@@ -618,6 +642,7 @@ export default function Inscricaoadm() {
                 <ConfirmButton
                   type="button"
                   onClick={excluirInscricao}
+                  onMouseMove={handleButtonMouseMove}
                   disabled={
                     confirmacaoExclusao.toLowerCase() !==
                     "excluir"
@@ -633,3 +658,4 @@ export default function Inscricaoadm() {
     </Page>
   );
 }
+

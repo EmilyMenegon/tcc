@@ -107,33 +107,32 @@ export const Title = styled.h1`
 
   font-size:
     clamp(
-      2rem,
-      4vw,
-      2.8rem
+      2.6rem,
+      5vw,
+      4.8rem
     );
 
-  font-weight: 700;
+  font-weight: 900;
 
-  line-height: 1.2;
+  line-height: 1.05;
+
+  letter-spacing: -2px;
 
 
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
 
     font-size:
       clamp(
-        1.8rem,
-        8vw,
-        2.2rem
+        2.4rem,
+        9vw,
+        4rem
       );
+
+    letter-spacing: -1.5px;
 
   }
 
 `;
-
-
-/* =====================================================
-   SUBTITLE
-===================================================== */
 
 export const Subtitle = styled.p`
 
@@ -143,28 +142,27 @@ export const Subtitle = styled.p`
 
   font-size:
     clamp(
-      .85rem,
-      1.5vw,
-      1rem
+      .95rem,
+      1.2vw,
+      1.08rem
     );
 
-  line-height: 1.5;
+  line-height: 1.7;
 
-  max-width: 600px;
+  max-width: 700px;
 
 
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
 
     width: 90%;
 
     max-width: 90%;
 
-    font-size: 14px;
+    font-size: .95rem;
 
   }
 
 `;
-
 
 /* =====================================================
    MURAL
@@ -718,8 +716,8 @@ const ButtonEffect = `
     top:
       var(--mouse-y);
 
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
 
     border-radius: 50%;
 
@@ -780,11 +778,6 @@ const ButtonEffect = `
 
 `;
 
-
-/* =====================================================
-   BOTÃO +
-===================================================== */
-
 export const FloatingButton = styled.button`
 
   ${ButtonEffect}
@@ -831,7 +824,7 @@ export const FloatingButton = styled.button`
 
   &::before {
 
-    background: #000000;
+    background: #831614;
 
   }
 
@@ -1337,68 +1330,38 @@ export const ColorOption = styled.button`
 `;
 
 
-/* =====================================================
-   CREATE BUTTON
-===================================================== */
-
 export const CreateButton = styled.button`
 
   ${ButtonEffect}
 
   width: 100%;
-
   height: 45px;
-
   margin-top: 2px;
-
   padding: 0;
-
   border: none;
-
   border-radius: 11px;
-
   background: #f9be06;
-
   color: #111111;
-
   font-size: 14px;
-
   font-weight: 700;
-
   cursor: pointer;
 
-
   &::before {
-
-    background: #111111;
-
+    background: #831614;
   }
-
 
   &:hover:not(:disabled) {
-
     color: #ffffff;
-
     transform:
       translateY(-2px);
-
   }
 
-
   &:disabled {
-
     opacity: .45;
-
     cursor: not-allowed;
-
   }
 
 `;
-
-
-/* =====================================================
-   VIEW OVERLAY
-===================================================== */
 
 export const ViewOverlay = styled.div`
 

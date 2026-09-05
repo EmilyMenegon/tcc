@@ -1,4 +1,79 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+
+
+/* ==========================================
+   ANIMAÇÃO DOS BOTÕES
+========================================== */
+
+const ButtonEffect = css`
+
+  position: relative;
+
+  overflow: hidden;
+
+  isolation: isolate;
+
+  --mouse-x: 50%;
+  --mouse-y: 50%;
+
+
+  &::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: var(--mouse-x);
+    top: var(--mouse-y);
+
+    width: 30px;
+    height: 30px;
+
+    border-radius: 50%;
+
+    background: #831614;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    transition:
+      transform .5s
+      cubic-bezier(
+        .16,
+        1,
+        .3,
+        1
+      );
+
+    z-index: 0;
+
+    pointer-events: none;
+
+  }
+
+
+  &:hover::before {
+
+    transform:
+      translate(-50%, -50%)
+      scale(18);
+
+  }
+
+
+  /* Conteúdo fica por cima da animação */
+
+  svg,
+  span {
+
+    position: relative;
+
+    z-index: 2;
+
+  }
+
+`;
 
 
 /* ==========================================
@@ -96,11 +171,6 @@ export const Header = styled.header`
 
 `;
 
-
-/* ==========================================
-   TITLE
-========================================== */
-
 export const Title = styled.h1`
 
   margin: 0;
@@ -109,37 +179,36 @@ export const Title = styled.h1`
 
   font-size:
     clamp(
-      2rem,
-      4vw,
-      2.8rem
+      2.6rem,
+      5vw,
+      4.8rem
     );
 
-  font-weight: 700;
+  font-weight: 900;
 
-  line-height: 1.2;
+  line-height: 1.05;
+
+  letter-spacing: -2px;
 
 
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
 
     font-size:
       clamp(
-        1.8rem,
-        8vw,
-        2.2rem
+        2.4rem,
+        9vw,
+        4rem
       );
+
+    letter-spacing: -1.5px;
 
   }
 
 `;
 
-
-/* ==========================================
-   SUBTITLE
-========================================== */
-
 export const Subtitle = styled.p`
 
-  max-width: 600px;
+  max-width: 700px;
 
   margin:
     10px 0 0;
@@ -148,28 +217,25 @@ export const Subtitle = styled.p`
 
   font-size:
     clamp(
-      .85rem,
-      1.5vw,
-      1rem
+      .95rem,
+      1.2vw,
+      1.08rem
     );
 
-  line-height: 1.5;
+  line-height: 1.7;
 
 
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
 
     width: 90%;
 
-    font-size: 14px;
+    max-width: 90%;
+
+    font-size: .95rem;
 
   }
 
 `;
-
-
-/* ==========================================
-   GALLERY
-========================================== */
 
 export const Gallery = styled.section`
 
@@ -338,6 +404,8 @@ export const ImageBox = styled.div`
 
 export const DeleteButton = styled.button`
 
+  ${ButtonEffect}
+
   position: absolute;
 
   top: 14px;
@@ -503,7 +571,7 @@ export const EmptyIcon = styled.div`
       .15
     );
 
-  color: #f9be06;
+  color: #ffdb53;
 
   font-size: 30px;
 
@@ -553,6 +621,8 @@ export const EmptyText = styled.p`
 
 export const FloatingButton = styled.button`
 
+  ${ButtonEffect}
+
   position: fixed;
 
   right: 35px;
@@ -567,7 +637,7 @@ export const FloatingButton = styled.button`
 
   border-radius: 50%;
 
-  background: #f9be06;
+  background: #ffdb53;
 
   color: #111111;
 
@@ -606,7 +676,7 @@ export const FloatingButton = styled.button`
 
     background: #000000;
 
-    color: #f9be06;
+    color: #ffdb53;
 
     transform:
       translateY(-2px);
@@ -806,6 +876,8 @@ export const ModalImage = styled.img`
 
 export const CloseButton = styled.button`
 
+  ${ButtonEffect}
+
   position: fixed;
 
   top: 25px;
@@ -855,7 +927,7 @@ export const CloseButton = styled.button`
 
   &:hover {
 
-    background: #f9be06;
+    background: #ffdb53;
 
     color: #000000;
 
@@ -1041,6 +1113,8 @@ export const ModalButtons = styled.div`
 
 export const CancelButton = styled.button`
 
+  ${ButtonEffect}
+
   padding:
     12px 22px;
 
@@ -1063,6 +1137,8 @@ export const CancelButton = styled.button`
 
     background: #d8d8d8;
 
+    color: #ffffff;
+
   }
 
 `;
@@ -1073,6 +1149,8 @@ export const CancelButton = styled.button`
 ========================================== */
 
 export const ConfirmButton = styled.button`
+
+  ${ButtonEffect}
 
   padding:
     12px 22px;
@@ -1100,17 +1178,21 @@ export const ConfirmButton = styled.button`
 
 `;
 
+
 /* ==========================================
    SETA DE NAVEGAÇÃO
 ========================================== */
 
 export const ArrowButton = styled.button`
 
+  ${ButtonEffect}
+
   position: fixed;
 
   top: 50%;
 
-  transform: translateY(-50%);
+  transform:
+    translateY(-50%);
 
   width: 55px;
 
@@ -1126,7 +1208,13 @@ export const ArrowButton = styled.button`
 
   justify-content: center;
 
-  background: rgba(255, 255, 255, .12);
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      .12
+    );
 
   color: #ffffff;
 
@@ -1147,14 +1235,20 @@ export const ArrowButton = styled.button`
 
 
   svg {
+
     width: 26px;
+
     height: 26px;
+
   }
 
 
   &:hover {
-    background: #f9be06;
+
+    background: #ffdb53;
+
     color: #000000;
+
   }
 
 
@@ -1175,8 +1269,11 @@ export const ArrowButton = styled.button`
 
 
     svg {
+
       width: 20px;
+
       height: 20px;
+
     }
 
   }
@@ -1185,18 +1282,25 @@ export const ArrowButton = styled.button`
 
 
 /* ==========================================
-   BOTÃO NAVEGAR (ANTERIOR / PRÓXIMA)
+   BOTÃO NAVEGAR
 ========================================== */
 
 export const NavButton = styled.button`
+
+  ${ButtonEffect}
 
   position: fixed;
 
   top: 50%;
 
-  ${({ $direction }) => ($direction === "left" ? "left: 30px;" : "right: 30px;")}
+  ${({ $direction }) =>
+    $direction === "left"
+      ? "left: 30px;"
+      : "right: 30px;"
+  }
 
-  transform: translateY(-50%);
+  transform:
+    translateY(-50%);
 
   width: 55px;
 
@@ -1212,7 +1316,13 @@ export const NavButton = styled.button`
 
   justify-content: center;
 
-  background: rgba(255, 255, 255, .12);
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      .12
+    );
 
   color: #ffffff;
 
@@ -1234,11 +1344,13 @@ export const NavButton = styled.button`
 
   &:hover {
 
-    background: #f9be06;
+    background: #ffdb53;
 
     color: #000000;
 
-    transform: translateY(-50%) scale(1.08);
+    transform:
+      translateY(-50%)
+      scale(1.08);
 
   }
 
@@ -1249,7 +1361,11 @@ export const NavButton = styled.button`
 
     height: 44px;
 
-    ${({ $direction }) => ($direction === "left" ? "left: 12px;" : "right: 12px;")}
+    ${({ $direction }) =>
+      $direction === "left"
+        ? "left: 12px;"
+        : "right: 12px;"
+    }
 
 
     svg {
