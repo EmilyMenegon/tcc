@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Layoutadm from "../../../components/Layoutadm";
 import { getUsuarioLogado, getAuthHeaders } from "../../../utils/auth";
+import VideoThumb from "../../../components/VideoThumb";
 
 import {
   FiPlus,
@@ -54,6 +55,7 @@ export default function Galeriaadm() {
   const [fotos, setFotos] = useState([]);
   const [erro, setErro] = useState("");
   const [enviando, setEnviando] = useState(false);
+  const [carregando, setCarregando] = useState(true);
 
   const fileInputRef = useRef(null);
 
@@ -103,6 +105,8 @@ export default function Galeriaadm() {
 
   function carregarFotos() {
 
+    setCarregando(true);
+
     fetch(
       "http://localhost:3001/galeria",
       {
@@ -124,6 +128,11 @@ export default function Galeriaadm() {
         setErro(
           "Não foi possível carregar a galeria."
         );
+
+      })
+      .finally(() => {
+
+        setCarregando(false);
 
       });
 
@@ -497,7 +506,21 @@ export default function Galeriaadm() {
 
         <Gallery>
 
-          {fotos.length === 0 ? (
+          {carregando ? (
+
+            <EmptyState>
+
+              <EmptyIcon>
+                <FiImage />
+              </EmptyIcon>
+
+              <EmptyTitle>
+                Carregando galeria...
+              </EmptyTitle>
+
+            </EmptyState>
+
+          ) : fotos.length === 0 ? (
 
             <EmptyState>
 
@@ -534,10 +557,8 @@ export default function Galeriaadm() {
                     foto.imagem
                   ) ? (
 
-                    <video
+                    <VideoThumb
                       src={foto.imagem}
-                      muted
-                      playsInline
                     />
 
                   ) : (
@@ -545,6 +566,7 @@ export default function Galeriaadm() {
                     <img
                       src={foto.imagem}
                       alt="Imagem da galeria"
+                      loading="lazy"
                     />
 
                   )}

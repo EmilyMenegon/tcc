@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import Layout from "../../../components/Layout";
 import { getAuthHeaders } from "../../../utils/auth";
+import VideoThumb from "../../../components/VideoThumb";
 
 import {
   FiX,
@@ -67,6 +68,8 @@ export default function Galeria() {
 
   const [fotos, setFotos] = useState([]);
 
+  const [carregando, setCarregando] = useState(true);
+
 
   const imagemSelecionada =
     indiceAtual !== null &&
@@ -82,6 +85,8 @@ export default function Galeria() {
   */
 
   useEffect(() => {
+
+    setCarregando(true);
 
     fetch("http://localhost:3001/galeria", {
       headers: getAuthHeaders(),
@@ -99,6 +104,11 @@ export default function Galeria() {
       .catch(() => {
 
         setFotos([]);
+
+      })
+      .finally(() => {
+
+        setCarregando(false);
 
       });
 
@@ -287,7 +297,21 @@ export default function Galeria() {
 
         <Gallery>
 
-          {fotos.length === 0 ? (
+          {carregando ? (
+
+            <EmptyState>
+
+              <EmptyIcon>
+                <FiImage />
+              </EmptyIcon>
+
+              <EmptyTitle>
+                Carregando galeria...
+              </EmptyTitle>
+
+            </EmptyState>
+
+          ) : fotos.length === 0 ? (
 
             <EmptyState>
 
@@ -341,9 +365,8 @@ export default function Galeria() {
 
                   {ehVideo(foto.imagem) ? (
 
-                    <video
+                    <VideoThumb
                       src={foto.imagem}
-                      muted
                     />
 
                   ) : (
@@ -351,6 +374,7 @@ export default function Galeria() {
                     <img
                       src={foto.imagem}
                       alt="Imagem da galeria"
+                      loading="lazy"
                     />
 
                   )}
@@ -471,6 +495,8 @@ export default function Galeria() {
                 controls
 
                 autoPlay
+
+                playsInline
 
                 onClick={(event) =>
                   event.stopPropagation()
