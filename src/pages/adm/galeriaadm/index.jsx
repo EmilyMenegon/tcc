@@ -20,22 +20,17 @@ import {
   Gallery,
   Card,
   ImageBox,
-
   EmptyState,
   EmptyIcon,
   EmptyTitle,
   EmptyText,
-
   FloatingButton,
-
   Modal,
   ModalContent,
   ModalImage,
   CloseButton,
   NavButton,
-
   DeleteButton,
-
   DeleteModalOverlay,
   DeleteModal,
   ModalButtons,
@@ -45,7 +40,10 @@ import {
 
 
 function ehVideo(arquivoBase64) {
-  return typeof arquivoBase64 === "string" && arquivoBase64.startsWith("data:video");
+  return (
+    typeof arquivoBase64 === "string" &&
+    arquivoBase64.startsWith("data:video")
+  );
 }
 
 
@@ -58,6 +56,7 @@ export default function Galeriaadm() {
   const [enviando, setEnviando] = useState(false);
 
   const fileInputRef = useRef(null);
+
 
   const imagemSelecionada =
     indiceAtual !== null && fotos[indiceAtual]
@@ -72,13 +71,21 @@ export default function Galeriaadm() {
   const handleButtonMouseMove = (event) => {
 
     const button = event.currentTarget;
+
     const rect = button.getBoundingClientRect();
 
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
-    button.style.setProperty("--mouse-x", `${x}px`);
-    button.style.setProperty("--mouse-y", `${y}px`);
+    button.style.setProperty(
+      "--mouse-x",
+      `${x}px`
+    );
+
+    button.style.setProperty(
+      "--mouse-y",
+      `${y}px`
+    );
 
   };
 
@@ -88,21 +95,36 @@ export default function Galeriaadm() {
   ========================================== */
 
   useEffect(() => {
+
     carregarFotos();
+
   }, []);
 
 
   function carregarFotos() {
 
-    fetch("http://localhost:3001/galeria", {
-      headers: getAuthHeaders(),
-    })
+    fetch(
+      "http://localhost:3001/galeria",
+      {
+        headers: getAuthHeaders(),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
-        setFotos(Array.isArray(data) ? data : []);
+
+        setFotos(
+          Array.isArray(data)
+            ? data
+            : []
+        );
+
       })
       .catch(() => {
-        setErro("Não foi possível carregar a galeria.");
+
+        setErro(
+          "Não foi possível carregar a galeria."
+        );
+
       });
 
   }
@@ -113,7 +135,9 @@ export default function Galeriaadm() {
   ========================================== */
 
   const abrirGaleria = () => {
+
     fileInputRef.current?.click();
+
   };
 
 
@@ -123,65 +147,88 @@ export default function Galeriaadm() {
 
   function arquivoParaBase64(arquivo) {
 
-    return new Promise((resolve, reject) => {
+    return new Promise(
+      (resolve, reject) => {
 
-      const reader = new FileReader();
+        const reader =
+          new FileReader();
 
-      reader.onload = () => resolve(reader.result);
+        reader.onload = () =>
+          resolve(reader.result);
 
-      reader.onerror = reject;
+        reader.onerror = reject;
 
-      reader.readAsDataURL(arquivo);
+        reader.readAsDataURL(
+          arquivo
+        );
 
-    });
+      }
+    );
 
   }
 
 
   /* ==========================================
-     ADICIONAR IMAGENS/VÍDEOS (salva no banco)
+     ADICIONAR IMAGENS/VÍDEOS
   ========================================== */
 
   const adicionarImagem = async (e) => {
 
-    const arquivos = Array.from(e.target.files);
+    const arquivos =
+      Array.from(e.target.files);
 
-    if (!arquivos.length) return;
+    if (!arquivos.length) {
+      return;
+    }
 
     setErro("");
     setEnviando(true);
 
     try {
 
-      const usuarioLogado = getUsuarioLogado();
+      const usuarioLogado =
+        getUsuarioLogado();
 
-      const base64s = await Promise.all(
-        arquivos.map((arquivo) =>
-          arquivoParaBase64(arquivo)
-        )
-      );
+      const base64s =
+        await Promise.all(
+          arquivos.map(
+            (arquivo) =>
+              arquivoParaBase64(
+                arquivo
+              )
+          )
+        );
 
-      const res = await fetch(
-        "http://localhost:3001/galeria",
-        {
-          method: "POST",
+      const res =
+        await fetch(
+          "http://localhost:3001/galeria",
+          {
+            method: "POST",
 
-          headers: {
-            "Content-Type": "application/json",
-            ...getAuthHeaders(),
-          },
+            headers: {
+              "Content-Type":
+                "application/json",
+              ...getAuthHeaders(),
+            },
 
-          body: JSON.stringify({
-            email: usuarioLogado.email,
-            fotos: base64s,
-          }),
-        }
-      );
+            body: JSON.stringify({
+              email:
+                usuarioLogado.email,
+              fotos: base64s,
+            }),
+          }
+        );
 
-      const data = await res.json();
+      const data =
+        await res.json();
 
       if (!res.ok) {
-        setErro(data.erro || "Erro ao enviar os arquivos.");
+
+        setErro(
+          data.erro ||
+          "Erro ao enviar os arquivos."
+        );
+
         return;
 
       }
@@ -194,7 +241,11 @@ export default function Galeriaadm() {
     } catch (err) {
 
       console.error(err);
-      setErro("Não foi possível enviar os arquivos. Se for um vídeo grande, tente um arquivo menor.");
+
+      setErro(
+        "Não foi possível enviar os arquivos. Se for um vídeo grande, tente um arquivo menor."
+      );
+
     } finally {
 
       setEnviando(false);
@@ -207,14 +258,16 @@ export default function Galeriaadm() {
 
 
   /* ==========================================
-     ABRIR / FECHAR / NAVEGAR
+     ABRIR IMAGEM/VÍDEO
   ========================================== */
 
   function abrirImagem(foto) {
 
-    const indice = fotos.findIndex(
-      (item) => item.id === foto.id
-    );
+    const indice =
+      fotos.findIndex(
+        (item) =>
+          item.id === foto.id
+      );
 
     setIndiceAtual(indice);
 
@@ -222,7 +275,9 @@ export default function Galeriaadm() {
 
 
   function fecharImagem() {
+
     setIndiceAtual(null);
+
   }
 
 
@@ -267,62 +322,76 @@ export default function Galeriaadm() {
   ========================================== */
 
   const pedirExclusao = (foto) => {
+
     setImagemParaExcluir(foto);
+
   };
 
 
   const cancelarExclusao = () => {
+
     setImagemParaExcluir(null);
+
   };
 
 
-  const confirmarExclusao = async () => {
+  const confirmarExclusao =
+    async () => {
 
-    if (!imagemParaExcluir) return;
+      if (!imagemParaExcluir) {
+        return;
+      }
 
-    try {
+      try {
 
-      const res = await fetch(
-        `http://localhost:3001/galeria/${imagemParaExcluir.id}`,
-        {
-          method: "DELETE",
-          headers: getAuthHeaders(),
+        const res =
+          await fetch(
+            `http://localhost:3001/galeria/${imagemParaExcluir.id}`,
+            {
+              method: "DELETE",
+              headers:
+                getAuthHeaders(),
+            }
+          );
+
+        if (!res.ok) {
+          throw new Error();
         }
-      );
 
-      if (!res.ok) {
-        throw new Error();
+        setFotos((prev) =>
+          prev.filter(
+            (foto) =>
+              foto.id !==
+              imagemParaExcluir.id
+          )
+        );
+
+        if (
+          imagemSelecionada?.id ===
+          imagemParaExcluir.id
+        ) {
+
+          setIndiceAtual(null);
+
+        }
+
+      } catch (err) {
+
+        setErro(
+          "Não foi possível excluir o arquivo."
+        );
+
+      } finally {
+
+        setImagemParaExcluir(null);
+
       }
 
-      setFotos((prev) =>
-        prev.filter(
-          (foto) =>
-            foto.id !== imagemParaExcluir.id
-        )
-      );
-
-      if (
-        imagemSelecionada?.id ===
-        imagemParaExcluir.id
-      ) {
-
-        setIndiceAtual(null);
-
-      }
-
-    } catch (err) {
-      setErro("Não foi possível excluir o arquivo.");
-    } finally {
-
-      setImagemParaExcluir(null);
-
-    }
-
-  };
+    };
 
 
   /* ==========================================
-     TECLADO: ESC, SETAS
+     TECLADO
   ========================================== */
 
   useEffect(() => {
@@ -331,7 +400,9 @@ export default function Galeriaadm() {
 
       if (imagemParaExcluir) {
 
-        if (event.key === "Escape") {
+        if (
+          event.key === "Escape"
+        ) {
           cancelarExclusao();
         }
 
@@ -341,15 +412,23 @@ export default function Galeriaadm() {
 
       if (imagemSelecionada) {
 
-        if (event.key === "Escape") {
+        if (
+          event.key === "Escape"
+        ) {
           fecharImagem();
         }
 
-        if (event.key === "ArrowLeft") {
+        if (
+          event.key ===
+          "ArrowLeft"
+        ) {
           irParaAnterior();
         }
 
-        if (event.key === "ArrowRight") {
+        if (
+          event.key ===
+          "ArrowRight"
+        ) {
           irParaProxima();
         }
 
@@ -357,10 +436,12 @@ export default function Galeriaadm() {
 
     }
 
+
     window.addEventListener(
       "keydown",
       handleKeyDown
     );
+
 
     return () =>
       window.removeEventListener(
@@ -382,6 +463,7 @@ export default function Galeriaadm() {
 
       <Layoutadm />
 
+
       <Content>
 
         <Header>
@@ -391,7 +473,8 @@ export default function Galeriaadm() {
           </Title>
 
           <Subtitle>
-            Confira os melhores momentos registrados durante o evento.
+            Confira os melhores momentos
+            registrados durante o evento.
           </Subtitle>
 
         </Header>
@@ -402,7 +485,7 @@ export default function Galeriaadm() {
           <p
             style={{
               textAlign: "center",
-              color: "red",
+              color: "#d62828",
               marginBottom: 20,
             }}
           >
@@ -417,10 +500,18 @@ export default function Galeriaadm() {
           {fotos.length === 0 ? (
 
             <EmptyState>
-              <EmptyIcon><FiImage /></EmptyIcon>
-              <EmptyTitle>Nenhuma foto ou vídeo disponível</EmptyTitle>
+
+              <EmptyIcon>
+                <FiImage />
+              </EmptyIcon>
+
+              <EmptyTitle>
+                Nenhuma foto ou vídeo disponível
+              </EmptyTitle>
+
               <EmptyText>
-                No momento não existem arquivos publicados na galeria.
+                No momento não existem
+                arquivos publicados na galeria.
               </EmptyText>
 
             </EmptyState>
@@ -429,14 +520,35 @@ export default function Galeriaadm() {
 
             fotos.map((foto) => (
 
-              <Card key={foto.id}>
+              <Card
+                key={foto.id}
+              >
 
-                <ImageBox onClick={() => abrirImagem(foto)}>
-                  {ehVideo(foto.imagem) ? (
-                    <video src={foto.imagem} muted />
+                <ImageBox
+                  onClick={() =>
+                    abrirImagem(foto)
+                  }
+                >
+
+                  {ehVideo(
+                    foto.imagem
+                  ) ? (
+
+                    <video
+                      src={foto.imagem}
+                      muted
+                      playsInline
+                    />
+
                   ) : (
-                    <img src={foto.imagem} alt="Imagem da galeria" />
+
+                    <img
+                      src={foto.imagem}
+                      alt="Imagem da galeria"
+                    />
+
                   )}
+
                 </ImageBox>
 
 
@@ -451,10 +563,14 @@ export default function Galeriaadm() {
 
                     event.stopPropagation();
 
-                    pedirExclusao(foto);
+                    pedirExclusao(
+                      foto
+                    );
 
                   }}
+
                   aria-label="Excluir arquivo"
+                  title="Excluir arquivo"
                 >
 
                   <FiTrash2 />
@@ -473,7 +589,7 @@ export default function Galeriaadm() {
 
 
       {/* ==========================================
-          BOTÃO ADICIONAR
+          BOTÃO FLUTUANTE
       ========================================== */}
 
       <FloatingButton
@@ -484,11 +600,19 @@ export default function Galeriaadm() {
         }
 
         onClick={abrirGaleria}
+
         aria-label="Adicionar imagens ou vídeos"
+
+        title="Adicionar imagens ou vídeos"
+
         disabled={enviando}
       >
 
-        <FiPlus size={30} />
+        <span className="buttonContent">
+
+          <FiPlus />
+
+        </span>
 
       </FloatingButton>
 
@@ -504,7 +628,7 @@ export default function Galeriaadm() {
 
 
       {/* ==========================================
-          MODAL DA IMAGEM
+          MODAL DA IMAGEM/VÍDEO
       ========================================== */}
 
       {imagemSelecionada && (
@@ -516,7 +640,9 @@ export default function Galeriaadm() {
               event.target ===
               event.currentTarget
             ) {
+
               fecharImagem();
+
             }
 
           }}
@@ -524,7 +650,13 @@ export default function Galeriaadm() {
 
           <ModalContent>
 
-            <CloseButton type="button" onClick={fecharImagem} aria-label="Fechar visualização">
+            <CloseButton
+              type="button"
+              onClick={fecharImagem}
+              aria-label="Fechar visualização"
+              title="Fechar"
+            >
+
               <FiX />
 
             </CloseButton>
@@ -548,7 +680,9 @@ export default function Galeriaadm() {
                   irParaAnterior();
 
                 }}
+
                 aria-label="Anterior"
+                title="Anterior"
               >
 
                 <FiChevronLeft />
@@ -557,24 +691,49 @@ export default function Galeriaadm() {
 
             )}
 
-            {ehVideo(imagemSelecionada.imagem) ? (
+
+            {ehVideo(
+              imagemSelecionada.imagem
+            ) ? (
+
               <video
-                src={imagemSelecionada.imagem}
+                src={
+                  imagemSelecionada.imagem
+                }
+
                 controls
+
                 autoPlay
-                onClick={(event) => event.stopPropagation()}
+
+                playsInline
+
+                onClick={(event) =>
+                  event.stopPropagation()
+                }
+
                 style={{
                   maxWidth: "90vw",
                   maxHeight: "88vh",
                   borderRadius: "15px",
+                  boxShadow:
+                    "0 20px 60px rgba(0,0,0,.4)",
                 }}
               />
+
             ) : (
+
               <ModalImage
-                src={imagemSelecionada.imagem}
+                src={
+                  imagemSelecionada.imagem
+                }
+
                 alt="Imagem ampliada"
-                onClick={(event) => event.stopPropagation()}
+
+                onClick={(event) =>
+                  event.stopPropagation()
+                }
               />
+
             )}
 
 
@@ -596,7 +755,9 @@ export default function Galeriaadm() {
                   irParaProxima();
 
                 }}
+
                 aria-label="Próximo"
+                title="Próximo"
               >
 
                 <FiChevronRight />
@@ -619,7 +780,6 @@ export default function Galeriaadm() {
       {imagemParaExcluir && (
 
         <DeleteModalOverlay
-
           onClick={(event) => {
 
             if (
@@ -632,13 +792,19 @@ export default function Galeriaadm() {
             }
 
           }}
-
         >
 
           <DeleteModal>
 
-            <h3>Excluir arquivo</h3>
-            <p>Tem certeza que deseja excluir este arquivo?</p>
+            <h3>
+              Excluir arquivo
+            </h3>
+
+            <p>
+              Tem certeza que deseja
+              excluir este arquivo?
+            </p>
+
 
             <ModalButtons>
 

@@ -296,7 +296,6 @@ export default function Profileadm() {
             </span>
           </SaveButton>
 
-          {/* SAIR DA CONTA - SEM ANIMAÇÃO */}
           <LogoutLink
             onClick={() => setShowLogoutModal(true)}
           >

@@ -61,12 +61,10 @@ import {
 
 
 // =====================================================
-// STORAGE
+// CONFIG DA API
 // =====================================================
 
-const MURAL_STORAGE_KEY = "muralPostIts";
-
-const MURAL_EVENT = "muralPostItsUpdated";
+const API_URL = "http://localhost:3001";
 
 
 // =====================================================
@@ -116,52 +114,78 @@ export default function Muraladm() {
 
 
   // ===================================================
-  // CARREGAR POSTS
+  // CABEÇALHOS PADRÃO (com token de autenticação)
+  // ===================================================
+
+  function headersPadrao() {
+
+    return {
+
+      "Content-Type": "application/json",
+
+      Authorization:
+        `Bearer ${localStorage.getItem("token")}`,
+
+    };
+
+  }
+
+
+  // ===================================================
+  // CARREGAR POSTS (agora vindo da API)
   // ===================================================
 
   const carregarPosts = () => {
 
-    try {
+    fetch(`${API_URL}/mural`, {
 
-      const dados =
-        localStorage.getItem(
-          MURAL_STORAGE_KEY
+      headers: {
+
+        Authorization:
+          `Bearer ${localStorage.getItem("token")}`,
+
+      },
+
+    })
+
+      .then((resposta) => {
+
+        if (!resposta.ok) {
+
+          throw new Error(
+            "Erro ao buscar o mural"
+          );
+
+        }
+
+        return resposta.json();
+
+      })
+
+      .then((postsSalvos) => {
+
+        if (Array.isArray(postsSalvos)) {
+
+          setPosts(postsSalvos);
+
+        } else {
+
+          setPosts([]);
+
+        }
+
+      })
+
+      .catch((error) => {
+
+        console.error(
+          "Erro ao carregar o mural:",
+          error
         );
 
-
-      if (!dados) {
-
         setPosts([]);
 
-        return;
-
-      }
-
-
-      const postsSalvos =
-        JSON.parse(dados);
-
-
-      if (Array.isArray(postsSalvos)) {
-
-        setPosts(postsSalvos);
-
-      } else {
-
-        setPosts([]);
-
-      }
-
-    } catch (error) {
-
-      console.error(
-        "Erro ao carregar o mural:",
-        error
-      );
-
-      setPosts([]);
-
-    }
+      });
 
   };
 
@@ -178,50 +202,19 @@ export default function Muraladm() {
 
 
   // ===================================================
-  // ATUALIZAÇÃO DO MURAL
+  // ATUALIZAÇÃO PERIÓDICA DO MURAL
   // ===================================================
 
   useEffect(() => {
 
-    const atualizarMural = () => {
-
-      carregarPosts();
-
-    };
-
-
-    window.addEventListener(
-      MURAL_EVENT,
-      atualizarMural
-    );
-
-
-    window.addEventListener(
-      "storage",
-      atualizarMural
-    );
-
-
     const intervalo =
       setInterval(
         carregarPosts,
-        1000
+        3000
       );
 
 
     return () => {
-
-      window.removeEventListener(
-        MURAL_EVENT,
-        atualizarMural
-      );
-
-
-      window.removeEventListener(
-        "storage",
-        atualizarMural
-      );
-
 
       clearInterval(intervalo);
 
@@ -302,7 +295,7 @@ export default function Muraladm() {
 
 
   // ===================================================
-  // CRIAR POST
+  // CRIAR POST (agora salvando na API)
   // ===================================================
 
   const criarPost = (event) => {
@@ -324,55 +317,58 @@ export default function Muraladm() {
     }
 
 
-    const novoPost = {
+    fetch(`${API_URL}/mural`, {
 
-      id: Date.now(),
+      method: "POST",
 
-      titulo:
-        tituloLimpo,
+      headers:
+        headersPadrao(),
 
-      descricao:
-        descricaoLimpa,
+      body: JSON.stringify({
 
-      mensagem:
-        descricaoLimpa,
+        titulo:
+          tituloLimpo,
 
-      cor:
-        corSelecionada,
+        descricao:
+          descricaoLimpa,
 
-      rotacao:
-        Number(
-          (
-            Math.random() * 4 - 2
-          ).toFixed(2)
-        ),
+        cor:
+          corSelecionada,
 
-    };
+      }),
 
+    })
 
-    const novosPosts = [
-      ...posts,
-      novoPost,
-    ];
+      .then((resposta) => {
 
+        if (!resposta.ok) {
 
-    localStorage.setItem(
-      MURAL_STORAGE_KEY,
-      JSON.stringify(
-        novosPosts
-      )
-    );
+          throw new Error(
+            "Erro ao criar post it"
+          );
 
+        }
 
-    setPosts(novosPosts);
+        return resposta.json();
 
+      })
 
-    fecharCriacao();
+      .then(() => {
 
+        carregarPosts();
 
-    window.dispatchEvent(
-      new Event(MURAL_EVENT)
-    );
+        fecharCriacao();
+
+      })
+
+      .catch((error) => {
+
+        console.error(
+          "Erro ao criar post it:",
+          error
+        );
+
+      });
 
   };
 
@@ -430,7 +426,7 @@ export default function Muraladm() {
 
 
   // ===================================================
-  // ATUALIZAR POST
+  // ATUALIZAR POST (agora salvando na API)
   // ===================================================
 
   const atualizarPost = (event) => {
@@ -459,59 +455,58 @@ export default function Muraladm() {
     }
 
 
-    const postsAtualizados =
-      posts.map((post) => {
+    fetch(`${API_URL}/mural/${postEditando.id}`, {
 
-        if (
-          post.id !==
-          postEditando.id
-        ) {
+      method: "PUT",
 
-          return post;
+      headers:
+        headersPadrao(),
+
+      body: JSON.stringify({
+
+        titulo:
+          tituloLimpo,
+
+        descricao:
+          descricaoLimpa,
+
+        cor:
+          corSelecionada,
+
+      }),
+
+    })
+
+      .then((resposta) => {
+
+        if (!resposta.ok) {
+
+          throw new Error(
+            "Erro ao atualizar post it"
+          );
 
         }
 
+        return resposta.json();
 
-        return {
+      })
 
-          ...post,
+      .then(() => {
 
-          titulo:
-            tituloLimpo,
+        carregarPosts();
 
-          descricao:
-            descricaoLimpa,
+        fecharCriacao();
 
-          mensagem:
-            descricaoLimpa,
+      })
 
-          cor:
-            corSelecionada,
+      .catch((error) => {
 
-        };
+        console.error(
+          "Erro ao atualizar post it:",
+          error
+        );
 
       });
-
-
-    localStorage.setItem(
-      MURAL_STORAGE_KEY,
-      JSON.stringify(
-        postsAtualizados
-      )
-    );
-
-
-    setPosts(
-      postsAtualizados
-    );
-
-
-    fecharCriacao();
-
-
-    window.dispatchEvent(
-      new Event(MURAL_EVENT)
-    );
 
   };
 
@@ -539,7 +534,7 @@ export default function Muraladm() {
 
 
   // ===================================================
-  // CONFIRMAR EXCLUSÃO
+  // CONFIRMAR EXCLUSÃO (agora removendo na API)
   // ===================================================
 
   const confirmarExclusao = () => {
@@ -551,32 +546,51 @@ export default function Muraladm() {
     }
 
 
-    const novosPosts =
-      posts.filter(
-        (post) =>
-          post.id !==
-          postParaExcluir.id
-      );
+    fetch(`${API_URL}/mural/${postParaExcluir.id}`, {
 
+      method: "DELETE",
 
-    localStorage.setItem(
-      MURAL_STORAGE_KEY,
-      JSON.stringify(
-        novosPosts
-      )
-    );
+      headers: {
 
+        Authorization:
+          `Bearer ${localStorage.getItem("token")}`,
 
-    setPosts(novosPosts);
+      },
 
-    setPostParaExcluir(null);
+    })
 
-    setPostSelecionado(null);
+      .then((resposta) => {
 
+        if (!resposta.ok) {
 
-    window.dispatchEvent(
-      new Event(MURAL_EVENT)
-    );
+          throw new Error(
+            "Erro ao excluir post it"
+          );
+
+        }
+
+        return resposta.json();
+
+      })
+
+      .then(() => {
+
+        carregarPosts();
+
+        setPostParaExcluir(null);
+
+        setPostSelecionado(null);
+
+      })
+
+      .catch((error) => {
+
+        console.error(
+          "Erro ao excluir post it:",
+          error
+        );
+
+      });
 
   };
 

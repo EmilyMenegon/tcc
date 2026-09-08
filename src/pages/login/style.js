@@ -16,11 +16,19 @@ const colors = {
   white: "#fff",
 };
 
+
 /* ============================================================
    GLOBAL
 ============================================================ */
 
 export const GlobalStyle = createGlobalStyle`
+@font-face {
+  font-family: "Lost in South";
+  src: url("/fonts/Lost in South.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
   * {
     margin: 0;
     padding: 0;

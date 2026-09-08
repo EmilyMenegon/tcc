@@ -2,7 +2,8 @@ import styled, { css } from "styled-components";
 
 
 /* ==========================================
-   ANIMAÇÃO DOS BOTÕES
+   EFEITO PADRÃO DOS BOTÕES
+   A ONDA NASCE EXATAMENTE ONDE ESTÁ O MOUSE
 ========================================== */
 
 const ButtonEffect = css`
@@ -14,6 +15,7 @@ const ButtonEffect = css`
   isolation: isolate;
 
   --mouse-x: 50%;
+
   --mouse-y: 50%;
 
 
@@ -24,9 +26,11 @@ const ButtonEffect = css`
     position: absolute;
 
     left: var(--mouse-x);
+
     top: var(--mouse-y);
 
     width: 30px;
+
     height: 30px;
 
     border-radius: 50%;
@@ -61,8 +65,6 @@ const ButtonEffect = css`
 
   }
 
-
-  /* Conteúdo fica por cima da animação */
 
   svg,
   span {
@@ -171,6 +173,7 @@ export const Header = styled.header`
 
 `;
 
+
 export const Title = styled.h1`
 
   margin: 0;
@@ -206,6 +209,7 @@ export const Title = styled.h1`
 
 `;
 
+
 export const Subtitle = styled.p`
 
   max-width: 700px;
@@ -236,6 +240,11 @@ export const Subtitle = styled.p`
   }
 
 `;
+
+
+/* ==========================================
+   GALERIA
+========================================== */
 
 export const Gallery = styled.section`
 
@@ -314,12 +323,12 @@ export const Card = styled.article`
 
   box-shadow:
     0 7px 25px
-      rgba(
-        0,
-        0,
-        0,
-        .08
-      );
+    rgba(
+      0,
+      0,
+      0,
+      .08
+    );
 
   transition:
     transform .3s ease,
@@ -335,12 +344,12 @@ export const Card = styled.article`
 
     box-shadow:
       0 18px 40px
-        rgba(
-          0,
-          0,
-          0,
-          .15
-        );
+      rgba(
+        0,
+        0,
+        0,
+        .15
+      );
 
   }
 
@@ -372,7 +381,8 @@ export const ImageBox = styled.div`
   background: #eeeeee;
 
 
-  img {
+  img,
+  video {
 
     width: 100%;
 
@@ -388,7 +398,15 @@ export const ImageBox = styled.div`
   }
 
 
-  &:hover img {
+  video {
+
+    background: #000000;
+
+  }
+
+
+  &:hover img,
+  &:hover video {
 
     transform:
       scale(1.07);
@@ -397,23 +415,9 @@ export const ImageBox = styled.div`
 
 `;
 
-export const ImageBoxVideoPatch = `
-  video {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-    transition: transform .5s ease;
-    background: #000;
-  }
- 
-  &:hover video {
-    transform: scale(1.07);
-  }
-`;
 
 /* ==========================================
-   DELETE BUTTON
+   BOTÃO EXCLUIR
 ========================================== */
 
 export const DeleteButton = styled.button`
@@ -459,15 +463,17 @@ export const DeleteButton = styled.button`
 
   box-shadow:
     0 6px 15px
-      rgba(
-        0,
-        0,
-        0,
-        .2
-      );
+    rgba(
+      0,
+      0,
+      0,
+      .2
+    );
 
   transition:
-    .2s;
+    opacity .2s ease,
+    transform .2s ease,
+    box-shadow .2s ease;
 
   z-index: 5;
 
@@ -493,10 +499,17 @@ export const DeleteButton = styled.button`
 
   &:hover {
 
-    background: #b71c1c;
-
     transform:
       scale(1.1);
+
+    box-shadow:
+      0 10px 25px
+      rgba(
+        0,
+        0,
+        0,
+        .3
+      );
 
   }
 
@@ -557,10 +570,6 @@ export const EmptyState = styled.div`
 `;
 
 
-/* ==========================================
-   EMPTY ICON
-========================================== */
-
 export const EmptyIcon = styled.div`
 
   width: 70px;
@@ -592,10 +601,6 @@ export const EmptyIcon = styled.div`
 `;
 
 
-/* ==========================================
-   EMPTY TITLE
-========================================== */
-
 export const EmptyTitle = styled.h2`
 
   margin:
@@ -609,10 +614,6 @@ export const EmptyTitle = styled.h2`
 
 `;
 
-
-/* ==========================================
-   EMPTY TEXT
-========================================== */
 
 export const EmptyText = styled.p`
 
@@ -630,7 +631,7 @@ export const EmptyText = styled.p`
 
 
 /* ==========================================
-   FLOATING BUTTON
+   BOTÃO + FLUTUANTE
 ========================================== */
 
 export const FloatingButton = styled.button`
@@ -646,6 +647,8 @@ export const FloatingButton = styled.button`
   width: 70px;
 
   height: 70px;
+
+  padding: 0;
 
   border: none;
 
@@ -664,36 +667,71 @@ export const FloatingButton = styled.button`
   cursor: pointer;
 
   box-shadow:
-    0 10px 25px
-      rgba(
-        0,
-        0,
-        0,
-        .2
-      );
+    0
+    10px
+    25px
+    rgba(
+      0,
+      0,
+      0,
+      .20
+    );
 
-  transition: .2s;
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease,
+    color .25s ease,
+    background .25s ease;
 
   z-index: 100;
 
 
+  .buttonContent {
+
+    width: 100%;
+
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+  }
+
+
   svg {
 
-    font-size: 28px;
+    width: 30px;
 
-    transition: .2s;
+    height: 30px;
+
+    transition:
+      transform .3s ease;
 
   }
 
 
   &:hover {
 
-    background: #000000;
-
     color: #ffdb53;
 
+    background: #831614;
+
     transform:
-      translateY(-2px);
+      translateY(-4px);
+
+    box-shadow:
+      0
+      15px
+      30px
+      rgba(
+        0,
+        0,
+        0,
+        .28
+      );
 
   }
 
@@ -709,7 +747,19 @@ export const FloatingButton = styled.button`
   &:active {
 
     transform:
-      translateY(1px);
+      translateY(1px)
+      scale(.96);
+
+  }
+
+
+  &:disabled {
+
+    cursor: not-allowed;
+
+    opacity: .6;
+
+    transform: none;
 
   }
 
@@ -724,13 +774,22 @@ export const FloatingButton = styled.button`
 
     bottom: 20px;
 
+
+    svg {
+
+      width: 27px;
+
+      height: 27px;
+
+    }
+
   }
 
 `;
 
 
 /* ==========================================
-   IMAGE MODAL
+   MODAL
 ========================================== */
 
 export const Modal = styled.div`
@@ -769,15 +828,11 @@ export const Modal = styled.div`
   @keyframes fadeIn {
 
     from {
-
       opacity: 0;
-
     }
 
     to {
-
       opacity: 1;
-
     }
 
   }
@@ -793,7 +848,7 @@ export const Modal = styled.div`
 
 
 /* ==========================================
-   IMAGE MODAL CONTENT
+   MODAL CONTENT
 ========================================== */
 
 export const ModalContent = styled.div`
@@ -862,13 +917,15 @@ export const ModalImage = styled.img`
   border-radius: 15px;
 
   box-shadow:
-    0 20px 60px
-      rgba(
-        0,
-        0,
-        0,
-        .4
-      );
+    0
+    20px
+    60px
+    rgba(
+      0,
+      0,
+      0,
+      .4
+    );
 
 
   @media (max-width: 600px) {
@@ -885,7 +942,7 @@ export const ModalImage = styled.img`
 
 
 /* ==========================================
-   CLOSE BUTTON
+   BOTÃO FECHAR
 ========================================== */
 
 export const CloseButton = styled.button`
@@ -901,6 +958,8 @@ export const CloseButton = styled.button`
   width: 50px;
 
   height: 50px;
+
+  padding: 0;
 
   border: none;
 
@@ -976,327 +1035,7 @@ export const CloseButton = styled.button`
 
 
 /* ==========================================
-   DELETE MODAL OVERLAY
-========================================== */
-
-export const DeleteModalOverlay = styled.div`
-
-  position: fixed;
-
-  inset: 0;
-
-  background:
-    rgba(
-      0,
-      0,
-      0,
-      .45
-    );
-
-  display: flex;
-
-  justify-content: center;
-
-  align-items: center;
-
-  z-index: 10001;
-
-  backdrop-filter:
-    blur(3px);
-
-  padding: 20px;
-
-  box-sizing: border-box;
-
-`;
-
-
-/* ==========================================
-   DELETE MODAL
-========================================== */
-
-export const DeleteModal = styled.div`
-
-  width: 400px;
-
-  max-width: 90%;
-
-  background: #ffffff;
-
-  border-radius: 20px;
-
-  padding: 30px;
-
-  text-align: center;
-
-  box-shadow:
-    0 20px 45px
-      rgba(
-        0,
-        0,
-        0,
-        .2
-      );
-
-  animation:
-    aparecer .25s ease;
-
-
-  h2,
-  h3 {
-
-    margin:
-      0 0 12px;
-
-    color: #111111;
-
-    font-size: 24px;
-
-  }
-
-
-  p {
-
-    color: #666666;
-
-    margin:
-      0 0 30px;
-
-    line-height: 1.5;
-
-  }
-
-
-  @keyframes aparecer {
-
-    from {
-
-      opacity: 0;
-
-      transform:
-        scale(.9);
-
-    }
-
-    to {
-
-      opacity: 1;
-
-      transform:
-        scale(1);
-
-    }
-
-  }
-
-
-  @media (max-width: 500px) {
-
-    padding: 25px 20px;
-
-  }
-
-`;
-
-
-/* ==========================================
-   MODAL BUTTONS
-========================================== */
-
-export const ModalButtons = styled.div`
-
-  display: flex;
-
-  justify-content: center;
-
-  gap: 15px;
-
-
-  @media (max-width: 450px) {
-
-    flex-direction: column;
-
-  }
-
-`;
-
-
-/* ==========================================
-   CANCEL BUTTON
-========================================== */
-
-export const CancelButton = styled.button`
-
-  ${ButtonEffect}
-
-  padding:
-    12px 22px;
-
-  border: none;
-
-  border-radius: 10px;
-
-  background: #ececec;
-
-  color: #111111;
-
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition: .2s;
-
-
-  &:hover {
-
-    background: #d8d8d8;
-
-    color: #ffffff;
-
-  }
-
-`;
-
-
-/* ==========================================
-   CONFIRM BUTTON
-========================================== */
-
-export const ConfirmButton = styled.button`
-
-  ${ButtonEffect}
-
-  padding:
-    12px 22px;
-
-  border: none;
-
-  border-radius: 10px;
-
-  background: #d62828;
-
-  color: #ffffff;
-
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition: .2s;
-
-
-  &:hover {
-
-    background: #b71c1c;
-
-  }
-
-`;
-
-
-/* ==========================================
-   SETA DE NAVEGAÇÃO
-========================================== */
-
-export const ArrowButton = styled.button`
-
-  ${ButtonEffect}
-
-  position: fixed;
-
-  top: 50%;
-
-  transform:
-    translateY(-50%);
-
-  width: 55px;
-
-  height: 55px;
-
-  border: none;
-
-  border-radius: 50%;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      .12
-    );
-
-  color: #ffffff;
-
-  cursor: pointer;
-
-  transition: .2s;
-
-  z-index: 10000;
-
-
-  &.left {
-    left: 25px;
-  }
-
-  &.right {
-    right: 25px;
-  }
-
-
-  svg {
-
-    width: 26px;
-
-    height: 26px;
-
-  }
-
-
-  &:hover {
-
-    background: #ffdb53;
-
-    color: #000000;
-
-  }
-
-
-  @media (max-width: 600px) {
-
-    width: 42px;
-
-    height: 42px;
-
-
-    &.left {
-      left: 10px;
-    }
-
-    &.right {
-      right: 10px;
-    }
-
-
-    svg {
-
-      width: 20px;
-
-      height: 20px;
-
-    }
-
-  }
-
-`;
-
-
-/* ==========================================
-   BOTÃO NAVEGAR
+   BOTÃO DE NAVEGAÇÃO
 ========================================== */
 
 export const NavButton = styled.button`
@@ -1320,6 +1059,8 @@ export const NavButton = styled.button`
 
   height: 55px;
 
+  padding: 0;
+
   border: none;
 
   border-radius: 50%;
@@ -1342,7 +1083,10 @@ export const NavButton = styled.button`
 
   cursor: pointer;
 
-  transition: .2s;
+  transition:
+    background .2s ease,
+    color .2s ease,
+    transform .2s ease;
 
   z-index: 10000;
 
@@ -1375,6 +1119,7 @@ export const NavButton = styled.button`
 
     height: 44px;
 
+
     ${({ $direction }) =>
       $direction === "left"
         ? "left: 12px;"
@@ -1393,3 +1138,231 @@ export const NavButton = styled.button`
   }
 
 `;
+
+
+/* ==========================================
+   MODAL DE EXCLUSÃO
+========================================== */
+
+export const DeleteModalOverlay =
+  styled.div`
+
+    position: fixed;
+
+    inset: 0;
+
+    background:
+      rgba(
+        0,
+        0,
+        0,
+        .45
+      );
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    z-index: 10001;
+
+    backdrop-filter:
+      blur(3px);
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+  `;
+
+
+/* ==========================================
+   DELETE MODAL
+========================================== */
+
+export const DeleteModal =
+  styled.div`
+
+    width: 400px;
+
+    max-width: 90%;
+
+    background: #ffffff;
+
+    border-radius: 20px;
+
+    padding: 30px;
+
+    text-align: center;
+
+    box-shadow:
+      0
+      20px
+      45px
+      rgba(
+        0,
+        0,
+        0,
+        .2
+      );
+
+    animation:
+      aparecer .25s ease;
+
+
+    h2,
+    h3 {
+
+      margin:
+        0 0 12px;
+
+      color: #111111;
+
+      font-size: 24px;
+
+    }
+
+
+    p {
+
+      color: #666666;
+
+      margin:
+        0 0 30px;
+
+      line-height: 1.5;
+
+    }
+
+
+    @keyframes aparecer {
+
+      from {
+
+        opacity: 0;
+
+        transform:
+          scale(.9);
+
+      }
+
+      to {
+
+        opacity: 1;
+
+        transform:
+          scale(1);
+
+      }
+
+    }
+
+
+    @media (max-width: 500px) {
+
+      padding:
+        25px 20px;
+
+    }
+
+  `;
+
+
+/* ==========================================
+   BOTÕES DO MODAL
+========================================== */
+
+export const ModalButtons =
+  styled.div`
+
+    display: flex;
+
+    justify-content: center;
+
+    gap: 15px;
+
+
+    @media (max-width: 450px) {
+
+      flex-direction: column;
+
+    }
+
+  `;
+
+
+/* ==========================================
+   CANCELAR
+========================================== */
+
+export const CancelButton =
+  styled.button`
+
+    ${ButtonEffect}
+
+    padding:
+      12px 22px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #ececec;
+
+    color: #111111;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+      .2s;
+
+
+    &:hover {
+
+      background: #d8d8d8;
+
+      color: #ffffff;
+
+    }
+
+  `;
+
+
+/* ==========================================
+   CONFIRMAR
+========================================== */
+
+export const ConfirmButton =
+  styled.button`
+
+    ${ButtonEffect}
+
+    padding:
+      12px 22px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: #d62828;
+
+    color: #ffffff;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+      .2s;
+
+
+    &:hover {
+
+      background: #b71c1c;
+
+    }
+
+  `;

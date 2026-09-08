@@ -130,6 +130,7 @@ export const Title = styled.h1`
 
 `;
 
+
 export const Subtitle = styled.p`
 
   margin: 10px 0 0;
@@ -159,6 +160,11 @@ export const Subtitle = styled.p`
   }
 
 `;
+
+
+/* ==========================================
+   CARDS
+========================================== */
 
 export const Cards = styled.section`
 
@@ -284,7 +290,7 @@ export const PostIt = styled.article`
     box-shadow .25s ease;
 
 
-  /* papel */
+  /* PAPEL */
 
   &::before {
 
@@ -309,7 +315,7 @@ export const PostIt = styled.article`
   }
 
 
-  /* dobrinha */
+  /* DOBRINHA */
 
   &::after {
 
@@ -882,7 +888,8 @@ export const FullPostItPin = styled.span`
 
 
 /* ==========================================
-   CLOSE BUTTON
+   BOTÃO FECHAR
+   ANIMAÇÃO RADIAL
 ========================================== */
 
 export const CloseButton = styled.button`
@@ -896,16 +903,18 @@ export const CloseButton = styled.button`
   width: 42px;
   height: 42px;
 
+  padding: 0;
+
   border: none;
 
   border-radius: 50%;
 
   background:
     rgba(
-      0,
-      0,
-      0,
-      .08
+      255,
+      255,
+      255,
+      0.75
     );
 
   color: #222222;
@@ -917,30 +926,175 @@ export const CloseButton = styled.button`
 
   cursor: pointer;
 
-  transition: .2s;
+  overflow: hidden;
+
+  isolation: isolate;
 
   z-index: 5;
 
+  transform:
+    rotate(0deg);
+
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
+
+
+  /* ======================================
+     ONDA PRETA
+  ====================================== */
+
+  &::before {
+
+    content: "";
+
+    position: absolute;
+
+    left:
+      var(
+        --mouse-x,
+        50%
+      );
+
+    top:
+      var(
+        --mouse-y,
+        50%
+      );
+
+    width: 30px;
+    height: 30px;
+
+    border-radius: 50%;
+
+    background: #000000;
+
+    transform:
+      translate(
+        -50%,
+        -50%
+      )
+      scale(0);
+
+    transition:
+      transform
+      0.5s
+      cubic-bezier(
+        0.16,
+        1,
+        0.3,
+        1
+      );
+
+    z-index: 0;
+
+    pointer-events: none;
+
+  }
+
+
+  /* ======================================
+     CONTEÚDO DO BOTÃO
+  ====================================== */
+
+  .buttonContent {
+
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+  }
+
+
+  /* ======================================
+     ÍCONE X
+  ====================================== */
 
   svg {
 
     width: 21px;
     height: 21px;
 
+    position: relative;
+
+    z-index: 2;
+
   }
 
 
+  /* ======================================
+     HOVER
+  ====================================== */
+
   &:hover {
 
-    background: #000000;
-
-    color: #ffdb53;
+    color: #ffffff;
 
     transform:
       rotate(90deg);
 
+
+    &::before {
+
+      transform:
+        translate(
+          -50%,
+          -50%
+        )
+        scale(18);
+
+    }
+
   }
 
+
+  /* ======================================
+     CLIQUE
+  ====================================== */
+
+  &:active {
+
+    transform:
+      translateY(1px)
+      scale(0.97);
+
+    transition:
+      transform
+      0.06s
+      ease;
+
+  }
+
+
+  /* ======================================
+     FOCO
+  ====================================== */
+
+  &:focus {
+
+    outline: none;
+
+  }
+
+
+  &:focus-visible {
+
+    outline:
+      2px solid #831614;
+
+    outline-offset: 3px;
+
+  }
+
+
+  /* ======================================
+     MOBILE
+  ====================================== */
 
   @media (max-width: 600px) {
 
@@ -950,6 +1104,34 @@ export const CloseButton = styled.button`
 
     width: 38px;
     height: 38px;
+
+
+    svg {
+
+      width: 19px;
+      height: 19px;
+
+    }
+
+
+    &:hover {
+
+      transform:
+        rotate(90deg);
+
+
+      &::before {
+
+        transform:
+          translate(
+            -50%,
+            -50%
+          )
+          scale(18);
+
+      }
+
+    }
 
   }
 

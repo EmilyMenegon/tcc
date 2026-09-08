@@ -1,9 +1,121 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 
-/* ==========================================
-   PAGE
-========================================== */
+/*
+==========================================
+EFEITO DOS BOTÕES
+
+A bolinha nasce exatamente na posição
+do cursor.
+==========================================
+*/
+
+const ButtonEffect = css`
+
+  position: relative;
+
+  overflow: hidden;
+
+  isolation: isolate;
+
+  /*
+  Posição inicial do cursor.
+  */
+
+  --mouse-x: 50%;
+
+  --mouse-y: 50%;
+
+
+  /*
+  CÍRCULO DA ANIMAÇÃO
+  */
+
+  &::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: var(--mouse-x);
+
+    top: var(--mouse-y);
+
+    width: 35px;
+
+    height: 35px;
+
+    border-radius: 50%;
+
+    background: #ffdb53;
+
+    /*
+    O círculo começa pequeno.
+    */
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    /*
+    A posição acompanha o mouse
+    instantaneamente.
+
+    A expansão é animada.
+    */
+
+    transition:
+      transform 0.5s
+      cubic-bezier(
+        0.16,
+        1,
+        0.3,
+        1
+      );
+
+    z-index: 0;
+
+    pointer-events: none;
+
+  }
+
+
+  /*
+  Quando o mouse está dentro do botão,
+  a bolinha cresce.
+  */
+
+  &:hover::before {
+
+    transform:
+      translate(-50%, -50%)
+      scale(18);
+
+  }
+
+
+  /*
+  Texto e ícones ficam acima
+  da animação.
+  */
+
+  svg,
+  span {
+
+    position: relative;
+
+    z-index: 2;
+
+  }
+
+`;
+
+
+/*
+==========================================
+PAGE
+==========================================
+*/
 
 export const Page = styled.div`
 
@@ -24,9 +136,11 @@ export const Page = styled.div`
 `;
 
 
-/* ==========================================
-   CONTENT
-========================================== */
+/*
+==========================================
+CONTENT
+==========================================
+*/
 
 export const Content = styled.main`
 
@@ -67,9 +181,11 @@ export const Content = styled.main`
 `;
 
 
-/* ==========================================
-   HEADER
-========================================== */
+/*
+==========================================
+HEADER
+==========================================
+*/
 
 export const Header = styled.header`
 
@@ -95,6 +211,7 @@ export const Header = styled.header`
   }
 
 `;
+
 
 export const Title = styled.h1`
 
@@ -131,6 +248,7 @@ export const Title = styled.h1`
 
 `;
 
+
 export const Subtitle = styled.p`
 
   max-width: 700px;
@@ -162,6 +280,13 @@ export const Subtitle = styled.p`
 
 `;
 
+
+/*
+==========================================
+GALERIA
+==========================================
+*/
+
 export const Gallery = styled.section`
 
   width: 100%;
@@ -185,10 +310,7 @@ export const Gallery = styled.section`
   @media (max-width: 1000px) {
 
     grid-template-columns:
-      repeat(
-        3,
-        1fr
-      );
+      repeat(3, 1fr);
 
     gap: 24px;
 
@@ -198,10 +320,7 @@ export const Gallery = styled.section`
   @media (max-width: 750px) {
 
     grid-template-columns:
-      repeat(
-        2,
-        1fr
-      );
+      repeat(2, 1fr);
 
     gap: 20px;
 
@@ -219,9 +338,11 @@ export const Gallery = styled.section`
 `;
 
 
-/* ==========================================
-   CARD
-========================================== */
+/*
+==========================================
+CARD
+==========================================
+*/
 
 export const Card = styled.article`
 
@@ -291,9 +412,11 @@ export const Card = styled.article`
 `;
 
 
-/* ==========================================
-   IMAGE BOX
-========================================== */
+/*
+==========================================
+IMAGE BOX
+==========================================
+*/
 
 export const ImageBox = styled.div`
 
@@ -308,7 +431,8 @@ export const ImageBox = styled.div`
   background: #eeeeee;
 
 
-  img {
+  img,
+  video {
 
     width: 100%;
 
@@ -324,7 +448,8 @@ export const ImageBox = styled.div`
   }
 
 
-  &:hover img {
+  &:hover img,
+  &:hover video {
 
     transform:
       scale(1.07);
@@ -333,25 +458,12 @@ export const ImageBox = styled.div`
 
 `;
 
-export const ImageBoxVideoPatch = `
-  video {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-    transition: transform .5s ease;
-    background: #000;
-  }
- 
-  &:hover video {
-    transform: scale(1.07);
-  }
-`;
 
-
-/* ==========================================
-   EMPTY STATE
-========================================== */
+/*
+==========================================
+EMPTY STATE
+==========================================
+*/
 
 export const EmptyState = styled.div`
 
@@ -385,10 +497,6 @@ export const EmptyState = styled.div`
 `;
 
 
-/* ==========================================
-   EMPTY ICON
-========================================== */
-
 export const EmptyIcon = styled.div`
 
   width: 70px;
@@ -420,10 +528,6 @@ export const EmptyIcon = styled.div`
 `;
 
 
-/* ==========================================
-   EMPTY TITLE
-========================================== */
-
 export const EmptyTitle = styled.h2`
 
   margin:
@@ -437,10 +541,6 @@ export const EmptyTitle = styled.h2`
 
 `;
 
-
-/* ==========================================
-   EMPTY TEXT
-========================================== */
 
 export const EmptyText = styled.p`
 
@@ -457,9 +557,11 @@ export const EmptyText = styled.p`
 `;
 
 
-/* ==========================================
-   MODAL
-========================================== */
+/*
+==========================================
+MODAL
+==========================================
+*/
 
 export const Modal = styled.div`
 
@@ -520,9 +622,11 @@ export const Modal = styled.div`
 `;
 
 
-/* ==========================================
-   MODAL CONTENT
-========================================== */
+/*
+==========================================
+MODAL CONTENT
+==========================================
+*/
 
 export const ModalContent = styled.div`
 
@@ -567,9 +671,11 @@ export const ModalContent = styled.div`
 `;
 
 
-/* ==========================================
-   MODAL IMAGE
-========================================== */
+/*
+==========================================
+MODAL IMAGE
+==========================================
+*/
 
 export const ModalImage = styled.img`
 
@@ -610,11 +716,15 @@ export const ModalImage = styled.img`
 `;
 
 
-/* ==========================================
-   CLOSE BUTTON
-========================================== */
+/*
+==========================================
+CLOSE BUTTON
+==========================================
+*/
 
 export const CloseButton = styled.button`
+
+  ${ButtonEffect}
 
   position: fixed;
 
@@ -649,7 +759,9 @@ export const CloseButton = styled.button`
   cursor: pointer;
 
   transition:
-    .2s;
+    background .2s ease,
+    color .2s ease,
+    transform .2s ease;
 
   z-index: 10000;
 
@@ -698,103 +810,29 @@ export const CloseButton = styled.button`
 
 `;
 
-/* ==========================================
-   SETA DE NAVEGAÇÃO
-========================================== */
 
-export const ArrowButton = styled.button`
-
-  position: fixed;
-
-  top: 50%;
-
-  transform: translateY(-50%);
-
-  width: 55px;
-
-  height: 55px;
-
-  border: none;
-
-  border-radius: 50%;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  background: rgba(255, 255, 255, .12);
-
-  color: #ffffff;
-
-  cursor: pointer;
-
-  transition: .2s;
-
-  z-index: 10000;
-
-
-  &.left {
-    left: 25px;
-  }
-
-  &.right {
-    right: 25px;
-  }
-
-
-  svg {
-    width: 26px;
-    height: 26px;
-  }
-
-
-  &:hover {
-    background: #ffdb53;
-    color: #000000;
-  }
-
-
-  @media (max-width: 600px) {
-
-    width: 42px;
-
-    height: 42px;
-
-
-    &.left {
-      left: 10px;
-    }
-
-    &.right {
-      right: 10px;
-    }
-
-
-    svg {
-      width: 20px;
-      height: 20px;
-    }
-
-  }
-
-`;
-
-
-/* ==========================================
-   BOTÃO NAVEGAR (ANTERIOR / PRÓXIMA)
-========================================== */
+/*
+==========================================
+NAV BUTTON
+==========================================
+*/
 
 export const NavButton = styled.button`
 
+  ${ButtonEffect}
+
   position: fixed;
 
   top: 50%;
 
-  ${({ $direction }) => ($direction === "left" ? "left: 30px;" : "right: 30px;")}
+  ${({ $direction }) =>
+    $direction === "left"
+      ? "left: 30px;"
+      : "right: 30px;"
+  }
 
-  transform: translateY(-50%);
+  transform:
+    translateY(-50%);
 
   width: 55px;
 
@@ -810,13 +848,22 @@ export const NavButton = styled.button`
 
   justify-content: center;
 
-  background: rgba(255, 255, 255, .12);
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      .12
+    );
 
   color: #ffffff;
 
   cursor: pointer;
 
-  transition: .2s;
+  transition:
+    background .2s ease,
+    color .2s ease,
+    transform .2s ease;
 
   z-index: 10000;
 
@@ -832,11 +879,13 @@ export const NavButton = styled.button`
 
   &:hover {
 
-    background: #ffdb53;
+    background: #f9be06;
 
     color: #000000;
 
-    transform: translateY(-50%) scale(1.08);
+    transform:
+      translateY(-50%)
+      scale(1.08);
 
   }
 
@@ -847,7 +896,12 @@ export const NavButton = styled.button`
 
     height: 44px;
 
-    ${({ $direction }) => ($direction === "left" ? "left: 12px;" : "right: 12px;")}
+
+    ${({ $direction }) =>
+      $direction === "left"
+        ? "left: 12px;"
+        : "right: 12px;"
+    }
 
 
     svg {

@@ -109,6 +109,6 @@ export function excluirInscricao(req, res) {
     "UPDATE usuario SET tipo_usuario = 'aluno', inscricao_id = NULL WHERE inscricao_id = ?"
   ).run(id);
 
-  res.status(204).send();
+  res.status(200).json({ mensagem: "Inscrição excluída com sucesso!" });
 
 }

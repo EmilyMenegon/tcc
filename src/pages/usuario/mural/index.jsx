@@ -37,6 +37,13 @@ import {
 } from "./style";
 
 
+/* ==========================================
+   CONFIG DA API
+========================================== */
+
+const API_URL = "http://localhost:3001";
+
+
 export default function Mural() {
 
   /* ==========================================
@@ -55,50 +62,90 @@ export default function Mural() {
 
 
   /* ==========================================
+     POSIÇÃO DO MOUSE NO BOTÃO
+  ========================================== */
+
+  const handleButtonMouseMove = (e) => {
+
+    const button = e.currentTarget;
+
+    const rect =
+      button.getBoundingClientRect();
+
+    const x =
+      e.clientX - rect.left;
+
+    const y =
+      e.clientY - rect.top;
+
+    button.style.setProperty(
+      "--mouse-x",
+      `${x}px`
+    );
+
+    button.style.setProperty(
+      "--mouse-y",
+      `${y}px`
+    );
+
+  };
+
+
+  /* ==========================================
      CARREGAR POSTS
   ========================================== */
 
   function carregarPosts() {
 
-    const dados =
-      localStorage.getItem("muralPostIts");
+    fetch(`${API_URL}/mural`, {
 
+      headers: {
 
-    if (!dados) {
+        Authorization:
+          `Bearer ${localStorage.getItem("token")}`,
 
-      setPosts([]);
+      },
 
-      return;
+    })
 
-    }
+      .then((resposta) => {
 
+        if (!resposta.ok) {
 
-    try {
+          throw new Error(
+            "Erro ao buscar o mural"
+          );
 
-      const postsSalvos =
-        JSON.parse(dados);
+        }
 
+        return resposta.json();
 
-      if (Array.isArray(postsSalvos)) {
+      })
 
-        setPosts(postsSalvos);
+      .then((postsSalvos) => {
 
-      } else {
+        if (Array.isArray(postsSalvos)) {
+
+          setPosts(postsSalvos);
+
+        } else {
+
+          setPosts([]);
+
+        }
+
+      })
+
+      .catch((error) => {
+
+        console.error(
+          "Erro ao carregar o mural:",
+          error
+        );
 
         setPosts([]);
 
-      }
-
-    } catch (error) {
-
-      console.error(
-        "Erro ao carregar o mural:",
-        error
-      );
-
-      setPosts([]);
-
-    }
+      });
 
   }
 
@@ -111,74 +158,13 @@ export default function Mural() {
 
     carregarPosts();
 
-
-    /*
-      Quando o ADM estiver aberto em outra aba,
-      o navegador dispara o evento storage.
-    */
-
-    function atualizarStorage(event) {
-
-      if (
-        event.key === "muralPostIts"
-      ) {
-
-        carregarPosts();
-
-      }
-
-    }
-
-
-    /*
-      Atualização dentro da mesma aplicação.
-    */
-
-    function atualizarMural() {
-
-      carregarPosts();
-
-    }
-
-
-    window.addEventListener(
-      "storage",
-      atualizarStorage
-    );
-
-
-    window.addEventListener(
-      "muralAtualizado",
-      atualizarMural
-    );
-
-
-    /*
-      Atualiza periodicamente também.
-      Isso ajuda caso ADM e usuário estejam
-      sendo usados em páginas diferentes.
-    */
-
     const intervalo =
       setInterval(
         carregarPosts,
-        1000
+        3000
       );
-
 
     return () => {
-
-      window.removeEventListener(
-        "storage",
-        atualizarStorage
-      );
-
-
-      window.removeEventListener(
-        "muralAtualizado",
-        atualizarMural
-      );
-
 
       clearInterval(intervalo);
 
@@ -227,12 +213,10 @@ export default function Mural() {
 
     }
 
-
     window.addEventListener(
       "keydown",
       handleKeyDown
     );
-
 
     return () => {
 
@@ -291,11 +275,9 @@ export default function Mural() {
                 <FiFileText />
               </EmptyIcon>
 
-
               <EmptyTitle>
                 Nenhum aviso disponível
               </EmptyTitle>
-
 
               <EmptyText>
                 No momento não existem
@@ -424,15 +406,24 @@ export default function Mural() {
             }
           >
 
-            {/* FECHAR */}
+            {/* ==================================
+                BOTÃO FECHAR
+            ================================== */}
 
             <CloseButton
               type="button"
               onClick={fecharPost}
+              onMouseMove={
+                handleButtonMouseMove
+              }
               aria-label="Fechar mensagem"
             >
 
-              <FiX />
+              <span className="buttonContent">
+
+                <FiX />
+
+              </span>
 
             </CloseButton>
 
