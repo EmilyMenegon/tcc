@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { FaPen, FaBook, FaHome } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { FaHome } from "react-icons/fa";
 import { logout } from "../../utils/auth";
 
 import {
@@ -9,9 +9,6 @@ import {
   Header,
   LogoText,
   Title,
-  Search,
-  Tabs,
-  Tab,
   Content,
   BackButton,
   Overlay,
@@ -23,18 +20,11 @@ import {
   DeleteButton,
 } from "./style";
 
-import Poetas from "./Poetas";
 import Notas from "./Notas";
 
 export default function Mat() {
-  const location = useLocation();
   const navigate = useNavigate();
 
-  const [aba, setAba] = useState(
-    location.state?.aba || "poetas"
-  );
-
-  const [search, setSearch] = useState("");
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   async function handleLogout() {
@@ -69,52 +59,12 @@ export default function Mat() {
           <LogoText>
 
             <Title>
-              {aba === "poetas"
-                ? "Poetas"
-                : "Notas"}
+              Notas
             </Title>
-
-
-            {aba === "poetas" && (
-              <Search
-                type="text"
-                placeholder="Buscar por nome..."
-                value={search}
-                onChange={(e) =>
-                  setSearch(e.target.value)
-                }
-              />
-            )}
 
           </LogoText>
 
         </Header>
-
-
-        {/* ==================================================
-            ABAS
-        ================================================== */}
-
-        <Tabs>
-
-          <Tab
-            active={aba === "poetas"}
-            onClick={() => setAba("poetas")}
-          >
-            <FaPen />
-            Poetas
-          </Tab>
-
-
-          <Tab
-            active={aba === "notas"}
-            onClick={() => setAba("notas")}
-          >
-            <FaBook />
-            Notas
-          </Tab>
-
-        </Tabs>
 
 
         {/* ==================================================
@@ -123,11 +73,7 @@ export default function Mat() {
 
         <Content>
 
-          {aba === "poetas" ? (
-            <Poetas search={search} />
-          ) : (
-            <Notas />
-          )}
+          <Notas />
 
         </Content>
 

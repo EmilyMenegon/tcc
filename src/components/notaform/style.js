@@ -1261,3 +1261,81 @@ export const SaveButton = styled.button`
     transform: scale(.98);
   }
 `;
+// ========================================
+// AUTOCOMPLETE DO POETA
+// ========================================
+
+export const AutocompleteWrapper = styled.div`
+  position: relative;
+
+  width: 100%;
+
+  margin-bottom: 25px;
+`;
+
+export const SuggestionsList = styled.ul`
+  position: absolute;
+
+  top: calc(100% + 6px);
+
+  left: 0;
+  right: 0;
+
+  z-index: 20;
+
+  max-height: 220px;
+
+  overflow-y: auto;
+
+  margin: 0;
+  padding: 6px;
+
+  list-style: none;
+
+  background: #fff;
+
+  border: 1px solid #e5e5e5;
+
+  border-radius: 14px;
+
+  box-shadow: 0 12px 30px rgba(0, 0, 0, .12);
+`;
+
+export const SuggestionItem = styled.button`
+  display: block;
+
+  width: 100%;
+
+  padding: 11px 12px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: ${({ $selected }) =>
+    $selected ? "#fff7d6" : "transparent"};
+
+  color: #222;
+
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  font-weight: ${({ $selected }) => ($selected ? 600 : 400)};
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition: background .15s;
+
+  &:hover {
+    background: #fff3c4;
+  }
+`;
+
+export const SuggestionEmpty = styled.li`
+  padding: 11px 12px;
+
+  color: #999;
+
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+`;

@@ -22,7 +22,15 @@ export default function NotaCard({
 }) {
 
 
-    const aprovado = (nota.media ?? 0) >= 7;
+    // usa a nota final (média das 3 válidas menos o desconto de tempo)
+    // e cai pra "media" se por algum motivo "resultado" não existir
+    const notaFinal =
+        nota.resultado ??
+        nota.media ??
+        0;
+
+
+    const aprovado = notaFinal >= 7;
 
 
 
@@ -36,7 +44,7 @@ export default function NotaCard({
 
                 <Aluno>
 
-                    {nota.nome_aluno || "Poeta não encontrado"}
+                    {nota.nomeAluno || "Poeta não encontrado"}
 
                 </Aluno>
 
@@ -108,14 +116,47 @@ export default function NotaCard({
 
 
 
+                    <NotaItem>
+
+                        <Label>N5</Label>
+
+                        <Valor>
+
+                            {nota.n5?.toFixed(1) ?? "-"}
+
+                        </Valor>
+
+                    </NotaItem>
+
+
+
+
+                    {nota.desconto > 0 && (
+
+                        <NotaItem>
+
+                            <Label>Desconto</Label>
+
+                            <Valor>
+
+                                -{nota.desconto.toFixed(1)}
+
+                            </Valor>
+
+                        </NotaItem>
+
+                    )}
+
+
+
 
                     <NotaItem>
 
-                        <Label>Média</Label>
+                        <Label>Nota final</Label>
 
                         <Media aprovado={aprovado}>
 
-                            {nota.media?.toFixed(1) ?? "-"}
+                            {notaFinal.toFixed(1)}
 
                         </Media>
 

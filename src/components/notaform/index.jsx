@@ -1,21 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
-import { FaPlus, FaTimes, FaPlay, FaStop, FaRedo } from "react-icons/fa";
+import { useEffect, useRef, useState } from "react";
+import { FaTimes, FaPlay, FaStop, FaRedo } from "react-icons/fa";
 
 import {
-    getAllNotas,
-    getAllAlunos,
-    createNota,
-    updateNota,
-    deleteNota
-} from "../../database/database";
-
-import NotaCard from "../../components/NotaCard";
-import EmptyState from "../../components/EmptyState";
-
-import {
-    List,
-    Fab,
-
     Overlay,
     CronometroPage,
 
@@ -44,7 +30,11 @@ import {
     SectionSub,
 
     SelectLabel,
-    Select,
+
+    AutocompleteWrapper,
+    SuggestionsList,
+    SuggestionItem,
+    SuggestionEmpty,
 
     NotesGrid,
     NoteField,
@@ -72,17 +62,33 @@ import {
 } from "./style";
 
 
-export default function Notas() {
+const API_URL = "http://localhost:3001";
 
-    const [notas, setNotas] = useState([]);
+const LIMIT = 180;
+const TOLERANCE_END = 190;
+const CIRCUMFERENCE = 603.19;
+
+
+export default function NotaForm({
+    visible,
+    nota,
+    onClose,
+    onSave
+}) {
 
     const [alunos, setAlunos] = useState([]);
 
-    const [pageVisible, setPageVisible] = useState(false);
-
-    const [editingNota, setEditingNota] = useState(null);
+    // Campo único: exibe o texto digitado/selecionado e filtra a lista.
+    const [buscaAluno, setBuscaAluno] = useState("");
 
     const [selectedAluno, setSelectedAluno] = useState("");
+
+    const [sugestoesAbertas, setSugestoesAbertas] = useState(false);
+
+    // Evita re-preencher o campo de busca depois que o usuário já mexeu nele.
+    const [poetaSincronizado, setPoetaSincronizado] = useState(false);
+
+    const inputRef = useRef(null);
 
     const [notes, setNotes] = useState(["", "", "", "", ""]);
 
@@ -95,9 +101,6 @@ export default function Notas() {
     // TIMER
     // ============================
 
-    const LIMIT = 180;
-    const TOLERANCE_END = 190;
-
     const [running, setRunning] = useState(false);
     const [startTs, setStartTs] = useState(null);
     const [accumulated, setAccumulated] = useState(0);
@@ -105,37 +108,153 @@ export default function Notas() {
 
 
     // ============================
-    // CARREGAR NOTAS
+    // CARREGAR POETAS (só quando o form abre)
     // ============================
-
-    const loadNotas = useCallback(async () => {
-
-        const result = await getAllNotas();
-
-        setNotas(result || []);
-
-    }, []);
-
-
-    // ============================
-    // CARREGAR POETAS
-    // ============================
-
-    const loadAlunos = useCallback(async () => {
-
-        const result = await getAllAlunos();
-
-        setAlunos(result || []);
-
-    }, []);
-
 
     useEffect(() => {
 
-        loadNotas();
-        loadAlunos();
+        if (!visible) return;
 
-    }, [loadNotas, loadAlunos]);
+        (async () => {
+
+            try {
+
+                const res = await fetch(`${API_URL}/notas/poetas`);
+
+                const data = await res.json();
+
+                setAlunos(Array.isArray(data) ? data : []);
+
+            } catch (err) {
+
+                console.error(err);
+
+                setError("Não foi possível carregar os poetas.");
+
+            }
+
+        })();
+
+    }, [visible]);
+
+
+    // ============================
+    // PREENCHER / LIMPAR AO ABRIR
+    // ============================
+
+    useEffect(() => {
+
+        if (!visible) return;
+
+        if (nota) {
+
+            setSelectedAluno(String(nota.idAluno || ""));
+
+            setNotes([
+                nota.n1 ?? "",
+                nota.n2 ?? "",
+                nota.n3 ?? "",
+                nota.n4 ?? "",
+                nota.n5 ?? ""
+            ]);
+
+        } else {
+
+            setSelectedAluno("");
+
+            setNotes(["", "", "", "", ""]);
+
+        }
+
+        setBuscaAluno("");
+
+        setPoetaSincronizado(false);
+
+        setSugestoesAbertas(false);
+
+        setResultado(null);
+
+        setError("");
+
+        setRunning(false);
+
+        setStartTs(null);
+
+        setAccumulated(0);
+
+        setElapsed(0);
+
+    }, [visible, nota]);
+
+
+    // ============================
+    // PREENCHER O CAMPO COM O NOME DO POETA JÁ SELECIONADO
+    // (só roda uma vez por abertura, assim que a lista de poetas carrega)
+    // ============================
+
+    useEffect(() => {
+
+        if (!visible || !nota || poetaSincronizado) return;
+
+        const aluno = alunos.find(
+            (item) => String(item.id) === String(nota.idAluno)
+        );
+
+        if (aluno) {
+
+            setBuscaAluno(aluno.nome);
+
+            setPoetaSincronizado(true);
+
+        }
+
+    }, [visible, nota, alunos, poetaSincronizado]);
+
+
+    // ============================
+    // BUSCA DE POETA (autocomplete)
+    // ============================
+
+    const alunosFiltrados = alunos.filter((aluno) => {
+
+        if (!buscaAluno.trim()) return true;
+
+        const termo = buscaAluno
+            .toLowerCase()
+            .trim();
+
+        return (
+            aluno.nome?.toLowerCase().includes(termo) ||
+            aluno.turma?.toLowerCase().includes(termo) ||
+            aluno.curso?.toLowerCase().includes(termo)
+        );
+
+    });
+
+
+    function handleBuscaChange(valor) {
+
+        setBuscaAluno(valor);
+
+        // Enquanto o usuário digita algo diferente do poeta já
+        // selecionado, a seleção deixa de ser válida até ele
+        // escolher de novo na lista.
+        setSelectedAluno("");
+
+        setSugestoesAbertas(true);
+
+    }
+
+
+    function selecionarAluno(aluno) {
+
+        setSelectedAluno(String(aluno.id));
+
+        setBuscaAluno(aluno.nome);
+
+        setSugestoesAbertas(false);
+
+    }
 
 
     // ============================
@@ -230,52 +349,10 @@ export default function Notas() {
     );
 
 
-    const circumference = 603.19;
-
     const progress = Math.min(
         elapsed / LIMIT,
         1
     );
-
-
-    // ============================
-    // ABRIR FORMULÁRIO
-    // ============================
-
-    function openNewNota() {
-
-        setEditingNota(null);
-
-        setSelectedAluno("");
-
-        setNotes(["", "", "", "", ""]);
-
-        setResultado(null);
-
-        setError("");
-
-        resetTimer();
-
-        setPageVisible(true);
-
-    }
-
-
-    // ============================
-    // FECHAR
-    // ============================
-
-    function closePage() {
-
-        setRunning(false);
-
-        setPageVisible(false);
-
-        setResultado(null);
-
-        setError("");
-
-    }
 
 
     // ============================
@@ -398,9 +475,10 @@ export default function Notas() {
 
     // ============================
     // SALVAR
+    // (delega o fetch de verdade pro pai, via onSave)
     // ============================
 
-    async function handleSave() {
+    async function handleSalvar() {
 
         if (!resultado) {
 
@@ -413,96 +491,30 @@ export default function Notas() {
         }
 
 
-        const alunoId = Number(selectedAluno);
+        const payload = {
+
+            n1: resultado.values[0],
+            n2: resultado.values[1],
+            n3: resultado.values[2],
+            n4: resultado.values[3],
+            n5: resultado.values[4],
+
+            media: resultado.baseAverage,
+            desconto: resultado.penalty,
+            tempo: Math.floor(elapsed),
+            resultado: resultado.finalScore,
+
+            id_aluno: Number(selectedAluno)
+
+        };
 
 
-        if (editingNota) {
-
-            await updateNota(
-
-                editingNota.id,
-
-                resultado.values[0],
-                resultado.values[1],
-                resultado.values[2],
-                resultado.values[3],
-                alunoId
-
-            );
-
-        } else {
-
-            await createNota(
-
-                resultado.values[0],
-                resultado.values[1],
-                resultado.values[2],
-                resultado.values[3],
-                alunoId
-
-            );
-
-        }
-
-
-        await loadNotas();
-
-        closePage();
+        await onSave(payload);
 
     }
 
 
-    // ============================
-    // EDITAR
-    // ============================
-
-    function handleEdit(nota) {
-
-        setEditingNota(nota);
-
-        setSelectedAluno(
-            String(nota.id_aluno || nota.aluno_id || "")
-        );
-
-
-        setNotes([
-            nota.n1 ?? "",
-            nota.n2 ?? "",
-            nota.n3 ?? "",
-            nota.n4 ?? "",
-            nota.n5 ?? ""
-        ]);
-
-
-        setResultado(null);
-
-        resetTimer();
-
-        setPageVisible(true);
-
-    }
-
-
-    // ============================
-    // EXCLUIR
-    // ============================
-
-    async function handleDelete(id) {
-
-        const confirmacao =
-            window.confirm(
-                "Tem certeza que deseja excluir esta nota?"
-            );
-
-
-        if (!confirmacao) return;
-
-
-        await deleteNota(id);
-
-        await loadNotas();
-
-    }
+    if (!visible) return null;
 
 
     // ============================
@@ -511,523 +523,558 @@ export default function Notas() {
 
     return (
 
-        <>
+        <Overlay>
+
+            <CronometroPage>
 
 
-            {/* =======================
-                BOTÃO +
-            ======================== */}
+                {/* TOPO */}
 
-            <Fab
-                onClick={openNewNota}
-            >
+                <TopBar>
 
-                <FaPlus />
+                    <div>
 
-            </Fab>
+                        <Eyebrow>
+                            Regulamento oficial · 3 min + 10s de tolerância
+                        </Eyebrow>
 
+                        <MainTitle>
+                            Cronômetro
+                        </MainTitle>
 
-            {/* =======================
-                PÁGINA DO CRONÔMETRO
-            ======================== */}
-
-            {pageVisible && (
-
-                <Overlay>
-
-                    <CronometroPage>
+                    </div>
 
 
-                        {/* TOPO */}
+                    <CloseButton
+                        onClick={onClose}
+                    >
 
-                        <TopBar>
+                        <FaTimes />
 
-                            <div>
+                    </CloseButton>
 
-                                <Eyebrow>
-                                    Regulamento oficial · 3 min + 10s de tolerância
-                                </Eyebrow>
-
-                                <MainTitle>
-                                    Cronômetro
-                                </MainTitle>
-
-                            </div>
-
-
-                            <CloseButton
-                                onClick={closePage}
-                            >
-
-                                <FaTimes />
-
-                            </CloseButton>
-
-                        </TopBar>
+                </TopBar>
 
 
 
-                        {/* TIMER */}
+                {/* TIMER */}
 
-                        <TimerCard>
-
-
-                            <RingWrap>
-
-                                <RingSvg
-                                    viewBox="0 0 220 220"
-                                >
-
-                                    <RingTrack
-                                        cx="110"
-                                        cy="110"
-                                        r="96"
-                                    />
-
-                                    <RingProgress
-
-                                        cx="110"
-                                        cy="110"
-                                        r="96"
-
-                                        strokeDasharray={
-                                            circumference
-                                        }
-
-                                        strokeDashoffset={
-                                            circumference *
-                                            (1 - progress)
-                                        }
-
-                                        penalty={
-                                            elapsed > TOLERANCE_END
-                                        }
-
-                                    />
-
-                                </RingSvg>
+                <TimerCard>
 
 
-                                <RingCenter>
+                    <RingWrap>
 
-                                    <TimeDisplay
-                                        penalty={
-                                            elapsed >
-                                            TOLERANCE_END
-                                        }
-                                    >
+                        <RingSvg
+                            viewBox="0 0 220 220"
+                        >
 
-                                        {formatTime(elapsed)}
+                            <RingTrack
+                                cx="110"
+                                cy="110"
+                                r="96"
+                            />
 
-                                    </TimeDisplay>
+                            <RingProgress
 
+                                cx="110"
+                                cy="110"
+                                r="96"
 
-                                    <ZoneLabel
-                                        penalty={
-                                            elapsed >
-                                            TOLERANCE_END
-                                        }
-                                    >
+                                strokeDasharray={
+                                    CIRCUMFERENCE
+                                }
 
-                                        {elapsed <= LIMIT
+                                strokeDashoffset={
+                                    CIRCUMFERENCE *
+                                    (1 - progress)
+                                }
 
-                                            ? "dentro do tempo"
+                                penalty={
+                                    elapsed > TOLERANCE_END
+                                }
 
-                                            : elapsed <= TOLERANCE_END
+                            />
 
-                                            ? "tolerância · sem desconto"
-
-                                            : "excedeu o tempo"
-
-                                        }
-
-                                    </ZoneLabel>
-
-                                </RingCenter>
-
-                            </RingWrap>
+                        </RingSvg>
 
 
-                            <PenaltyBadge
-                                visible={
-                                    penalty > 0
+                        <RingCenter>
+
+                            <TimeDisplay
+                                penalty={
+                                    elapsed >
+                                    TOLERANCE_END
                                 }
                             >
 
-                                desconto: -
-                                {penalty
-                                    .toFixed(1)
-                                    .replace(".", ",")
+                                {formatTime(elapsed)}
+
+                            </TimeDisplay>
+
+
+                            <ZoneLabel
+                                penalty={
+                                    elapsed >
+                                    TOLERANCE_END
                                 }
-                                {" "}pontos
-
-                            </PenaltyBadge>
-
-
-                            <TimerControls>
-
-                                <TimerButton
-                                    onClick={startTimer}
-                                    primary
-                                >
-
-                                    {running
-                                        ? <FaStop />
-                                        : <FaPlay />
-                                    }
-
-                                    {running
-                                        ? "Parar"
-                                        : "Iniciar"
-                                    }
-
-                                </TimerButton>
-
-
-                                <ResetButton
-                                    onClick={resetTimer}
-                                >
-
-                                    <FaRedo />
-
-                                    Zerar
-
-                                </ResetButton>
-
-                            </TimerControls>
-
-                        </TimerCard>
-
-
-
-                        {/* NOTAS */}
-
-                        <NotesCard>
-
-
-                            <SectionTitle>
-                                Notas dos jurados
-                            </SectionTitle>
-
-
-                            <SectionSub>
-                                Selecione o poeta e informe as 5 notas.
-                                A maior e a menor nota serão descartadas.
-                            </SectionSub>
-
-
-                            {/* POETA */}
-
-                            <SelectLabel>
-                                Poeta
-                            </SelectLabel>
-
-
-                            <Select
-
-                                value={selectedAluno}
-
-                                onChange={(e) =>
-                                    setSelectedAluno(
-                                        e.target.value
-                                    )
-                                }
-
                             >
 
-                                <option value="">
-                                    Selecione o poeta
-                                </option>
+                                {elapsed <= LIMIT
+
+                                    ? "dentro do tempo"
+
+                                    : elapsed <= TOLERANCE_END
+
+                                    ? "tolerância · sem desconto"
+
+                                    : "excedeu o tempo"
+
+                                }
+
+                            </ZoneLabel>
+
+                        </RingCenter>
+
+                    </RingWrap>
 
 
-                                {alunos.map(aluno => (
+                    <PenaltyBadge
+                        visible={
+                            penalty > 0
+                        }
+                    >
 
-                                    <option
-                                        key={aluno.id}
-                                        value={aluno.id}
-                                    >
+                        desconto: -
+                        {penalty
+                            .toFixed(1)
+                            .replace(".", ",")
+                        }
+                        {" "}pontos
 
-                                        {aluno.nome}
-
-                                    </option>
-
-                                ))}
-
-                            </Select>
-
-
-                            {/* NOTAS */}
-
-                            <NotesGrid>
-
-                                {notes.map(
-                                    (value, index) => (
-
-                                        <NoteField
-                                            key={index}
-                                        >
-
-                                            <NoteLabel>
-                                                Jurado {index + 1}
-                                            </NoteLabel>
+                    </PenaltyBadge>
 
 
-                                            <NoteInput
+                    <TimerControls>
 
-                                                type="number"
+                        <TimerButton
+                            onClick={startTimer}
+                            primary
+                        >
 
-                                                min="0"
+                            {running
+                                ? <FaStop />
+                                : <FaPlay />
+                            }
 
-                                                max="10"
+                            {running
+                                ? "Parar"
+                                : "Iniciar"
+                            }
 
-                                                step="0.1"
+                        </TimerButton>
 
-                                                inputMode="decimal"
 
-                                                value={value}
+                        <ResetButton
+                            onClick={resetTimer}
+                        >
 
-                                                onChange={(e) =>
-                                                    handleNoteChange(
-                                                        index,
-                                                        e.target.value
-                                                    )
+                            <FaRedo />
+
+                            Zerar
+
+                        </ResetButton>
+
+                    </TimerControls>
+
+                </TimerCard>
+
+
+
+                {/* NOTAS */}
+
+                <NotesCard>
+
+
+                    <SectionTitle>
+                        Notas dos jurados
+                    </SectionTitle>
+
+
+                    <SectionSub>
+                        Digite pra buscar o poeta pelo nome, turma ou curso
+                        e selecione na lista. Depois informe as 5 notas —
+                        a maior e a menor serão descartadas.
+                    </SectionSub>
+
+
+                    {/* AUTOCOMPLETE DO POETA */}
+
+                    <SelectLabel>
+                        Poeta
+                    </SelectLabel>
+
+
+                    <AutocompleteWrapper>
+
+                        <NoteInput
+
+                            ref={inputRef}
+
+                            type="text"
+
+                            placeholder="Digite o nome, turma ou curso..."
+
+                            value={buscaAluno}
+
+                            onChange={(e) =>
+                                handleBuscaChange(
+                                    e.target.value
+                                )
+                            }
+
+                            onFocus={() =>
+                                setSugestoesAbertas(true)
+                            }
+
+                            style={{
+                                width: "100%",
+                                textAlign: "left"
+                            }}
+
+                        />
+
+
+                        {sugestoesAbertas && (
+
+                            <SuggestionsList>
+
+                                {alunosFiltrados.length === 0 ? (
+
+                                    <SuggestionEmpty>
+                                        Nenhum poeta encontrado.
+                                    </SuggestionEmpty>
+
+                                ) : (
+
+                                    alunosFiltrados.map((aluno) => (
+
+                                        <li key={aluno.id}>
+
+                                            <SuggestionItem
+
+                                                type="button"
+
+                                                $selected={
+                                                    String(aluno.id) ===
+                                                    selectedAluno
                                                 }
 
-                                            />
+                                                // Evita que o blur do input feche
+                                                // a lista antes do clique registrar.
+                                                onMouseDown={(e) =>
+                                                    e.preventDefault()
+                                                }
 
-                                        </NoteField>
+                                                onClick={() =>
+                                                    selecionarAluno(aluno)
+                                                }
 
-                                    )
+                                            >
+
+                                                {aluno.nome}
+                                                {aluno.turma
+                                                    ? ` — ${aluno.turma}`
+                                                    : ""
+                                                }
+
+                                            </SuggestionItem>
+
+                                        </li>
+
+                                    ))
+
                                 )}
 
-                            </NotesGrid>
-
-
-                            <CalculateButton
-                                onClick={calculateResult}
-                            >
-
-                                Calcular resultado
-
-                            </CalculateButton>
-
-
-                            {error && (
-
-                                <ErrorMessage>
-                                    {error}
-                                </ErrorMessage>
-
-                            )}
-
-                        </NotesCard>
-
-
-
-                        {/* RESULTADO */}
-
-                        {resultado && (
-
-                            <ResultsCard>
-
-
-                                <SectionTitle>
-                                    Resultado
-                                </SectionTitle>
-
-
-                                <SectionSub>
-
-                                    Tempo do poeta:{" "}
-
-                                    {formatTime(elapsed)}
-
-                                    {resultado.penalty > 0
-                                        ? " — excedeu o limite."
-                                        : " — dentro do tempo permitido."
-                                    }
-
-                                </SectionSub>
-
-
-                                <ResultsTable>
-
-                                    <thead>
-
-                                        <tr>
-
-                                            <ResultsHeader>
-                                                Jurado
-                                            </ResultsHeader>
-
-                                            <ResultsHeader>
-                                                Nota
-                                            </ResultsHeader>
-
-                                            <ResultsHeader>
-                                                Status
-                                            </ResultsHeader>
-
-                                        </tr>
-
-                                    </thead>
-
-
-                                    <tbody>
-
-                                        {resultado.values.map(
-                                            (value, index) => {
-
-                                                const isDiscarded =
-                                                    resultado.discarded.has(
-                                                        index
-                                                    );
-
-
-                                                return (
-
-                                                    <ResultsRow
-                                                        key={index}
-                                                        discarded={
-                                                            isDiscarded
-                                                        }
-                                                    >
-
-                                                        <td>
-                                                            Jurado {index + 1}
-                                                        </td>
-
-
-                                                        <td>
-
-                                                            {value
-                                                                .toFixed(1)
-                                                                .replace(
-                                                                    ".",
-                                                                    ","
-                                                                )
-                                                            }
-
-                                                        </td>
-
-
-                                                        <td>
-
-                                                            {isDiscarded && (
-
-                                                                <Tag>
-                                                                    {index ===
-                                                                    [...resultado.discarded][0]
-                                                                        ? "Descartada"
-                                                                        : "Descartada"
-                                                                    }
-                                                                </Tag>
-
-                                                            )}
-
-                                                        </td>
-
-                                                    </ResultsRow>
-
-                                                );
-
-                                            }
-                                        )}
-
-                                    </tbody>
-
-                                </ResultsTable>
-
-
-                                <Summary>
-
-                                    <SummaryRow>
-
-                                        <span>
-                                            Média das 3 notas válidas
-                                        </span>
-
-                                        <SummaryValue>
-
-                                            {resultado.baseAverage
-                                                .toFixed(2)
-                                                .replace(
-                                                    ".",
-                                                    ","
-                                                )
-                                            }
-
-                                        </SummaryValue>
-
-                                    </SummaryRow>
-
-
-                                    <SummaryRow>
-
-                                        <span>
-                                            Desconto por tempo
-                                        </span>
-
-                                        <SummaryValue penalty>
-
-                                            -
-                                            {resultado.penalty
-                                                .toFixed(1)
-                                                .replace(
-                                                    ".",
-                                                    ","
-                                                )
-                                            }
-
-                                        </SummaryValue>
-
-                                    </SummaryRow>
-
-                                </Summary>
-
-
-                                <FinalRow>
-
-                                    <FinalLabel>
-                                        Nota final
-                                    </FinalLabel>
-
-
-                                    <FinalValue>
-
-                                        {resultado.finalScore
-                                            .toFixed(2)
-                                            .replace(
-                                                ".",
-                                                ","
-                                            )
-                                        }
-
-                                    </FinalValue>
-
-                                </FinalRow>
-
-
-                                <SaveButton
-                                    onClick={handleSave}
-                                >
-
-                                    Salvar nota
-
-                                </SaveButton>
-
-
-                            </ResultsCard>
+                            </SuggestionsList>
 
                         )}
 
-                    </CronometroPage>
+                    </AutocompleteWrapper>
 
-                </Overlay>
 
-            )}
+                    {!selectedAluno && buscaAluno.trim() && !sugestoesAbertas && (
 
-        </>
+                        <ErrorMessage>
+                            Selecione um poeta na lista de sugestões.
+                        </ErrorMessage>
+
+                    )}
+
+
+                    {/* NOTAS */}
+
+                    <NotesGrid>
+
+                        {notes.map(
+                            (value, index) => (
+
+                                <NoteField
+                                    key={index}
+                                >
+
+                                    <NoteLabel>
+                                        Jurado {index + 1}
+                                    </NoteLabel>
+
+
+                                    <NoteInput
+
+                                        type="number"
+
+                                        min="0"
+
+                                        max="10"
+
+                                        step="0.1"
+
+                                        inputMode="decimal"
+
+                                        value={value}
+
+                                        onChange={(e) =>
+                                            handleNoteChange(
+                                                index,
+                                                e.target.value
+                                            )
+                                        }
+
+                                    />
+
+                                </NoteField>
+
+                            )
+                        )}
+
+                    </NotesGrid>
+
+
+                    <CalculateButton
+                        onClick={calculateResult}
+                    >
+
+                        Calcular resultado
+
+                    </CalculateButton>
+
+
+                    {error && (
+
+                        <ErrorMessage>
+                            {error}
+                        </ErrorMessage>
+
+                    )}
+
+                </NotesCard>
+
+
+
+                {/* RESULTADO */}
+
+                {resultado && (
+
+                    <ResultsCard>
+
+
+                        <SectionTitle>
+                            Resultado
+                        </SectionTitle>
+
+
+                        <SectionSub>
+
+                            Tempo do poeta:{" "}
+
+                            {formatTime(elapsed)}
+
+                            {resultado.penalty > 0
+                                ? " — excedeu o limite."
+                                : " — dentro do tempo permitido."
+                            }
+
+                        </SectionSub>
+
+
+                        <ResultsTable>
+
+                            <thead>
+
+                                <tr>
+
+                                    <ResultsHeader>
+                                        Jurado
+                                    </ResultsHeader>
+
+                                    <ResultsHeader>
+                                        Nota
+                                    </ResultsHeader>
+
+                                    <ResultsHeader>
+                                        Status
+                                    </ResultsHeader>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody>
+
+                                {resultado.values.map(
+                                    (value, index) => {
+
+                                        const isDiscarded =
+                                            resultado.discarded.has(
+                                                index
+                                            );
+
+
+                                        return (
+
+                                            <ResultsRow
+                                                key={index}
+                                                discarded={
+                                                    isDiscarded
+                                                }
+                                            >
+
+                                                <td>
+                                                    Jurado {index + 1}
+                                                </td>
+
+
+                                                <td>
+
+                                                    {value
+                                                        .toFixed(1)
+                                                        .replace(
+                                                            ".",
+                                                            ","
+                                                        )
+                                                    }
+
+                                                </td>
+
+
+                                                <td>
+
+                                                    {isDiscarded && (
+
+                                                        <Tag>
+                                                            Descartada
+                                                        </Tag>
+
+                                                    )}
+
+                                                </td>
+
+                                            </ResultsRow>
+
+                                        );
+
+                                    }
+                                )}
+
+                            </tbody>
+
+                        </ResultsTable>
+
+
+                        <Summary>
+
+                            <SummaryRow>
+
+                                <span>
+                                    Média das 3 notas válidas
+                                </span>
+
+                                <SummaryValue>
+
+                                    {resultado.baseAverage
+                                        .toFixed(2)
+                                        .replace(
+                                            ".",
+                                            ","
+                                        )
+                                    }
+
+                                </SummaryValue>
+
+                            </SummaryRow>
+
+
+                            <SummaryRow>
+
+                                <span>
+                                    Desconto por tempo
+                                </span>
+
+                                <SummaryValue penalty>
+
+                                    -
+                                    {resultado.penalty
+                                        .toFixed(1)
+                                        .replace(
+                                            ".",
+                                            ","
+                                        )
+                                    }
+
+                                </SummaryValue>
+
+                            </SummaryRow>
+
+                        </Summary>
+
+
+                        <FinalRow>
+
+                            <FinalLabel>
+                                Nota final
+                            </FinalLabel>
+
+
+                            <FinalValue>
+
+                                {resultado.finalScore
+                                    .toFixed(2)
+                                    .replace(
+                                        ".",
+                                        ","
+                                    )
+                                }
+
+                            </FinalValue>
+
+                        </FinalRow>
+
+
+                        <SaveButton
+                            onClick={handleSalvar}
+                        >
+
+                            Salvar nota
+
+                        </SaveButton>
+
+
+                    </ResultsCard>
+
+                )}
+
+            </CronometroPage>
+
+        </Overlay>
 
     );
 

@@ -7,6 +7,7 @@ import inscricaoRoutes from "./routes/inscricaoRoutes.js";
 import galeriaRoutes from "./routes/galeriaRoutes.js";
 import muralRoutes from "./routes/muralRoutes.js";
 import eventoRoutes from "./routes/eventoRoutes.js";
+import notaRoutes from "./routes/notaRoutes.js";
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(galeriaRoutes);
 app.use(authRoutes);
 app.use(muralRoutes);
 app.use(eventoRoutes);
+app.use(notaRoutes);
 
 const PORT = 3001;
 app.listen(PORT, () => {

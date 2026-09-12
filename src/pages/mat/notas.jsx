@@ -1,19 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
+import { FaPlus } from "react-icons/fa";
 
-import {
-    getAllNotas,
-    getAllAlunos,
-    createNota,
-    updateNota,
-    deleteNota
-} from "../../database/database";
-
-import NotaCard from "../../components/NotaCard";
-import NotaForm from "../../components/NotaForm";
+import NotaCard from "../../components/notacard";
+import NotaForm from "../../components/notaform";
 import EmptyState from "../../components/EmptyState";
 
 import {
     List,
+    Fab,
     Overlay,
     Modal,
     ModalTitle,
@@ -22,6 +16,9 @@ import {
     CancelButton,
     DeleteButton
 } from "./style";
+
+
+const API_URL = "http://localhost:3001";
 
 
 export default function Notas() {
@@ -39,9 +36,19 @@ export default function Notas() {
 
     const loadNotas = useCallback(async () => {
 
-        const result = await getAllNotas();
+        try {
 
-        setNotas(result);
+            const res = await fetch(`${API_URL}/notas`);
+
+            const data = await res.json();
+
+            setNotas(Array.isArray(data) ? data : []);
+
+        } catch (err) {
+
+            console.error(err);
+
+        }
 
     }, []);
 
@@ -53,49 +60,58 @@ export default function Notas() {
     }, [loadNotas]);
 
 
-    async function loadAlunos() {
+    async function handleSave(payload) {
 
-        return await getAllAlunos();
+        try {
 
-    }
+            const url = editingNota
+                ? `${API_URL}/notas/${editingNota.id}`
+                : `${API_URL}/notas`;
 
+            const method = editingNota
+                ? "PUT"
+                : "POST";
 
-    async function handleSave(
-        n1,
-        n2,
-        n3,
-        n4,
-        id_aluno
-    ) {
+            const res = await fetch(url, {
 
-        if (editingNota) {
+                method,
 
-            await updateNota(
-                editingNota.id,
-                n1,
-                n2,
-                n3,
-                n4,
-                id_aluno
-            );
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-        } else {
+                body: JSON.stringify(payload)
 
-            await createNota(
-                n1,
-                n2,
-                n3,
-                n4,
-                id_aluno
+            });
+
+            if (!res.ok) {
+
+                const data = await res.json();
+
+                alert(
+                    data.erro ||
+                    "Erro ao salvar a nota."
+                );
+
+                return;
+
+            }
+
+            setEditingNota(null);
+
+            setFormVisible(false);
+
+            await loadNotas();
+
+        } catch (err) {
+
+            console.error(err);
+
+            alert(
+                "Não foi possível salvar a nota."
             );
 
         }
-
-        setEditingNota(null);
-
-        setFormVisible(false);
-
-        await loadNotas();
 
     }
 
@@ -105,6 +121,15 @@ export default function Notas() {
         setEditingNota(nota);
 
         setFormVisible(true);
+
+    }
+
+
+    function closeForm() {
+
+        setFormVisible(false);
+
+        setEditingNota(null);
 
     }
 
@@ -122,24 +147,26 @@ export default function Notas() {
 
         if (idDelete) {
 
-            await deleteNota(idDelete);
+            try {
 
-            await loadNotas();
+                await fetch(
+                    `${API_URL}/notas/${idDelete}`,
+                    { method: "DELETE" }
+                );
+
+                await loadNotas();
+
+            } catch (err) {
+
+                console.error(err);
+
+            }
 
         }
 
         setDeleteModal(false);
 
         setIdDelete(null);
-
-    }
-
-
-    function closeForm() {
-
-        setFormVisible(false);
-
-        setEditingNota(null);
 
     }
 
@@ -174,18 +201,20 @@ export default function Notas() {
             </List>
 
 
-            {/* 
-                IMPORTANTE:
-                O NotaForm fica aqui como MODAL.
-                Ele aparece por cima da página.
-            */}
+            <Fab
+                onClick={() => setFormVisible(true)}
+            >
+
+                <FaPlus />
+
+            </Fab>
+
 
             <NotaForm
                 visible={formVisible}
                 nota={editingNota}
                 onClose={closeForm}
                 onSave={handleSave}
-                onLoadAlunos={loadAlunos}
             />
 
 

@@ -33,6 +33,7 @@ import {
   EmptyIcon,
   EmptyTitle,
   EmptyText,
+  ErrorText,
 
   ModalOverlay,
   Modal,
@@ -81,16 +82,10 @@ export default function EventosUsuario() {
       fetch("http://localhost:3001/eventos")
         .then((res) => res.json())
         .then((dados) => {
-          setEventos(
-            Array.isArray(dados)
-              ? dados
-              : []
-          );
+          setEventos(Array.isArray(dados) ? dados : []);
         })
         .catch(() => {
-          setErro(
-            "Não foi possível carregar os eventos."
-          );
+          setErro("Não foi possível carregar os eventos.");
         })
         .finally(() => {
           setCarregando(false);
@@ -223,17 +218,9 @@ export default function EventosUsuario() {
 
 
         {erro && (
-
-          <p
-            style={{
-              textAlign: "center",
-              color: "#c62828",
-              marginBottom: "20px",
-            }}
-          >
+          <ErrorText>
             {erro}
-          </p>
-
+          </ErrorText>
         )}
 
 
@@ -256,7 +243,8 @@ export default function EventosUsuario() {
               </EmptyTitle>
 
               <EmptyText>
-                No momento não há eventos cadastrados.
+                No momento não há eventos
+                cadastrados. 
               </EmptyText>
 
             </EmptyState>
@@ -266,34 +254,8 @@ export default function EventosUsuario() {
             eventos.map((evento) => (
 
               <EventCard
-
                 key={evento.id}
-
-                onClick={() =>
-                  abrirEvento(evento)
-                }
-
-                /*
-                  ==================================================
-                  ESTILO DIRETO DO CARD DO ADMIN
-                  ==================================================
-                */
-
-                style={{
-                  width: "100%",
-                  minHeight: "0",
-                  background: "#ffffff",
-                  border: "1px solid #eeeeee",
-                  borderRadius: "18px",
-                  overflow: "hidden",
-                  cursor: "pointer",
-                  display: "flex",
-                  flexDirection: "column",
-                  boxSizing: "border-box",
-                  boxShadow:
-                    "0 7px 25px rgba(0,0,0,.08)",
-                }}
-
+                onClick={() => abrirEvento(evento)}
               >
 
                 {/* =================================
@@ -302,46 +264,18 @@ export default function EventosUsuario() {
 
                 {evento.imagem ? (
 
-                  <EventImage
-                    style={{
-                      width: "100%",
-                      height: "auto",
-                      aspectRatio: "4 / 3",
-                      overflow: "hidden",
-                      background: "#eeeeee",
-                      flexShrink: 0,
-                    }}
-                  >
+                  <EventImage>
 
                     <img
                       src={evento.imagem}
                       alt={evento.nome}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                        display: "block",
-                      }}
                     />
 
                   </EventImage>
 
                 ) : (
 
-                  <EventImagePlaceholder
-                    style={{
-                      width: "100%",
-                      height: "auto",
-                      aspectRatio: "4 / 3",
-                      flexShrink: 0,
-                      background: "#eeeeee",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "#b5b5b5",
-                      fontSize: "45px",
-                    }}
-                  >
+                  <EventImagePlaceholder>
 
                     <FiImage />
 
@@ -354,80 +288,21 @@ export default function EventosUsuario() {
                     CONTEÚDO
                 ================================= */}
 
-                <EventContent
-                  style={{
-                    width: "100%",
-                    padding: "18px",
-                    display: "flex",
-                    flexDirection: "column",
-                    boxSizing: "border-box",
-                    flex: 1,
-                    background: "#ffffff",
-                  }}
-                >
+                <EventContent>
 
-                  <EventTitle
-                    style={{
-                      width: "100%",
-                      margin: "0 0 8px",
-                      color: "#222222",
-                      fontFamily:
-                        '"Poppins", sans-serif',
-                      fontSize: "19px",
-                      lineHeight: "1.3",
-                      fontWeight: 700,
-                      wordBreak: "break-word",
-                    }}
-                  >
-
+                  <EventTitle>
                     {evento.nome}
-
                   </EventTitle>
 
 
-                  <EventDescription
-                    style={{
-                      width: "100%",
-                      margin: "0 0 14px",
-                      color:
-                        "rgba(0,0,0,.65)",
-                      fontFamily:
-                        '"Poppins", sans-serif',
-                      fontSize: "13px",
-                      lineHeight: "1.5",
-                      display: "-webkit-box",
-                      WebkitLineClamp: 3,
-                      WebkitBoxOrient: "vertical",
-                      overflow: "hidden",
-                    }}
-                  >
-
+                  <EventDescription>
                     {evento.descricao}
-
                   </EventDescription>
 
 
-                  <InfoList
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "8px",
-                      marginTop: "0",
-                    }}
-                  >
+                  <InfoList>
 
-                    <InfoItem
-                      style={{
-                        width: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                        color: "#555555",
-                        fontSize: "12px",
-                        minWidth: 0,
-                      }}
-                    >
+                    <InfoItem>
 
                       <FiCalendar />
 
@@ -438,17 +313,7 @@ export default function EventosUsuario() {
                     </InfoItem>
 
 
-                    <InfoItem
-                      style={{
-                        width: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                        color: "#555555",
-                        fontSize: "12px",
-                        minWidth: 0,
-                      }}
-                    >
+                    <InfoItem>
 
                       <FiClock />
 
@@ -459,17 +324,7 @@ export default function EventosUsuario() {
                     </InfoItem>
 
 
-                    <InfoItem
-                      style={{
-                        width: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                        color: "#555555",
-                        fontSize: "12px",
-                        minWidth: 0,
-                      }}
-                    >
+                    <InfoItem>
 
                       <FiMapPin />
 
@@ -486,20 +341,10 @@ export default function EventosUsuario() {
                       BOTÃO
                   ================================= */}
 
-                  <EventFooter
-                    style={{
-                      width: "100%",
-                      marginTop: "auto",
-                      paddingTop: "18px",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                    }}
-                  >
+                  <EventFooter>
 
                     <AccessButton
                       type="button"
-
                       onClick={(event) => {
 
                         event.stopPropagation();
@@ -507,27 +352,8 @@ export default function EventosUsuario() {
                         abrirEvento(evento);
 
                       }}
-
-                      style={{
-                        flex: 1,
-                        width: "100%",
-                        minHeight: "38px",
-                        height: "38px",
-                        border: "none",
-                        borderRadius: "9px",
-                        background: "#000000",
-                        color: "#f9be06",
-                        fontFamily:
-                          '"Poppins", sans-serif',
-                        fontSize: "13px",
-                        fontWeight: 700,
-                        cursor: "pointer",
-                      }}
-
                     >
-
                       Ver evento
-
                     </AccessButton>
 
                   </EventFooter>
@@ -552,7 +378,6 @@ export default function EventosUsuario() {
       {eventoSelecionado && (
 
         <ModalOverlay
-
           onClick={(event) => {
 
             if (
@@ -565,7 +390,6 @@ export default function EventosUsuario() {
             }
 
           }}
-
         >
 
           <Modal>
@@ -655,11 +479,9 @@ export default function EventosUsuario() {
                   </strong>
 
                   <span>
-
                     {formatarData(
                       eventoSelecionado.data
                     )}
-
                   </span>
 
                 </div>

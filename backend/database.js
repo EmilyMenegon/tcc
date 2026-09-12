@@ -67,4 +67,32 @@ db.exec(`
   )
 `);
 
+/* ==========================================
+   NOTAS (avaliação dos poetas pelos jurados)
+   - 5 notas (N1 a N5); a maior e a menor
+     são descartadas no cálculo do resultado
+   - "media"     = média das 3 notas válidas
+   - "desconto"  = penalidade por tempo excedido
+   - "resultado" = nota final (media - desconto)
+   - "tempo"     = tempo do poeta no cronômetro, em segundos
+========================================== */
+
+db.exec(`
+  CREATE TABLE IF NOT EXISTS notas (
+    id_notas INTEGER PRIMARY KEY AUTOINCREMENT,
+    n1 FLOAT NOT NULL,
+    n2 FLOAT NOT NULL,
+    n3 FLOAT NOT NULL,
+    n4 FLOAT NOT NULL,
+    n5 FLOAT NOT NULL,
+    media FLOAT NOT NULL,
+    desconto FLOAT NOT NULL DEFAULT 0,
+    tempo FLOAT,
+    resultado FLOAT NOT NULL,
+    usuario_id INTEGER NOT NULL,
+    criado_em TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (usuario_id) REFERENCES usuario (id)
+  )
+`);
+
 export default db;
