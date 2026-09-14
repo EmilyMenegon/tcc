@@ -75,6 +75,7 @@ db.exec(`
    - "desconto"  = penalidade por tempo excedido
    - "resultado" = nota final (media - desconto)
    - "tempo"     = tempo do poeta no cronômetro, em segundos
+   - "evento_id" = evento ao qual essa nota pertence
 ========================================== */
 
 db.exec(`
@@ -90,9 +91,18 @@ db.exec(`
     tempo FLOAT,
     resultado FLOAT NOT NULL,
     usuario_id INTEGER NOT NULL,
+    evento_id INTEGER,
     criado_em TEXT NOT NULL DEFAULT (datetime('now')),
-    FOREIGN KEY (usuario_id) REFERENCES usuario (id)
+    FOREIGN KEY (usuario_id) REFERENCES usuario (id),
+    FOREIGN KEY (evento_id) REFERENCES evento (id_evento)
   )
 `);
+
+
+try {
+  db.exec(`ALTER TABLE notas ADD COLUMN evento_id INTEGER REFERENCES evento (id_evento)`);
+} catch (err) {
+  // coluna já existe — segue o jogo
+}
 
 export default db;

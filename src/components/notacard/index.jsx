@@ -49,6 +49,23 @@ export default function NotaCard({
                 </Aluno>
 
 
+                {nota.eventoNome && (
+
+                    <NotaItem>
+
+                        <Label>Evento</Label>
+
+                        <Valor>
+
+                            {nota.eventoNome}
+
+                        </Valor>
+
+                    </NotaItem>
+
+                )}
+
+
 
 
                 <Notas>

@@ -30,6 +30,7 @@ import {
     SectionSub,
 
     SelectLabel,
+    Select,
 
     AutocompleteWrapper,
     SuggestionsList,
@@ -90,6 +91,12 @@ export default function NotaForm({
 
     const inputRef = useRef(null);
 
+
+    const [eventos, setEventos] = useState([]);
+
+    const [selectedEvento, setSelectedEvento] = useState("");
+
+
     const [notes, setNotes] = useState(["", "", "", "", ""]);
 
     const [error, setError] = useState("");
@@ -139,6 +146,37 @@ export default function NotaForm({
 
 
     // ============================
+    // CARREGAR EVENTOS (só quando o form abre)
+    // ============================
+
+    useEffect(() => {
+
+        if (!visible) return;
+
+        (async () => {
+
+            try {
+
+                const res = await fetch(`${API_URL}/eventos`);
+
+                const data = await res.json();
+
+                setEventos(Array.isArray(data) ? data : []);
+
+            } catch (err) {
+
+                console.error(err);
+
+                setError("Não foi possível carregar os eventos.");
+
+            }
+
+        })();
+
+    }, [visible]);
+
+
+    // ============================
     // PREENCHER / LIMPAR AO ABRIR
     // ============================
 
@@ -149,6 +187,8 @@ export default function NotaForm({
         if (nota) {
 
             setSelectedAluno(String(nota.idAluno || ""));
+
+            setSelectedEvento(String(nota.eventoId || ""));
 
             setNotes([
                 nota.n1 ?? "",
@@ -161,6 +201,8 @@ export default function NotaForm({
         } else {
 
             setSelectedAluno("");
+
+            setSelectedEvento("");
 
             setNotes(["", "", "", "", ""]);
 
@@ -379,6 +421,17 @@ export default function NotaForm({
         setError("");
 
 
+        if (!selectedEvento) {
+
+            setError(
+                "Selecione o evento antes de calcular."
+            );
+
+            return;
+
+        }
+
+
         if (!selectedAluno) {
 
             setError(
@@ -504,7 +557,8 @@ export default function NotaForm({
             tempo: Math.floor(elapsed),
             resultado: resultado.finalScore,
 
-            id_aluno: Number(selectedAluno)
+            id_aluno: Number(selectedAluno),
+            evento_id: Number(selectedEvento)
 
         };
 
@@ -701,10 +755,59 @@ export default function NotaForm({
 
 
                     <SectionSub>
-                        Digite pra buscar o poeta pelo nome, turma ou curso
-                        e selecione na lista. Depois informe as 5 notas —
-                        a maior e a menor serão descartadas.
+                        Selecione o evento, digite pra buscar o poeta pelo
+                        nome, turma ou curso e escolha na lista, e informe
+                        as 5 notas — a maior e a menor serão descartadas.
                     </SectionSub>
+
+
+                    {/* EVENTO */}
+
+                    <SelectLabel>
+                        Evento
+                    </SelectLabel>
+
+
+                    <Select
+
+                        value={selectedEvento}
+
+                        onChange={(e) =>
+                            setSelectedEvento(
+                                e.target.value
+                            )
+                        }
+
+                    >
+
+                        <option value="">
+                            Selecione o evento
+                        </option>
+
+
+                        {eventos.map(evento => (
+
+                            <option
+                                key={evento.id}
+                                value={evento.id}
+                            >
+
+                                {evento.nome}
+
+                            </option>
+
+                        ))}
+
+                    </Select>
+
+
+                    {eventos.length === 0 && (
+
+                        <ErrorMessage>
+                            Nenhum evento cadastrado ainda. Peça pro organizador criar um evento antes de lançar notas.
+                        </ErrorMessage>
+
+                    )}
 
 
                     {/* AUTOCOMPLETE DO POETA */}
@@ -769,8 +872,6 @@ export default function NotaForm({
                                                     selectedAluno
                                                 }
 
-                                                // Evita que o blur do input feche
-                                                // a lista antes do clique registrar.
                                                 onMouseDown={(e) =>
                                                     e.preventDefault()
                                                 }

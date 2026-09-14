@@ -14,6 +14,7 @@ import {
   FiImage,
   FiUpload,
   FiUsers,
+  FiAward,
 } from "react-icons/fi";
 
 import {
@@ -77,12 +78,21 @@ import {
   CancelButton,
   ConfirmButton,
 
-  PoetsSection,
-  PoetsSectionTitle,
-  PoetsList,
-  PoetItem,
-  PoetName,
-  PoetDetails,
+  RankingSection,
+  RankingHeader,
+  RankingTitle,
+  RankingDescription,
+  RankingTableWrapper,
+  RankingTable,
+  RankingRow,
+  Position,
+  ParticipantName,
+  Score,
+  Average,
+  Penalty,
+  Time,
+  FinalScore,
+  RankingEmpty,
 } from "./style";
 
 const API_URL = "http://localhost:3001";
@@ -114,10 +124,12 @@ async function apiFetch(caminho, opcoes = {}) {
 // ======================================================
 
 export default function Eventos() {
-  // Eventos / inscrições (poetas)
+  // Eventos
   const [eventos, setEventos] = useState([]);
-  const [inscricoes, setInscricoes] = useState([]);
   const [carregando, setCarregando] = useState(true);
+
+  // Resultados (notas) do evento aberto no momento
+  const [resultados, setResultados] = useState([]);
 
   // Modais
   const [modalAberto, setModalAberto] = useState(false);
@@ -141,7 +153,7 @@ export default function Eventos() {
   }, [eventos, eventoSelecionadoId]);
 
   // ====================================================
-  // CARREGAR EVENTOS E INSCRIÇÕES
+  // CARREGAR EVENTOS
   // ====================================================
 
   async function carregarEventos() {
@@ -155,19 +167,32 @@ export default function Eventos() {
     }
   }
 
-  async function carregarInscricoes() {
+  useEffect(() => {
+    carregarEventos();
+  }, []);
+
+  // ====================================================
+  // CARREGAR RESULTADOS DO EVENTO ABERTO
+  // ====================================================
+
+  async function carregarResultados(eventoId) {
     try {
-      const dados = await apiFetch("/inscricoes");
-      setInscricoes(dados);
+      const dados = await apiFetch(`/eventos/${eventoId}/notas`);
+      setResultados(Array.isArray(dados) ? dados : []);
     } catch (err) {
       console.error(err);
+      setResultados([]);
     }
   }
 
   useEffect(() => {
-    carregarEventos();
-    carregarInscricoes();
-  }, []);
+    if (!eventoSelecionadoId) {
+      setResultados([]);
+      return;
+    }
+
+    carregarResultados(eventoSelecionadoId);
+  }, [eventoSelecionadoId]);
 
   // ====================================================
   // EFEITO DO MOUSE NOS BOTÕES (acompanha o cursor pra animação)
@@ -372,7 +397,7 @@ export default function Eventos() {
   }
 
   // ====================================================
-  // DATA
+  // DATA / TEMPO
   // ====================================================
 
   function formatarData(dataEvento) {
@@ -380,6 +405,15 @@ export default function Eventos() {
     const partes = dataEvento.split("-");
     if (partes.length !== 3) return dataEvento;
     return `${partes[2]}/${partes[1]}/${partes[0]}`;
+  }
+
+  function formatarTempo(segundos) {
+    if (segundos === null || segundos === undefined) return "-";
+
+    const m = Math.floor(segundos / 60);
+    const s = Math.floor(segundos % 60);
+
+    return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
   }
 
   // ====================================================
@@ -626,8 +660,8 @@ export default function Eventos() {
                 <ParticipantsText>
                   <strong>Participantes do evento</strong>
                   <span>
-                    A atribuição de poetas e notas aos eventos será feita futuramente pelo
-                    matemático.
+                    O matemático seleciona este evento ao lançar cada nota. Os resultados
+                    aparecem aqui automaticamente assim que as notas forem lançadas.
                   </span>
                 </ParticipantsText>
               </ParticipantsBox>
@@ -694,36 +728,111 @@ export default function Eventos() {
               </InfoItem>
             </InfoList>
 
-            {/* POETAS INSCRITOS (somente leitura, sem vínculo com o evento ainda) */}
-            <PoetsSection>
-              <PoetsSectionTitle>
-                <FiUsers />
-                Poetas inscritos ({inscricoes.length})
-              </PoetsSectionTitle>
+            {/* RESULTADOS (notas lançadas pelo matemático para este evento) */}
+            <RankingSection>
+              <RankingHeader>
+                <RankingTitle>
+                  <FiAward />
+                  Resultados ({resultados.length})
+                </RankingTitle>
 
-              {inscricoes.length === 0 ? (
-                <ParticipantsBox>
-                  <ParticipantsIcon>
-                    <FiUsers />
-                  </ParticipantsIcon>
-                  <ParticipantsText>
-                    <strong>Nenhuma inscrição ainda</strong>
-                    <span>Os poetas aparecerão aqui assim que se inscreverem.</span>
-                  </ParticipantsText>
-                </ParticipantsBox>
+                <RankingDescription>
+                  Notas lançadas pelo matemático para este evento. A maior e a menor nota de
+                  cada poeta já foram descartadas — o resultado é a média das três restantes,
+                  menos o desconto por tempo excedido.
+                </RankingDescription>
+              </RankingHeader>
+
+              {resultados.length === 0 ? (
+                <RankingEmpty>
+                  <FiAward />
+                  <strong>Nenhum resultado ainda</strong>
+                  <span>
+                    As notas lançadas pelo matemático para este evento aparecerão aqui.
+                  </span>
+                </RankingEmpty>
               ) : (
-                <PoetsList>
-                  {inscricoes.map((inscricao) => (
-                    <PoetItem key={inscricao.id_inscricoes}>
-                      <PoetName>{inscricao.nome_poeta}</PoetName>
-                      <PoetDetails>
-                        {inscricao.turma} · {inscricao.turno} · {inscricao.curso}
-                      </PoetDetails>
-                    </PoetItem>
-                  ))}
-                </PoetsList>
+                <RankingTableWrapper>
+                  <RankingTable>
+                    <thead>
+                      <tr>
+                        <th>Pos.</th>
+                        <th>Poeta</th>
+                        <th>N1</th>
+                        <th>N2</th>
+                        <th>N3</th>
+                        <th>N4</th>
+                        <th>N5</th>
+                        <th>Média</th>
+                        <th>Tempo</th>
+                        <th>Desconto</th>
+                        <th>Nota final</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {resultados.map((resultado, index) => (
+                        <RankingRow key={resultado.id} $primeiro={index === 0}>
+                          <td>
+                            <Position>
+                              {index === 0 && <FiAward />}
+                              {index + 1}º
+                            </Position>
+                          </td>
+
+                          <td>
+                            <ParticipantName>{resultado.nomeAluno}</ParticipantName>
+                          </td>
+
+                          <td>
+                            <Score>{resultado.n1?.toFixed(1) ?? "-"}</Score>
+                          </td>
+
+                          <td>
+                            <Score>{resultado.n2?.toFixed(1) ?? "-"}</Score>
+                          </td>
+
+                          <td>
+                            <Score>{resultado.n3?.toFixed(1) ?? "-"}</Score>
+                          </td>
+
+                          <td>
+                            <Score>{resultado.n4?.toFixed(1) ?? "-"}</Score>
+                          </td>
+
+                          <td>
+                            <Score>{resultado.n5?.toFixed(1) ?? "-"}</Score>
+                          </td>
+
+                          <td>
+                            <Average>{resultado.media?.toFixed(2) ?? "-"}</Average>
+                          </td>
+
+                          <td>
+                            <Time>
+                              <FiClock />
+                              {formatarTempo(resultado.tempo)}
+                            </Time>
+                          </td>
+
+                          <td>
+                            <Penalty $penalidade={resultado.desconto > 0}>
+                              {resultado.desconto > 0
+                                ? `-${resultado.desconto.toFixed(1)}`
+                                : "0"}
+                            </Penalty>
+                          </td>
+
+                          <td>
+                            <FinalScore>{resultado.resultado?.toFixed(2) ?? "-"}</FinalScore>
+                          </td>
+                        </RankingRow>
+                      ))}
+                    </tbody>
+                  </RankingTable>
+                </RankingTableWrapper>
               )}
-            </PoetsSection>
+            </RankingSection>
           </Modal>
         </ModalOverlay>
       )}

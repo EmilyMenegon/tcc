@@ -7,6 +7,7 @@ import {
   FiImage,
   FiUsers,
   FiX,
+  FiAward,
 } from "react-icons/fi";
 
 import Layout from "../../../components/Layout";
@@ -46,6 +47,21 @@ import {
   ModalDescription,
   ModalInfoList,
   ModalInfoItem,
+    RankingSection,
+  RankingHeader,
+  RankingTitle,
+  RankingDescription,
+  RankingTableWrapper,
+  RankingTable,
+  RankingRow,
+  Position,
+  ParticipantName,
+  Score,
+  Average,
+  Penalty,
+  Time,
+  FinalScore,
+  RankingEmpty,
 } from "./style";
 
 
@@ -66,9 +82,10 @@ export default function EventosUsuario() {
 
   const [eventoSelecionado, setEventoSelecionado] =
     useState(null);
+    const [resultados, setResultados] = useState([]);
 
 
-  // ==========================================
+   // ==========================================
   // CARREGAR EVENTOS DO BACK-END
   // ==========================================
 
@@ -93,10 +110,32 @@ export default function EventosUsuario() {
 
     }
 
-
     carregarEventos();
 
   }, []);
+
+
+  // ==========================================
+  // CARREGAR RESULTADOS DO EVENTO SELECIONADO
+  // ==========================================
+
+  useEffect(() => {
+
+    if (!eventoSelecionado) {
+      setResultados([]);
+      return;
+    }
+
+    fetch(`http://localhost:3001/eventos/${eventoSelecionado.id}/notas`)
+      .then((res) => res.json())
+      .then((dados) => {
+        setResultados(Array.isArray(dados) ? dados : []);
+      })
+      .catch(() => {
+        setResultados([]);
+      });
+
+  }, [eventoSelecionado]);
 
 
   // ==========================================
@@ -139,6 +178,16 @@ export default function EventosUsuario() {
     return `${partes[2]}/${partes[1]}/${partes[0]}`;
 
   }
+  function formatarTempo(segundos) {
+
+  if (segundos === null || segundos === undefined) return "-";
+
+  const m = Math.floor(segundos / 60);
+  const s = Math.floor(segundos % 60);
+
+  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+
+}
 
 
   // ==========================================
@@ -573,6 +622,79 @@ export default function EventosUsuario() {
               </ModalInfoItem>
 
             </ModalInfoList>
+
+            <RankingSection>
+  <RankingHeader>
+    <RankingTitle>
+      <FiAward />
+      Resultados ({resultados.length})
+    </RankingTitle>
+
+    <RankingDescription>
+      Notas lançadas pelo matemático para este evento.
+    </RankingDescription>
+  </RankingHeader>
+
+  {resultados.length === 0 ? (
+    <RankingEmpty>
+      <FiAward />
+      <strong>Nenhum resultado ainda</strong>
+      <span>Os resultados deste evento aparecerão aqui assim que forem lançados.</span>
+    </RankingEmpty>
+  ) : (
+    <RankingTableWrapper>
+      <RankingTable>
+        <thead>
+          <tr>
+            <th>Pos.</th>
+            <th>Poeta</th>
+            <th>N1</th>
+            <th>N2</th>
+            <th>N3</th>
+            <th>N4</th>
+            <th>N5</th>
+            <th>Média</th>
+            <th>Tempo</th>
+            <th>Desconto</th>
+            <th>Nota final</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {resultados.map((resultado, index) => (
+            <RankingRow key={resultado.id} $primeiro={index === 0}>
+              <td>
+                <Position>
+                  {index === 0 && <FiAward />}
+                  {index + 1}º
+                </Position>
+              </td>
+              <td><ParticipantName>{resultado.nomeAluno}</ParticipantName></td>
+              <td><Score>{resultado.n1?.toFixed(1) ?? "-"}</Score></td>
+              <td><Score>{resultado.n2?.toFixed(1) ?? "-"}</Score></td>
+              <td><Score>{resultado.n3?.toFixed(1) ?? "-"}</Score></td>
+              <td><Score>{resultado.n4?.toFixed(1) ?? "-"}</Score></td>
+              <td><Score>{resultado.n5?.toFixed(1) ?? "-"}</Score></td>
+              <td><Average>{resultado.media?.toFixed(2) ?? "-"}</Average></td>
+              <td>
+                <Time>
+                  <FiClock />
+                  {formatarTempo(resultado.tempo)}
+                </Time>
+              </td>
+              <td>
+                <Penalty $penalidade={resultado.desconto > 0}>
+                  {resultado.desconto > 0 ? `-${resultado.desconto.toFixed(1)}` : "0"}
+                </Penalty>
+              </td>
+              <td><FinalScore>{resultado.resultado?.toFixed(2) ?? "-"}</FinalScore></td>
+            </RankingRow>
+          ))}
+        </tbody>
+      </RankingTable>
+    </RankingTableWrapper>
+  )}
+</RankingSection>
 
           </Modal>
 
