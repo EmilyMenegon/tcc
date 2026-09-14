@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 /* ============================================================
-   PALETA (igual ao Login)
+   PALETA
 ============================================================ */
 
 const colors = {
@@ -10,7 +10,7 @@ const colors = {
   cream: "#FFF7D0",
   input: "#FFFDF0",
   red: "#831614",
-  wine: "#571111",
+  wine: "#300404",
   black: "#010000",
   white: "#fff",
 };
@@ -42,57 +42,32 @@ export const Page = styled.div`
   }
 `;
 
-/* ============================================================
-   TITLE AREA
-============================================================ */
-
 export const TitleArea = styled.div`
   width: 100%;
-
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-
-  padding: 34px 20px 25px;
-
   text-align: center;
-
-  .title-description {
-    max-width: 520px;
-
-    margin: 9px auto 0;
-
-    color: #777;
-
-    font-size: 0.86rem;
-
-    line-height: 1.5;
-  }
+  padding: 30px 20px 22px;
 
   @media (max-width: 768px) {
-    padding: 28px 18px 20px;
-
-    .title-description {
-      font-size: 0.8rem;
-    }
+    padding: 27px 18px 20px;
   }
 
   @media (max-width: 480px) {
-    padding: 23px 14px 16px;
-
-    .title-description {
-      font-size: 0.74rem;
-    }
+    padding: 23px 14px 17px;
   }
 `;
 
 export const Title = styled.h1`
-  margin: 0 0 18px;
+  margin: 0 0 14px;
 
-  color: ${colors.red};
+  color: #831614;
 
   font-size:
     clamp(
-      2.6rem,
+      2.8rem,
       5vw,
       4.8rem
     );
@@ -106,23 +81,51 @@ export const Title = styled.h1`
   @media (max-width: 768px) {
     font-size:
       clamp(
-        2.4rem,
+        2.5rem,
         9vw,
         4rem
       );
 
     letter-spacing: -1.5px;
   }
+
+  @media (max-width: 480px) {
+    font-size: 2.3rem;
+  }
 `;
 
-/* ============================================================
-   CONTAINER (igual ao Card do Login)
-============================================================ */
+export const Subtitle = styled.p`
+  width: 100%;
+
+  max-width: 700px;
+
+  margin: 18px auto 0;
+
+  color: #777;
+
+  font-size: 1.55rem;
+
+  line-height: 1.6;
+
+  text-align: center;
+
+  @media (max-width: 768px) {
+    margin-top: 15px;
+
+    font-size: 1.1rem;
+  }
+
+  @media (max-width: 480px) {
+    margin-top: 13px;
+
+    font-size: 1rem;
+  }
+`;
 
 export const Container = styled.div`
   position: relative;
 
-  width: min(1120px, 91%);
+  width: min(1380px, 95%);
 
   min-height: 535px;
 
@@ -130,7 +133,7 @@ export const Container = styled.div`
 
   align-items: stretch;
 
-  margin: 12px auto 55px;
+  margin: 10px auto 40px;
 
   overflow: hidden;
 
@@ -142,41 +145,45 @@ export const Container = styled.div`
     0 30px 80px rgba(0, 0, 0, 0.18),
     0 10px 35px rgba(0, 0, 0, 0.1);
 
+  @media (max-width: 1200px) {
+    width: 95%;
+  }
+
   @media (max-width: 900px) {
-    width: 93%;
+    width: 96%;
   }
 
   @media (max-width: 768px) {
-    width: 92%;
+    width: 94%;
 
     min-height: 0;
 
     flex-direction: column;
 
-    margin: 8px auto 35px;
+    margin: 8px auto 30px;
 
     border-radius: 26px;
   }
 
   @media (max-width: 480px) {
-    width: 94%;
+    width: 96%;
 
     border-radius: 22px;
   }
 `;
 
 /* ============================================================
-   LEFT SIDE (igual ao SidePanel do Login)
+   LEFT SIDE
 ============================================================ */
 
 export const LeftSide = styled.div`
   position: relative;
 
-  width: 38%;
+  width: 34%;
 
   min-height: 535px;
 
-  padding: 52px 46px;
+  padding: 48px 42px;
 
   display: flex;
 
@@ -190,8 +197,6 @@ export const LeftSide = styled.div`
   overflow: hidden;
 
   isolation: isolate;
-
-  /* Formas orgânicas, iguais ao painel do Login */
 
   &::before {
     content: "";
@@ -250,19 +255,32 @@ export const LeftSide = styled.div`
   }
 
   .contact-description {
+    width: 100%;
+
     margin: 0 0 32px;
 
     color: ${colors.cream};
 
-    font-size: 0.76rem;
+    /* BEM MAIOR */
+    font-size: 1.15rem;
 
-    line-height: 1.55;
+    line-height: 1.65;
 
     text-align: center;
   }
 
-  @media (max-width: 1000px) {
-    padding: 45px 34px;
+  @media (max-width: 1100px) {
+    width: 36%;
+
+    padding: 43px 30px;
+
+    .contact-description {
+      font-size: 1.05rem;
+    }
+  }
+
+  @media (max-width: 900px) {
+    padding: 40px 27px;
   }
 
   @media (max-width: 768px) {
@@ -270,42 +288,45 @@ export const LeftSide = styled.div`
 
     min-height: 0;
 
-    padding: 34px 30px 30px;
+    padding: 35px 30px 32px;
 
     .contact-description {
-      max-width: 450px;
+      max-width: 600px;
 
       margin: 0 auto 25px;
+
+      font-size: 1.1rem;
     }
   }
 
   @media (max-width: 480px) {
-    padding: 28px 20px 25px;
+    padding: 29px 20px 26px;
 
     .contact-description {
-      margin-bottom: 20px;
+      margin-bottom: 21px;
 
-      font-size: 0.7rem;
+      font-size: 1rem;
     }
   }
 `;
 
 /* ============================================================
-   SECTION TITLE (igual ao PanelTitle do Login)
+   SECTION TITLE
 ============================================================ */
 
 export const SectionTitle = styled.h2`
-  margin: 0 0 26px;
-
   width: 100%;
+
+  margin: 0 0 25px;
 
   color: ${colors.yellow};
 
-  font-size: clamp(
-    1.35rem,
-    2.2vw,
-    1.8rem
-  );
+  font-size:
+    clamp(
+      1.6rem,
+      2.5vw,
+      2.1rem
+    );
 
   font-weight: 700;
 
@@ -326,13 +347,13 @@ export const SectionTitle = styled.h2`
   @media (max-width: 768px) {
     margin-bottom: 20px;
 
-    font-size: 1.5rem;
+    font-size: 1.8rem;
   }
 
   @media (max-width: 480px) {
-    margin-bottom: 20px;
+    margin-bottom: 19px;
 
-    font-size: 1.3rem;
+    font-size: 1.55rem;
   }
 `;
 
@@ -357,7 +378,7 @@ export const SocialContainer = styled.div`
 export const InfoText = styled.div`
   width: 100%;
 
-  min-height: 70px;
+  min-height: 76px;
 
   display: flex;
 
@@ -365,7 +386,7 @@ export const InfoText = styled.div`
 
   gap: 15px;
 
-  padding: 11px 13px;
+  padding: 12px 14px;
 
   border: 1px solid rgba(255, 255, 255, 0.14);
 
@@ -379,8 +400,8 @@ export const InfoText = styled.div`
     border-color 0.25s ease;
 
   .icon-box {
-    width: 43px;
-    height: 43px;
+    width: 46px;
+    height: 46px;
 
     flex-shrink: 0;
 
@@ -394,8 +415,8 @@ export const InfoText = styled.div`
     background: rgba(255, 255, 255, 0.12);
 
     svg {
-      width: 21px;
-      height: 21px;
+      width: 23px;
+      height: 23px;
 
       color: ${colors.yellow};
     }
@@ -412,7 +433,7 @@ export const InfoText = styled.div`
   strong {
     color: ${colors.yellow};
 
-    font-size: 0.82rem;
+    font-size: 1.05rem;
 
     font-weight: 700;
   }
@@ -424,9 +445,9 @@ export const InfoText = styled.div`
 
     opacity: 0.85;
 
-    font-size: 0.7rem;
+    font-size: 0.95rem;
 
-    line-height: 1.3;
+    line-height: 1.4;
 
     overflow-wrap: anywhere;
   }
@@ -440,55 +461,62 @@ export const InfoText = styled.div`
   }
 
   @media (max-width: 768px) {
-    max-width: 500px;
+    max-width: 600px;
 
     margin: 0 auto;
 
-    min-height: 64px;
+    min-height: 70px;
+
+    strong {
+      font-size: 1rem;
+    }
+
+    p {
+      font-size: 0.92rem;
+    }
 
     .icon-box {
-      width: 40px;
-      height: 40px;
+      width: 43px;
+      height: 43px;
     }
   }
 
   @media (max-width: 480px) {
-    min-height: 59px;
+    min-height: 66px;
 
     gap: 12px;
 
-    padding: 9px 10px;
+    padding: 10px 11px;
 
     border-radius: 12px;
 
     .icon-box {
-      width: 37px;
-      height: 37px;
+      width: 40px;
+      height: 40px;
 
       border-radius: 10px;
 
       svg {
-        width: 18px;
-        height: 18px;
+        width: 20px;
+        height: 20px;
       }
     }
 
     strong {
-      font-size: 0.76rem;
+      font-size: 0.95rem;
     }
 
     p {
-      font-size: 0.64rem;
+      font-size: 0.88rem;
     }
   }
 `;
 
 /* ============================================================
-   RIGHT SIDE (igual ao FormSide do Login)
+   RIGHT SIDE
 ============================================================ */
-
 export const RightSide = styled.div`
-  width: 62%;
+  width: 64%;
 
   min-width: 0;
 
@@ -498,18 +526,19 @@ export const RightSide = styled.div`
 
   justify-content: center;
 
-  padding: 52px 70px;
+  /* Mais espaço nas laterais e no topo */
+  padding: 68px 60px 55px;
 
   background: ${colors.white};
 
   .form-area {
     width: 100%;
 
-    max-width: 620px;
+    max-width: 700px;
   }
 
   .form-header {
-    margin: 0 0 26px;
+    margin: 0 0 38px;
 
     h2 {
       margin: 0;
@@ -517,9 +546,9 @@ export const RightSide = styled.div`
       color: ${colors.red};
 
       font-size: clamp(
-        1.35rem,
-        2.2vw,
-        1.8rem
+        1.7rem,
+        2.5vw,
+        2.15rem
       );
 
       font-weight: 700;
@@ -528,13 +557,14 @@ export const RightSide = styled.div`
     }
 
     p {
-      margin: 7px 0 0;
+      margin: 12px 0 0;
 
       color: #777;
 
-      font-size: 0.75rem;
+      /* Mesmo tamanho da Description da página inicial */
+      font-size: 1.5rem;
 
-      line-height: 1.5;
+      line-height: 1.6;
     }
   }
 
@@ -543,7 +573,7 @@ export const RightSide = styled.div`
 
     grid-template-columns: 1fr 1fr;
 
-    gap: 13px;
+    gap: 16px;
   }
 
   .loading {
@@ -553,20 +583,24 @@ export const RightSide = styled.div`
 
     align-items: center;
 
-    gap: 12px;
+    justify-content: center;
+
+    gap: 15px;
 
     color: #777;
+
+    min-height: 300px;
 
     p {
       margin: 0;
 
-      font-size: 0.8rem;
+      font-size: 1.1rem;
     }
   }
 
   .loading-spinner {
-    width: 30px;
-    height: 30px;
+    width: 34px;
+    height: 34px;
 
     border: 3px solid ${colors.cream};
 
@@ -586,46 +620,97 @@ export const RightSide = styled.div`
     }
   }
 
-  @media (max-width: 1000px) {
-    padding: 45px 40px;
+  @media (max-width: 1100px) {
+    width: 64%;
+
+    padding: 60px 45px 50px;
+
+    .form-area {
+      max-width: 680px;
+    }
+
+    .form-header {
+      margin-bottom: 34px;
+
+      p {
+        font-size: 1.25rem;
+      }
+    }
+  }
+
+  @media (max-width: 900px) {
+    padding: 55px 35px 45px;
+
+    .form-header {
+      p {
+        font-size: 1.15rem;
+      }
+    }
   }
 
   @media (max-width: 768px) {
     width: 100%;
 
-    padding: 38px 30px;
+    padding: 52px 30px 40px;
 
     .form-area {
-      max-width: 560px;
+      max-width: 650px;
+    }
+
+    .form-header {
+      margin-bottom: 32px;
+
+      h2 {
+        font-size: 1.8rem;
+      }
+
+      p {
+        font-size: 1.1rem;
+
+        line-height: 1.55;
+      }
     }
   }
 
   @media (max-width: 600px) {
-    padding: 32px 22px;
+    padding: 45px 22px 35px;
 
     .form-row {
       grid-template-columns: 1fr;
 
-      gap: 10px;
+      gap: 12px;
+    }
+
+    .form-header {
+      margin-bottom: 28px;
+
+      h2 {
+        font-size: 1.65rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
     }
   }
 
   @media (max-width: 480px) {
-    padding: 28px 17px;
+    padding: 40px 17px 30px;
 
     .form-header {
-      margin-bottom: 20px;
+      margin-bottom: 27px;
 
       h2 {
-        font-size: 1.3rem;
+        font-size: 1.5rem;
       }
 
       p {
-        font-size: 0.68rem;
+        font-size: 0.95rem;
       }
     }
   }
 `;
+
 
 /* ============================================================
    FORM
@@ -638,20 +723,20 @@ export const Form = styled.form`
 
   flex-direction: column;
 
-  gap: 13px;
+  gap: 15px;
 
   .form-message {
     width: 100%;
 
-    padding: 10px 13px;
+    padding: 13px 15px;
 
     border-radius: 10px;
 
     text-align: center;
 
-    font-size: 0.75rem;
+    font-size: 1rem;
 
-    line-height: 1.4;
+    line-height: 1.5;
 
     animation:
       messageAppear
@@ -677,23 +762,21 @@ export const Form = styled.form`
   @keyframes messageAppear {
     from {
       opacity: 0;
-
       transform: translateY(-4px);
     }
 
     to {
       opacity: 1;
-
       transform: translateY(0);
     }
   }
 
   @media (max-width: 768px) {
-    gap: 11px;
+    gap: 13px;
   }
 
   @media (max-width: 480px) {
-    gap: 10px;
+    gap: 11px;
   }
 `;
 
@@ -706,16 +789,16 @@ export const InputWrapper = styled.div`
 
   width: 100%;
 
-  height: 68px;
+  height: 76px;
 
   flex-shrink: 0;
 
   @media (max-width: 768px) {
-    height: 60px;
+    height: 68px;
   }
 
   @media (max-width: 480px) {
-    height: 57px;
+    height: 64px;
   }
 `;
 
@@ -726,14 +809,14 @@ export const InputWrapper = styled.div`
 export const InputLabel = styled.label`
   position: absolute;
 
-  top: 9px;
-  left: 24px;
+  top: 10px;
+  left: 25px;
 
   z-index: 2;
 
-  color: #a09870;
+  color: #8f855c;
 
-  font-size: 0.72rem;
+  font-size: 1rem;
 
   font-weight: 500;
 
@@ -744,31 +827,31 @@ export const InputLabel = styled.label`
   transition: color 0.25s ease;
 
   @media (max-width: 768px) {
-    top: 8px;
-    left: 19px;
+    top: 9px;
+    left: 20px;
 
-    font-size: 0.65rem;
+    font-size: 0.9rem;
   }
 
   @media (max-width: 480px) {
-    top: 7px;
-    left: 17px;
+    top: 8px;
+    left: 18px;
 
-    font-size: 0.62rem;
+    font-size: 0.85rem;
   }
 `;
 
 /* ============================================================
-   INPUT (igual ao Input do Login)
+   INPUT
 ============================================================ */
 
 export const Input = styled.input`
   display: block;
 
   width: 100%;
-  height: 68px;
+  height: 76px;
 
-  padding: 27px 24px 8px;
+  padding: 30px 25px 8px;
 
   border: 2px solid ${colors.yellow};
 
@@ -782,7 +865,8 @@ export const Input = styled.input`
 
   font-family: inherit;
 
-  font-size: 0.95rem;
+  /* FONTE MAIOR */
+  font-size: 1.15rem;
 
   font-weight: 500;
 
@@ -811,23 +895,23 @@ export const Input = styled.input`
   }
 
   @media (max-width: 768px) {
-    height: 60px;
+    height: 68px;
 
-    padding: 23px 19px 7px;
+    padding: 27px 20px 7px;
 
-    border-radius: 13px;
+    border-radius: 14px;
 
-    font-size: 0.88rem;
+    font-size: 1.05rem;
   }
 
   @media (max-width: 480px) {
-    height: 57px;
+    height: 64px;
 
-    padding: 21px 17px 6px;
+    padding: 25px 18px 6px;
 
     border-radius: 12px;
 
-    font-size: 0.82rem;
+    font-size: 1rem;
   }
 `;
 
@@ -840,16 +924,16 @@ export const SelectWrapper = styled.div`
 
   width: 100%;
 
-  height: 68px;
+  height: 76px;
 
   flex-shrink: 0;
 
   @media (max-width: 768px) {
-    height: 60px;
+    height: 68px;
   }
 
   @media (max-width: 480px) {
-    height: 57px;
+    height: 64px;
   }
 `;
 
@@ -860,14 +944,14 @@ export const SelectWrapper = styled.div`
 export const SelectLabel = styled.label`
   position: absolute;
 
-  top: 9px;
-  left: 24px;
+  top: 10px;
+  left: 25px;
 
   z-index: 2;
 
-  color: #a09870;
+  color: #8f855c;
 
-  font-size: 0.72rem;
+  font-size: 1rem;
 
   font-weight: 500;
 
@@ -876,31 +960,31 @@ export const SelectLabel = styled.label`
   pointer-events: none;
 
   @media (max-width: 768px) {
-    top: 8px;
-    left: 19px;
+    top: 9px;
+    left: 20px;
 
-    font-size: 0.65rem;
+    font-size: 0.9rem;
   }
 
   @media (max-width: 480px) {
-    top: 7px;
-    left: 17px;
+    top: 8px;
+    left: 18px;
 
-    font-size: 0.62rem;
+    font-size: 0.85rem;
   }
 `;
 
 /* ============================================================
-   SELECT (igual ao Input do Login)
+   SELECT
 ============================================================ */
 
 export const Select = styled.select`
   display: block;
 
   width: 100%;
-  height: 68px;
+  height: 76px;
 
-  padding: 27px 42px 8px 24px;
+  padding: 30px 48px 8px 25px;
 
   border: 2px solid ${colors.yellow};
 
@@ -914,7 +998,8 @@ export const Select = styled.select`
 
   font-family: inherit;
 
-  font-size: 0.95rem;
+  /* FONTE MAIOR */
+  font-size: 1.15rem;
 
   font-weight: 500;
 
@@ -937,12 +1022,12 @@ export const Select = styled.select`
     );
 
   background-position:
-    calc(100% - 22px) 31px,
-    calc(100% - 16px) 31px;
+    calc(100% - 25px) 34px,
+    calc(100% - 18px) 34px;
 
   background-size:
-    6px 6px,
-    6px 6px;
+    7px 7px,
+    7px 7px;
 
   background-repeat: no-repeat;
 
@@ -970,39 +1055,41 @@ export const Select = styled.select`
     color: #111;
 
     background: #fff;
+
+    font-size: 1rem;
   }
 
   @media (max-width: 768px) {
-    height: 60px;
+    height: 68px;
 
-    padding: 23px 38px 7px 19px;
+    padding: 27px 42px 7px 20px;
 
-    border-radius: 13px;
+    border-radius: 14px;
 
-    font-size: 0.88rem;
+    font-size: 1.05rem;
 
     background-position:
-      calc(100% - 19px) 27px,
-      calc(100% - 13px) 27px;
+      calc(100% - 21px) 30px,
+      calc(100% - 14px) 30px;
   }
 
   @media (max-width: 480px) {
-    height: 57px;
+    height: 64px;
 
-    padding: 21px 36px 6px 17px;
+    padding: 25px 40px 6px 18px;
 
     border-radius: 12px;
 
-    font-size: 0.82rem;
+    font-size: 1rem;
 
     background-position:
-      calc(100% - 18px) 25px,
-      calc(100% - 12px) 25px;
+      calc(100% - 20px) 28px,
+      calc(100% - 13px) 28px;
   }
 `;
 
 /* ============================================================
-   BUTTON (igual ao Button do Login)
+   BUTTON
 ============================================================ */
 
 export const Button = styled.button`
@@ -1012,13 +1099,14 @@ export const Button = styled.button`
   position: relative;
 
   width: 100%;
-  height: 62px;
+  height: 66px;
 
-  margin-top: 4px;
+  margin-top: 5px;
 
-  padding: 0 24px;
+  padding: 0 25px;
 
   border: 0;
+
   border-radius: 17px;
 
   background: ${colors.yellow};
@@ -1027,7 +1115,8 @@ export const Button = styled.button`
 
   font-family: inherit;
 
-  font-size: 1rem;
+  font-size: 1.15rem;
+
   font-weight: 700;
 
   cursor: pointer;
@@ -1049,8 +1138,8 @@ export const Button = styled.button`
     left: var(--mouse-x);
     top: var(--mouse-y);
 
-    width: 50px;
-    height: 50px;
+    width: 55px;
+    height: 55px;
 
     border-radius: 50%;
 
@@ -1066,13 +1155,18 @@ export const Button = styled.button`
 
     transition:
       transform 0.6s
-      cubic-bezier(0.16, 1, 0.3, 1);
+      cubic-bezier(
+        0.16,
+        1,
+        0.3,
+        1
+      );
   }
 
   &.button-hovering::before {
     transform:
       translate(-50%, -50%)
-      scale(18);
+      scale(20);
   }
 
   &.button-leaving::before {
@@ -1112,19 +1206,19 @@ export const Button = styled.button`
   }
 
   @media (max-width: 768px) {
-    height: 54px;
+    height: 60px;
 
     border-radius: 14px;
 
-    font-size: 0.94rem;
+    font-size: 1.05rem;
   }
 
   @media (max-width: 480px) {
-    height: 50px;
+    height: 56px;
 
     border-radius: 13px;
 
-    font-size: 0.86rem;
+    font-size: 1rem;
   }
 `;
 
@@ -1135,7 +1229,7 @@ export const Button = styled.button`
 export const AlreadyBox = styled.div`
   width: 100%;
 
-  max-width: 570px;
+  max-width: 700px;
 
   display: flex;
 
@@ -1143,7 +1237,7 @@ export const AlreadyBox = styled.div`
 
   align-items: center;
 
-  padding: 35px 40px;
+  padding: 38px 45px;
 
   border: 1px solid rgba(255, 219, 83, 0.8);
 
@@ -1155,44 +1249,44 @@ export const AlreadyBox = styled.div`
     0 15px 45px rgba(0, 0, 0, 0.06);
 
   .success-icon {
-    width: 64px;
-    height: 64px;
+    width: 68px;
+    height: 68px;
 
     display: flex;
 
     align-items: center;
     justify-content: center;
 
-    margin-bottom: 14px;
+    margin-bottom: 15px;
 
     border-radius: 50%;
 
     background: ${colors.cream};
 
     svg {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
 
       color: ${colors.yellowStrong};
     }
   }
 
   @media (max-width: 768px) {
-    padding: 32px 25px;
+    padding: 32px 28px;
 
     border-radius: 19px;
   }
 
   @media (max-width: 480px) {
-    padding: 27px 17px;
+    padding: 28px 18px;
 
     .success-icon {
-      width: 55px;
-      height: 55px;
+      width: 58px;
+      height: 58px;
 
       svg {
-        width: 32px;
-        height: 32px;
+        width: 34px;
+        height: 34px;
       }
     }
   }
@@ -1207,11 +1301,12 @@ export const AlreadyTitle = styled.h3`
 
   color: ${colors.red};
 
-  font-size: clamp(
-    1.1rem,
-    2vw,
-    1.4rem
-  );
+  font-size:
+    clamp(
+      1.5rem,
+      2.5vw,
+      2rem
+    );
 
   font-weight: 700;
 
@@ -1223,20 +1318,25 @@ export const AlreadyTitle = styled.h3`
 ============================================================ */
 
 export const AlreadyText = styled.p`
-  max-width: 430px;
+  max-width: 600px;
 
-  margin: 8px 0 23px;
+  margin: 10px 0 25px;
 
   color: #6d6d6d;
 
-  font-size: 0.78rem;
+  /* GRANDE COMO A DESCRIPTION */
+  font-size: 1.15rem;
 
-  line-height: 1.6;
+  line-height: 1.65;
 
   text-align: center;
 
+  @media (max-width: 768px) {
+    font-size: 1.05rem;
+  }
+
   @media (max-width: 480px) {
-    font-size: 0.7rem;
+    font-size: 1rem;
   }
 `;
 
@@ -1246,9 +1346,10 @@ export const AlreadyText = styled.p`
 
 export const AlreadyDetails = styled.div`
   width: 100%;
-  max-width: 400px;
 
-  padding: 17px 20px;
+  max-width: 500px;
+
+  padding: 19px 23px;
 
   border: 1px solid rgba(255, 219, 83, 0.65);
 
@@ -1261,9 +1362,9 @@ export const AlreadyDetails = styled.div`
 
     align-items: center;
 
-    gap: 9px;
+    gap: 10px;
 
-    margin-bottom: 13px;
+    margin-bottom: 14px;
 
     span {
       flex: 1;
@@ -1276,7 +1377,7 @@ export const AlreadyDetails = styled.div`
     strong {
       color: ${colors.red};
 
-      font-size: 0.66rem;
+      font-size: 0.9rem;
 
       text-transform: uppercase;
 
@@ -1293,7 +1394,7 @@ export const AlreadyDetails = styled.div`
 
     gap: 20px;
 
-    padding: 8px 0;
+    padding: 9px 0;
 
     border-bottom: 1px solid rgba(131, 22, 20, 0.07);
 
@@ -1306,7 +1407,7 @@ export const AlreadyDetails = styled.div`
     span {
       color: #8c8c8c;
 
-      font-size: 0.7rem;
+      font-size: 0.95rem;
     }
 
     strong {
@@ -1314,7 +1415,7 @@ export const AlreadyDetails = styled.div`
 
       color: #222;
 
-      font-size: 0.72rem;
+      font-size: 1rem;
 
       font-weight: 600;
 
@@ -1325,12 +1426,21 @@ export const AlreadyDetails = styled.div`
   }
 
   @media (max-width: 480px) {
-    padding: 14px 15px;
+    padding: 15px 16px;
+
+    .detail-header {
+      strong {
+        font-size: 0.78rem;
+      }
+    }
 
     .detail-row {
-      span,
+      span {
+        font-size: 0.85rem;
+      }
+
       strong {
-        font-size: 0.65rem;
+        font-size: 0.9rem;
       }
     }
   }
@@ -1384,11 +1494,11 @@ export const ModalOverlay = styled.div`
 ============================================================ */
 
 export const Modal = styled.div`
-  width: 430px;
+  width: 500px;
 
   max-width: 100%;
 
-  padding: 32px;
+  padding: 36px;
 
   border-radius: 22px;
 
@@ -1402,26 +1512,31 @@ export const Modal = styled.div`
   animation:
     modalAppear
     0.3s
-    cubic-bezier(0.16, 1, 0.3, 1);
+    cubic-bezier(
+      0.16,
+      1,
+      0.3,
+      1
+    );
 
   .modal-icon {
-    width: 54px;
-    height: 54px;
+    width: 58px;
+    height: 58px;
 
     display: flex;
 
     align-items: center;
     justify-content: center;
 
-    margin: 0 auto 15px;
+    margin: 0 auto 16px;
 
     border-radius: 50%;
 
     background: ${colors.cream};
 
     span {
-      width: 28px;
-      height: 28px;
+      width: 31px;
+      height: 31px;
 
       display: flex;
 
@@ -1434,44 +1549,44 @@ export const Modal = styled.div`
 
       color: ${colors.red};
 
-      font-size: 1rem;
+      font-size: 1.1rem;
 
       font-weight: 800;
     }
   }
 
   h3 {
-    margin: 0 0 8px;
+    margin: 0 0 9px;
 
     color: ${colors.red};
 
-    font-size: 1.4rem;
+    font-size: 1.7rem;
 
     font-weight: 700;
   }
 
   > p {
-    margin: 0 0 20px;
+    margin: 0 0 22px;
 
     color: #777;
 
-    font-size: 0.78rem;
+    font-size: 1.05rem;
 
-    line-height: 1.5;
+    line-height: 1.6;
   }
 
   .modal-summary {
     width: 100%;
 
-    margin-bottom: 23px;
+    margin-bottom: 25px;
 
-    padding: 13px 15px;
+    padding: 15px 17px;
 
     display: flex;
 
     flex-direction: column;
 
-    gap: 8px;
+    gap: 9px;
 
     border-radius: 13px;
 
@@ -1491,7 +1606,7 @@ export const Modal = styled.div`
       span {
         color: #888;
 
-        font-size: 0.67rem;
+        font-size: 0.9rem;
       }
 
       strong {
@@ -1499,7 +1614,7 @@ export const Modal = styled.div`
 
         color: #222;
 
-        font-size: 0.7rem;
+        font-size: 0.95rem;
 
         text-align: right;
 
@@ -1527,16 +1642,16 @@ export const Modal = styled.div`
   }
 
   @media (max-width: 600px) {
-    padding: 27px 20px;
+    padding: 29px 21px;
 
     border-radius: 19px;
 
     h3 {
-      font-size: 1.2rem;
+      font-size: 1.45rem;
     }
 
     > p {
-      font-size: 0.72rem;
+      font-size: 1rem;
     }
   }
 `;
@@ -1550,7 +1665,7 @@ export const ModalButtons = styled.div`
 
   grid-template-columns: 1fr 1fr;
 
-  gap: 10px;
+  gap: 11px;
 
   @media (max-width: 400px) {
     grid-template-columns: 1fr;
@@ -1562,7 +1677,7 @@ export const ModalButtons = styled.div`
 ============================================================ */
 
 export const CancelButton = styled.button`
-  height: 47px;
+  height: 50px;
 
   padding: 0 20px;
 
@@ -1576,7 +1691,7 @@ export const CancelButton = styled.button`
 
   font-family: inherit;
 
-  font-size: 0.78rem;
+  font-size: 1rem;
 
   font-weight: 600;
 
@@ -1609,7 +1724,7 @@ export const CancelButton = styled.button`
 ============================================================ */
 
 export const ConfirmButton = styled.button`
-  height: 47px;
+  height: 50px;
 
   padding: 0 20px;
 
@@ -1623,7 +1738,7 @@ export const ConfirmButton = styled.button`
 
   font-family: inherit;
 
-  font-size: 0.78rem;
+  font-size: 1rem;
 
   font-weight: 600;
 

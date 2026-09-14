@@ -41,6 +41,7 @@ import {
   ModalButtons,
   CancelButton,
   ConfirmButton,
+  Subtitle,
 } from "./style";
 
 export default function Inscricao() {
@@ -237,22 +238,19 @@ export default function Inscricao() {
     <Page>
       <Layout />
 
-      <TitleArea>
-        <div>
-          <Title>
-            {jaInscrito
-              ? "Sua inscrição"
-              : "Faça sua inscrição"}
-          </Title>
+   <TitleArea>
+  <Title>
+    {jaInscrito
+      ? "Sua inscrição"
+      : "Faça sua inscrição"}
+  </Title>
 
-          {!jaInscrito && (
-            <p className="title-description">
-              Preencha seus dados para participar
-              da competição como poeta.
-            </p>
-          )}
-        </div>
-      </TitleArea>
+  {!jaInscrito && (
+    <Subtitle>
+      Preencha seus dados para participar da competição.
+    </Subtitle>
+  )}
+</TitleArea>
 
       <Container>
         <LeftSide>

@@ -22,11 +22,11 @@ import {
   EmptyTitle,
   EmptyText,
   PostIt,
-  PostItPin,
   PostItTitle,
   PostItMessage,
   PostItFooter,
   ReadMore,
+  PostDate,
   FloatingButton,
   CreateOverlay,
   CreateModal,
@@ -44,7 +44,6 @@ import {
   CreateButton,
   ViewOverlay,
   ViewPostIt,
-  ViewPostItPin,
   ViewTopButtons,
   ViewEditButton,
   ViewCloseButton,
@@ -72,7 +71,6 @@ const API_URL = "http://localhost:3001";
 // =====================================================
 
 export default function Muraladm() {
-
   const [posts, setPosts] = useState([]);
 
   const [showCreateModal, setShowCreateModal] =
@@ -94,99 +92,99 @@ export default function Muraladm() {
     useState("");
 
   const [corSelecionada, setCorSelecionada] =
-    useState("#fff176");
+    useState("#ffcf70");
 
 
   // ===================================================
-  // CORES
+  // CORES DOS CARDS
   // ===================================================
 
   const cores = [
-    "#fff176",
-    "#ffcc80",
-    "#ef9a9a",
-    "#f48fb1",
-    "#ce93d8",
-    "#90caf9",
-    "#80cbc4",
-    "#a5d6a7",
+    "#ffcf70",
+    "#ff9875",
+    "#e4ef87",
+    "#b18bea",
+    "#d7eb85",
+    "#19c5df",
+    "#9dc9ff",
+    "#f29bc3",
   ];
 
 
   // ===================================================
-  // CABEÇALHOS PADRÃO (com token de autenticação)
+  // FORMATA DATA
+  // ===================================================
+
+  const formatarData = (data) => {
+    if (!data) {
+      return "";
+    }
+
+    const dataObj = new Date(data);
+
+    if (Number.isNaN(dataObj.getTime())) {
+      return "";
+    }
+
+    return dataObj.toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  };
+
+
+  // ===================================================
+  // CABEÇALHOS PADRÃO
   // ===================================================
 
   function headersPadrao() {
-
     return {
-
       "Content-Type": "application/json",
 
       Authorization:
         `Bearer ${localStorage.getItem("token")}`,
-
     };
-
   }
 
 
   // ===================================================
-  // CARREGAR POSTS (agora vindo da API)
+  // CARREGAR POSTS
   // ===================================================
 
   const carregarPosts = () => {
-
     fetch(`${API_URL}/mural`, {
-
       headers: {
-
         Authorization:
           `Bearer ${localStorage.getItem("token")}`,
-
       },
-
     })
-
       .then((resposta) => {
-
         if (!resposta.ok) {
-
           throw new Error(
             "Erro ao buscar o mural"
           );
-
         }
 
         return resposta.json();
-
       })
 
       .then((postsSalvos) => {
-
         if (Array.isArray(postsSalvos)) {
-
           setPosts(postsSalvos);
-
         } else {
-
           setPosts([]);
-
         }
-
       })
 
       .catch((error) => {
-
         console.error(
           "Erro ao carregar o mural:",
           error
         );
 
         setPosts([]);
-
       });
-
   };
 
 
@@ -195,31 +193,23 @@ export default function Muraladm() {
   // ===================================================
 
   useEffect(() => {
-
     carregarPosts();
-
   }, []);
 
 
   // ===================================================
-  // ATUALIZAÇÃO PERIÓDICA DO MURAL
+  // ATUALIZAÇÃO PERIÓDICA
   // ===================================================
 
   useEffect(() => {
-
-    const intervalo =
-      setInterval(
-        carregarPosts,
-        3000
-      );
-
+    const intervalo = setInterval(
+      carregarPosts,
+      3000
+    );
 
     return () => {
-
       clearInterval(intervalo);
-
     };
-
   }, []);
 
 
@@ -228,7 +218,6 @@ export default function Muraladm() {
   // ===================================================
 
   const handleButtonMouseMove = (event) => {
-
     const button =
       event.currentTarget;
 
@@ -241,18 +230,15 @@ export default function Muraladm() {
     const y =
       event.clientY - rect.top;
 
-
     button.style.setProperty(
       "--mouse-x",
       `${x}px`
     );
 
-
     button.style.setProperty(
       "--mouse-y",
       `${y}px`
     );
-
   };
 
 
@@ -261,17 +247,15 @@ export default function Muraladm() {
   // ===================================================
 
   const abrirCriacao = () => {
-
     setPostEditando(null);
 
     setTitulo("");
 
     setDescricao("");
 
-    setCorSelecionada("#fff176");
+    setCorSelecionada("#ffcf70");
 
     setShowCreateModal(true);
-
   };
 
 
@@ -280,7 +264,6 @@ export default function Muraladm() {
   // ===================================================
 
   const fecharCriacao = () => {
-
     setShowCreateModal(false);
 
     setPostEditando(null);
@@ -289,19 +272,16 @@ export default function Muraladm() {
 
     setDescricao("");
 
-    setCorSelecionada("#fff176");
-
+    setCorSelecionada("#ffcf70");
   };
 
 
   // ===================================================
-  // CRIAR POST (agora salvando na API)
+  // CRIAR POST
   // ===================================================
 
   const criarPost = (event) => {
-
     event.preventDefault();
-
 
     const tituloLimpo =
       titulo.trim();
@@ -309,23 +289,17 @@ export default function Muraladm() {
     const descricaoLimpa =
       descricao.trim();
 
-
     if (!tituloLimpo) {
-
       return;
-
     }
 
-
     fetch(`${API_URL}/mural`, {
-
       method: "POST",
 
       headers:
         headersPadrao(),
 
       body: JSON.stringify({
-
         titulo:
           tituloLimpo,
 
@@ -334,42 +308,30 @@ export default function Muraladm() {
 
         cor:
           corSelecionada,
-
       }),
-
     })
-
       .then((resposta) => {
-
         if (!resposta.ok) {
-
           throw new Error(
-            "Erro ao criar post it"
+            "Erro ao criar post"
           );
-
         }
 
         return resposta.json();
-
       })
 
       .then(() => {
-
         carregarPosts();
 
         fecharCriacao();
-
       })
 
       .catch((error) => {
-
         console.error(
-          "Erro ao criar post it:",
+          "Erro ao criar post:",
           error
         );
-
       });
-
   };
 
 
@@ -378,9 +340,7 @@ export default function Muraladm() {
   // ===================================================
 
   const abrirPost = (post) => {
-
     setPostSelecionado(post);
-
   };
 
 
@@ -389,9 +349,7 @@ export default function Muraladm() {
   // ===================================================
 
   const fecharPost = () => {
-
     setPostSelecionado(null);
-
   };
 
 
@@ -400,7 +358,6 @@ export default function Muraladm() {
   // ===================================================
 
   const iniciarEdicao = (post) => {
-
     setPostEditando(post);
 
     setTitulo(
@@ -415,31 +372,25 @@ export default function Muraladm() {
 
     setCorSelecionada(
       post.cor ||
-      "#fff176"
+      "#ffcf70"
     );
 
     setPostSelecionado(null);
 
     setShowCreateModal(true);
-
   };
 
 
   // ===================================================
-  // ATUALIZAR POST (agora salvando na API)
+  // ATUALIZAR POST
   // ===================================================
 
   const atualizarPost = (event) => {
-
     event.preventDefault();
 
-
     if (!postEditando) {
-
       return;
-
     }
-
 
     const tituloLimpo =
       titulo.trim();
@@ -447,67 +398,52 @@ export default function Muraladm() {
     const descricaoLimpa =
       descricao.trim();
 
-
     if (!tituloLimpo) {
-
       return;
-
     }
 
+    fetch(
+      `${API_URL}/mural/${postEditando.id}`,
+      {
+        method: "PUT",
 
-    fetch(`${API_URL}/mural/${postEditando.id}`, {
+        headers:
+          headersPadrao(),
 
-      method: "PUT",
+        body: JSON.stringify({
+          titulo:
+            tituloLimpo,
 
-      headers:
-        headersPadrao(),
+          descricao:
+            descricaoLimpa,
 
-      body: JSON.stringify({
-
-        titulo:
-          tituloLimpo,
-
-        descricao:
-          descricaoLimpa,
-
-        cor:
-          corSelecionada,
-
-      }),
-
-    })
-
+          cor:
+            corSelecionada,
+        }),
+      }
+    )
       .then((resposta) => {
-
         if (!resposta.ok) {
-
           throw new Error(
-            "Erro ao atualizar post it"
+            "Erro ao atualizar post"
           );
-
         }
 
         return resposta.json();
-
       })
 
       .then(() => {
-
         carregarPosts();
 
         fecharCriacao();
-
       })
 
       .catch((error) => {
-
         console.error(
-          "Erro ao atualizar post it:",
+          "Erro ao atualizar post:",
           error
         );
-
       });
-
   };
 
 
@@ -516,9 +452,7 @@ export default function Muraladm() {
   // ===================================================
 
   const pedirExclusao = (post) => {
-
     setPostParaExcluir(post);
-
   };
 
 
@@ -527,71 +461,54 @@ export default function Muraladm() {
   // ===================================================
 
   const cancelarExclusao = () => {
-
     setPostParaExcluir(null);
-
   };
 
 
   // ===================================================
-  // CONFIRMAR EXCLUSÃO (agora removendo na API)
+  // CONFIRMAR EXCLUSÃO
   // ===================================================
 
   const confirmarExclusao = () => {
-
     if (!postParaExcluir) {
-
       return;
-
     }
 
+    fetch(
+      `${API_URL}/mural/${postParaExcluir.id}`,
+      {
+        method: "DELETE",
 
-    fetch(`${API_URL}/mural/${postParaExcluir.id}`, {
-
-      method: "DELETE",
-
-      headers: {
-
-        Authorization:
-          `Bearer ${localStorage.getItem("token")}`,
-
-      },
-
-    })
-
+        headers: {
+          Authorization:
+            `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
       .then((resposta) => {
-
         if (!resposta.ok) {
-
           throw new Error(
-            "Erro ao excluir post it"
+            "Erro ao excluir post"
           );
-
         }
 
         return resposta.json();
-
       })
 
       .then(() => {
-
         carregarPosts();
 
         setPostParaExcluir(null);
 
         setPostSelecionado(null);
-
       })
 
       .catch((error) => {
-
         console.error(
-          "Erro ao excluir post it:",
+          "Erro ao excluir post:",
           error
         );
-
       });
-
   };
 
 
@@ -600,60 +517,37 @@ export default function Muraladm() {
   // ===================================================
 
   useEffect(() => {
-
     const handleKeyDown = (event) => {
-
-      if (
-        event.key !== "Escape"
-      ) {
-
+      if (event.key !== "Escape") {
         return;
-
       }
-
 
       if (postParaExcluir) {
-
         setPostParaExcluir(null);
-
         return;
-
       }
-
 
       if (showCreateModal) {
-
         fecharCriacao();
-
         return;
-
       }
-
 
       if (postSelecionado) {
-
         fecharPost();
-
       }
-
     };
-
 
     window.addEventListener(
       "keydown",
       handleKeyDown
     );
 
-
     return () => {
-
       window.removeEventListener(
         "keydown",
         handleKeyDown
       );
-
     };
-
   }, [
     postParaExcluir,
     showCreateModal,
@@ -666,11 +560,9 @@ export default function Muraladm() {
   // ===================================================
 
   return (
-
     <Page>
 
       <Layoutadm />
-
 
       <Content>
 
@@ -679,7 +571,6 @@ export default function Muraladm() {
           <Title>
             Mural
           </Title>
-
 
           <Subtitle>
             Deixe seus recados e informações
@@ -699,11 +590,9 @@ export default function Muraladm() {
                 <FiMessageSquare />
               </EmptyIcon>
 
-
               <EmptyTitle>
-                Nenhum post it cadastrado
+                Nenhum recado cadastrado
               </EmptyTitle>
-
 
               <EmptyText>
                 No momento não existem
@@ -718,7 +607,6 @@ export default function Muraladm() {
               (post, index) => (
 
                 <PostIt
-
                   key={
                     post.id ||
                     index
@@ -726,14 +614,11 @@ export default function Muraladm() {
 
                   $color={
                     post.cor ||
-                    "#fff176"
+                    cores[
+                      index %
+                      cores.length
+                    ]
                   }
-
-                  $rotation={
-                    post.rotacao
-                  }
-
-                  $index={index}
 
                   onClick={() =>
                     abrirPost(post)
@@ -757,27 +642,19 @@ export default function Muraladm() {
                     }
 
                   }}
-
                 >
 
-                  <PostItPin />
-
-
                   <PostItTitle>
-
                     {post.titulo}
-
                   </PostItTitle>
 
 
                   <PostItMessage>
-
                     {
                       post.mensagem ||
                       post.descricao ||
                       ""
                     }
-
                   </PostItMessage>
 
 
@@ -787,12 +664,23 @@ export default function Muraladm() {
                       Clique para visualizar
                     </ReadMore>
 
+
+                    <PostDate>
+                      {formatarData(
+                        post.data_publicacao ||
+                        post.dataPublicacao ||
+                        post.created_at ||
+                        post.createdAt ||
+                        post.data_criacao ||
+                        post.dataCriacao
+                      )}
+                    </PostDate>
+
                   </PostItFooter>
 
                 </PostIt>
 
               )
-
             )
 
           )}
@@ -807,7 +695,6 @@ export default function Muraladm() {
       ================================================= */}
 
       <FloatingButton
-
         type="button"
 
         onClick={
@@ -818,10 +705,9 @@ export default function Muraladm() {
           handleButtonMouseMove
         }
 
-        aria-label="Criar post it"
+        aria-label="Criar novo recado"
 
-        title="Criar post it"
-
+        title="Criar novo recado"
       >
 
         <span className="buttonContent">
@@ -840,7 +726,6 @@ export default function Muraladm() {
       {showCreateModal && (
 
         <CreateOverlay
-
           onClick={(event) => {
 
             if (
@@ -853,7 +738,6 @@ export default function Muraladm() {
             }
 
           }}
-
         >
 
           <CreateModal>
@@ -863,14 +747,13 @@ export default function Muraladm() {
               <CreateTitle>
 
                 {postEditando
-                  ? "Editar post it"
-                  : "Novo post it"}
+                  ? "Editar recado"
+                  : "Novo recado"}
 
               </CreateTitle>
 
 
               <CreateCloseButton
-
                 type="button"
 
                 onClick={
@@ -884,7 +767,6 @@ export default function Muraladm() {
                 aria-label="Fechar"
 
                 title="Fechar"
-
               >
 
                 <span className="buttonContent">
@@ -899,13 +781,11 @@ export default function Muraladm() {
 
 
             <CreateForm
-
               onSubmit={
                 postEditando
                   ? atualizarPost
                   : criarPost
               }
-
             >
 
               <Field>
@@ -914,9 +794,7 @@ export default function Muraladm() {
                   Título
                 </Label>
 
-
                 <TitleInput
-
                   type="text"
 
                   value={titulo}
@@ -932,7 +810,6 @@ export default function Muraladm() {
                   maxLength={60}
 
                   autoFocus
-
                 />
 
               </Field>
@@ -944,9 +821,7 @@ export default function Muraladm() {
                   Descrição
                 </Label>
 
-
                 <DescriptionInput
-
                   value={descricao}
 
                   onChange={(event) =>
@@ -958,7 +833,6 @@ export default function Muraladm() {
                   placeholder="Digite seu recado..."
 
                   maxLength={300}
-
                 />
 
               </Field>
@@ -977,7 +851,6 @@ export default function Muraladm() {
                     (cor) => (
 
                       <ColorOption
-
                         key={cor}
 
                         type="button"
@@ -998,7 +871,6 @@ export default function Muraladm() {
                         aria-label={
                           `Selecionar cor ${cor}`
                         }
-
                       />
 
                     )
@@ -1010,7 +882,6 @@ export default function Muraladm() {
 
 
               <CreateButton
-
                 type="submit"
 
                 disabled={
@@ -1020,14 +891,13 @@ export default function Muraladm() {
                 onMouseMove={
                   handleButtonMouseMove
                 }
-
               >
 
                 <span className="buttonContent">
 
                   {postEditando
                     ? "Salvar alterações"
-                    : "Criar post it"}
+                    : "Criar recado"}
 
                 </span>
 
@@ -1049,7 +919,6 @@ export default function Muraladm() {
       {postSelecionado && (
 
         <ViewOverlay
-
           onClick={(event) => {
 
             if (
@@ -1062,29 +931,18 @@ export default function Muraladm() {
             }
 
           }}
-
         >
 
           <ViewPostIt
-
             $color={
               postSelecionado.cor ||
-              "#fff176"
+              "#ffcf70"
             }
-
-            $rotation={
-              postSelecionado.rotacao
-            }
-
           >
-
-            <ViewPostItPin />
-
 
             <ViewTopButtons>
 
               <ViewEditButton
-
                 type="button"
 
                 onClick={() =>
@@ -1097,10 +955,9 @@ export default function Muraladm() {
                   handleButtonMouseMove
                 }
 
-                aria-label="Editar post it"
+                aria-label="Editar recado"
 
                 title="Editar"
-
               >
 
                 <span className="buttonContent">
@@ -1113,7 +970,6 @@ export default function Muraladm() {
 
 
               <ViewDeleteButton
-
                 type="button"
 
                 onClick={() =>
@@ -1126,10 +982,9 @@ export default function Muraladm() {
                   handleButtonMouseMove
                 }
 
-                aria-label="Excluir post it"
+                aria-label="Excluir recado"
 
                 title="Excluir"
-
               >
 
                 <span className="buttonContent">
@@ -1142,7 +997,6 @@ export default function Muraladm() {
 
 
               <ViewCloseButton
-
                 type="button"
 
                 onClick={
@@ -1153,10 +1007,9 @@ export default function Muraladm() {
                   handleButtonMouseMove
                 }
 
-                aria-label="Fechar post it"
+                aria-label="Fechar"
 
                 title="Fechar"
-
               >
 
                 <span className="buttonContent">
@@ -1173,23 +1026,31 @@ export default function Muraladm() {
             <ViewContent>
 
               <ViewTitle>
-
                 {
                   postSelecionado.titulo
                 }
-
               </ViewTitle>
 
 
               <ViewDescription>
-
                 {
                   postSelecionado.mensagem ||
                   postSelecionado.descricao ||
                   ""
                 }
-
               </ViewDescription>
+
+
+              <PostDate>
+                {formatarData(
+                  postSelecionado.data_publicacao ||
+                  postSelecionado.dataPublicacao ||
+                  postSelecionado.created_at ||
+                  postSelecionado.createdAt ||
+                  postSelecionado.data_criacao ||
+                  postSelecionado.dataCriacao
+                )}
+              </PostDate>
 
             </ViewContent>
 
@@ -1211,20 +1072,19 @@ export default function Muraladm() {
           <DeleteModal>
 
             <h3>
-              Excluir post it
+              Excluir recado
             </h3>
 
 
             <p>
               Tem certeza que deseja
-              excluir este post it?
+              excluir este recado?
             </p>
 
 
             <ModalButtons>
 
               <CancelButton
-
                 type="button"
 
                 onClick={
@@ -1234,20 +1094,16 @@ export default function Muraladm() {
                 onMouseMove={
                   handleButtonMouseMove
                 }
-
               >
 
                 <span className="buttonContent">
-
                   Cancelar
-
                 </span>
 
               </CancelButton>
 
 
               <ConfirmButton
-
                 type="button"
 
                 onClick={
@@ -1257,13 +1113,10 @@ export default function Muraladm() {
                 onMouseMove={
                   handleButtonMouseMove
                 }
-
               >
 
                 <span className="buttonContent">
-
                   Excluir
-
                 </span>
 
               </ConfirmButton>
@@ -1277,7 +1130,5 @@ export default function Muraladm() {
       )}
 
     </Page>
-
   );
-
 }

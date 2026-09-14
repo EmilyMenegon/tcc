@@ -4,23 +4,75 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import {
-  FaArrowRight, FaEnvelope, FaInstagram, FaYoutube,
-  FaFileAlt, FaCalendarAlt, FaTrophy, FaBookOpen, FaMicrophone,
+  FaArrowRight,
+  FaEnvelope,
+  FaInstagram,
+  FaYoutube,
+  FaFileAlt,
+  FaCalendarAlt,
+  FaTrophy,
+  FaBookOpen,
+  FaMicrophone,
 } from "react-icons/fa";
 
 import {
-  Page, HeroWrapper, Hero, Header, Logo, HeaderBar, SocialIcons, SocialIcon,
-  Container, LeftSide, BigText, SmallText, Buttons, PrimaryButton,
-  ImageBox, Image, Circle, PixelImage,
-  MarqueeSection, MarqueeReveal, MarqueeTrack, AnimatedImage, Phrase,
-  AboutSection, AboutContainer, AboutTitle, AboutContent, AboutText,
-  AboutFindBox, AboutWords, AboutWord, AboutGame, AboutBoard, AboutRow,
-  AboutLetter, GameFeedback,
-  FeaturesSection, SectionTitle, FeaturesGrid, FeatureCard, FeatureIcon,
-  FeatureTitle, FeatureText,
-  NumbersSection, NumbersContainer, NumberItem, NumberValue, NumberLabel,
+  GlobalStyle,
+  Page,
+  HeroWrapper,
+  Hero,
+  Header,
+  Logo,
+  HeaderBar,
+  SocialIcons,
+  SocialIcon,
+  Container,
+  LeftSide,
+  BigText,
+  SmallText,
+  Buttons,
+  PrimaryButton,
+  ImageBox,
+  Image,
+  Circle,
+  PixelImage,
+  MarqueeSection,
+  MarqueeReveal,
+  MarqueeTrack,
+  AnimatedImage,
+  Phrase,
+  AboutSection,
+  AboutContainer,
+  AboutTitle,
+  AboutContent,
+  AboutText,
+  AboutFindBox,
+  AboutWords,
+  AboutWord,
+  AboutGame,
+  AboutBoard,
+  AboutRow,
+  AboutLetter,
+  GameFeedback,
+  FeaturesSection,
+  SectionTitle,
+  FeaturesGrid,
+  FeatureCard,
+  FeatureIcon,
+  FeatureTitle,
+  FeatureText,
+  NumbersSection,
+  NumbersContainer,
+  NumberItem,
+  NumberValue,
+  NumberLabel,
   NumberDivider,
-  CTASection, CTAContainer, CTAIcon, CTAText, CTATitle, CTASubtitle, CTALink,
+  CTASection,
+  CTAContainer,
+  CTAIcon,
+  CTAText,
+  CTATitle,
+  CTASubtitle,
+  CTALink,
 } from "./style";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -30,8 +82,16 @@ gsap.registerPlugin(ScrollTrigger);
 ============================================================ */
 
 const words = [
-  "SLAM", "POESIA", "SENTIMENTOS", "ARTE", "ESCRITA",
-  "ORALIDADE", "RIMAS", "PERFORMANCES", "CONFIANÇA", "EXPRESSÃO",
+  "SLAM",
+  "POESIA",
+  "SENTIMENTOS",
+  "ARTE",
+  "ESCRITA",
+  "ORALIDADE",
+  "RIMAS",
+  "PERFORMANCES",
+  "CONFIANÇA",
+  "EXPRESSÃO",
 ];
 
 /* ============================================================
@@ -58,9 +118,9 @@ export default function TelaInicial() {
   const marqueeRef = useRef(null);
   const numbersRef = useRef(null);
 
-  // Refs e estados do caça-palavras
   const gameRef = useRef(null);
   const feedbackRef = useRef(null);
+
   const [selected, setSelected] = useState([]);
   const [found, setFound] = useState([]);
   const [foundCells, setFoundCells] = useState([]);
@@ -134,7 +194,8 @@ export default function TelaInicial() {
 
     gsap.killTweensOf(gameRef.current);
 
-    gsap.timeline()
+    gsap
+      .timeline()
       .to(gameRef.current, {
         x: -10,
         duration: 0.07,
@@ -179,20 +240,19 @@ export default function TelaInicial() {
   function selectLetter(row, col) {
     const position = `${row}-${col}`;
 
-    // Primeiro clique
     if (selected.length === 0) {
       setSelected([position]);
       return;
     }
 
     const [r1, c1] = selected[0].split("-").map(Number);
+
     const r2 = row;
     const c2 = col;
 
     let cells = [];
 
     if (r1 === r2) {
-      // Horizontal
       const start = Math.min(c1, c2);
       const end = Math.max(c1, c2);
 
@@ -200,7 +260,6 @@ export default function TelaInicial() {
         cells.push(`${r1}-${c}`);
       }
     } else if (c1 === c2) {
-      // Vertical
       const start = Math.min(r1, r2);
       const end = Math.max(r1, r2);
 
@@ -208,7 +267,6 @@ export default function TelaInicial() {
         cells.push(`${r}-${c1}`);
       }
     } else if (Math.abs(r1 - r2) === Math.abs(c1 - c2)) {
-      // Diagonal
       const rowStep = r2 > r1 ? 1 : -1;
       const colStep = c2 > c1 ? 1 : -1;
 
@@ -225,7 +283,6 @@ export default function TelaInicial() {
       }
     }
 
-    // Verificar palavra
     const letters = cells.map((item) => {
       const [r, c] = item.split("-").map(Number);
 
@@ -270,7 +327,6 @@ export default function TelaInicial() {
       return;
     }
 
-    // Erro
     setSelected([]);
 
     shakeGame();
@@ -288,13 +344,12 @@ export default function TelaInicial() {
     if (!page) return;
 
     const ctx = gsap.context(() => {
-
-      // Hero — animação de entrada
-      gsap.timeline({
-        defaults: {
-          ease: "power4.out",
-        },
-      })
+      gsap
+        .timeline({
+          defaults: {
+            ease: "power4.out",
+          },
+        })
         .from(".hero-logo", {
           y: -30,
           opacity: 0,
@@ -376,21 +431,24 @@ export default function TelaInicial() {
 
       gsap.utils.toArray(".hero-pixel").forEach((pixel, index) => {
         gsap.to(pixel, {
-          y: index === 0
-            ? -18
-            : index === 1
+          y:
+            index === 0
+              ? -18
+              : index === 1
               ? 20
               : -15,
 
-          x: index === 0
-            ? 12
-            : index === 1
+          x:
+            index === 0
+              ? 12
+              : index === 1
               ? -12
               : 10,
 
-          rotation: index === 0
-            ? 6
-            : index === 1
+          rotation:
+            index === 0
+              ? 6
+              : index === 1
               ? -7
               : 5,
 
@@ -406,14 +464,15 @@ export default function TelaInicial() {
         });
       });
 
-      // Círculos flutuantes
+      /* ========================================================
+         CÍRCULOS FLUTUANTES
+      ======================================================== */
+
       gsap.utils.toArray(".hero-circle").forEach((circle, index) => {
         gsap.to(circle, {
           y: index % 2 === 0 ? -20 : 20,
 
-          x: index % 3 === 0
-            ? 12
-            : -12,
+          x: index % 3 === 0 ? 12 : -12,
 
           duration: 3 + index * 0.25,
 
@@ -427,17 +486,17 @@ export default function TelaInicial() {
         });
       });
 
-      // Marquee — somente horizontal
+      /* ========================================================
+         MARQUEE
+      ======================================================== */
+
       if (marqueeRef.current) {
-        gsap.set(
-          marqueeRef.current,
-          {
-            x: 0,
-            y: 0,
-            opacity: 1,
-            visibility: "visible",
-          }
-        );
+        gsap.set(marqueeRef.current, {
+          x: 0,
+          y: 0,
+          opacity: 1,
+          visibility: "visible",
+        });
       }
 
       const marqueeTrack =
@@ -470,7 +529,10 @@ export default function TelaInicial() {
         });
       }
 
-      // Números
+      /* ========================================================
+         NÚMEROS
+      ======================================================== */
+
       if (numbersRef.current) {
         const numberElements =
           numbersRef.current.querySelectorAll(
@@ -520,574 +582,599 @@ export default function TelaInicial() {
         });
       }
 
-      requestAnimationFrame(() =>
-        ScrollTrigger.refresh()
-      );
-
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+      });
     }, page);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <Page ref={pageRef}>
+    <>
+      {/* ========================================================
+          RESET DO BODY / HTML / ROOT
+      ======================================================== */}
 
-      {/* HERO */}
-      <HeroWrapper>
-        <Hero>
+      <GlobalStyle />
 
-          <Header>
-            <Logo className="hero-logo">
-              <img
-                src="/logo.png"
-                alt="Slam Interescolar"
+      <Page ref={pageRef}>
+
+        {/* ======================================================
+            HERO
+        ====================================================== */}
+
+        <HeroWrapper>
+          <Hero>
+
+            <Header>
+              <Logo className="hero-logo">
+                <img
+                  src="/logo.png"
+                  alt="Slam Interescolar"
+                />
+              </Logo>
+
+              <HeaderBar />
+
+              <SocialIcons className="hero-social">
+
+                <SocialIcon
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaInstagram />
+                </SocialIcon>
+
+                <SocialIcon href="mailto:contato@email.com">
+                  <FaEnvelope />
+                </SocialIcon>
+
+                <SocialIcon
+                  href="https://youtube.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaYoutube />
+                </SocialIcon>
+
+              </SocialIcons>
+            </Header>
+
+            <Container>
+
+              <LeftSide>
+
+                <BigText className="hero-title">
+                  DAS RUAS PARA AS <span>ESCOLAS</span>
+                  <br />
+                  DAS ESCOLAS PARA AS <span>RUAS</span>
+                </BigText>
+
+                <SmallText className="hero-description">
+                  O Slam Etecamp celebra a expressão,
+                  criatividade e o poder da palavra entre
+                  jovens estudantes.
+                </SmallText>
+
+                <Buttons className="hero-buttons">
+
+                  <RouterLink to="/login">
+
+                    <PrimaryButton
+                      onPointerMove={handleButtonMove}
+                    >
+                      <span className="button-content">
+                        Participar do Slam Etecamp
+                        <FaArrowRight />
+                      </span>
+                    </PrimaryButton>
+
+                  </RouterLink>
+
+                </Buttons>
+
+              </LeftSide>
+
+              <ImageBox className="hero-image">
+
+                <PixelImage
+                  className="hero-pixel hero-pixel-01"
+                  src="/pixel01.png"
+                  alt=""
+                />
+
+                <PixelImage
+                  className="hero-pixel hero-pixel-02"
+                  src="/pixel02.png"
+                  alt=""
+                />
+
+                <PixelImage
+                  className="hero-pixel hero-pixel-03"
+                  src="/pixel03.png"
+                  alt=""
+                />
+
+                <Circle
+                  className="hero-circle"
+                  $size="65px"
+                  $top="0%"
+                  $left="8%"
+                />
+
+                <Circle
+                  className="hero-circle"
+                  $size="45px"
+                  $top="0%"
+                  $left="28%"
+                />
+
+                <Circle
+                  className="hero-circle"
+                  $size="25px"
+                  $top="18%"
+                  $right="12%"
+                />
+
+                <Circle
+                  className="hero-circle"
+                  $size="35px"
+                  $bottom="10%"
+                  $left="2%"
+                />
+
+                <Circle
+                  className="hero-circle"
+                  $size="18px"
+                  $bottom="25%"
+                  $right="5%"
+                />
+
+                <Circle
+                  className="hero-circle"
+                  $size="70px"
+                  $top="99%"
+                  $right="20%"
+                />
+
+                <Image
+                  src="/inicialimg.png"
+                  alt="Ilustração do Slam Etecamp"
+                />
+
+              </ImageBox>
+
+            </Container>
+
+          </Hero>
+        </HeroWrapper>
+
+        {/* ======================================================
+            MARQUEE
+        ====================================================== */}
+
+        <MarqueeSection>
+
+          <MarqueeReveal ref={marqueeRef}>
+
+            <MarqueeTrack className="marquee-track">
+
+              <Phrase>LIBERDADE</Phrase>
+              <AnimatedImage
+                src="/icons.png"
+                alt="Slam"
               />
-            </Logo>
 
-            <HeaderBar />
+              <Phrase>RESPEITO</Phrase>
+              <AnimatedImage
+                src="/icons.png"
+                alt="Slam"
+              />
 
-            <SocialIcons className="hero-social">
+              <Phrase>ESFORÇO</Phrase>
+              <AnimatedImage
+                src="/icons.png"
+                alt="Slam"
+              />
 
-              <SocialIcon
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaInstagram />
-              </SocialIcon>
+              <Phrase>AUTENTICIDADE</Phrase>
+              <AnimatedImage
+                src="/icons.png"
+                alt="Slam"
+              />
 
-              <SocialIcon href="mailto:contato@email.com">
-                <FaEnvelope />
-              </SocialIcon>
+              <Phrase>EVOLUÇÃO</Phrase>
+              <AnimatedImage
+                src="/icons.png"
+                alt="Slam"
+              />
 
-              <SocialIcon
-                href="https://youtube.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaYoutube />
-              </SocialIcon>
+              <Phrase>CORAGEM</Phrase>
+              <AnimatedImage
+                src="/icons.png"
+                alt="Slam"
+              />
 
-            </SocialIcons>
-          </Header>
+              <Phrase>UNIÃO</Phrase>
+              <AnimatedImage
+                src="/icons.png"
+                alt="Slam"
+              />
 
-          <Container>
+              <Phrase>LIBERDADE</Phrase>
+              <AnimatedImage
+                src="/icons.png"
+                alt="Slam"
+              />
 
-            <LeftSide>
+              <Phrase>RESPEITO</Phrase>
+              <AnimatedImage
+                src="/icons.png"
+                alt="Slam"
+              />
 
-              <BigText className="hero-title">
-                DAS RUAS PARA AS <span>ESCOLAS</span>
+              <Phrase>ESFORÇO</Phrase>
+              <AnimatedImage
+                src="/icons.png"
+                alt="Slam"
+              />
+
+              <Phrase>AUTENTICIDADE</Phrase>
+              <AnimatedImage
+                src="/icons.png"
+                alt="Slam"
+              />
+
+              <Phrase>EVOLUÇÃO</Phrase>
+              <AnimatedImage
+                src="/icons.png"
+                alt="Slam"
+              />
+
+              <Phrase>CORAGEM</Phrase>
+              <AnimatedImage
+                src="/icons.png"
+                alt="Slam"
+              />
+
+              <Phrase>UNIÃO</Phrase>
+              <AnimatedImage
+                src="/icons.png"
+                alt="Slam"
+              />
+
+              <Phrase>CULTURA</Phrase>
+
+            </MarqueeTrack>
+
+          </MarqueeReveal>
+
+        </MarqueeSection>
+
+        {/* ======================================================
+            SOBRE O SLAM
+        ====================================================== */}
+
+        <AboutSection>
+
+          <AboutTitle>
+            SOBRE O <span>SLAM</span>
+          </AboutTitle>
+
+          <AboutContainer>
+
+            <AboutContent>
+
+              <AboutText>
+                O <b>Slam</b> Interescolar é uma competição
+                de <b>poesia</b> falada que reúne estudantes
+                de diferentes escolas para compartilharem
+                suas ideias, <b>sentimentos</b> e vivências
+                por meio da <b>arte</b> e da palavra.
+
                 <br />
-                DAS ESCOLAS PARA AS <span>RUAS</span>
-              </BigText>
+                <br />
 
-              <SmallText className="hero-description">
-                O Slam Etecamp celebra a expressão, criatividade e o poder
-                da palavra entre jovens estudantes.
-              </SmallText>
+                Além de incentivar a <b>escrita</b> e a
+                <b> oralidade</b>, a iniciativa fortalece
+                a autoestima, o pensamento crítico e o
+                respeito. Entre <b>rimas</b>, emoções e
+                <b> performances</b>, os jovens desenvolvem
+                <b> confiança</b> e ampliam suas formas de
+                <b> expressão</b>.
+              </AboutText>
 
-              <Buttons className="hero-buttons">
+              <AboutFindBox>
 
-                <RouterLink to="/login">
+                <h3>Encontre:</h3>
 
-                  <PrimaryButton
-                    onPointerMove={handleButtonMove}
-                  >
-                    <span className="button-content">
-                      Participar do Slam Etecamp
-                      <FaArrowRight />
-                    </span>
-                  </PrimaryButton>
+                <AboutWords>
 
-                </RouterLink>
+                  {words.map((word) => (
+                    <AboutWord
+                      key={word}
+                      $found={found.includes(word)}
+                    >
+                      {word}
+                    </AboutWord>
+                  ))}
 
-              </Buttons>
+                </AboutWords>
 
-            </LeftSide>
+              </AboutFindBox>
 
-            <ImageBox className="hero-image">
+            </AboutContent>
 
-              {/* =================================================
-                  3 PEQUENAS IMAGENS AO REDOR DA IMAGEM PRINCIPAL
-              ================================================= */}
+            <AboutGame>
 
-              <PixelImage
-                className="hero-pixel hero-pixel-01"
-                src="/pixel01.png"
-                alt=""
-              />
+              {feedback && (
+                <GameFeedback
+                  ref={feedbackRef}
+                  $success={feedback.startsWith("PARABÉNS")}
+                >
+                  {feedback}
+                </GameFeedback>
+              )}
 
-              <PixelImage
-                className="hero-pixel hero-pixel-02"
-                src="/pixel02.png"
-                alt=""
-              />
+              <AboutBoard
+                ref={gameRef}
+                $completed={found.length === words.length}
+              >
 
-              <PixelImage
-                className="hero-pixel hero-pixel-03"
-                src="/pixel03.png"
-                alt=""
-              />
+                {board.map((row, i) => (
 
-              {/* CÍRCULOS ORIGINAIS */}
+                  <AboutRow key={i}>
 
-              <Circle
-                className="hero-circle"
-                $size="65px"
-                $top="0%"
-                $left="8%"
-              />
+                    {row.map((letter, j) => {
 
-              <Circle
-                className="hero-circle"
-                $size="45px"
-                $top="0%"
-                $left="28%"
-              />
+                      const position = `${i}-${j}`;
 
-              <Circle
-                className="hero-circle"
-                $size="25px"
-                $top="18%"
-                $right="12%"
-              />
+                      return (
+                        <AboutLetter
+                          type="button"
+                          key={j}
+                          $active={selected.includes(position)}
+                          $found={foundCells.includes(position)}
+                          onClick={() =>
+                            selectLetter(i, j)
+                          }
+                        >
+                          {letter}
+                        </AboutLetter>
+                      );
 
-              <Circle
-                className="hero-circle"
-                $size="35px"
-                $bottom="10%"
-                $left="2%"
-              />
+                    })}
 
-              <Circle
-                className="hero-circle"
-                $size="18px"
-                $bottom="25%"
-                $right="5%"
-              />
+                  </AboutRow>
 
-              <Circle
-                className="hero-circle"
-                $size="70px"
-                $top="99%"
-                $right="20%"
-              />
-
-              {/* IMAGEM PRINCIPAL */}
-
-              <Image
-                src="/inicialimg.png"
-                alt="Ilustração do Slam Etecamp"
-              />
-
-            </ImageBox>
-
-          </Container>
-
-        </Hero>
-      </HeroWrapper>
-
-      {/* MARQUEE */}
-      <MarqueeSection>
-
-        <MarqueeReveal ref={marqueeRef}>
-
-          <MarqueeTrack className="marquee-track">
-
-            <Phrase>LIBERDADE</Phrase>
-            <AnimatedImage
-              src="/icons.png"
-              alt="Slam"
-            />
-
-            <Phrase>RESPEITO</Phrase>
-            <AnimatedImage
-              src="/icons.png"
-              alt="Slam"
-            />
-
-            <Phrase>ESFORÇO</Phrase>
-            <AnimatedImage
-              src="/icons.png"
-              alt="Slam"
-            />
-
-            <Phrase>AUTENTICIDADE</Phrase>
-            <AnimatedImage
-              src="/icons.png"
-              alt="Slam"
-            />
-
-            <Phrase>EVOLUÇÃO</Phrase>
-            <AnimatedImage
-              src="/icons.png"
-              alt="Slam"
-            />
-
-            <Phrase>CORAGEM</Phrase>
-            <AnimatedImage
-              src="/icons.png"
-              alt="Slam"
-            />
-
-            <Phrase>UNIÃO</Phrase>
-            <AnimatedImage
-              src="/icons.png"
-              alt="Slam"
-            />
-
-            <Phrase>LIBERDADE</Phrase>
-            <AnimatedImage
-              src="/icons.png"
-              alt="Slam"
-            />
-
-            <Phrase>RESPEITO</Phrase>
-            <AnimatedImage
-              src="/icons.png"
-              alt="Slam"
-            />
-
-            <Phrase>ESFORÇO</Phrase>
-            <AnimatedImage
-              src="/icons.png"
-              alt="Slam"
-            />
-
-            <Phrase>AUTENTICIDADE</Phrase>
-            <AnimatedImage
-              src="/icons.png"
-              alt="Slam"
-            />
-
-            <Phrase>EVOLUÇÃO</Phrase>
-            <AnimatedImage
-              src="/icons.png"
-              alt="Slam"
-            />
-
-            <Phrase>CORAGEM</Phrase>
-            <AnimatedImage
-              src="/icons.png"
-              alt="Slam"
-            />
-
-            <Phrase>UNIÃO</Phrase>
-            <AnimatedImage
-              src="/icons.png"
-              alt="Slam"
-            />
-
-            <Phrase>CULTURA</Phrase>
-
-          </MarqueeTrack>
-
-        </MarqueeReveal>
-
-      </MarqueeSection>
-
-      {/* SOBRE O SLAM */}
-      <AboutSection>
-
-        <AboutTitle>
-          SOBRE O <span>SLAM</span>
-        </AboutTitle>
-
-        <AboutContainer>
-
-          <AboutContent>
-
-            <AboutText>
-              O <b>Slam</b> Interescolar é uma competição de <b>poesia</b> falada
-              que reúne estudantes de diferentes escolas para compartilharem
-              suas ideias, <b>sentimentos</b> e vivências por meio da <b>arte</b> e
-              da palavra.
-
-              <br />
-              <br />
-
-              Além de incentivar a <b>escrita</b> e a <b>oralidade</b>, a iniciativa
-              fortalece a autoestima, o pensamento crítico e o respeito. Entre{" "}
-              <b>rimas</b>, emoções e <b>performances</b>, os jovens desenvolvem
-              <b> confiança</b> e ampliam suas formas de <b>expressão</b>.
-            </AboutText>
-
-            <AboutFindBox>
-
-              <h3>Encontre:</h3>
-
-              <AboutWords>
-
-                {words.map((word) => (
-                  <AboutWord
-                    key={word}
-                    $found={found.includes(word)}
-                  >
-                    {word}
-                  </AboutWord>
                 ))}
 
-              </AboutWords>
+              </AboutBoard>
 
-            </AboutFindBox>
+            </AboutGame>
 
-          </AboutContent>
+          </AboutContainer>
 
-          <AboutGame>
+        </AboutSection>
 
-            {feedback && (
-              <GameFeedback
-                ref={feedbackRef}
-                $success={feedback.startsWith("PARABÉNS")}
-              >
-                {feedback}
-              </GameFeedback>
-            )}
+        {/* ======================================================
+            FEATURES
+        ====================================================== */}
 
-            <AboutBoard
-              ref={gameRef}
-              $completed={found.length === words.length}
-            >
+        <FeaturesSection>
 
-              {board.map((row, i) => (
-
-                <AboutRow key={i}>
-
-                  {row.map((letter, j) => {
-
-                    const position = `${i}-${j}`;
-
-                    return (
-                      <AboutLetter
-                        type="button"
-                        key={j}
-                        $active={selected.includes(position)}
-                        $found={foundCells.includes(position)}
-                        onClick={() =>
-                          selectLetter(i, j)
-                        }
-                      >
-                        {letter}
-                      </AboutLetter>
-                    );
-
-                  })}
-
-                </AboutRow>
-
-              ))}
-
-            </AboutBoard>
-
-          </AboutGame>
-
-        </AboutContainer>
-
-      </AboutSection>
-
-      {/* FEATURES */}
-      <FeaturesSection>
-
-        <SectionTitle>
-          O QUE VOCÊ ENCONTRA <span>AQUI</span>
-        </SectionTitle>
-
-        <FeaturesGrid>
-
-          <FeatureCard>
-
-            <FeatureIcon>
-              <FaFileAlt />
-            </FeatureIcon>
-
-            <FeatureTitle>
-              INSCRIÇÕES
-            </FeatureTitle>
-
-            <FeatureText>
-              Faça sua inscrição de forma simples e rápida.
-            </FeatureText>
-
-          </FeatureCard>
-
-          <FeatureCard>
-
-            <FeatureIcon>
-              <FaCalendarAlt />
-            </FeatureIcon>
-
-            <FeatureTitle>
-              ETAPAS DO EVENTO
-            </FeatureTitle>
-
-            <FeatureText>
-              Acompanhe todas as fases do Slam Interescolar e não perca nada!
-            </FeatureText>
-
-          </FeatureCard>
-
-          <FeatureCard>
-
-            <FeatureIcon>
-              <FaTrophy />
-            </FeatureIcon>
-
-            <FeatureTitle>
-              PONTUAÇÕES
-            </FeatureTitle>
-
-            <FeatureText>
-              Veja as notas, classificações e o ranking dos slammers.
-            </FeatureText>
-
-          </FeatureCard>
-
-          <FeatureCard>
-
-            <FeatureIcon>
-              <FaBookOpen />
-            </FeatureIcon>
-
-            <FeatureTitle>
-              REGRAS E DICAS
-            </FeatureTitle>
-
-            <FeatureText>
-              Fique por dentro das regras do Slam e prepare sua melhor poesia.
-            </FeatureText>
-
-          </FeatureCard>
-
-        </FeaturesGrid>
-
-      </FeaturesSection>
-
-      {/* NÚMEROS */}
-      <NumbersSection ref={numbersRef}>
-
-        <NumbersContainer>
-
-          <SectionTitle $dark>
-            O SLAM EM <span>NÚMEROS</span>
+          <SectionTitle>
+            O QUE VOCÊ ENCONTRA <span>AQUI</span>
           </SectionTitle>
 
-          <NumberItem>
+          <FeaturesGrid>
 
-            <NumberValue
-              className="number-value"
-              data-target="500"
-              data-suffix="+"
+            <FeatureCard>
+
+              <FeatureIcon>
+                <FaFileAlt />
+              </FeatureIcon>
+
+              <FeatureTitle>
+                INSCRIÇÕES
+              </FeatureTitle>
+
+              <FeatureText>
+                Faça sua inscrição de forma simples e rápida.
+              </FeatureText>
+
+            </FeatureCard>
+
+            <FeatureCard>
+
+              <FeatureIcon>
+                <FaCalendarAlt />
+              </FeatureIcon>
+
+              <FeatureTitle>
+                ETAPAS DO EVENTO
+              </FeatureTitle>
+
+              <FeatureText>
+                Acompanhe todas as fases do Slam Interescolar
+                e não perca nada!
+              </FeatureText>
+
+            </FeatureCard>
+
+            <FeatureCard>
+
+              <FeatureIcon>
+                <FaTrophy />
+              </FeatureIcon>
+
+              <FeatureTitle>
+                PONTUAÇÕES
+              </FeatureTitle>
+
+              <FeatureText>
+                Veja as notas, classificações e o ranking
+                dos slammers.
+              </FeatureText>
+
+            </FeatureCard>
+
+            <FeatureCard>
+
+              <FeatureIcon>
+                <FaBookOpen />
+              </FeatureIcon>
+
+              <FeatureTitle>
+                REGRAS E DICAS
+              </FeatureTitle>
+
+              <FeatureText>
+                Fique por dentro das regras do Slam e prepare
+                sua melhor poesia.
+              </FeatureText>
+
+            </FeatureCard>
+
+          </FeaturesGrid>
+
+        </FeaturesSection>
+
+        {/* ======================================================
+            NÚMEROS
+        ====================================================== */}
+
+        <NumbersSection ref={numbersRef}>
+
+          <NumbersContainer>
+
+            <SectionTitle $dark>
+              O SLAM EM <span>NÚMEROS</span>
+            </SectionTitle>
+
+            <NumberItem>
+
+              <NumberValue
+                className="number-value"
+                data-target="500"
+                data-suffix="+"
+              >
+                0+
+              </NumberValue>
+
+              <NumberLabel>
+                POESIAS
+                <br />
+                ESCRITAS
+              </NumberLabel>
+
+            </NumberItem>
+
+            <NumberDivider />
+
+            <NumberItem>
+
+              <NumberValue
+                className="number-value"
+                data-target="400"
+                data-suffix="+"
+              >
+                0+
+              </NumberValue>
+
+              <NumberLabel>
+                ESCOLAS
+                <br />
+                CONECTADAS
+              </NumberLabel>
+
+            </NumberItem>
+
+            <NumberDivider />
+
+            <NumberItem>
+
+              <NumberValue
+                className="number-value"
+                data-target="300"
+                data-suffix="+"
+              >
+                0+
+              </NumberValue>
+
+              <NumberLabel>
+                ALUNOS
+                <br />
+                INSCRITOS
+              </NumberLabel>
+
+            </NumberItem>
+
+            <NumberDivider />
+
+            <NumberItem>
+
+              <NumberValue
+                className="number-value"
+                data-target="10"
+                data-suffix=""
+              >
+                0
+              </NumberValue>
+
+              <NumberLabel>
+                ANOS
+                <br />
+                DE EVENTO
+              </NumberLabel>
+
+            </NumberItem>
+
+          </NumbersContainer>
+
+        </NumbersSection>
+
+        {/* ======================================================
+            CTA
+        ====================================================== */}
+
+        <CTASection>
+
+          <CTAContainer>
+
+            <CTAIcon>
+              <FaMicrophone />
+            </CTAIcon>
+
+            <CTAText>
+
+              <CTATitle>
+                SUA VOZ TEM PODER.
+              </CTATitle>
+
+              <CTASubtitle>
+                PARTICIPE, PERFORME E TRANSFORME!
+              </CTASubtitle>
+
+            </CTAText>
+
+            <CTALink
+              href="/login"
+              onPointerMove={handleButtonMove}
             >
-              0+
-            </NumberValue>
+              <span className="button-content">
+                QUERO PARTICIPAR
+                <FaArrowRight />
+              </span>
+            </CTALink>
 
-            <NumberLabel>
-              POESIAS
-              <br />
-              ESCRITAS
-            </NumberLabel>
+          </CTAContainer>
 
-          </NumberItem>
+        </CTASection>
 
-          <NumberDivider />
-
-          <NumberItem>
-
-            <NumberValue
-              className="number-value"
-              data-target="400"
-              data-suffix="+"
-            >
-              0+
-            </NumberValue>
-
-            <NumberLabel>
-              ESCOLAS
-              <br />
-              CONECTADAS
-            </NumberLabel>
-
-          </NumberItem>
-
-          <NumberDivider />
-
-          <NumberItem>
-
-            <NumberValue
-              className="number-value"
-              data-target="300"
-              data-suffix="+"
-            >
-              0+
-            </NumberValue>
-
-            <NumberLabel>
-              ALUNOS
-              <br />
-              INSCRITOS
-            </NumberLabel>
-
-          </NumberItem>
-
-          <NumberDivider />
-
-          <NumberItem>
-
-            <NumberValue
-              className="number-value"
-              data-target="10"
-              data-suffix=""
-            >
-              0
-            </NumberValue>
-
-            <NumberLabel>
-              ANOS
-              <br />
-              DE EVENTO
-            </NumberLabel>
-
-          </NumberItem>
-
-        </NumbersContainer>
-
-      </NumbersSection>
-
-      {/* CTA */}
-      <CTASection>
-
-        <CTAContainer>
-
-          <CTAIcon>
-            <FaMicrophone />
-          </CTAIcon>
-
-          <CTAText>
-
-            <CTATitle>
-              SUA VOZ TEM PODER.
-            </CTATitle>
-
-            <CTASubtitle>
-              PARTICIPE, PERFORME E TRANSFORME!
-            </CTASubtitle>
-
-          </CTAText>
-
-          <CTALink
-            href="/login"
-            onPointerMove={handleButtonMove}
-          >
-            <span className="button-content">
-              QUERO PARTICIPAR
-              <FaArrowRight />
-            </span>
-          </CTALink>
-
-        </CTAContainer>
-
-      </CTASection>
-
-    </Page>
+      </Page>
+    </>
   );
 }

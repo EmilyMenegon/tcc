@@ -1,12 +1,11 @@
 import styled from "styled-components";
 
 
-/* ==========================================
-   PAGE
-========================================== */
+// =====================================================
+// PAGE
+// =====================================================
 
 export const Page = styled.div`
-
   width: 100%;
   min-height: 100vh;
 
@@ -19,16 +18,14 @@ export const Page = styled.div`
   color: #000000;
 
   overflow-x: hidden;
-
 `;
 
 
-/* ==========================================
-   CONTENT
-========================================== */
+// =====================================================
+// CONTENT
+// =====================================================
 
 export const Content = styled.main`
-
   width: 90%;
   max-width: 1400px;
 
@@ -61,16 +58,14 @@ export const Content = styled.main`
       70px;
 
   }
-
 `;
 
 
-/* ==========================================
-   HEADER
-========================================== */
+// =====================================================
+// HEADER
+// =====================================================
 
 export const Header = styled.header`
-
   width: 100%;
 
   display: flex;
@@ -91,35 +86,37 @@ export const Header = styled.header`
     margin-bottom: 28px;
 
   }
-
 `;
 
 
-export const Title = styled.h1`
+// =====================================================
+// TITLE
+// =====================================================
 
-  margin: 0;
+export const Title = styled.h1`
+  margin: 0 0 14px;
 
   color: #831614;
 
   font-size:
     clamp(
-      2.6rem,
+      2.8rem,
       5vw,
       4.8rem
     );
 
   font-weight: 900;
 
-  line-height: 1.05;
-
   letter-spacing: -2px;
+
+  line-height: 1.05;
 
 
   @media (max-width: 768px) {
 
     font-size:
       clamp(
-        2.4rem,
+        2.5rem,
         9vw,
         4rem
       );
@@ -128,46 +125,55 @@ export const Title = styled.h1`
 
   }
 
+
+  @media (max-width: 480px) {
+
+    font-size: 2.3rem;
+
+  }
 `;
 
 
+// =====================================================
+// SUBTITLE
+// =====================================================
+
 export const Subtitle = styled.p`
-
-  margin: 10px 0 0;
-
-  color: #777777;
-
-  font-size:
-    clamp(
-      .95rem,
-      1.2vw,
-      1.08rem
-    );
-
-  line-height: 1.7;
+  width: 100%;
 
   max-width: 700px;
+
+  margin: 10px auto 0;
+
+  color: #777;
+
+  font-size: 1.55rem;
+
+  line-height: 1.6;
+
+  text-align: center;
 
 
   @media (max-width: 768px) {
 
-    width: 90%;
-
-    max-width: 90%;
-
-    font-size: .95rem;
+    font-size: 1.1rem;
 
   }
 
+
+  @media (max-width: 480px) {
+
+    font-size: 1rem;
+
+  }
 `;
 
 
-/* ==========================================
-   CARDS
-========================================== */
+// =====================================================
+// CARDS
+// =====================================================
 
 export const Cards = styled.section`
-
   width: 100%;
 
   display: grid;
@@ -181,62 +187,72 @@ export const Cards = styled.section`
       )
     );
 
-  gap: 30px;
+  gap: 26px;
 
   align-items: stretch;
 
 
-  @media (max-width: 900px) {
+  @media (max-width: 1000px) {
 
     grid-template-columns:
       repeat(
-        auto-fill,
-        minmax(
-          250px,
-          1fr
-        )
+        3,
+        1fr
       );
 
-    gap: 24px;
+    gap: 22px;
 
   }
 
 
-  @media (max-width: 600px) {
+  @media (max-width: 750px) {
 
-    grid-template-columns: 1fr;
+    grid-template-columns:
+      repeat(
+        2,
+        1fr
+      );
 
     gap: 20px;
 
   }
 
+
+  @media (max-width: 500px) {
+
+    grid-template-columns: 1fr;
+
+    gap: 18px;
+
+  }
 `;
 
 
-/* ==========================================
-   POST IT
-========================================== */
+// =====================================================
+// CARD
+// IGUAL AO ADM
+// =====================================================
 
 export const PostIt = styled.article`
-
   position: relative;
+
+  width: 100%;
 
   min-width: 0;
 
-  min-height: 280px;
+  min-height: 220px;
 
   padding:
-    38px
-    25px
-    23px;
+    28px 25px
+    22px;
 
   box-sizing: border-box;
 
   background:
     ${({ $color }) =>
-      $color || "#fff176"};
+      $color || "#ffcf70"};
 
-  color: #222;
+  color: #222222;
 
   cursor: pointer;
 
@@ -244,130 +260,41 @@ export const PostIt = styled.article`
 
   flex-direction: column;
 
+  border-radius: 17px;
+
   overflow: hidden;
 
   box-shadow:
-    4px 8px 18px
+    0
+    7px
+    18px
     rgba(
       0,
       0,
       0,
-      .14
-    );
-
-  transform:
-    rotate(
-      ${({ $rotation, $index }) => {
-
-        if (
-          $rotation !== undefined &&
-          $rotation !== null
-        ) {
-
-          return `${$rotation}deg`;
-
-        }
-
-        if ($index % 3 === 0) {
-
-          return "-1.2deg";
-
-        }
-
-        if ($index % 3 === 1) {
-
-          return "1deg";
-
-        }
-
-        return "-.5deg";
-
-      }}
+      0.10
     );
 
   transition:
-    transform .25s ease,
-    box-shadow .25s ease;
-
-
-  /* PAPEL */
-
-  &::before {
-
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    left: 0;
-    right: 0;
-
-    height: 7px;
-
-    background:
-      rgba(
-        255,
-        255,
-        255,
-        .22
-      );
-
-  }
-
-
-  /* DOBRINHA */
-
-  &::after {
-
-    content: "";
-
-    position: absolute;
-
-    right: 0;
-    bottom: 0;
-
-    width: 0;
-    height: 0;
-
-    border-style: solid;
-
-    border-width:
-      0
-      0
-      28px
-      28px;
-
-    border-color:
-      transparent
-      transparent
-      rgba(
-        0,
-        0,
-        0,
-        .07
-      )
-      transparent;
-
-  }
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 
 
   &:hover {
 
     transform:
-      translateY(-8px)
-      rotate(0deg)
-      scale(1.015);
+      translateY(-7px);
 
     box-shadow:
-      8px 18px 30px
+      0
+      14px
+      28px
       rgba(
         0,
         0,
         0,
-        .20
+        0.16
       );
-
-    z-index: 5;
 
   }
 
@@ -382,121 +309,62 @@ export const PostIt = styled.article`
   }
 
 
-  @media (max-width: 600px) {
+  @media (max-width: 500px) {
 
-    min-height: 250px;
+    min-height: 205px;
 
     padding:
-      36px
-      22px
-      22px;
+      25px 22px
+      20px;
 
   }
-
 `;
 
 
-/* ==========================================
-   PIN
-========================================== */
-
-export const PostItPin = styled.span`
-
-  position: absolute;
-
-  top: 13px;
-
-  left: 50%;
-
-  width: 15px;
-  height: 15px;
-
-  transform:
-    translateX(-50%);
-
-  border-radius: 50%;
-
-  background: #e44747;
-
-  box-shadow:
-
-    inset
-      2px
-      2px
-      3px
-      rgba(
-        255,
-        255,
-        255,
-        .45
-      ),
-
-    2px
-    3px
-    5px
-    rgba(
-      0,
-      0,
-      0,
-      .22
-    );
-
-  z-index: 2;
-
-`;
-
-
-/* ==========================================
-   POST IT TITLE
-========================================== */
+// =====================================================
+// CARD TITLE
+// IGUAL AO ADM
+// =====================================================
 
 export const PostItTitle = styled.h2`
-
   margin:
-    0
-    0
-    15px;
+    0 0 18px;
 
   color: #222222;
 
   font-family:
-    "Comic Sans MS",
-    "Trebuchet MS",
+    "Poppins",
     sans-serif;
 
-  font-size: 22px;
+  font-size: 20px;
 
-  font-weight: 700;
+  font-weight: 600;
 
-  line-height: 1.25;
+  line-height: 1.35;
 
   word-break: break-word;
-
-  position: relative;
-
-  z-index: 2;
-
 `;
 
 
-/* ==========================================
-   POST IT MESSAGE
-========================================== */
+// =====================================================
+// CARD MESSAGE
+// IGUAL AO ADM
+// =====================================================
 
 export const PostItMessage = styled.p`
-
   margin: 0;
 
-  color: #333333;
+  color: #292929;
 
   font-family:
-    "Comic Sans MS",
-    "Trebuchet MS",
+    "Poppins",
     sans-serif;
 
-  font-size: 15px;
+  font-size: 14px;
 
-  line-height: 1.65;
+  font-weight: 400;
+
+  line-height: 1.55;
 
   word-break: break-word;
 
@@ -505,67 +373,114 @@ export const PostItMessage = styled.p`
   display:
     -webkit-box;
 
-  -webkit-line-clamp: 6;
+  -webkit-line-clamp: 5;
 
   -webkit-box-orient: vertical;
 
   overflow: hidden;
-
-  position: relative;
-
-  z-index: 2;
-
 `;
 
 
-/* ==========================================
-   FOOTER
-========================================== */
+// =====================================================
+// CARD FOOTER
+// IGUAL AO ADM
+// =====================================================
 
 export const PostItFooter = styled.div`
-
   margin-top: auto;
 
   padding-top: 20px;
 
-  position: relative;
+  display: flex;
 
-  z-index: 2;
+  flex-direction: column;
 
+  align-items: center;
+
+  gap: 7px;
 `;
 
 
-/* ==========================================
-   READ MORE
-========================================== */
+// =====================================================
+// CLIQUE PARA VISUALIZAR
+// IGUAL AO ADM
+// =====================================================
 
 export const ReadMore = styled.span`
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: fit-content;
+
+  min-height: 27px;
+
+  padding:
+    4px 13px;
+
+  box-sizing: border-box;
+
+  border-radius: 999px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.45
+    );
 
   color:
     rgba(
       0,
       0,
       0,
-      .55
+      0.62
     );
 
   font-family:
     "Poppins",
     sans-serif;
 
-  font-size: 12px;
+  font-size: 11px;
 
-  font-weight: 600;
+  font-weight: 500;
 
+  line-height: 1.3;
+
+  white-space: nowrap;
 `;
 
 
-/* ==========================================
-   EMPTY STATE
-========================================== */
+// =====================================================
+// DATA
+// IGUAL AO ADM
+// =====================================================
+
+export const PostDate = styled.span`
+  display: block;
+
+  color: #555555;
+
+  font-family:
+    "Poppins",
+    sans-serif;
+
+  font-size: 11px;
+
+  font-weight: 500;
+
+  line-height: 1.4;
+`;
+
+
+// =====================================================
+// EMPTY STATE
+// =====================================================
 
 export const EmptyState = styled.div`
-
   grid-column:
     1 / -1;
 
@@ -589,20 +504,19 @@ export const EmptyState = styled.div`
   border:
     2px dashed #dddddd;
 
-  border-radius: 15px;
+  border-radius: 20px;
 
   background: #fafafa;
-
 `;
 
 
-/* ==========================================
-   EMPTY ICON
-========================================== */
+// =====================================================
+// EMPTY ICON
+// =====================================================
 
 export const EmptyIcon = styled.div`
-
   width: 70px;
+
   height: 70px;
 
   margin-bottom: 18px;
@@ -610,31 +524,26 @@ export const EmptyIcon = styled.div`
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
-  border-radius: 50%;
+  border-radius: 18px;
 
   background:
-    rgba(
-      249,
-      190,
-      6,
-      .15
-    );
+    #fff4c4;
 
-  color: #ffdb53;
+  color:
+    #d69e00;
 
   font-size: 30px;
-
 `;
 
 
-/* ==========================================
-   EMPTY TITLE
-========================================== */
+// =====================================================
+// EMPTY TITLE
+// =====================================================
 
 export const EmptyTitle = styled.h2`
-
   margin:
     0 0 8px;
 
@@ -643,16 +552,14 @@ export const EmptyTitle = styled.h2`
   font-size: 22px;
 
   font-weight: 600;
-
 `;
 
 
-/* ==========================================
-   EMPTY TEXT
-========================================== */
+// =====================================================
+// EMPTY TEXT
+// =====================================================
 
 export const EmptyText = styled.p`
-
   max-width: 450px;
 
   margin: 0;
@@ -662,16 +569,14 @@ export const EmptyText = styled.p`
   font-size: 14px;
 
   line-height: 1.6;
-
 `;
 
 
-/* ==========================================
-   MODAL OVERLAY
-========================================== */
+// =====================================================
+// MODAL OVERLAY
+// =====================================================
 
 export const ModalOverlay = styled.div`
-
   position: fixed;
 
   inset: 0;
@@ -693,11 +598,11 @@ export const ModalOverlay = styled.div`
       0,
       0,
       0,
-      .70
+      .72
     );
 
   backdrop-filter:
-    blur(4px);
+    blur(8px);
 
   animation:
     fadeIn .2s ease;
@@ -706,15 +611,11 @@ export const ModalOverlay = styled.div`
   @keyframes fadeIn {
 
     from {
-
       opacity: 0;
-
     }
 
     to {
-
       opacity: 1;
-
     }
 
   }
@@ -725,15 +626,17 @@ export const ModalOverlay = styled.div`
     padding: 12px;
 
   }
-
 `;
 
 
-/* ==========================================
-   FULL POST IT
-========================================== */
+// =====================================================
+// MODAL
+// =====================================================
 
 export const FullPostIt = styled.div`
+  --modal-color:
+    ${({ $color }) =>
+      $color || "#ffdb53"};
 
   position: relative;
 
@@ -743,50 +646,39 @@ export const FullPostIt = styled.div`
       100%
     );
 
-  min-height: 500px;
-
   max-height:
     calc(
       100vh - 60px
     );
 
-  padding:
-    85px
-    clamp(
-      30px,
-      8vw,
-      90px
-    )
-    50px;
-
   box-sizing: border-box;
 
+  overflow-y: auto;
+
+  border-radius: 25px;
+
   background:
-    ${({ $color }) =>
-      $color || "#fff176"};
+    var(--modal-color);
 
   box-shadow:
-    10px
-    22px
-    50px
+    0
+    30px
+    80px
     rgba(
       0,
       0,
       0,
-      .30
-    );
-
-  overflow-y: auto;
-
-  transform:
-    rotate(
-      ${({ $rotation }) =>
-        $rotation || 0
-      }deg
+      .35
     );
 
   animation:
-    postOpen .25s ease;
+    postOpen .3s
+    cubic-bezier(
+      .16,
+      1,
+      .3,
+      1
+    );
 
 
   @keyframes postOpen {
@@ -796,8 +688,8 @@ export const FullPostIt = styled.div`
       opacity: 0;
 
       transform:
-        scale(.93)
-        rotate(-2deg);
+        translateY(25px)
+        scale(.94);
 
     }
 
@@ -806,12 +698,8 @@ export const FullPostIt = styled.div`
       opacity: 1;
 
       transform:
-        scale(1)
-        rotate(
-          ${({ $rotation }) =>
-            $rotation || 0
-          }deg
-        );
+        translateY(0)
+        scale(1);
 
     }
 
@@ -822,86 +710,26 @@ export const FullPostIt = styled.div`
 
     width: 100%;
 
-    min-height: 400px;
-
     max-height:
       calc(
         100vh - 24px
       );
 
-    padding:
-      75px
-      25px
-      35px;
+    border-radius: 20px;
 
   }
-
 `;
 
-
-/* ==========================================
-   FULL POST PIN
-========================================== */
-
-export const FullPostItPin = styled.span`
-
+export const CloseButton = styled.button`
   position: absolute;
 
   top: 22px;
 
-  left: 50%;
+  right: 22px;
 
-  width: 18px;
-  height: 18px;
+  width: 44px;
 
-  transform:
-    translateX(-50%);
-
-  border-radius: 50%;
-
-  background: #e44747;
-
-  box-shadow:
-
-    inset
-      2px
-      2px
-      4px
-      rgba(
-        255,
-        255,
-        255,
-        .4
-      ),
-
-    2px
-    3px
-    6px
-    rgba(
-      0,
-      0,
-      0,
-      .25
-    );
-
-`;
-
-
-/* ==========================================
-   BOTÃO FECHAR
-   ANIMAÇÃO RADIAL
-========================================== */
-
-export const CloseButton = styled.button`
-
-  position: absolute;
-
-  top: 18px;
-
-  right: 20px;
-
-  width: 42px;
-  height: 42px;
+  height: 44px;
 
   padding: 0;
 
@@ -914,14 +742,16 @@ export const CloseButton = styled.button`
       255,
       255,
       255,
-      0.75
+      .8
     );
 
-  color: #222222;
+  color:
+    #222222;
 
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   cursor: pointer;
@@ -930,19 +760,12 @@ export const CloseButton = styled.button`
 
   isolation: isolate;
 
-  z-index: 5;
-
-  transform:
-    rotate(0deg);
+  z-index: 10;
 
   transition:
-    transform 0.2s ease,
-    color 0.2s ease;
+    transform .25s ease,
+    color .25s ease;
 
-
-  /* ======================================
-     ONDA PRETA
-  ====================================== */
 
   &::before {
 
@@ -963,11 +786,13 @@ export const CloseButton = styled.button`
       );
 
     width: 30px;
+
     height: 30px;
 
     border-radius: 50%;
 
-    background: #000000;
+    background:
+      #831614;
 
     transform:
       translate(
@@ -977,25 +802,18 @@ export const CloseButton = styled.button`
       scale(0);
 
     transition:
-      transform
-      0.5s
+      transform .5s
       cubic-bezier(
-        0.16,
+        .16,
         1,
-        0.3,
+        .3,
         1
       );
 
     z-index: 0;
 
-    pointer-events: none;
-
   }
 
-
-  /* ======================================
-     CONTEÚDO DO BOTÃO
-  ====================================== */
 
   .buttonContent {
 
@@ -1006,30 +824,20 @@ export const CloseButton = styled.button`
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
   }
 
 
-  /* ======================================
-     ÍCONE X
-  ====================================== */
-
   svg {
 
     width: 21px;
+
     height: 21px;
-
-    position: relative;
-
-    z-index: 2;
 
   }
 
-
-  /* ======================================
-     HOVER
-  ====================================== */
 
   &:hover {
 
@@ -1038,42 +846,20 @@ export const CloseButton = styled.button`
     transform:
       rotate(90deg);
 
-
-    &::before {
-
-      transform:
-        translate(
-          -50%,
-          -50%
-        )
-        scale(18);
-
-    }
-
   }
 
 
-  /* ======================================
-     CLIQUE
-  ====================================== */
-
-  &:active {
+  &:hover::before {
 
     transform:
-      translateY(1px)
-      scale(0.97);
-
-    transition:
-      transform
-      0.06s
-      ease;
+      translate(
+        -50%,
+        -50%
+      )
+      scale(18);
 
   }
 
-
-  /* ======================================
-     FOCO
-  ====================================== */
 
   &:focus {
 
@@ -1085,162 +871,128 @@ export const CloseButton = styled.button`
   &:focus-visible {
 
     outline:
-      2px solid #831614;
+      3px solid
+      #831614;
 
     outline-offset: 3px;
 
   }
 
 
-  /* ======================================
-     MOBILE
-  ====================================== */
-
   @media (max-width: 600px) {
 
-    top: 14px;
+    top: 15px;
 
-    right: 14px;
+    right: 15px;
 
     width: 38px;
+
     height: 38px;
 
-
-    svg {
-
-      width: 19px;
-      height: 19px;
-
-    }
-
-
-    &:hover {
-
-      transform:
-        rotate(90deg);
-
-
-      &::before {
-
-        transform:
-          translate(
-            -50%,
-            -50%
-          )
-          scale(18);
-
-      }
-
-    }
-
   }
-
 `;
 
 
-/* ==========================================
-   FULL POST CONTENT
-========================================== */
+// =====================================================
+// CONTEÚDO MODAL
+// =====================================================
 
 export const FullPostItContent = styled.div`
-
   width:
     min(
       700px,
       100%
     );
 
-  min-height: 100%;
-
   margin: 0 auto;
+
+  padding:
+    25px
+    55px
+    50px;
+
+  box-sizing: border-box;
 
   display: flex;
 
   flex-direction: column;
 
-  justify-content: flex-start;
 
+  @media (max-width: 600px) {
+
+    padding:
+      20px
+      25px
+      35px;
+
+  }
 `;
 
 
-/* ==========================================
-   FULL POST TITLE
-========================================== */
+// =====================================================
+// TÍTULO MODAL
+// =====================================================
 
 export const FullPostItTitle = styled.h2`
-
   margin:
-    0 0 35px;
+    0
+    0
+    25px;
 
-  color: #222222;
+  color:
+    #171717;
 
   font-family:
-    "Comic Sans MS",
-    "Trebuchet MS",
+    "Poppins",
     sans-serif;
 
   font-size:
     clamp(
       2rem,
-      6vw,
-      4rem
+      5vw,
+      3.4rem
     );
 
-  line-height: 1.05;
+  line-height: 1.1;
 
-  font-weight: 800;
+  font-weight: 900;
 
-  letter-spacing: -1px;
+  letter-spacing:
+    -1.5px;
 
   word-break: break-word;
-
-
-  @media (max-width: 600px) {
-
-    margin-bottom: 25px;
-
-    font-size: 32px;
-
-  }
-
 `;
 
 
-/* ==========================================
-   FULL POST MESSAGE
-========================================== */
+// =====================================================
+// MENSAGEM MODAL
+// =====================================================
 
 export const FullPostItMessage = styled.p`
-
   margin: 0;
 
-  color: #292929;
+  color:
+    rgba(
+      20,
+      20,
+      20,
+      .78
+    );
 
   font-family:
-    "Comic Sans MS",
-    "Trebuchet MS",
+    "Poppins",
     sans-serif;
 
   font-size:
     clamp(
-      1.1rem,
-      3vw,
-      1.8rem
+      1rem,
+      2vw,
+      1.25rem
     );
 
-  line-height: 1.75;
+  line-height: 1.85;
 
   white-space: pre-wrap;
 
   word-break: break-word;
-
-
-  @media (max-width: 600px) {
-
-    font-size: 18px;
-
-    line-height: 1.65;
-
-  }
-
 `;

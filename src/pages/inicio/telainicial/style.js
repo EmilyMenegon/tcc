@@ -1,23 +1,15 @@
 import styled, {
   createGlobalStyle,
 } from "styled-components";
-
-/* ============================================================
-   REMOVE MARGENS PADRÃO DO NAVEGADOR
-============================================================ */
-
-export const GlobalStyle =
-  createGlobalStyle`
-
+export const GlobalStyle = createGlobalStyle`
   html,
   body,
   #root {
     margin: 0 !important;
     padding: 0 !important;
-
-    width: 100%;
-    min-width: 100%;
-
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
     min-height: 100%;
   }
 
@@ -28,13 +20,11 @@ export const GlobalStyle =
 
   body {
     background: #fff;
-
-    font-family:
-      "Poppins",
-      sans-serif;
+    font-family: "Poppins", sans-serif;
   }
 
   #root {
+    display: block;
     margin: 0 !important;
     padding: 0 !important;
   }
@@ -44,11 +34,14 @@ export const GlobalStyle =
   *::after {
     box-sizing: border-box;
   }
-`;
 
-/* ============================================================
-   PAGE
-============================================================ */
+  img,
+  svg,
+  video,
+  canvas {
+    max-width: 100%;
+  }
+`;
 
 export const Page = styled.div`
   width: 100%;
