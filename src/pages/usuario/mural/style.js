@@ -67,6 +67,7 @@ export const Content = styled.main`
 
 /* ==========================================
    HEADER
+   NÃO ALTERADO
 ========================================== */
 
 export const Header = styled.header`
@@ -176,33 +177,31 @@ export const Cards = styled.section`
     repeat(
       auto-fill,
       minmax(
-        280px,
+        310px,
         1fr
       )
     );
 
-  gap: 30px;
+  gap: 26px;
 
   align-items: stretch;
 
 
-  @media (max-width: 900px) {
+  @media (max-width: 1100px) {
 
     grid-template-columns:
       repeat(
-        auto-fill,
+        2,
         minmax(
-          250px,
+          0,
           1fr
         )
       );
 
-    gap: 24px;
-
   }
 
 
-  @media (max-width: 600px) {
+  @media (max-width: 700px) {
 
     grid-template-columns: 1fr;
 
@@ -214,31 +213,27 @@ export const Cards = styled.section`
 
 
 /* ==========================================
-   POST IT
+   CARD COLORIDO
 ========================================== */
 
 export const PostIt = styled.article`
+
+  --card-color:
+    ${({ $color }) =>
+      $color || "#ffdb53"};
 
   position: relative;
 
   min-width: 0;
 
-  min-height: 280px;
+  min-height: 300px;
 
   padding:
-    38px
-    25px
-    23px;
+    30px
+    28px
+    22px;
 
   box-sizing: border-box;
-
-  background:
-    ${({ $color }) =>
-      $color || "#fff176"};
-
-  color: #222;
-
-  cursor: pointer;
 
   display: flex;
 
@@ -246,51 +241,40 @@ export const PostIt = styled.article`
 
   overflow: hidden;
 
+  cursor: pointer;
+
+  border-radius: 20px;
+
+  background:
+    var(--card-color);
+
+  color: #222222;
+
   box-shadow:
-    4px 8px 18px
+    0
+    12px
+    30px
     rgba(
       0,
       0,
       0,
-      .14
-    );
-
-  transform:
-    rotate(
-      ${({ $rotation, $index }) => {
-
-        if (
-          $rotation !== undefined &&
-          $rotation !== null
-        ) {
-
-          return `${$rotation}deg`;
-
-        }
-
-        if ($index % 3 === 0) {
-
-          return "-1.2deg";
-
-        }
-
-        if ($index % 3 === 1) {
-
-          return "1deg";
-
-        }
-
-        return "-.5deg";
-
-      }}
+      .12
     );
 
   transition:
-    transform .25s ease,
-    box-shadow .25s ease;
+    transform .3s
+    cubic-bezier(
+      .16,
+      1,
+      .3,
+      1
+    ),
+    box-shadow .3s ease;
 
 
-  /* PAPEL */
+  /* ======================================
+     BRILHO DECORATIVO
+  ====================================== */
 
   &::before {
 
@@ -298,24 +282,32 @@ export const PostIt = styled.article`
 
     position: absolute;
 
-    top: 0;
-    left: 0;
-    right: 0;
+    width: 220px;
 
-    height: 7px;
+    height: 220px;
+
+    top: -110px;
+
+    right: -90px;
+
+    border-radius: 50%;
 
     background:
       rgba(
         255,
         255,
         255,
-        .22
+        .20
       );
+
+    pointer-events: none;
 
   }
 
 
-  /* DOBRINHA */
+  /* ======================================
+     SEGUNDO BRILHO
+  ====================================== */
 
   &::after {
 
@@ -323,51 +315,49 @@ export const PostIt = styled.article`
 
     position: absolute;
 
-    right: 0;
-    bottom: 0;
+    width: 140px;
 
-    width: 0;
-    height: 0;
+    height: 140px;
 
-    border-style: solid;
+    bottom: -80px;
 
-    border-width:
-      0
-      0
-      28px
-      28px;
+    left: -60px;
 
-    border-color:
-      transparent
-      transparent
+    border-radius: 50%;
+
+    background:
       rgba(
-        0,
-        0,
-        0,
-        .07
-      )
-      transparent;
+        255,
+        255,
+        255,
+        .12
+      );
+
+    pointer-events: none;
 
   }
 
 
+  /* ======================================
+     HOVER
+  ====================================== */
+
   &:hover {
 
     transform:
-      translateY(-8px)
-      rotate(0deg)
+      translateY(-9px)
       scale(1.015);
 
     box-shadow:
-      8px 18px 30px
+      0
+      22px
+      45px
       rgba(
         0,
         0,
         0,
-        .20
+        .18
       );
-
-    z-index: 5;
 
   }
 
@@ -375,7 +365,8 @@ export const PostIt = styled.article`
   &:focus-visible {
 
     outline:
-      3px solid #000000;
+      3px solid
+      #000000;
 
     outline-offset: 4px;
 
@@ -384,12 +375,12 @@ export const PostIt = styled.article`
 
   @media (max-width: 600px) {
 
-    min-height: 250px;
+    min-height: 280px;
 
     padding:
-      36px
+      26px
       22px
-      22px;
+      20px;
 
   }
 
@@ -397,106 +388,116 @@ export const PostIt = styled.article`
 
 
 /* ==========================================
-   PIN
+   BADGE
 ========================================== */
 
-export const PostItPin = styled.span`
-
-  position: absolute;
-
-  top: 13px;
-
-  left: 50%;
-
-  width: 15px;
-  height: 15px;
-
-  transform:
-    translateX(-50%);
-
-  border-radius: 50%;
-
-  background: #e44747;
-
-  box-shadow:
-
-    inset
-      2px
-      2px
-      3px
-      rgba(
-        255,
-        255,
-        255,
-        .45
-      ),
-
-    2px
-    3px
-    5px
-    rgba(
-      0,
-      0,
-      0,
-      .22
-    );
-
-  z-index: 2;
-
-`;
-
-
-/* ==========================================
-   POST IT TITLE
-========================================== */
-
-export const PostItTitle = styled.h2`
-
-  margin:
-    0
-    0
-    15px;
-
-  color: #222222;
-
-  font-family:
-    "Comic Sans MS",
-    "Trebuchet MS",
-    sans-serif;
-
-  font-size: 22px;
-
-  font-weight: 700;
-
-  line-height: 1.25;
-
-  word-break: break-word;
+export const PostItBadge = styled.span`
 
   position: relative;
 
   z-index: 2;
 
+  width: fit-content;
+
+  margin-bottom: 18px;
+
+  padding:
+    7px
+    13px;
+
+  border-radius: 50px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      .75
+    );
+
+  color:
+    #831614;
+
+  font-size: 10px;
+
+  font-weight: 900;
+
+  letter-spacing:
+    1px;
+
+  line-height: 1;
+
 `;
 
 
 /* ==========================================
-   POST IT MESSAGE
+   TÍTULO
+========================================== */
+
+export const PostItTitle = styled.h2`
+
+  position: relative;
+
+  z-index: 2;
+
+  margin:
+    0
+    0
+    14px;
+
+  color:
+    #171717;
+
+  font-family:
+    "Poppins",
+    sans-serif;
+
+  font-size:
+    clamp(
+      1.25rem,
+      2vw,
+      1.5rem
+    );
+
+  font-weight: 900;
+
+  line-height: 1.25;
+
+  letter-spacing:
+    -.4px;
+
+  word-break: break-word;
+
+`;
+
+
+/* ==========================================
+   MENSAGEM
 ========================================== */
 
 export const PostItMessage = styled.p`
 
+  position: relative;
+
+  z-index: 2;
+
   margin: 0;
 
-  color: #333333;
+  color:
+    rgba(
+      20,
+      20,
+      20,
+      .72
+    );
 
   font-family:
-    "Comic Sans MS",
-    "Trebuchet MS",
+    "Poppins",
     sans-serif;
 
   font-size: 15px;
 
-  line-height: 1.65;
+  line-height: 1.7;
 
   word-break: break-word;
 
@@ -505,15 +506,11 @@ export const PostItMessage = styled.p`
   display:
     -webkit-box;
 
-  -webkit-line-clamp: 6;
+  -webkit-line-clamp: 5;
 
   -webkit-box-orient: vertical;
 
   overflow: hidden;
-
-  position: relative;
-
-  z-index: 2;
 
 `;
 
@@ -524,38 +521,102 @@ export const PostItMessage = styled.p`
 
 export const PostItFooter = styled.div`
 
-  margin-top: auto;
-
-  padding-top: 20px;
-
   position: relative;
 
   z-index: 2;
+
+  margin-top: auto;
+
+  padding-top: 25px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 15px;
+
+  border-top:
+    1px solid
+    rgba(
+      0,
+      0,
+      0,
+      .15
+    );
 
 `;
 
 
 /* ==========================================
-   READ MORE
+   LER MAIS
 ========================================== */
 
 export const ReadMore = styled.span`
 
   color:
-    rgba(
-      0,
-      0,
-      0,
-      .55
-    );
-
-  font-family:
-    "Poppins",
-    sans-serif;
+    #831614;
 
   font-size: 12px;
 
-  font-weight: 600;
+  font-weight: 800;
+
+  letter-spacing:
+    .2px;
+
+`;
+
+
+/* ==========================================
+   SETA
+========================================== */
+
+export const ReadMoreIcon = styled.span`
+
+  width: 34px;
+
+  height: 34px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      .75
+    );
+
+  color:
+    #831614;
+
+  font-size: 16px;
+
+  transition:
+    transform .3s
+    cubic-bezier(
+      .16,
+      1,
+      .3,
+      1
+    );
+
+
+  ${PostIt}:hover & {
+
+    transform:
+      translateX(5px);
+
+  }
 
 `;
 
@@ -589,20 +650,17 @@ export const EmptyState = styled.div`
   border:
     2px dashed #dddddd;
 
-  border-radius: 15px;
+  border-radius: 20px;
 
   background: #fafafa;
 
 `;
 
 
-/* ==========================================
-   EMPTY ICON
-========================================== */
-
 export const EmptyIcon = styled.div`
 
   width: 70px;
+
   height: 70px;
 
   margin-bottom: 18px;
@@ -610,28 +668,21 @@ export const EmptyIcon = styled.div`
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
-  border-radius: 50%;
+  border-radius: 18px;
 
   background:
-    rgba(
-      249,
-      190,
-      6,
-      .15
-    );
+    #fff4c4;
 
-  color: #ffdb53;
+  color:
+    #d69e00;
 
   font-size: 30px;
 
 `;
 
-
-/* ==========================================
-   EMPTY TITLE
-========================================== */
 
 export const EmptyTitle = styled.h2`
 
@@ -646,10 +697,6 @@ export const EmptyTitle = styled.h2`
 
 `;
 
-
-/* ==========================================
-   EMPTY TEXT
-========================================== */
 
 export const EmptyText = styled.p`
 
@@ -693,11 +740,11 @@ export const ModalOverlay = styled.div`
       0,
       0,
       0,
-      .70
+      .72
     );
 
   backdrop-filter:
-    blur(4px);
+    blur(8px);
 
   animation:
     fadeIn .2s ease;
@@ -706,15 +753,11 @@ export const ModalOverlay = styled.div`
   @keyframes fadeIn {
 
     from {
-
       opacity: 0;
-
     }
 
     to {
-
       opacity: 1;
-
     }
 
   }
@@ -730,10 +773,14 @@ export const ModalOverlay = styled.div`
 
 
 /* ==========================================
-   FULL POST IT
+   MODAL COLORIDO
 ========================================== */
 
 export const FullPostIt = styled.div`
+
+  --modal-color:
+    ${({ $color }) =>
+      $color || "#ffdb53"};
 
   position: relative;
 
@@ -743,50 +790,39 @@ export const FullPostIt = styled.div`
       100%
     );
 
-  min-height: 500px;
-
   max-height:
     calc(
       100vh - 60px
     );
 
-  padding:
-    85px
-    clamp(
-      30px,
-      8vw,
-      90px
-    )
-    50px;
-
   box-sizing: border-box;
 
+  overflow-y: auto;
+
+  border-radius: 25px;
+
   background:
-    ${({ $color }) =>
-      $color || "#fff176"};
+    var(--modal-color);
 
   box-shadow:
-    10px
-    22px
-    50px
+    0
+    30px
+    80px
     rgba(
       0,
       0,
       0,
-      .30
-    );
-
-  overflow-y: auto;
-
-  transform:
-    rotate(
-      ${({ $rotation }) =>
-        $rotation || 0
-      }deg
+      .35
     );
 
   animation:
-    postOpen .25s ease;
+    postOpen .3s
+    cubic-bezier(
+      .16,
+      1,
+      .3,
+      1
+    );
 
 
   @keyframes postOpen {
@@ -796,8 +832,8 @@ export const FullPostIt = styled.div`
       opacity: 0;
 
       transform:
-        scale(.93)
-        rotate(-2deg);
+        translateY(25px)
+        scale(.94);
 
     }
 
@@ -806,12 +842,8 @@ export const FullPostIt = styled.div`
       opacity: 1;
 
       transform:
-        scale(1)
-        rotate(
-          ${({ $rotation }) =>
-            $rotation || 0
-          }deg
-        );
+        translateY(0)
+        scale(1);
 
     }
 
@@ -822,17 +854,12 @@ export const FullPostIt = styled.div`
 
     width: 100%;
 
-    min-height: 400px;
-
     max-height:
       calc(
         100vh - 24px
       );
 
-    padding:
-      75px
-      25px
-      35px;
+    border-radius: 20px;
 
   }
 
@@ -840,68 +867,82 @@ export const FullPostIt = styled.div`
 
 
 /* ==========================================
-   FULL POST PIN
+   TOPO MODAL
 ========================================== */
 
-export const FullPostItPin = styled.span`
+export const FullPostItTop = styled.div`
 
-  position: absolute;
+  min-height: 120px;
 
-  top: 22px;
+  padding:
+    30px
+    40px;
 
-  left: 50%;
+  display: flex;
 
-  width: 18px;
-  height: 18px;
+  align-items: center;
 
-  transform:
-    translateX(-50%);
 
-  border-radius: 50%;
+  @media (max-width: 600px) {
 
-  background: #e44747;
+    min-height: 100px;
 
-  box-shadow:
+    padding:
+      25px;
 
-    inset
-      2px
-      2px
-      4px
-      rgba(
-        255,
-        255,
-        255,
-        .4
-      ),
+  }
 
-    2px
-    3px
-    6px
+`;
+
+
+/* ==========================================
+   BADGE MODAL
+========================================== */
+
+export const FullPostItBadge = styled.span`
+
+  padding:
+    8px
+    14px;
+
+  border-radius: 50px;
+
+  background:
     rgba(
-      0,
-      0,
-      0,
-      .25
+      255,
+      255,
+      255,
+      .75
     );
+
+  color:
+    #831614;
+
+  font-size: 11px;
+
+  font-weight: 900;
+
+  letter-spacing:
+    1px;
 
 `;
 
 
 /* ==========================================
    BOTÃO FECHAR
-   ANIMAÇÃO RADIAL
 ========================================== */
 
 export const CloseButton = styled.button`
 
   position: absolute;
 
-  top: 18px;
+  top: 22px;
 
-  right: 20px;
+  right: 22px;
 
-  width: 42px;
-  height: 42px;
+  width: 44px;
+
+  height: 44px;
 
   padding: 0;
 
@@ -914,14 +955,16 @@ export const CloseButton = styled.button`
       255,
       255,
       255,
-      0.75
+      .8
     );
 
-  color: #222222;
+  color:
+    #222222;
 
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   cursor: pointer;
@@ -930,19 +973,12 @@ export const CloseButton = styled.button`
 
   isolation: isolate;
 
-  z-index: 5;
-
-  transform:
-    rotate(0deg);
+  z-index: 10;
 
   transition:
-    transform 0.2s ease,
-    color 0.2s ease;
+    transform .25s ease,
+    color .25s ease;
 
-
-  /* ======================================
-     ONDA PRETA
-  ====================================== */
 
   &::before {
 
@@ -963,11 +999,13 @@ export const CloseButton = styled.button`
       );
 
     width: 30px;
+
     height: 30px;
 
     border-radius: 50%;
 
-    background: #000000;
+    background:
+      #831614;
 
     transform:
       translate(
@@ -977,25 +1015,18 @@ export const CloseButton = styled.button`
       scale(0);
 
     transition:
-      transform
-      0.5s
+      transform .5s
       cubic-bezier(
-        0.16,
+        .16,
         1,
-        0.3,
+        .3,
         1
       );
 
     z-index: 0;
 
-    pointer-events: none;
-
   }
 
-
-  /* ======================================
-     CONTEÚDO DO BOTÃO
-  ====================================== */
 
   .buttonContent {
 
@@ -1006,30 +1037,20 @@ export const CloseButton = styled.button`
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
   }
 
 
-  /* ======================================
-     ÍCONE X
-  ====================================== */
-
   svg {
 
     width: 21px;
+
     height: 21px;
-
-    position: relative;
-
-    z-index: 2;
 
   }
 
-
-  /* ======================================
-     HOVER
-  ====================================== */
 
   &:hover {
 
@@ -1038,42 +1059,20 @@ export const CloseButton = styled.button`
     transform:
       rotate(90deg);
 
-
-    &::before {
-
-      transform:
-        translate(
-          -50%,
-          -50%
-        )
-        scale(18);
-
-    }
-
   }
 
 
-  /* ======================================
-     CLIQUE
-  ====================================== */
-
-  &:active {
+  &:hover::before {
 
     transform:
-      translateY(1px)
-      scale(0.97);
-
-    transition:
-      transform
-      0.06s
-      ease;
+      translate(
+        -50%,
+        -50%
+      )
+      scale(18);
 
   }
 
-
-  /* ======================================
-     FOCO
-  ====================================== */
 
   &:focus {
 
@@ -1085,53 +1084,23 @@ export const CloseButton = styled.button`
   &:focus-visible {
 
     outline:
-      2px solid #831614;
+      3px solid
+      #831614;
 
     outline-offset: 3px;
 
   }
 
 
-  /* ======================================
-     MOBILE
-  ====================================== */
-
   @media (max-width: 600px) {
 
-    top: 14px;
+    top: 15px;
 
-    right: 14px;
+    right: 15px;
 
     width: 38px;
+
     height: 38px;
-
-
-    svg {
-
-      width: 19px;
-      height: 19px;
-
-    }
-
-
-    &:hover {
-
-      transform:
-        rotate(90deg);
-
-
-      &::before {
-
-        transform:
-          translate(
-            -50%,
-            -50%
-          )
-          scale(18);
-
-      }
-
-    }
 
   }
 
@@ -1139,7 +1108,7 @@ export const CloseButton = styled.button`
 
 
 /* ==========================================
-   FULL POST CONTENT
+   CONTEÚDO MODAL
 ========================================== */
 
 export const FullPostItContent = styled.div`
@@ -1150,56 +1119,26 @@ export const FullPostItContent = styled.div`
       100%
     );
 
-  min-height: 100%;
-
   margin: 0 auto;
+
+  padding:
+    25px
+    55px
+    50px;
+
+  box-sizing: border-box;
 
   display: flex;
 
   flex-direction: column;
 
-  justify-content: flex-start;
-
-`;
-
-
-/* ==========================================
-   FULL POST TITLE
-========================================== */
-
-export const FullPostItTitle = styled.h2`
-
-  margin:
-    0 0 35px;
-
-  color: #222222;
-
-  font-family:
-    "Comic Sans MS",
-    "Trebuchet MS",
-    sans-serif;
-
-  font-size:
-    clamp(
-      2rem,
-      6vw,
-      4rem
-    );
-
-  line-height: 1.05;
-
-  font-weight: 800;
-
-  letter-spacing: -1px;
-
-  word-break: break-word;
-
 
   @media (max-width: 600px) {
 
-    margin-bottom: 25px;
-
-    font-size: 32px;
+    padding:
+      20px
+      25px
+      35px;
 
   }
 
@@ -1207,40 +1146,73 @@ export const FullPostItTitle = styled.h2`
 
 
 /* ==========================================
-   FULL POST MESSAGE
+   TÍTULO MODAL
+========================================== */
+
+export const FullPostItTitle = styled.h2`
+
+  margin:
+    0
+    0
+    25px;
+
+  color:
+    #171717;
+
+  font-family:
+    "Poppins",
+    sans-serif;
+
+  font-size:
+    clamp(
+      2rem,
+      5vw,
+      3.4rem
+    );
+
+  line-height: 1.1;
+
+  font-weight: 900;
+
+  letter-spacing:
+    -1.5px;
+
+  word-break: break-word;
+
+`;
+
+
+/* ==========================================
+   MENSAGEM MODAL
 ========================================== */
 
 export const FullPostItMessage = styled.p`
 
   margin: 0;
 
-  color: #292929;
+  color:
+    rgba(
+      20,
+      20,
+      20,
+      .78
+    );
 
   font-family:
-    "Comic Sans MS",
-    "Trebuchet MS",
+    "Poppins",
     sans-serif;
 
   font-size:
     clamp(
-      1.1rem,
-      3vw,
-      1.8rem
+      1rem,
+      2vw,
+      1.25rem
     );
 
-  line-height: 1.75;
+  line-height: 1.85;
 
   white-space: pre-wrap;
 
   word-break: break-word;
-
-
-  @media (max-width: 600px) {
-
-    font-size: 18px;
-
-    line-height: 1.65;
-
-  }
 
 `;

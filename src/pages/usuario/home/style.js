@@ -355,8 +355,8 @@ export const Description = styled.p`
   font-size:
     clamp(
       1rem,
-      1.25vw,
-      1.18rem
+      5.25vw,
+      1.50rem
     );
 
   line-height: 1.7;

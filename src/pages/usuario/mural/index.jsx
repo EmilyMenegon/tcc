@@ -5,6 +5,7 @@ import Layout from "../../../components/Layout";
 import {
   FiFileText,
   FiX,
+  FiArrowRight,
 } from "react-icons/fi";
 
 import {
@@ -16,11 +17,12 @@ import {
   Cards,
 
   PostIt,
-  PostItPin,
+  PostItBadge,
   PostItTitle,
   PostItMessage,
   PostItFooter,
   ReadMore,
+  ReadMoreIcon,
 
   EmptyState,
   EmptyIcon,
@@ -29,7 +31,8 @@ import {
 
   ModalOverlay,
   FullPostIt,
-  FullPostItPin,
+  FullPostItTop,
+  FullPostItBadge,
   FullPostItContent,
   FullPostItTitle,
   FullPostItMessage,
@@ -37,25 +40,12 @@ import {
 } from "./style";
 
 
-/* ==========================================
-   CONFIG DA API
-========================================== */
-
 const API_URL = "http://localhost:3001";
 
 
 export default function Mural() {
 
-  /* ==========================================
-     POSTS
-  ========================================== */
-
   const [posts, setPosts] = useState([]);
-
-
-  /* ==========================================
-     POST SELECIONADO
-  ========================================== */
 
   const [postSelecionado, setPostSelecionado] =
     useState(null);
@@ -72,20 +62,14 @@ export default function Mural() {
     const rect =
       button.getBoundingClientRect();
 
-    const x =
-      e.clientX - rect.left;
-
-    const y =
-      e.clientY - rect.top;
-
     button.style.setProperty(
       "--mouse-x",
-      `${x}px`
+      `${e.clientX - rect.left}px`
     );
 
     button.style.setProperty(
       "--mouse-y",
-      `${y}px`
+      `${e.clientY - rect.top}px`
     );
 
   };
@@ -151,7 +135,7 @@ export default function Mural() {
 
 
   /* ==========================================
-     CARREGAMENTO INICIAL
+     CARREGAMENTO
   ========================================== */
 
   useEffect(() => {
@@ -174,7 +158,7 @@ export default function Mural() {
 
 
   /* ==========================================
-     ABRIR POST
+     ABRIR
   ========================================== */
 
   function abrirPost(post) {
@@ -185,7 +169,7 @@ export default function Mural() {
 
 
   /* ==========================================
-     FECHAR POST
+     FECHAR
   ========================================== */
 
   function fecharPost() {
@@ -230,21 +214,17 @@ export default function Mural() {
   }, []);
 
 
-  /* ==========================================
-     RENDER
-  ========================================== */
-
   return (
 
     <Page>
 
       <Layout />
 
-
       <Content>
 
         {/* ==================================
             HEADER
+            NÃO ALTERADO
         ================================== */}
 
         <Header>
@@ -262,7 +242,7 @@ export default function Mural() {
 
 
         {/* ==================================
-            POST-ITS
+            CARDS
         ================================== */}
 
         <Cards>
@@ -298,7 +278,7 @@ export default function Mural() {
 
                   $color={
                     post.cor ||
-                    "#fff176"
+                    "#ffdb53"
                   }
 
                   $index={index}
@@ -327,9 +307,11 @@ export default function Mural() {
                   }}
                 >
 
-                  {/* PIN */}
+                  {/* BADGE */}
 
-                  <PostItPin />
+                  <PostItBadge>
+                    AVISO
+                  </PostItBadge>
 
 
                   {/* TÍTULO */}
@@ -341,7 +323,7 @@ export default function Mural() {
                   </PostItTitle>
 
 
-                  {/* DESCRIÇÃO */}
+                  {/* MENSAGEM */}
 
                   <PostItMessage>
 
@@ -359,8 +341,12 @@ export default function Mural() {
                   <PostItFooter>
 
                     <ReadMore>
-                      Clique para visualizar
+                      Ler aviso completo
                     </ReadMore>
+
+                    <ReadMoreIcon>
+                      <FiArrowRight />
+                    </ReadMoreIcon>
 
                   </PostItFooter>
 
@@ -377,7 +363,7 @@ export default function Mural() {
 
 
       {/* ==================================
-          MODAL DO POST
+          MODAL
       ================================== */}
 
       {postSelecionado && (
@@ -402,13 +388,22 @@ export default function Mural() {
           <FullPostIt
             $color={
               postSelecionado.cor ||
-              "#fff176"
+              "#ffdb53"
             }
           >
 
-            {/* ==================================
-                BOTÃO FECHAR
-            ================================== */}
+            {/* TOPO */}
+
+            <FullPostItTop>
+
+              <FullPostItBadge>
+                AVISO
+              </FullPostItBadge>
+
+            </FullPostItTop>
+
+
+            {/* FECHAR */}
 
             <CloseButton
               type="button"
@@ -426,11 +421,6 @@ export default function Mural() {
               </span>
 
             </CloseButton>
-
-
-            {/* PIN */}
-
-            <FullPostItPin />
 
 
             {/* CONTEÚDO */}
