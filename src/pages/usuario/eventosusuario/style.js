@@ -176,16 +176,11 @@ export const TitleArea = styled.div`
 `;
 
 export const Title = styled.h1`
- margin: 0;
+  margin: 0 0 14px;
 
   color: #831614;
 
-  font-size:
-    clamp(
-      2.6rem,
-      5vw,
-      4.8rem
-    );
+  font-size: clamp(2.8rem, 5vw, 4.8rem);
 
   font-weight: 900;
 
@@ -193,18 +188,14 @@ export const Title = styled.h1`
 
   letter-spacing: -2px;
 
-
   @media (max-width: 768px) {
-
-    font-size:
-      clamp(
-        2.4rem,
-        9vw,
-        4rem
-      );
+    font-size: clamp(2.5rem, 9vw, 4rem);
 
     letter-spacing: -1.5px;
+  }
 
+  @media (max-width: 480px) {
+    font-size: 2.3rem;
   }
 `;
 
@@ -213,34 +204,28 @@ export const Title = styled.h1`
 ===================================================== */
 
 export const Subtitle = styled.p`
-  max-width: 600px;
+  width: 100%;
 
-  margin:
-    10px 0 0;
+  max-width: 700px;
+
+  margin: 10px auto 0;
 
   color: #777777;
 
-  font-size:
-    clamp(
-      .85rem,
-      1.5vw,
-      1rem
-    );
+   font-size: 1.55rem;
 
-  line-height: 1.5;
+  line-height: 1.6;
 
+  text-align: center;
 
-  @media (max-width: 600px) {
-    width: 90%;
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+  }
 
-    font-size: 14px;
+  @media (max-width: 480px) {
+    font-size: 1rem;
   }
 `;
-
-
-/* =====================================================
-   CARDS
-===================================================== */
 
 export const Cards = styled.section`
   width: 100%;

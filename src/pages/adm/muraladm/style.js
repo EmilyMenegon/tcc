@@ -1,12 +1,11 @@
 import styled from "styled-components";
 
 
-/* =====================================================
-   PAGE
-===================================================== */
+// =====================================================
+// PAGE
+// =====================================================
 
 export const Page = styled.div`
-
   width: 100%;
   min-height: 100vh;
 
@@ -19,16 +18,14 @@ export const Page = styled.div`
   color: #000000;
 
   overflow-x: hidden;
-
 `;
 
 
-/* =====================================================
-   CONTENT
-===================================================== */
+// =====================================================
+// CONTENT
+// =====================================================
 
 export const Content = styled.main`
-
   width: 90%;
   max-width: 1400px;
 
@@ -42,35 +39,29 @@ export const Content = styled.main`
 
 
   @media (max-width: 768px) {
-
     width: 92%;
 
     padding:
       25px 0
       80px;
-
   }
 
 
   @media (max-width: 480px) {
-
     width: 90%;
 
     padding:
       20px 0
       70px;
-
   }
-
 `;
 
 
-/* =====================================================
-   HEADER
-===================================================== */
+// =====================================================
+// HEADER
+// =====================================================
 
 export const Header = styled.header`
-
   width: 100%;
 
   display: flex;
@@ -83,93 +74,96 @@ export const Header = styled.header`
 
   text-align: center;
 
-  margin-bottom: 40px;
+  margin-bottom: 45px;
 
 
   @media (max-width: 600px) {
-
-    margin-bottom: 28px;
-
+    margin-bottom: 30px;
   }
-
 `;
 
 
-/* =====================================================
-   TITLE
-===================================================== */
+// =====================================================
+// TITLE
+// =====================================================
 
 export const Title = styled.h1`
-
-  margin: 0;
+  margin: 0 0 14px;
 
   color: #831614;
 
   font-size:
     clamp(
-      2.6rem,
+      2.8rem,
       5vw,
       4.8rem
     );
 
   font-weight: 900;
 
-  line-height: 1.05;
-
   letter-spacing: -2px;
+
+  line-height: 1.05;
 
 
   @media (max-width: 768px) {
-
     font-size:
       clamp(
-        2.4rem,
+        2.5rem,
         9vw,
         4rem
       );
 
     letter-spacing: -1.5px;
-
   }
 
+
+  @media (max-width: 480px) {
+    font-size: 2.3rem;
+  }
 `;
 
+
+// =====================================================
+// SUBTITLE
+// =====================================================
+
 export const Subtitle = styled.p`
-
-  margin: 10px 0 0;
-
-  color: #777777;
-
-  font-size:
-    clamp(
-      .95rem,
-      1.2vw,
-      1.08rem
-    );
-
-  line-height: 1.7;
+  width: 100%;
 
   max-width: 700px;
 
+  margin: 0 auto;
+
+  color: #777777;
+
+  font-size: 1.25rem;
+
+  line-height: 1.6;
+
+  text-align: center;
+
 
   @media (max-width: 768px) {
-
     width: 90%;
 
     max-width: 90%;
 
-    font-size: .95rem;
-
+    font-size: 1.1rem;
   }
 
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
 `;
 
-/* =====================================================
-   MURAL
-===================================================== */
+
+// =====================================================
+// MURAL
+// =====================================================
 
 export const Mural = styled.section`
-
   width: 100%;
 
   display: grid;
@@ -183,26 +177,23 @@ export const Mural = styled.section`
       )
     );
 
-  gap: 30px;
+  gap: 26px;
 
   align-items: stretch;
 
 
   @media (max-width: 1000px) {
-
     grid-template-columns:
       repeat(
         3,
         1fr
       );
 
-    gap: 24px;
-
+    gap: 22px;
   }
 
 
   @media (max-width: 750px) {
-
     grid-template-columns:
       repeat(
         2,
@@ -210,27 +201,22 @@ export const Mural = styled.section`
       );
 
     gap: 20px;
-
   }
 
 
   @media (max-width: 500px) {
-
     grid-template-columns: 1fr;
 
-    gap: 20px;
-
+    gap: 18px;
   }
-
 `;
 
 
-/* =====================================================
-   EMPTY STATE
-===================================================== */
+// =====================================================
+// EMPTY STATE
+// =====================================================
 
 export const EmptyState = styled.div`
-
   grid-column:
     1 / -1;
 
@@ -254,19 +240,17 @@ export const EmptyState = styled.div`
   border:
     2px dashed #dddddd;
 
-  border-radius: 15px;
+  border-radius: 18px;
 
   background: #fafafa;
-
 `;
 
 
-/* =====================================================
-   EMPTY ICON
-===================================================== */
+// =====================================================
+// EMPTY ICON
+// =====================================================
 
 export const EmptyIcon = styled.div`
-
   width: 70px;
   height: 70px;
 
@@ -275,6 +259,7 @@ export const EmptyIcon = styled.div`
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   border-radius: 50%;
@@ -284,22 +269,20 @@ export const EmptyIcon = styled.div`
       249,
       190,
       6,
-      .15
+      0.15
     );
 
   color: #f9be06;
 
   font-size: 30px;
-
 `;
 
 
-/* =====================================================
-   EMPTY TITLE
-===================================================== */
+// =====================================================
+// EMPTY TITLE
+// =====================================================
 
 export const EmptyTitle = styled.h2`
-
   margin:
     0 0 8px;
 
@@ -308,16 +291,14 @@ export const EmptyTitle = styled.h2`
   font-size: 22px;
 
   font-weight: 600;
-
 `;
 
 
-/* =====================================================
-   EMPTY TEXT
-===================================================== */
+// =====================================================
+// EMPTY TEXT
+// =====================================================
 
 export const EmptyText = styled.p`
-
   max-width: 450px;
 
   margin: 0;
@@ -327,36 +308,31 @@ export const EmptyText = styled.p`
   font-size: 14px;
 
   line-height: 1.6;
-
 `;
 
 
-/* =====================================================
-   POST IT
-===================================================== */
+// =====================================================
+// CARD DO MURAL
+// =====================================================
 
 export const PostIt = styled.article`
-
   position: relative;
 
   width: 100%;
 
   min-width: 0;
 
-  aspect-ratio: 4 / 3;
-
-  min-height: 0;
+  min-height: 220px;
 
   padding:
-    38px
-    25px
-    23px;
+    28px 25px
+    22px;
 
   box-sizing: border-box;
 
   background:
     ${({ $color }) =>
-      $color || "#fff176"};
+      $color || "#ffcf70"};
 
   color: #222222;
 
@@ -366,259 +342,103 @@ export const PostIt = styled.article`
 
   flex-direction: column;
 
+  border-radius: 17px;
+
   overflow: hidden;
 
   box-shadow:
-    4px
-    8px
+    0
+    7px
     18px
     rgba(
       0,
       0,
       0,
-      .14
-    );
-
-  transform:
-    rotate(
-      ${({ $rotation, $index }) => {
-
-        if (
-          $rotation !== undefined &&
-          $rotation !== null
-        ) {
-
-          return `${$rotation}deg`;
-
-        }
-
-        if ($index % 3 === 0) {
-
-          return "-1.2deg";
-
-        }
-
-        if ($index % 3 === 1) {
-
-          return "1deg";
-
-        }
-
-        return "-.5deg";
-
-      }}
+      0.10
     );
 
   transition:
-    transform .25s ease,
-    box-shadow .25s ease;
-
-
-  &::before {
-
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    left: 0;
-    right: 0;
-
-    height: 7px;
-
-    background:
-      rgba(
-        255,
-        255,
-        255,
-        .22
-      );
-
-  }
-
-
-  &::after {
-
-    content: "";
-
-    position: absolute;
-
-    right: 0;
-    bottom: 0;
-
-    width: 0;
-    height: 0;
-
-    border-style: solid;
-
-    border-width:
-      0
-      0
-      28px
-      28px;
-
-    border-color:
-      transparent
-      transparent
-      rgba(
-        0,
-        0,
-        0,
-        .07
-      )
-      transparent;
-
-  }
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 
 
   &:hover {
-
     transform:
-      translateY(-8px)
-      rotate(0deg)
-      scale(1.015);
+      translateY(-7px);
 
     box-shadow:
-      8px
-      18px
-      30px
+      0
+      14px
+      28px
       rgba(
         0,
         0,
         0,
-        .20
+        0.16
       );
-
-    z-index: 5;
-
   }
 
 
   &:focus-visible {
-
     outline:
       3px solid #000000;
 
     outline-offset: 4px;
-
   }
 
 
   @media (max-width: 500px) {
-
-    aspect-ratio: 4 / 3;
+    min-height: 205px;
 
     padding:
-      36px
-      22px
-      22px;
-
+      25px 22px
+      20px;
   }
-
 `;
 
 
-/* =====================================================
-   POST IT PIN
-===================================================== */
-
-export const PostItPin = styled.span`
-
-  position: absolute;
-
-  top: 13px;
-
-  left: 50%;
-
-  width: 15px;
-  height: 15px;
-
-  transform:
-    translateX(-50%);
-
-  border-radius: 50%;
-
-  background: #e44747;
-
-  box-shadow:
-
-    inset
-      2px
-      2px
-      3px
-      rgba(
-        255,
-        255,
-        255,
-        .45
-      ),
-
-    2px
-    3px
-    5px
-    rgba(
-      0,
-      0,
-      0,
-      .22
-    );
-
-  z-index: 2;
-
-`;
-
-
-/* =====================================================
-   POST IT TITLE
-===================================================== */
+// =====================================================
+// CARD TITLE
+// =====================================================
 
 export const PostItTitle = styled.h2`
-
   margin:
-    0
-    0
-    15px;
+    0 0 18px;
 
   color: #222222;
 
   font-family:
-    "Comic Sans MS",
-    "Trebuchet MS",
+    "Poppins",
     sans-serif;
 
-  font-size: 22px;
+  font-size: 20px;
 
-  font-weight: 700;
+  font-weight: 600;
 
-  line-height: 1.25;
+  line-height: 1.35;
 
   word-break: break-word;
-
-  position: relative;
-
-  z-index: 2;
-
 `;
 
 
-/* =====================================================
-   POST IT MESSAGE
-===================================================== */
+// =====================================================
+// CARD MESSAGE
+// =====================================================
 
 export const PostItMessage = styled.p`
-
   margin: 0;
 
-  color: #333333;
+  color: #292929;
 
   font-family:
-    "Comic Sans MS",
-    "Trebuchet MS",
+    "Poppins",
     sans-serif;
 
-  font-size: 15px;
+  font-size: 14px;
 
-  line-height: 1.65;
+  font-weight: 400;
+
+  line-height: 1.55;
 
   word-break: break-word;
 
@@ -627,67 +447,112 @@ export const PostItMessage = styled.p`
   display:
     -webkit-box;
 
-  -webkit-line-clamp: 6;
+  -webkit-line-clamp: 5;
 
   -webkit-box-orient: vertical;
 
   overflow: hidden;
-
-  position: relative;
-
-  z-index: 2;
-
 `;
 
 
-/* =====================================================
-   POST IT FOOTER
-===================================================== */
+// =====================================================
+// CARD FOOTER
+// =====================================================
 
 export const PostItFooter = styled.div`
-
   margin-top: auto;
 
   padding-top: 20px;
 
-  position: relative;
+  display: flex;
 
-  z-index: 2;
+  flex-direction: column;
 
+  align-items: center;
+
+  gap: 7px;
 `;
 
 
-/* =====================================================
-   READ MORE
-===================================================== */
+// =====================================================
+// "CLIQUE PARA VISUALIZAR"
+// NÃO É BOTÃO — APENAS VISUAL
+// =====================================================
 
 export const ReadMore = styled.span`
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: fit-content;
+
+  min-height: 27px;
+
+  padding:
+    4px 13px;
+
+  box-sizing: border-box;
+
+  border-radius: 999px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.45
+    );
 
   color:
     rgba(
       0,
       0,
       0,
-      .55
+      0.62
     );
 
   font-family:
     "Poppins",
     sans-serif;
 
-  font-size: 12px;
+  font-size: 11px;
 
-  font-weight: 600;
+  font-weight: 500;
 
+  line-height: 1.3;
+
+  white-space: nowrap;
 `;
 
 
-/* =====================================================
-   ANIMAÇÃO BASE DOS BOTÕES
-===================================================== */
+// =====================================================
+// DATA DE PUBLICAÇÃO
+// =====================================================
+
+export const PostDate = styled.span`
+  display: block;
+
+  color: #555555;
+
+  font-family:
+    "Poppins",
+    sans-serif;
+
+  font-size: 11px;
+
+  font-weight: 500;
+
+  line-height: 1.4;
+`;
+
+
+// =====================================================
+// ANIMAÇÃO BASE DOS BOTÕES
+// =====================================================
 
 const ButtonEffect = `
-
   position: relative;
 
   overflow: hidden;
@@ -699,13 +564,13 @@ const ButtonEffect = `
   --mouse-y: 50%;
 
   transition:
-    transform .2s ease,
-    box-shadow .2s ease,
-    background-color .2s ease,
-    color .2s ease;
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+
 
   &::before {
-
     content: "";
 
     position: absolute;
@@ -726,41 +591,38 @@ const ButtonEffect = `
       scale(0);
 
     transition:
-      transform .5s
+      transform 0.5s
       cubic-bezier(
-        .16,
+        0.16,
         1,
-        .3,
+        0.3,
         1
       );
 
     z-index: 0;
 
     pointer-events: none;
-
   }
 
-  &:hover::before {
 
+  &:hover::before {
     transform:
       translate(-50%, -50%)
       scale(18);
-
   }
+
 
   &:active {
-
     transform:
       translateY(1px)
-      scale(.97);
+      scale(0.97);
 
     transition:
-      transform .06s ease;
-
+      transform 0.06s ease;
   }
 
-  .buttonContent {
 
+  .buttonContent {
     position: relative;
 
     z-index: 2;
@@ -773,13 +635,15 @@ const ButtonEffect = `
 
     width: 100%;
     height: 100%;
-
   }
-
 `;
 
-export const FloatingButton = styled.button`
 
+// =====================================================
+// FLOATING BUTTON
+// =====================================================
+
+export const FloatingButton = styled.button`
   ${ButtonEffect}
 
   position: fixed;
@@ -804,6 +668,7 @@ export const FloatingButton = styled.button`
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   cursor: pointer;
@@ -816,21 +681,18 @@ export const FloatingButton = styled.button`
       0,
       0,
       0,
-      .20
+      0.20
     );
 
   z-index: 100;
 
 
   &::before {
-
     background: #831614;
-
   }
 
 
   &:hover {
-
     color: #ffdb53;
 
     transform:
@@ -844,59 +706,48 @@ export const FloatingButton = styled.button`
         0,
         0,
         0,
-        .28
+        0.28
       );
-
   }
 
 
   svg {
-
     width: 30px;
     height: 30px;
 
     transition:
-      transform .3s ease;
-
+      transform 0.3s ease;
   }
 
 
   &:hover svg {
-
     transform:
       rotate(90deg);
-
   }
 
 
   &:active {
-
     transform:
       translateY(1px)
-      scale(.96);
-
+      scale(0.96);
   }
 
 
   @media (max-width: 600px) {
-
     width: 60px;
     height: 60px;
 
     right: 20px;
     bottom: 20px;
-
   }
-
 `;
 
 
-/* =====================================================
-   CREATE OVERLAY
-===================================================== */
+// =====================================================
+// CREATE OVERLAY
+// =====================================================
 
 export const CreateOverlay = styled.div`
-
   position: fixed;
 
   inset: 0;
@@ -906,6 +757,7 @@ export const CreateOverlay = styled.div`
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   padding: 15px;
@@ -917,21 +769,19 @@ export const CreateOverlay = styled.div`
       0,
       0,
       0,
-      .45
+      0.45
     );
 
   backdrop-filter:
     blur(3px);
-
 `;
 
 
-/* =====================================================
-   CREATE MODAL
-===================================================== */
+// =====================================================
+// CREATE MODAL
+// =====================================================
 
 export const CreateModal = styled.div`
-
   width: 420px;
 
   max-width: 100%;
@@ -939,8 +789,7 @@ export const CreateModal = styled.div`
   box-sizing: border-box;
 
   padding:
-    22px
-    25px;
+    22px 25px;
 
   background: #ffffff;
 
@@ -954,59 +803,49 @@ export const CreateModal = styled.div`
       0,
       0,
       0,
-      .25
+      0.25
     );
 
   animation:
     createAppear
-    .2s
+    0.2s
     ease;
 
 
   @keyframes createAppear {
-
     from {
-
       opacity: 0;
 
       transform:
-        scale(.94)
+        scale(0.94)
         translateY(10px);
-
     }
 
     to {
-
       opacity: 1;
 
       transform:
         scale(1)
         translateY(0);
-
     }
-
   }
 
 
   @media (max-width: 500px) {
-
     width: 100%;
 
     border-radius: 18px;
 
     padding: 18px;
-
   }
-
 `;
 
 
-/* =====================================================
-   CREATE HEADER
-===================================================== */
+// =====================================================
+// CREATE HEADER
+// =====================================================
 
 export const CreateHeader = styled.div`
-
   width: 100%;
 
   display: flex;
@@ -1016,16 +855,14 @@ export const CreateHeader = styled.div`
   justify-content: space-between;
 
   margin-bottom: 16px;
-
 `;
 
 
-/* =====================================================
-   CREATE TITLE
-===================================================== */
+// =====================================================
+// CREATE TITLE
+// =====================================================
 
 export const CreateTitle = styled.h2`
-
   margin: 0;
 
   color: #111111;
@@ -1033,16 +870,14 @@ export const CreateTitle = styled.h2`
   font-size: 23px;
 
   font-weight: 700;
-
 `;
 
 
-/* =====================================================
-   CREATE CLOSE
-===================================================== */
+// =====================================================
+// CREATE CLOSE
+// =====================================================
 
 export const CreateCloseButton = styled.button`
-
   ${ButtonEffect}
 
   width: 38px;
@@ -1061,89 +896,76 @@ export const CreateCloseButton = styled.button`
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   cursor: pointer;
 
 
   &::before {
-
     background: #111111;
-
   }
 
 
   &:hover {
-
     color: #ffffff;
 
     transform:
       scale(1.05);
-
   }
 
 
   svg {
-
     width: 21px;
     height: 21px;
-
   }
-
 `;
 
 
-/* =====================================================
-   FORM
-===================================================== */
+// =====================================================
+// FORM
+// =====================================================
 
 export const CreateForm = styled.form`
-
   display: flex;
 
   flex-direction: column;
 
   gap: 13px;
-
 `;
 
 
-/* =====================================================
-   FIELD
-===================================================== */
+// =====================================================
+// FIELD
+// =====================================================
 
 export const Field = styled.div`
-
   display: flex;
 
   flex-direction: column;
 
   gap: 6px;
-
 `;
 
 
-/* =====================================================
-   LABEL
-===================================================== */
+// =====================================================
+// LABEL
+// =====================================================
 
 export const Label = styled.label`
-
   color: #333333;
 
   font-size: 13px;
 
   font-weight: 600;
-
 `;
 
 
-/* =====================================================
-   TITLE INPUT
-===================================================== */
+// =====================================================
+// TITLE INPUT
+// =====================================================
 
 export const TitleInput = styled.input`
-
   width: 100%;
 
   height: 43px;
@@ -1171,7 +993,6 @@ export const TitleInput = styled.input`
 
 
   &:focus {
-
     box-shadow:
       0
       0
@@ -1181,20 +1002,17 @@ export const TitleInput = styled.input`
         249,
         190,
         6,
-        .4
+        0.4
       );
-
   }
-
 `;
 
 
-/* =====================================================
-   DESCRIPTION INPUT
-===================================================== */
+// =====================================================
+// DESCRIPTION INPUT
+// =====================================================
 
 export const DescriptionInput = styled.textarea`
-
   width: 100%;
 
   height: 80px;
@@ -1208,8 +1026,7 @@ export const DescriptionInput = styled.textarea`
   box-sizing: border-box;
 
   padding:
-    11px
-    13px;
+    11px 13px;
 
   border: none;
 
@@ -1231,7 +1048,6 @@ export const DescriptionInput = styled.textarea`
 
 
   &:focus {
-
     box-shadow:
       0
       0
@@ -1241,35 +1057,30 @@ export const DescriptionInput = styled.textarea`
         249,
         190,
         6,
-        .4
+        0.4
       );
-
   }
-
 `;
 
 
-/* =====================================================
-   COLOR LABEL
-===================================================== */
+// =====================================================
+// COLOR LABEL
+// =====================================================
 
 export const ColorLabel = styled.span`
-
   color: #333333;
 
   font-size: 13px;
 
   font-weight: 600;
-
 `;
 
 
-/* =====================================================
-   COLOR OPTIONS
-===================================================== */
+// =====================================================
+// COLOR OPTIONS
+// =====================================================
 
 export const ColorOptions = styled.div`
-
   display: flex;
 
   align-items: center;
@@ -1277,16 +1088,14 @@ export const ColorOptions = styled.div`
   gap: 9px;
 
   flex-wrap: wrap;
-
 `;
 
 
-/* =====================================================
-   COLOR OPTION
-===================================================== */
+// =====================================================
+// COLOR OPTION
+// =====================================================
 
 export const ColorOption = styled.button`
-
   width: 30px;
   height: 30px;
 
@@ -1317,54 +1126,72 @@ export const ColorOption = styled.button`
   cursor: pointer;
 
   transition:
-    transform .2s ease;
+    transform 0.2s ease;
 
 
   &:hover {
-
     transform:
       scale(1.12);
-
   }
-
 `;
 
 
-export const CreateButton = styled.button`
+// =====================================================
+// CREATE BUTTON
+// =====================================================
 
+export const CreateButton = styled.button`
   ${ButtonEffect}
 
   width: 100%;
+
   height: 45px;
+
   margin-top: 2px;
+
   padding: 0;
+
   border: none;
+
   border-radius: 11px;
+
   background: #f9be06;
+
   color: #111111;
+
   font-size: 14px;
+
   font-weight: 700;
+
   cursor: pointer;
+
 
   &::before {
     background: #831614;
   }
 
+
   &:hover:not(:disabled) {
     color: #ffffff;
+
     transform:
       translateY(-2px);
   }
 
+
   &:disabled {
-    opacity: .45;
+    opacity: 0.45;
+
     cursor: not-allowed;
   }
-
 `;
 
-export const ViewOverlay = styled.div`
 
+// =====================================================
+// VIEW OVERLAY
+// =====================================================
+
+export const ViewOverlay = styled.div`
   position: fixed;
 
   inset: 0;
@@ -1378,6 +1205,7 @@ export const ViewOverlay = styled.div`
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   background:
@@ -1385,48 +1213,40 @@ export const ViewOverlay = styled.div`
       0,
       0,
       0,
-      .70
+      0.70
     );
 
   backdrop-filter:
     blur(4px);
 
   animation:
-    fadeIn .2s ease;
+    fadeIn
+    0.2s
+    ease;
 
 
   @keyframes fadeIn {
-
     from {
-
       opacity: 0;
-
     }
 
     to {
-
       opacity: 1;
-
     }
-
   }
 
 
   @media (max-width: 600px) {
-
     padding: 12px;
-
   }
-
 `;
 
 
-/* =====================================================
-   VIEW POST IT
-===================================================== */
+// =====================================================
+// VIEW CARD
+// =====================================================
 
 export const ViewPostIt = styled.div`
-
   position: relative;
 
   width:
@@ -1455,7 +1275,9 @@ export const ViewPostIt = styled.div`
 
   background:
     ${({ $color }) =>
-      $color || "#fff176"};
+      $color || "#ffcf70"};
+
+  border-radius: 20px;
 
   box-shadow:
     10px
@@ -1465,112 +1287,37 @@ export const ViewPostIt = styled.div`
       0,
       0,
       0,
-      .30
+      0.30
     );
 
   overflow-y: auto;
 
-  transform:
-    rotate(
-      ${({ $rotation }) =>
-        $rotation || 0
-      }deg
-    );
-
   animation:
     postOpen
-    .25s
+    0.25s
     ease;
 
 
-  &::before {
-
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    left: 0;
-    right: 0;
-
-    height: 7px;
-
-    background:
-      rgba(
-        255,
-        255,
-        255,
-        .22
-      );
-
-  }
-
-
-  &::after {
-
-    content: "";
-
-    position: absolute;
-
-    right: 0;
-    bottom: 0;
-
-    width: 0;
-    height: 0;
-
-    border-style: solid;
-
-    border-width:
-      0
-      0
-      35px
-      35px;
-
-    border-color:
-      transparent
-      transparent
-      rgba(
-        0,
-        0,
-        0,
-        .07
-      )
-      transparent;
-
-  }
-
-
   @keyframes postOpen {
-
     from {
-
       opacity: 0;
 
       transform:
-        scale(.93)
-        rotate(-2deg);
-
+        scale(0.93)
+        translateY(15px);
     }
 
     to {
-
       opacity: 1;
 
       transform:
         scale(1)
-        rotate(
-          ${({ $rotation }) =>
-            $rotation || 0
-          }deg
-        );
-
+        translateY(0);
     }
-
   }
 
 
   @media (max-width: 600px) {
-
     width: 100%;
 
     min-height: 400px;
@@ -1584,68 +1331,15 @@ export const ViewPostIt = styled.div`
       75px
       25px
       35px;
-
   }
-
 `;
 
 
-/* =====================================================
-   VIEW PIN
-===================================================== */
-
-export const ViewPostItPin = styled.span`
-
-  position: absolute;
-
-  top: 22px;
-
-  left: 50%;
-
-  width: 18px;
-  height: 18px;
-
-  transform:
-    translateX(-50%);
-
-  border-radius: 50%;
-
-  background: #e44747;
-
-  box-shadow:
-
-    inset
-      2px
-      2px
-      4px
-      rgba(
-        255,
-        255,
-        255,
-        .4
-      ),
-
-    2px
-    3px
-    6px
-    rgba(
-      0,
-      0,
-      0,
-      .25
-    );
-
-  z-index: 10;
-
-`;
-
-
-/* =====================================================
-   VIEW BUTTONS
-===================================================== */
+// =====================================================
+// VIEW BUTTONS
+// =====================================================
 
 export const ViewTopButtons = styled.div`
-
   position: absolute;
 
   top: 18px;
@@ -1661,16 +1355,14 @@ export const ViewTopButtons = styled.div`
   gap: 10px;
 
   z-index: 20;
-
 `;
 
 
-/* =====================================================
-   VIEW EDIT
-===================================================== */
+// =====================================================
+// VIEW EDIT
+// =====================================================
 
 export const ViewEditButton = styled.button`
-
   ${ButtonEffect}
 
   width: 42px;
@@ -1687,7 +1379,7 @@ export const ViewEditButton = styled.button`
       255,
       255,
       255,
-      .75
+      0.75
     );
 
   color: #222222;
@@ -1695,6 +1387,7 @@ export const ViewEditButton = styled.button`
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   cursor: pointer;
@@ -1707,43 +1400,35 @@ export const ViewEditButton = styled.button`
       0,
       0,
       0,
-      .12
+      0.12
     );
 
 
   &::before {
-
     background: #000000;
-
   }
 
 
   &:hover {
-
     color: #ffffff;
 
     transform:
       scale(1.08);
-
   }
 
 
   svg {
-
     width: 20px;
     height: 20px;
-
   }
-
 `;
 
 
-/* =====================================================
-   VIEW CLOSE
-===================================================== */
+// =====================================================
+// VIEW CLOSE
+// =====================================================
 
 export const ViewCloseButton = styled.button`
-
   ${ButtonEffect}
 
   width: 42px;
@@ -1760,7 +1445,7 @@ export const ViewCloseButton = styled.button`
       255,
       255,
       255,
-      .75
+      0.75
     );
 
   color: #222222;
@@ -1768,6 +1453,7 @@ export const ViewCloseButton = styled.button`
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   cursor: pointer;
@@ -1780,43 +1466,35 @@ export const ViewCloseButton = styled.button`
       0,
       0,
       0,
-      .12
+      0.12
     );
 
 
   &::before {
-
     background: #000000;
-
   }
 
 
   &:hover {
-
     color: #ffffff;
 
     transform:
       rotate(90deg);
-
   }
 
 
   svg {
-
     width: 22px;
     height: 22px;
-
   }
-
 `;
 
 
-/* =====================================================
-   VIEW DELETE
-===================================================== */
+// =====================================================
+// VIEW DELETE
+// =====================================================
 
 export const ViewDeleteButton = styled.button`
-
   ${ButtonEffect}
 
   width: 42px;
@@ -1835,6 +1513,7 @@ export const ViewDeleteButton = styled.button`
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   cursor: pointer;
@@ -1847,43 +1526,35 @@ export const ViewDeleteButton = styled.button`
       0,
       0,
       0,
-      .15
+      0.15
     );
 
 
   &::before {
-
-    background: #111;
-
+    background: #111111;
   }
 
 
   &:hover {
-
     color: #ffffff;
 
     transform:
       scale(1.08);
-
   }
 
 
   svg {
-
     width: 20px;
     height: 20px;
-
   }
-
 `;
 
 
-/* =====================================================
-   VIEW CONTENT
-===================================================== */
+// =====================================================
+// VIEW CONTENT
+// =====================================================
 
 export const ViewContent = styled.div`
-
   width:
     min(
       700px,
@@ -1899,24 +1570,21 @@ export const ViewContent = styled.div`
   flex-direction: column;
 
   justify-content: flex-start;
-
 `;
 
 
-/* =====================================================
-   VIEW TITLE
-===================================================== */
+// =====================================================
+// VIEW TITLE
+// =====================================================
 
 export const ViewTitle = styled.h2`
-
   margin:
     0 0 35px;
 
   color: #222222;
 
   font-family:
-    "Comic Sans MS",
-    "Trebuchet MS",
+    "Poppins",
     sans-serif;
 
   font-size:
@@ -1928,7 +1596,7 @@ export const ViewTitle = styled.h2`
 
   line-height: 1.05;
 
-  font-weight: 800;
+  font-weight: 700;
 
   letter-spacing: -1px;
 
@@ -1936,29 +1604,24 @@ export const ViewTitle = styled.h2`
 
 
   @media (max-width: 600px) {
-
     margin-bottom: 25px;
 
     font-size: 32px;
-
   }
-
 `;
 
 
-/* =====================================================
-   VIEW DESCRIPTION
-===================================================== */
+// =====================================================
+// VIEW DESCRIPTION
+// =====================================================
 
 export const ViewDescription = styled.p`
-
-  margin: 0;
+  margin: 0 0 30px;
 
   color: #292929;
 
   font-family:
-    "Comic Sans MS",
-    "Trebuchet MS",
+    "Poppins",
     sans-serif;
 
   font-size:
@@ -1976,22 +1639,18 @@ export const ViewDescription = styled.p`
 
 
   @media (max-width: 600px) {
-
     font-size: 18px;
 
     line-height: 1.65;
-
   }
-
 `;
 
 
-/* =====================================================
-   DELETE OVERLAY
-===================================================== */
+// =====================================================
+// DELETE OVERLAY
+// =====================================================
 
 export const DeleteOverlay = styled.div`
-
   position: fixed;
 
   inset: 0;
@@ -2001,6 +1660,7 @@ export const DeleteOverlay = styled.div`
   display: flex;
 
   align-items: center;
+
   justify-content: center;
 
   padding: 20px;
@@ -2012,21 +1672,19 @@ export const DeleteOverlay = styled.div`
       0,
       0,
       0,
-      .45
+      0.45
     );
 
   backdrop-filter:
     blur(3px);
-
 `;
 
 
-/* =====================================================
-   DELETE MODAL
-===================================================== */
+// =====================================================
+// DELETE MODAL
+// =====================================================
 
 export const DeleteModal = styled.div`
-
   width: 400px;
 
   max-width: 100%;
@@ -2049,29 +1707,26 @@ export const DeleteModal = styled.div`
       0,
       0,
       0,
-      .20
+      0.20
     );
 
   animation:
     deleteAppear
-    .25s
+    0.25s
     ease;
 
 
   h3 {
-
     margin:
       0 0 12px;
 
     color: #111111;
 
     font-size: 24px;
-
   }
 
 
   p {
-
     margin:
       0 0 30px;
 
@@ -2080,52 +1735,41 @@ export const DeleteModal = styled.div`
     font-size: 15px;
 
     line-height: 1.5;
-
   }
 
 
   @keyframes deleteAppear {
-
     from {
-
       opacity: 0;
 
       transform:
         translateY(15px)
-        scale(.95);
-
+        scale(0.95);
     }
 
     to {
-
       opacity: 1;
 
       transform:
         translateY(0)
         scale(1);
-
     }
-
   }
 
 
   @media (max-width: 500px) {
-
     padding:
       25px
       20px;
-
   }
-
 `;
 
 
-/* =====================================================
-   MODAL BUTTONS
-===================================================== */
+// =====================================================
+// MODAL BUTTONS
+// =====================================================
 
 export const ModalButtons = styled.div`
-
   display: flex;
 
   justify-content: center;
@@ -2134,17 +1778,20 @@ export const ModalButtons = styled.div`
 
 
   @media (max-width: 400px) {
-
     flex-direction: column;
-
   }
-
 `;
+
+
+// =====================================================
+// CANCEL BUTTON
+// =====================================================
 
 export const CancelButton = styled.button`
   position: relative;
 
   width: 140px;
+
   height: 46px;
 
   padding: 0;
@@ -2155,7 +1802,7 @@ export const CancelButton = styled.button`
 
   background: #ececec;
 
-  color: #111;
+  color: #111111;
 
   font-size: 15px;
 
@@ -2168,19 +1815,32 @@ export const CancelButton = styled.button`
   isolation: isolate;
 
   transition:
-    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.25s
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      ),
+
     color 0.25s ease,
+
     box-shadow 0.25s ease;
+
 
   &::before {
     content: "";
 
     position: absolute;
 
-    left: var(--mouse-x, 50%);
-    top: var(--mouse-y, 50%);
+    left:
+      var(--mouse-x, 50%);
+
+    top:
+      var(--mouse-y, 50%);
 
     width: 20px;
+
     height: 20px;
 
     border-radius: 50%;
@@ -2192,21 +1852,37 @@ export const CancelButton = styled.button`
       scale(0);
 
     transition:
-      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+      transform 0.55s
+      cubic-bezier(
+        0.16,
+        1,
+        0.3,
+        1
+      );
 
     z-index: -1;
 
     pointer-events: none;
   }
 
-  &:hover {
-    color: #111;
 
-    transform: translateY(-3px);
+  &:hover {
+    color: #111111;
+
+    transform:
+      translateY(-3px);
 
     box-shadow:
-      0 10px 22px
-      rgba(123, 30, 58, 0.25);
+      0
+      10px
+      22px
+      rgba(
+        123,
+        30,
+        58,
+        0.25
+      );
+
 
     &::before {
       transform:
@@ -2214,6 +1890,7 @@ export const CancelButton = styled.button`
         scale(15);
     }
   }
+
 
   &:active {
     transform:
@@ -2224,19 +1901,27 @@ export const CancelButton = styled.button`
       transform 0.08s ease;
   }
 
+
   &:focus {
     outline: none;
   }
+
 
   @media (max-width: 400px) {
     width: 100%;
   }
 `;
 
+
+// =====================================================
+// CONFIRM BUTTON
+// =====================================================
+
 export const ConfirmButton = styled.button`
   position: relative;
 
   width: 140px;
+
   height: 46px;
 
   padding: 0;
@@ -2247,7 +1932,7 @@ export const ConfirmButton = styled.button`
 
   background: #d62828;
 
-  color: #fff;
+  color: #ffffff;
 
   font-size: 15px;
 
@@ -2260,45 +1945,74 @@ export const ConfirmButton = styled.button`
   isolation: isolate;
 
   transition:
-    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.25s
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      ),
+
     color 0.25s ease,
+
     box-shadow 0.25s ease;
+
 
   &::before {
     content: "";
 
     position: absolute;
 
-    left: var(--mouse-x, 50%);
-    top: var(--mouse-y, 50%);
+    left:
+      var(--mouse-x, 50%);
+
+    top:
+      var(--mouse-y, 50%);
 
     width: 20px;
+
     height: 20px;
 
     border-radius: 50%;
 
-    background: #111;
+    background: #111111;
 
     transform:
       translate(-50%, -50%)
       scale(0);
 
     transition:
-      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+      transform 0.55s
+      cubic-bezier(
+        0.16,
+        1,
+        0.3,
+        1
+      );
 
     z-index: -1;
 
     pointer-events: none;
   }
 
-  &:hover {
-    color: #fff;
 
-    transform: translateY(-3px);
+  &:hover {
+    color: #ffffff;
+
+    transform:
+      translateY(-3px);
 
     box-shadow:
-      0 10px 22px
-      rgba(123, 30, 58, 0.3);
+      0
+      10px
+      22px
+      rgba(
+        123,
+        30,
+        58,
+        0.3
+      );
+
 
     &::before {
       transform:
@@ -2306,6 +2020,7 @@ export const ConfirmButton = styled.button`
         scale(15);
     }
   }
+
 
   &:active {
     transform:
@@ -2316,9 +2031,11 @@ export const ConfirmButton = styled.button`
       transform 0.08s ease;
   }
 
+
   &:focus {
     outline: none;
   }
+
 
   @media (max-width: 400px) {
     width: 100%;

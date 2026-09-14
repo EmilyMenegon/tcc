@@ -10,7 +10,7 @@ const colors = {
   cream: "#FFF7D0",
   input: "#FFFDF0",
   red: "#831614",
-  wine: "#571111",
+  wine: "#300404",
   black: "#010000",
   white: "#fff",
 };
@@ -42,59 +42,28 @@ export const Page = styled.div`
   }
 `;
 
-/* ============================================================
-   TITLE AREA
-============================================================ */
-
 export const TitleArea = styled.div`
   width: 100%;
-
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-
-  padding: 30px 20px 22px;
-
   text-align: center;
-
-  .title-description {
-    width: 100%;
-    max-width: 700px;
-
-    margin: 10px auto 0;
-
-    color: #777;
-
-    /* MESMO PADRÃO DA DESCRIPTION DA OUTRA PAGE */
-    font-size: 1.25rem;
-
-    line-height: 1.6;
-  }
+  padding: 30px 20px 22px;
 
   @media (max-width: 768px) {
     padding: 27px 18px 20px;
-
-    .title-description {
-      font-size: 1.1rem;
-    }
   }
 
   @media (max-width: 480px) {
     padding: 23px 14px 17px;
-
-    .title-description {
-      font-size: 1rem;
-    }
   }
 `;
-
-/* ============================================================
-   TITLE
-============================================================ */
 
 export const Title = styled.h1`
   margin: 0 0 14px;
 
-  color: ${colors.red};
+  color: #831614;
 
   font-size:
     clamp(
@@ -125,9 +94,33 @@ export const Title = styled.h1`
   }
 `;
 
-/* ============================================================
-   CONTAINER
-============================================================ */
+export const Subtitle = styled.p`
+  width: 100%;
+
+  max-width: 700px;
+
+  margin: 18px auto 0;
+
+  color: #777;
+
+  font-size: 1.55rem;
+
+  line-height: 1.6;
+
+  text-align: center;
+
+  @media (max-width: 768px) {
+    margin-top: 15px;
+
+    font-size: 1.1rem;
+  }
+
+  @media (max-width: 480px) {
+    margin-top: 13px;
+
+    font-size: 1rem;
+  }
+`;
 
 export const Container = styled.div`
   position: relative;

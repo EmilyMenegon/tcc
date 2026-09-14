@@ -1,12 +1,11 @@
 import styled from "styled-components";
 
 
-/* ==========================================
-   PAGE
-========================================== */
+// =====================================================
+// PAGE
+// =====================================================
 
 export const Page = styled.div`
-
   width: 100%;
   min-height: 100vh;
 
@@ -19,16 +18,14 @@ export const Page = styled.div`
   color: #000000;
 
   overflow-x: hidden;
-
 `;
 
 
-/* ==========================================
-   CONTENT
-========================================== */
+// =====================================================
+// CONTENT
+// =====================================================
 
 export const Content = styled.main`
-
   width: 90%;
   max-width: 1400px;
 
@@ -61,17 +58,14 @@ export const Content = styled.main`
       70px;
 
   }
-
 `;
 
 
-/* ==========================================
-   HEADER
-   NÃO ALTERADO
-========================================== */
+// =====================================================
+// HEADER
+// =====================================================
 
 export const Header = styled.header`
-
   width: 100%;
 
   display: flex;
@@ -92,35 +86,37 @@ export const Header = styled.header`
     margin-bottom: 28px;
 
   }
-
 `;
 
 
-export const Title = styled.h1`
+// =====================================================
+// TITLE
+// =====================================================
 
-  margin: 0;
+export const Title = styled.h1`
+  margin: 0 0 14px;
 
   color: #831614;
 
   font-size:
     clamp(
-      2.6rem,
+      2.8rem,
       5vw,
       4.8rem
     );
 
   font-weight: 900;
 
-  line-height: 1.05;
-
   letter-spacing: -2px;
+
+  line-height: 1.05;
 
 
   @media (max-width: 768px) {
 
     font-size:
       clamp(
-        2.4rem,
+        2.5rem,
         9vw,
         4rem
       );
@@ -129,46 +125,55 @@ export const Title = styled.h1`
 
   }
 
+
+  @media (max-width: 480px) {
+
+    font-size: 2.3rem;
+
+  }
 `;
 
 
+// =====================================================
+// SUBTITLE
+// =====================================================
+
 export const Subtitle = styled.p`
-
-  margin: 10px 0 0;
-
-  color: #777777;
-
-  font-size:
-    clamp(
-      .95rem,
-      1.2vw,
-      1.08rem
-    );
-
-  line-height: 1.7;
+  width: 100%;
 
   max-width: 700px;
+
+  margin: 10px auto 0;
+
+  color: #777;
+
+  font-size: 1.55rem;
+
+  line-height: 1.6;
+
+  text-align: center;
 
 
   @media (max-width: 768px) {
 
-    width: 90%;
-
-    max-width: 90%;
-
-    font-size: .95rem;
+    font-size: 1.1rem;
 
   }
 
+
+  @media (max-width: 480px) {
+
+    font-size: 1rem;
+
+  }
 `;
 
 
-/* ==========================================
-   CARDS
-========================================== */
+// =====================================================
+// CARDS
+// =====================================================
 
 export const Cards = styled.section`
-
   width: 100%;
 
   display: grid;
@@ -177,7 +182,7 @@ export const Cards = styled.section`
     repeat(
       auto-fill,
       minmax(
-        310px,
+        280px,
         1fr
       )
     );
@@ -187,176 +192,108 @@ export const Cards = styled.section`
   align-items: stretch;
 
 
-  @media (max-width: 1100px) {
+  @media (max-width: 1000px) {
 
     grid-template-columns:
       repeat(
-        2,
-        minmax(
-          0,
-          1fr
-        )
+        3,
+        1fr
       );
+
+    gap: 22px;
 
   }
 
 
-  @media (max-width: 700px) {
+  @media (max-width: 750px) {
 
-    grid-template-columns: 1fr;
+    grid-template-columns:
+      repeat(
+        2,
+        1fr
+      );
 
     gap: 20px;
 
   }
 
+
+  @media (max-width: 500px) {
+
+    grid-template-columns: 1fr;
+
+    gap: 18px;
+
+  }
 `;
 
 
-/* ==========================================
-   CARD COLORIDO
-========================================== */
+// =====================================================
+// CARD
+// IGUAL AO ADM
+// =====================================================
 
 export const PostIt = styled.article`
-
-  --card-color:
-    ${({ $color }) =>
-      $color || "#ffdb53"};
-
   position: relative;
+
+  width: 100%;
 
   min-width: 0;
 
-  min-height: 300px;
+  min-height: 220px;
 
   padding:
-    30px
-    28px
+    28px 25px
     22px;
 
   box-sizing: border-box;
+
+  background:
+    ${({ $color }) =>
+      $color || "#ffcf70"};
+
+  color: #222222;
+
+  cursor: pointer;
 
   display: flex;
 
   flex-direction: column;
 
+  border-radius: 17px;
+
   overflow: hidden;
-
-  cursor: pointer;
-
-  border-radius: 20px;
-
-  background:
-    var(--card-color);
-
-  color: #222222;
 
   box-shadow:
     0
-    12px
-    30px
+    7px
+    18px
     rgba(
       0,
       0,
       0,
-      .12
+      0.10
     );
 
   transition:
-    transform .3s
-    cubic-bezier(
-      .16,
-      1,
-      .3,
-      1
-    ),
-    box-shadow .3s ease;
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
 
-
-  /* ======================================
-     BRILHO DECORATIVO
-  ====================================== */
-
-  &::before {
-
-    content: "";
-
-    position: absolute;
-
-    width: 220px;
-
-    height: 220px;
-
-    top: -110px;
-
-    right: -90px;
-
-    border-radius: 50%;
-
-    background:
-      rgba(
-        255,
-        255,
-        255,
-        .20
-      );
-
-    pointer-events: none;
-
-  }
-
-
-  /* ======================================
-     SEGUNDO BRILHO
-  ====================================== */
-
-  &::after {
-
-    content: "";
-
-    position: absolute;
-
-    width: 140px;
-
-    height: 140px;
-
-    bottom: -80px;
-
-    left: -60px;
-
-    border-radius: 50%;
-
-    background:
-      rgba(
-        255,
-        255,
-        255,
-        .12
-      );
-
-    pointer-events: none;
-
-  }
-
-
-  /* ======================================
-     HOVER
-  ====================================== */
 
   &:hover {
 
     transform:
-      translateY(-9px)
-      scale(1.015);
+      translateY(-7px);
 
     box-shadow:
       0
-      22px
-      45px
+      14px
+      28px
       rgba(
         0,
         0,
         0,
-        .18
+        0.16
       );
 
   }
@@ -365,139 +302,69 @@ export const PostIt = styled.article`
   &:focus-visible {
 
     outline:
-      3px solid
-      #000000;
+      3px solid #000000;
 
     outline-offset: 4px;
 
   }
 
 
-  @media (max-width: 600px) {
+  @media (max-width: 500px) {
 
-    min-height: 280px;
+    min-height: 205px;
 
     padding:
-      26px
-      22px
+      25px 22px
       20px;
 
   }
-
 `;
 
 
-/* ==========================================
-   BADGE
-========================================== */
-
-export const PostItBadge = styled.span`
-
-  position: relative;
-
-  z-index: 2;
-
-  width: fit-content;
-
-  margin-bottom: 18px;
-
-  padding:
-    7px
-    13px;
-
-  border-radius: 50px;
-
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      .75
-    );
-
-  color:
-    #831614;
-
-  font-size: 10px;
-
-  font-weight: 900;
-
-  letter-spacing:
-    1px;
-
-  line-height: 1;
-
-`;
-
-
-/* ==========================================
-   TÍTULO
-========================================== */
+// =====================================================
+// CARD TITLE
+// IGUAL AO ADM
+// =====================================================
 
 export const PostItTitle = styled.h2`
-
-  position: relative;
-
-  z-index: 2;
-
   margin:
-    0
-    0
-    14px;
+    0 0 18px;
 
-  color:
-    #171717;
+  color: #222222;
 
   font-family:
     "Poppins",
     sans-serif;
 
-  font-size:
-    clamp(
-      1.25rem,
-      2vw,
-      1.5rem
-    );
+  font-size: 20px;
 
-  font-weight: 900;
+  font-weight: 600;
 
-  line-height: 1.25;
-
-  letter-spacing:
-    -.4px;
+  line-height: 1.35;
 
   word-break: break-word;
-
 `;
 
 
-/* ==========================================
-   MENSAGEM
-========================================== */
+// =====================================================
+// CARD MESSAGE
+// IGUAL AO ADM
+// =====================================================
 
 export const PostItMessage = styled.p`
-
-  position: relative;
-
-  z-index: 2;
-
   margin: 0;
 
-  color:
-    rgba(
-      20,
-      20,
-      20,
-      .72
-    );
+  color: #292929;
 
   font-family:
     "Poppins",
     sans-serif;
 
-  font-size: 15px;
+  font-size: 14px;
 
-  line-height: 1.7;
+  font-weight: 400;
+
+  line-height: 1.55;
 
   word-break: break-word;
 
@@ -511,122 +378,109 @@ export const PostItMessage = styled.p`
   -webkit-box-orient: vertical;
 
   overflow: hidden;
-
 `;
 
 
-/* ==========================================
-   FOOTER
-========================================== */
+// =====================================================
+// CARD FOOTER
+// IGUAL AO ADM
+// =====================================================
 
 export const PostItFooter = styled.div`
-
-  position: relative;
-
-  z-index: 2;
-
   margin-top: auto;
 
-  padding-top: 25px;
+  padding-top: 20px;
 
   display: flex;
+
+  flex-direction: column;
 
   align-items: center;
 
-  justify-content: space-between;
-
-  gap: 15px;
-
-  border-top:
-    1px solid
-    rgba(
-      0,
-      0,
-      0,
-      .15
-    );
-
+  gap: 7px;
 `;
 
 
-/* ==========================================
-   LER MAIS
-========================================== */
+// =====================================================
+// CLIQUE PARA VISUALIZAR
+// IGUAL AO ADM
+// =====================================================
 
 export const ReadMore = styled.span`
-
-  color:
-    #831614;
-
-  font-size: 12px;
-
-  font-weight: 800;
-
-  letter-spacing:
-    .2px;
-
-`;
-
-
-/* ==========================================
-   SETA
-========================================== */
-
-export const ReadMoreIcon = styled.span`
-
-  width: 34px;
-
-  height: 34px;
-
-  flex-shrink: 0;
-
-  display: flex;
+  display: inline-flex;
 
   align-items: center;
 
   justify-content: center;
 
-  border-radius: 50%;
+  width: fit-content;
+
+  min-height: 27px;
+
+  padding:
+    4px 13px;
+
+  box-sizing: border-box;
+
+  border-radius: 999px;
 
   background:
     rgba(
       255,
       255,
       255,
-      .75
+      0.45
     );
 
   color:
-    #831614;
-
-  font-size: 16px;
-
-  transition:
-    transform .3s
-    cubic-bezier(
-      .16,
-      1,
-      .3,
-      1
+    rgba(
+      0,
+      0,
+      0,
+      0.62
     );
 
+  font-family:
+    "Poppins",
+    sans-serif;
 
-  ${PostIt}:hover & {
+  font-size: 11px;
 
-    transform:
-      translateX(5px);
+  font-weight: 500;
 
-  }
+  line-height: 1.3;
 
+  white-space: nowrap;
 `;
 
 
-/* ==========================================
-   EMPTY STATE
-========================================== */
+// =====================================================
+// DATA
+// IGUAL AO ADM
+// =====================================================
+
+export const PostDate = styled.span`
+  display: block;
+
+  color: #555555;
+
+  font-family:
+    "Poppins",
+    sans-serif;
+
+  font-size: 11px;
+
+  font-weight: 500;
+
+  line-height: 1.4;
+`;
+
+
+// =====================================================
+// EMPTY STATE
+// =====================================================
 
 export const EmptyState = styled.div`
-
   grid-column:
     1 / -1;
 
@@ -653,12 +507,14 @@ export const EmptyState = styled.div`
   border-radius: 20px;
 
   background: #fafafa;
-
 `;
 
 
-export const EmptyIcon = styled.div`
+// =====================================================
+// EMPTY ICON
+// =====================================================
 
+export const EmptyIcon = styled.div`
   width: 70px;
 
   height: 70px;
@@ -680,12 +536,14 @@ export const EmptyIcon = styled.div`
     #d69e00;
 
   font-size: 30px;
-
 `;
 
 
-export const EmptyTitle = styled.h2`
+// =====================================================
+// EMPTY TITLE
+// =====================================================
 
+export const EmptyTitle = styled.h2`
   margin:
     0 0 8px;
 
@@ -694,12 +552,14 @@ export const EmptyTitle = styled.h2`
   font-size: 22px;
 
   font-weight: 600;
-
 `;
 
 
-export const EmptyText = styled.p`
+// =====================================================
+// EMPTY TEXT
+// =====================================================
 
+export const EmptyText = styled.p`
   max-width: 450px;
 
   margin: 0;
@@ -709,16 +569,14 @@ export const EmptyText = styled.p`
   font-size: 14px;
 
   line-height: 1.6;
-
 `;
 
 
-/* ==========================================
-   MODAL OVERLAY
-========================================== */
+// =====================================================
+// MODAL OVERLAY
+// =====================================================
 
 export const ModalOverlay = styled.div`
-
   position: fixed;
 
   inset: 0;
@@ -768,16 +626,14 @@ export const ModalOverlay = styled.div`
     padding: 12px;
 
   }
-
 `;
 
 
-/* ==========================================
-   MODAL COLORIDO
-========================================== */
+// =====================================================
+// MODAL
+// =====================================================
 
 export const FullPostIt = styled.div`
-
   --modal-color:
     ${({ $color }) =>
       $color || "#ffdb53"};
@@ -862,78 +718,9 @@ export const FullPostIt = styled.div`
     border-radius: 20px;
 
   }
-
 `;
-
-
-/* ==========================================
-   TOPO MODAL
-========================================== */
-
-export const FullPostItTop = styled.div`
-
-  min-height: 120px;
-
-  padding:
-    30px
-    40px;
-
-  display: flex;
-
-  align-items: center;
-
-
-  @media (max-width: 600px) {
-
-    min-height: 100px;
-
-    padding:
-      25px;
-
-  }
-
-`;
-
-
-/* ==========================================
-   BADGE MODAL
-========================================== */
-
-export const FullPostItBadge = styled.span`
-
-  padding:
-    8px
-    14px;
-
-  border-radius: 50px;
-
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      .75
-    );
-
-  color:
-    #831614;
-
-  font-size: 11px;
-
-  font-weight: 900;
-
-  letter-spacing:
-    1px;
-
-`;
-
-
-/* ==========================================
-   BOTÃO FECHAR
-========================================== */
 
 export const CloseButton = styled.button`
-
   position: absolute;
 
   top: 22px;
@@ -1103,16 +890,14 @@ export const CloseButton = styled.button`
     height: 38px;
 
   }
-
 `;
 
 
-/* ==========================================
-   CONTEÚDO MODAL
-========================================== */
+// =====================================================
+// CONTEÚDO MODAL
+// =====================================================
 
 export const FullPostItContent = styled.div`
-
   width:
     min(
       700px,
@@ -1141,16 +926,14 @@ export const FullPostItContent = styled.div`
       35px;
 
   }
-
 `;
 
 
-/* ==========================================
-   TÍTULO MODAL
-========================================== */
+// =====================================================
+// TÍTULO MODAL
+// =====================================================
 
 export const FullPostItTitle = styled.h2`
-
   margin:
     0
     0
@@ -1178,16 +961,14 @@ export const FullPostItTitle = styled.h2`
     -1.5px;
 
   word-break: break-word;
-
 `;
 
 
-/* ==========================================
-   MENSAGEM MODAL
-========================================== */
+// =====================================================
+// MENSAGEM MODAL
+// =====================================================
 
 export const FullPostItMessage = styled.p`
-
   margin: 0;
 
   color:
@@ -1214,5 +995,4 @@ export const FullPostItMessage = styled.p`
   white-space: pre-wrap;
 
   word-break: break-word;
-
 `;

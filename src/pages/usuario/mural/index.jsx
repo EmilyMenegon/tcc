@@ -5,7 +5,6 @@ import Layout from "../../../components/Layout";
 import {
   FiFileText,
   FiX,
-  FiArrowRight,
 } from "react-icons/fi";
 
 import {
@@ -17,12 +16,11 @@ import {
   Cards,
 
   PostIt,
-  PostItBadge,
   PostItTitle,
   PostItMessage,
   PostItFooter,
   ReadMore,
-  ReadMoreIcon,
+  PostDate,
 
   EmptyState,
   EmptyIcon,
@@ -31,8 +29,6 @@ import {
 
   ModalOverlay,
   FullPostIt,
-  FullPostItTop,
-  FullPostItBadge,
   FullPostItContent,
   FullPostItTitle,
   FullPostItMessage,
@@ -51,9 +47,9 @@ export default function Mural() {
     useState(null);
 
 
-  /* ==========================================
-     POSIÇÃO DO MOUSE NO BOTÃO
-  ========================================== */
+  // =====================================================
+  // POSIÇÃO DO MOUSE
+  // =====================================================
 
   const handleButtonMouseMove = (e) => {
 
@@ -75,9 +71,9 @@ export default function Mural() {
   };
 
 
-  /* ==========================================
-     CARREGAR POSTS
-  ========================================== */
+  // =====================================================
+  // CARREGAR POSTS
+  // =====================================================
 
   function carregarPosts() {
 
@@ -134,9 +130,9 @@ export default function Mural() {
   }
 
 
-  /* ==========================================
-     CARREGAMENTO
-  ========================================== */
+  // =====================================================
+  // CARREGAMENTO
+  // =====================================================
 
   useEffect(() => {
 
@@ -157,9 +153,9 @@ export default function Mural() {
   }, []);
 
 
-  /* ==========================================
-     ABRIR
-  ========================================== */
+  // =====================================================
+  // ABRIR POST
+  // =====================================================
 
   function abrirPost(post) {
 
@@ -168,9 +164,9 @@ export default function Mural() {
   }
 
 
-  /* ==========================================
-     FECHAR
-  ========================================== */
+  // =====================================================
+  // FECHAR POST
+  // =====================================================
 
   function fecharPost() {
 
@@ -179,9 +175,9 @@ export default function Mural() {
   }
 
 
-  /* ==========================================
-     ESC
-  ========================================== */
+  // =====================================================
+  // ESC
+  // =====================================================
 
   useEffect(() => {
 
@@ -214,6 +210,38 @@ export default function Mural() {
   }, []);
 
 
+  // =====================================================
+  // FORMATAR DATA
+  // =====================================================
+
+  const formatarData = (data) => {
+
+    if (!data) {
+      return "";
+    }
+
+    const dataObj = new Date(data);
+
+    if (Number.isNaN(dataObj.getTime())) {
+      return "";
+    }
+
+    return dataObj.toLocaleDateString(
+      "pt-BR",
+      {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      }
+    );
+
+  };
+
+
+  // =====================================================
+  // RENDER
+  // =====================================================
+
   return (
 
     <Page>
@@ -222,10 +250,7 @@ export default function Mural() {
 
       <Content>
 
-        {/* ==================================
-            HEADER
-            NÃO ALTERADO
-        ================================== */}
+        {/* HEADER */}
 
         <Header>
 
@@ -235,15 +260,15 @@ export default function Mural() {
 
           <Subtitle>
             Confira os avisos e mensagens
-            publicados pela organização.
+            sobre o evento.
           </Subtitle>
 
         </Header>
 
 
-        {/* ==================================
+        {/* =================================================
             CARDS
-        ================================== */}
+        ================================================= */}
 
         <Cards>
 
@@ -273,15 +298,14 @@ export default function Mural() {
 
                 <PostIt
                   key={
-                    post.id || index
+                    post.id ||
+                    index
                   }
 
                   $color={
                     post.cor ||
-                    "#ffdb53"
+                    "#ffcf70"
                   }
-
-                  $index={index}
 
                   onClick={() =>
                     abrirPost(post)
@@ -305,14 +329,8 @@ export default function Mural() {
                     }
 
                   }}
+
                 >
-
-                  {/* BADGE */}
-
-                  <PostItBadge>
-                    AVISO
-                  </PostItBadge>
-
 
                   {/* TÍTULO */}
 
@@ -336,17 +354,39 @@ export default function Mural() {
                   </PostItMessage>
 
 
-                  {/* FOOTER */}
+                  {/* RODAPÉ */}
 
                   <PostItFooter>
 
                     <ReadMore>
-                      Ler aviso completo
+                      Clique para visualizar
                     </ReadMore>
 
-                    <ReadMoreIcon>
-                      <FiArrowRight />
-                    </ReadMoreIcon>
+                    {formatarData(
+                      post.data_publicacao ||
+                      post.dataPublicacao ||
+                      post.created_at ||
+                      post.createdAt ||
+                      post.data_criacao ||
+                      post.dataCriacao
+                    ) && (
+
+                      <PostDate>
+
+                        Publicado em{" "}
+
+                        {formatarData(
+                          post.data_publicacao ||
+                          post.dataPublicacao ||
+                          post.created_at ||
+                          post.createdAt ||
+                          post.data_criacao ||
+                          post.dataCriacao
+                        )}
+
+                      </PostDate>
+
+                    )}
 
                   </PostItFooter>
 
@@ -362,9 +402,9 @@ export default function Mural() {
       </Content>
 
 
-      {/* ==================================
+      {/* =================================================
           MODAL
-      ================================== */}
+      ================================================= */}
 
       {postSelecionado && (
 
@@ -388,30 +428,23 @@ export default function Mural() {
           <FullPostIt
             $color={
               postSelecionado.cor ||
-              "#ffdb53"
+              "#ffcf70"
             }
           >
 
-            {/* TOPO */}
-
-            <FullPostItTop>
-
-              <FullPostItBadge>
-                AVISO
-              </FullPostItBadge>
-
-            </FullPostItTop>
-
-
-            {/* FECHAR */}
-
             <CloseButton
               type="button"
-              onClick={fecharPost}
+
+              onClick={
+                fecharPost
+              }
+
               onMouseMove={
                 handleButtonMouseMove
               }
+
               aria-label="Fechar mensagem"
+
             >
 
               <span className="buttonContent">
@@ -422,8 +455,6 @@ export default function Mural() {
 
             </CloseButton>
 
-
-            {/* CONTEÚDO */}
 
             <FullPostItContent>
 

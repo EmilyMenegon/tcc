@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import Layoutadm from "../../../components/layoutadm";
 import { getAuthHeaders } from "../../../utils/auth";
@@ -69,7 +68,7 @@ import {
 } from "./style";
 
 export default function Inscricaoadm() {
-  const [turno, setTurno] = useState("Manhã");
+  const [turno, setTurno] = useState("Todos");
   const [inscricoes, setInscricoes] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
@@ -218,9 +217,20 @@ export default function Inscricaoadm() {
     setConfirmacaoExclusao("");
   }
 
-  const inscricoesFiltradas = inscricoes.filter(
-    (inscricao) => inscricao.turno === turno
-  );
+  const inscricoesFiltradas =
+    turno === "Todos"
+      ? [...inscricoes].sort((a, b) =>
+          (a.nome_poeta || "").localeCompare(
+            b.nome_poeta || "",
+            "pt-BR",
+            { sensitivity: "base" }
+          )
+        )
+      : inscricoes.filter(
+          (inscricao) => inscricao.turno === turno
+        );
+
+  const totalTodos = inscricoes.length;
 
   const totalManha = inscricoes.filter(
     (item) => item.turno === "Manhã"
@@ -265,6 +275,10 @@ export default function Inscricaoadm() {
 
         <FilterContainer>
           {[
+            {
+              nome: "Todos",
+              quantidade: totalTodos,
+            },
             {
               nome: "Manhã",
               quantidade: totalManha,
@@ -409,8 +423,9 @@ export default function Inscricaoadm() {
                           </EmptyTitle>
 
                           <EmptyText>
-                            Não existem alunos inscritos no
-                            turno da {turno.toLowerCase()}.
+                            {turno === "Todos"
+                              ? "Não existem alunos inscritos."
+                              : `Não existem alunos inscritos no turno da ${turno.toLowerCase()}.`}
                           </EmptyText>
                         </EmptyState>
                       </td>
@@ -658,4 +673,3 @@ export default function Inscricaoadm() {
     </Page>
   );
 }
-

@@ -108,7 +108,7 @@ export default function Home() {
 
             <BigText>
 
-              Bem-Vindo
+              Bem-Vindo(a)
 
               <br />
 
@@ -123,12 +123,8 @@ export default function Home() {
 
               Estão abertas as inscrições para o
               <strong>
-                {" "}Slam Interescolar!
+                {" "}Slam Interescolar Etecamp!
               </strong>
-
-              <br />
-
-              Prepare sua poesia, e venha fazer parte desse encontro
 
             </Description>
 
