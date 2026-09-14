@@ -1,10 +1,84 @@
+import styled, { css } from "styled-components";
 
-import styled from "styled-components";
+
+/* =====================================================
+   EFEITO DE BOTÃO (bolinha que cresce a partir do cursor)
+===================================================== */
+
+const ButtonEffect = css`
+  position: relative;
+
+  overflow: hidden;
+
+  isolation: isolate;
+
+  --mouse-x: 50%;
+
+  --mouse-y: 50%;
+
+  &::before {
+    content: "";
+
+    position: absolute;
+
+    left: var(--mouse-x);
+
+    top: var(--mouse-y);
+
+    width: 35px;
+
+    height: 35px;
+
+    border-radius: 50%;
+
+    background: #ffdb53;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    transition:
+      transform 0.5s
+      cubic-bezier(
+        0.16,
+        1,
+        0.3,
+        1
+      );
+
+    z-index: 0;
+
+    pointer-events: none;
+  }
+
+  &:hover::before {
+    transform:
+      translate(-50%, -50%)
+      scale(18);
+  }
+
+  .buttonContent {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    width: 100%;
+
+    height: 100%;
+  }
+`;
 
 
 /* =====================================================
    PAGE
-   MESMAS MEDIDAS DA GALERIA
 ===================================================== */
 
 export const Page = styled.div`
@@ -26,7 +100,6 @@ export const Page = styled.div`
 
 /* =====================================================
    CONTENT
-   IGUAL À GALERIA
 ===================================================== */
 
 export const Content = styled.main`
@@ -64,7 +137,6 @@ export const Content = styled.main`
 
 /* =====================================================
    HEADER
-   IGUAL À GALERIA
 ===================================================== */
 
 export const Header = styled.header`
@@ -104,7 +176,7 @@ export const TitleArea = styled.div`
 `;
 
 export const Title = styled.h1`
-  margin: 0;
+ margin: 0;
 
   color: #831614;
 
@@ -136,8 +208,12 @@ export const Title = styled.h1`
   }
 `;
 
+/* =====================================================
+   SUBTITLE
+===================================================== */
+
 export const Subtitle = styled.p`
-  max-width: 700px;
+  max-width: 600px;
 
   margin:
     10px 0 0;
@@ -146,24 +222,25 @@ export const Subtitle = styled.p`
 
   font-size:
     clamp(
-      .95rem,
-      1.2vw,
-      1.08rem
+      .85rem,
+      1.5vw,
+      1rem
     );
 
-  line-height: 1.7;
+  line-height: 1.5;
 
 
-  @media (max-width: 768px) {
-
+  @media (max-width: 600px) {
     width: 90%;
 
-    max-width: 90%;
-
-    font-size: .95rem;
-
+    font-size: 14px;
   }
 `;
+
+
+/* =====================================================
+   CARDS
+===================================================== */
 
 export const Cards = styled.section`
   width: 100%;
@@ -216,7 +293,6 @@ export const Cards = styled.section`
 
 /* =====================================================
    EVENT CARD
-   DIMENSÕES ALINHADAS AO PADRÃO DA GALERIA
 ===================================================== */
 
 export const EventCard = styled.article`
@@ -280,57 +356,51 @@ export const EventCard = styled.article`
 
 /* =====================================================
    EVENT IMAGE
-   PADRÃO PROPORCIONAL DA GALERIA
+   (formato de altura fixa)
 ===================================================== */
 
 export const EventImage = styled.div`
-
   width: 100%;
 
-  height: auto;
+  height: 145px;
 
-  aspect-ratio: 4 / 3;
+  flex-shrink: 0;
 
   overflow: hidden;
 
   background: #eeeeee;
 
-  flex-shrink: 0;
-
 
   img {
-
     width: 100%;
 
     height: 100%;
 
-    object-fit: cover;
-
     display: block;
+
+    object-fit: cover;
 
     transition:
       transform .5s ease;
-
   }
 
 
-  ${'${EventCard}'}:hover & img {
-
+  ${EventCard}:hover & img {
     transform:
       scale(1.07);
-
   }
 
+
+  @media (max-width: 600px) {
+    height: 125px;
+  }
 `;
 
 
 export const EventImagePlaceholder = styled.div`
-
   width: 100%;
 
-  height: auto;
-
-  aspect-ratio: 4 / 3;
+  height: 145px;
 
   flex-shrink: 0;
 
@@ -344,9 +414,15 @@ export const EventImagePlaceholder = styled.div`
 
   color: #b5b5b5;
 
-  font-size: 45px;
+  font-size: 40px;
 
+
+  @media (max-width: 600px) {
+    height: 125px;
+  }
 `;
+
+
 /* =====================================================
    EVENT CONTENT
 ===================================================== */
@@ -491,6 +567,8 @@ export const EventFooter = styled.div`
 
 
 export const AccessButton = styled.button`
+  ${ButtonEffect}
+
   flex: 1;
 
   min-height: 38px;
@@ -555,7 +633,6 @@ export const Actions = styled.div`
 
 /* =====================================================
    EMPTY
-   IGUAL À GALERIA
 ===================================================== */
 
 export const EmptyState = styled.div`
@@ -760,7 +837,6 @@ export const ModalOverlay = styled.div`
 
 /* =====================================================
    MODAL
-   MANTIDO, APENAS ORGANIZADO
 ===================================================== */
 
 export const Modal = styled.div`
@@ -827,6 +903,8 @@ export const ModalTitle = styled.h2`
 
 
 export const CloseButton = styled.button`
+  ${ButtonEffect}
+
   width: 40px;
 
   height: 40px;
@@ -850,10 +928,19 @@ export const CloseButton = styled.button`
   transition: .2s;
 
 
+  svg {
+    transition: transform .3s ease;
+  }
+
+
   &:hover {
     background: #000000;
 
-    color: #f9be06;
+    color: #111111;
+  }
+
+  &:hover svg {
+    transform: rotate(90deg);
   }
 `;
 
@@ -1379,8 +1466,7 @@ export const ConfirmButton = styled.button`
 
 
 /* =====================================================
-   RANKING
-   MANTIDO INTEIRO
+   RANKING (usado apenas na tela do admin)
 ===================================================== */
 
 export const RankingSection = styled.section`
@@ -1436,10 +1522,6 @@ export const RankingDescription = styled.p`
   line-height: 1.5;
 `;
 
-
-/* =====================================================
-   PLANILHA
-===================================================== */
 
 export const RankingTableWrapper = styled.div`
   width: 100%;
@@ -1594,10 +1676,6 @@ export const RankingTable = styled.table`
 `;
 
 
-/* =====================================================
-   LINHA DO RANKING
-===================================================== */
-
 export const RankingRow = styled.tr`
   background:
     ${({ $primeiro }) =>
@@ -1619,10 +1697,6 @@ export const RankingRow = styled.tr`
     `}
 `;
 
-
-/* =====================================================
-   POSIÇÃO
-===================================================== */
 
 export const Position = styled.div`
   min-width: 50px;
@@ -1650,10 +1724,6 @@ export const Position = styled.div`
 `;
 
 
-/* =====================================================
-   NOME
-===================================================== */
-
 export const ParticipantName = styled.span`
   display: block;
 
@@ -1672,10 +1742,6 @@ export const ParticipantName = styled.span`
   font-weight: 600;
 `;
 
-
-/* =====================================================
-   NOTA
-===================================================== */
 
 export const Score = styled.span`
   display: inline-flex;
@@ -1703,10 +1769,6 @@ export const Score = styled.span`
 `;
 
 
-/* =====================================================
-   MÉDIA
-===================================================== */
-
 export const Average = styled.span`
   color: #222222;
 
@@ -1715,10 +1777,6 @@ export const Average = styled.span`
   font-size: 12px;
 `;
 
-
-/* =====================================================
-   PENALIDADE
-===================================================== */
 
 export const Penalty = styled.span`
   color:
@@ -1732,10 +1790,6 @@ export const Penalty = styled.span`
   font-size: 12px;
 `;
 
-
-/* =====================================================
-   TEMPO
-===================================================== */
 
 export const Time = styled.span`
   display: inline-flex;
@@ -1760,10 +1814,6 @@ export const Time = styled.span`
   }
 `;
 
-
-/* =====================================================
-   NOTA FINAL
-===================================================== */
 
 export const FinalScore = styled.span`
   display: inline-flex;
@@ -1799,10 +1849,6 @@ export const FinalScore = styled.span`
     );
 `;
 
-
-/* =====================================================
-   RANKING VAZIO
-===================================================== */
 
 export const RankingEmpty = styled.div`
   min-height: 180px;
@@ -1910,4 +1956,21 @@ export const PoetDetails = styled.span`
   color: #888888;
   font-size: 11px;
   text-align: right;
+`;
+
+
+/* =====================================================
+   MENSAGEM DE ERRO (SEM ESTILO INLINE)
+===================================================== */
+
+export const ErrorText = styled.p`
+  width: 100%;
+
+  margin: 0 0 20px;
+
+  color: #c62828;
+
+  font-size: 14px;
+
+  text-align: center;
 `;

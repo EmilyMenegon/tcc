@@ -1,6 +1,21 @@
 import styled from "styled-components";
 
 /* ============================================================
+   PALETA (igual ao Login)
+============================================================ */
+
+const colors = {
+  yellow: "#FFDB53",
+  yellowStrong: "#F9BE06",
+  cream: "#FFF7D0",
+  input: "#FFFDF0",
+  red: "#831614",
+  wine: "#571111",
+  black: "#010000",
+  white: "#fff",
+};
+
+/* ============================================================
    PAGE
 ============================================================ */
 
@@ -12,7 +27,7 @@ export const Page = styled.div`
   flex-direction: column;
   align-items: center;
 
-  background: #ffffff;
+  background: ${colors.white};
 
   color: #111;
 
@@ -73,7 +88,7 @@ export const TitleArea = styled.div`
 export const Title = styled.h1`
   margin: 0 0 18px;
 
-  color: #831614;
+  color: ${colors.red};
 
   font-size:
     clamp(
@@ -100,6 +115,10 @@ export const Title = styled.h1`
   }
 `;
 
+/* ============================================================
+   CONTAINER (igual ao Card do Login)
+============================================================ */
+
 export const Container = styled.div`
   position: relative;
 
@@ -115,13 +134,13 @@ export const Container = styled.div`
 
   overflow: hidden;
 
-  border-radius: 28px;
+  border-radius: 32px;
 
-  background: #fff;
+  background: ${colors.white};
 
   box-shadow:
-    0 35px 90px rgba(0, 0, 0, 0.13),
-    0 10px 30px rgba(0, 0, 0, 0.06);
+    0 30px 80px rgba(0, 0, 0, 0.18),
+    0 10px 35px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 900px) {
     width: 93%;
@@ -136,18 +155,18 @@ export const Container = styled.div`
 
     margin: 8px auto 35px;
 
-    border-radius: 23px;
+    border-radius: 26px;
   }
 
   @media (max-width: 480px) {
     width: 94%;
 
-    border-radius: 19px;
+    border-radius: 22px;
   }
 `;
 
 /* ============================================================
-   LEFT SIDE
+   LEFT SIDE (igual ao SidePanel do Login)
 ============================================================ */
 
 export const LeftSide = styled.div`
@@ -162,20 +181,61 @@ export const LeftSide = styled.div`
   display: flex;
 
   justify-content: center;
+  align-items: center;
 
-  background: linear-gradient(
-    145deg,
-    #ffdb53 0%,
-    #ffd442 100%
-  );
+  background: ${colors.wine};
 
-  color: #831614;
+  color: ${colors.white};
 
   overflow: hidden;
 
-  /*
-    Círculos decorativos removidos.
-  */
+  isolation: isolate;
+
+  /* Formas orgânicas, iguais ao painel do Login */
+
+  &::before {
+    content: "";
+
+    position: absolute;
+
+    width: 280px;
+    height: 90px;
+
+    right: -105px;
+    top: 65px;
+
+    background: ${colors.red};
+
+    opacity: 0.65;
+
+    transform: rotate(-25deg);
+
+    border-radius: 50%;
+
+    z-index: -2;
+  }
+
+  &::after {
+    content: "";
+
+    position: absolute;
+
+    width: 130px;
+    height: 7px;
+
+    left: -25px;
+    bottom: 55px;
+
+    background: ${colors.yellow};
+
+    opacity: 0.35;
+
+    transform: rotate(-25deg);
+
+    border-radius: 10px;
+
+    z-index: -2;
+  }
 
   .left-content {
     position: relative;
@@ -192,7 +252,7 @@ export const LeftSide = styled.div`
   .contact-description {
     margin: 0 0 32px;
 
-    color: rgba(131, 22, 20, 0.72);
+    color: ${colors.cream};
 
     font-size: 0.76rem;
 
@@ -231,21 +291,15 @@ export const LeftSide = styled.div`
 `;
 
 /* ============================================================
-   SECTION TITLE
+   SECTION TITLE (igual ao PanelTitle do Login)
 ============================================================ */
 
 export const SectionTitle = styled.h2`
-  /*
-    Mantemos exatamente o mesmo tamanho,
-    altura de linha e margem do título
-    "Dados do poeta".
-  */
-
   margin: 0 0 26px;
 
   width: 100%;
 
-  color: #831614;
+  color: ${colors.yellow};
 
   font-size: clamp(
     1.35rem,
@@ -313,17 +367,11 @@ export const InfoText = styled.div`
 
   padding: 11px 13px;
 
-  border: 1px solid
-    rgba(131, 22, 20, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.14);
 
   border-radius: 14px;
 
-  background: rgba(
-    255,
-    255,
-    255,
-    0.16
-  );
+  background: rgba(255, 255, 255, 0.06);
 
   transition:
     transform 0.25s ease,
@@ -343,18 +391,13 @@ export const InfoText = styled.div`
 
     border-radius: 12px;
 
-    background: rgba(
-      255,
-      255,
-      255,
-      0.38
-    );
+    background: rgba(255, 255, 255, 0.12);
 
     svg {
       width: 21px;
       height: 21px;
 
-      color: #831614;
+      color: ${colors.yellow};
     }
   }
 
@@ -367,7 +410,7 @@ export const InfoText = styled.div`
   }
 
   strong {
-    color: #831614;
+    color: ${colors.yellow};
 
     font-size: 0.82rem;
 
@@ -377,12 +420,9 @@ export const InfoText = styled.div`
   p {
     margin: 3px 0 0;
 
-    color: rgba(
-      131,
-      22,
-      20,
-      0.65
-    );
+    color: ${colors.cream};
+
+    opacity: 0.85;
 
     font-size: 0.7rem;
 
@@ -394,19 +434,9 @@ export const InfoText = styled.div`
   &:hover {
     transform: translateY(-2px);
 
-    border-color: rgba(
-      131,
-      22,
-      20,
-      0.18
-    );
+    border-color: rgba(255, 255, 255, 0.24);
 
-    background: rgba(
-      255,
-      255,
-      255,
-      0.3
-    );
+    background: rgba(255, 255, 255, 0.1);
   }
 
   @media (max-width: 768px) {
@@ -454,7 +484,7 @@ export const InfoText = styled.div`
 `;
 
 /* ============================================================
-   RIGHT SIDE
+   RIGHT SIDE (igual ao FormSide do Login)
 ============================================================ */
 
 export const RightSide = styled.div`
@@ -470,7 +500,7 @@ export const RightSide = styled.div`
 
   padding: 52px 70px;
 
-  background: #fff;
+  background: ${colors.white};
 
   .form-area {
     width: 100%;
@@ -478,18 +508,13 @@ export const RightSide = styled.div`
     max-width: 620px;
   }
 
-  /*
-    O título começa exatamente no mesmo
-    ponto vertical que "Contatos".
-  */
-
   .form-header {
     margin: 0 0 26px;
 
     h2 {
       margin: 0;
 
-      color: #831614;
+      color: ${colors.red};
 
       font-size: clamp(
         1.35rem,
@@ -543,9 +568,9 @@ export const RightSide = styled.div`
     width: 30px;
     height: 30px;
 
-    border: 3px solid #fff0a6;
+    border: 3px solid ${colors.cream};
 
-    border-top-color: #831614;
+    border-top-color: ${colors.red};
 
     border-radius: 50%;
 
@@ -636,39 +661,17 @@ export const Form = styled.form`
   .form-message.error {
     color: #a51d1d;
 
-    background: rgba(
-      198,
-      40,
-      40,
-      0.07
-    );
+    background: rgba(198, 40, 40, 0.07);
 
-    border: 1px solid
-      rgba(
-        198,
-        40,
-        40,
-        0.12
-      );
+    border: 1px solid rgba(198, 40, 40, 0.12);
   }
 
   .form-message.success {
     color: #2e7d32;
 
-    background: rgba(
-      46,
-      125,
-      50,
-      0.07
-    );
+    background: rgba(46, 125, 50, 0.07);
 
-    border: 1px solid
-      rgba(
-        46,
-        125,
-        50,
-        0.12
-      );
+    border: 1px solid rgba(46, 125, 50, 0.12);
   }
 
   @keyframes messageAppear {
@@ -756,7 +759,7 @@ export const InputLabel = styled.label`
 `;
 
 /* ============================================================
-   INPUT
+   INPUT (igual ao Input do Login)
 ============================================================ */
 
 export const Input = styled.input`
@@ -767,13 +770,13 @@ export const Input = styled.input`
 
   padding: 27px 24px 8px;
 
-  border: 2px solid #ffdb53;
+  border: 2px solid ${colors.yellow};
 
   border-radius: 16px;
 
   outline: none;
 
-  background: #fff7d0;
+  background: ${colors.input};
 
   color: #111;
 
@@ -793,22 +796,18 @@ export const Input = styled.input`
   }
 
   &:hover {
-    background: #fff5c2;
+    background: #fffaf0;
+
+    border-color: ${colors.yellowStrong};
   }
 
   &:focus {
-    border-color: #f9be06;
+    border-color: ${colors.yellowStrong};
 
-    background: #fff5c2;
+    background: #fffbe6;
 
     box-shadow:
-      0 7px 22px
-        rgba(
-          249,
-          190,
-          6,
-          0.11
-        );
+      0 7px 22px rgba(249, 190, 6, 0.11);
   }
 
   @media (max-width: 768px) {
@@ -892,7 +891,7 @@ export const SelectLabel = styled.label`
 `;
 
 /* ============================================================
-   SELECT
+   SELECT (igual ao Input do Login)
 ============================================================ */
 
 export const Select = styled.select`
@@ -903,13 +902,13 @@ export const Select = styled.select`
 
   padding: 27px 42px 8px 24px;
 
-  border: 2px solid #ffdb53;
+  border: 2px solid ${colors.yellow};
 
   border-radius: 16px;
 
   outline: none;
 
-  background-color: #fff7d0;
+  background-color: ${colors.input};
 
   color: #111;
 
@@ -929,11 +928,11 @@ export const Select = styled.select`
     linear-gradient(
       45deg,
       transparent 50%,
-      #831614 50%
+      ${colors.red} 50%
     ),
     linear-gradient(
       135deg,
-      #831614 50%,
+      ${colors.red} 50%,
       transparent 50%
     );
 
@@ -953,22 +952,18 @@ export const Select = styled.select`
     box-shadow 0.25s ease;
 
   &:hover {
-    background-color: #fff5c2;
+    background-color: #fffaf0;
+
+    border-color: ${colors.yellowStrong};
   }
 
   &:focus {
-    border-color: #f9be06;
+    border-color: ${colors.yellowStrong};
 
-    background-color: #fff5c2;
+    background-color: #fffbe6;
 
     box-shadow:
-      0 7px 22px
-        rgba(
-          249,
-          190,
-          6,
-          0.11
-        );
+      0 7px 22px rgba(249, 190, 6, 0.11);
   }
 
   option {
@@ -1007,11 +1002,7 @@ export const Select = styled.select`
 `;
 
 /* ============================================================
-   BUTTON
-============================================================ */
-
-/* ============================================================
-   BUTTON
+   BUTTON (igual ao Button do Login)
 ============================================================ */
 
 export const Button = styled.button`
@@ -1030,14 +1021,13 @@ export const Button = styled.button`
   border: 0;
   border-radius: 17px;
 
-  background: #ffdb53;
+  background: ${colors.yellow};
 
-  color: #000;
+  color: ${colors.black};
 
   font-family: inherit;
 
   font-size: 1rem;
-
   font-weight: 700;
 
   cursor: pointer;
@@ -1050,12 +1040,6 @@ export const Button = styled.button`
     color 0.3s ease,
     transform 0.25s ease,
     box-shadow 0.3s ease;
-
-  /*
-   * ==========================================================
-   * CÍRCULO
-   * ==========================================================
-   */
 
   &::before {
     content: "";
@@ -1070,7 +1054,7 @@ export const Button = styled.button`
 
     border-radius: 50%;
 
-    background: #831614;
+    background: ${colors.red};
 
     pointer-events: none;
 
@@ -1080,27 +1064,10 @@ export const Button = styled.button`
       translate(-50%, -50%)
       scale(0);
 
-    /*
-     * A posição acompanha o mouse
-     * instantaneamente.
-     *
-     * A escala é animada.
-     */
     transition:
       transform 0.6s
-      cubic-bezier(
-        0.16,
-        1,
-        0.3,
-        1
-      );
+      cubic-bezier(0.16, 1, 0.3, 1);
   }
-
-  /*
-   * ==========================================================
-   * ENTRANDO / DENTRO DO BOTÃO
-   * ==========================================================
-   */
 
   &.button-hovering::before {
     transform:
@@ -1108,30 +1075,11 @@ export const Button = styled.button`
       scale(18);
   }
 
-  /*
-   * ==========================================================
-   * SAINDO DO BOTÃO
-   * ==========================================================
-   *
-   * IMPORTANTE:
-   *
-   * Não mudamos --mouse-x nem --mouse-y.
-   *
-   * Portanto o círculo continua exatamente
-   * no último ponto em que o mouse estava.
-   */
-
   &.button-leaving::before {
     transform:
       translate(-50%, -50%)
       scale(0);
   }
-
-  /*
-   * ==========================================================
-   * TEXTO
-   * ==========================================================
-   */
 
   .button-content {
     position: relative;
@@ -1141,7 +1089,6 @@ export const Button = styled.button`
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     color: inherit;
@@ -1149,44 +1096,20 @@ export const Button = styled.button`
     pointer-events: none;
   }
 
-  /*
-   * ==========================================================
-   * HOVER
-   * ==========================================================
-   */
-
   &:hover {
-    color: #fff;
+    color: ${colors.white};
 
     transform: translateY(-3px);
 
     box-shadow:
-      0 12px 28px
-      rgba(
-        0,
-        0,
-        0,
-        0.16
-      );
+      0 12px 28px rgba(0, 0, 0, 0.16);
   }
-
-  /*
-   * ==========================================================
-   * ACTIVE
-   * ==========================================================
-   */
 
   &:active {
     transform:
       translateY(1px)
       scale(0.98);
   }
-
-  /*
-   * ==========================================================
-   * RESPONSIVO
-   * ==========================================================
-   */
 
   @media (max-width: 768px) {
     height: 54px;
@@ -1205,7 +1128,6 @@ export const Button = styled.button`
   }
 `;
 
-
 /* ============================================================
    ALREADY BOX
 ============================================================ */
@@ -1223,26 +1145,14 @@ export const AlreadyBox = styled.div`
 
   padding: 35px 40px;
 
-  border: 1px solid
-    rgba(
-      255,
-      219,
-      83,
-      0.8
-    );
+  border: 1px solid rgba(255, 219, 83, 0.8);
 
   border-radius: 22px;
 
   background: #fff;
 
   box-shadow:
-    0 15px 45px
-      rgba(
-        0,
-        0,
-        0,
-        0.06
-      );
+    0 15px 45px rgba(0, 0, 0, 0.06);
 
   .success-icon {
     width: 64px;
@@ -1257,13 +1167,13 @@ export const AlreadyBox = styled.div`
 
     border-radius: 50%;
 
-    background: #fff7d0;
+    background: ${colors.cream};
 
     svg {
       width: 38px;
       height: 38px;
 
-      color: #f9be06;
+      color: ${colors.yellowStrong};
     }
   }
 
@@ -1295,7 +1205,7 @@ export const AlreadyBox = styled.div`
 export const AlreadyTitle = styled.h3`
   margin: 0;
 
-  color: #831614;
+  color: ${colors.red};
 
   font-size: clamp(
     1.1rem,
@@ -1336,22 +1246,15 @@ export const AlreadyText = styled.p`
 
 export const AlreadyDetails = styled.div`
   width: 100%;
-
   max-width: 400px;
 
   padding: 17px 20px;
 
-  border: 1px solid
-    rgba(
-      255,
-      219,
-      83,
-      0.65
-    );
+  border: 1px solid rgba(255, 219, 83, 0.65);
 
   border-radius: 15px;
 
-  background: #fff7d0;
+  background: ${colors.cream};
 
   .detail-header {
     display: flex;
@@ -1367,16 +1270,11 @@ export const AlreadyDetails = styled.div`
 
       height: 1px;
 
-      background: rgba(
-        131,
-        22,
-        20,
-        0.14
-      );
+      background: rgba(131, 22, 20, 0.14);
     }
 
     strong {
-      color: #831614;
+      color: ${colors.red};
 
       font-size: 0.66rem;
 
@@ -1397,13 +1295,7 @@ export const AlreadyDetails = styled.div`
 
     padding: 8px 0;
 
-    border-bottom: 1px solid
-      rgba(
-        131,
-        22,
-        20,
-        0.07
-      );
+    border-bottom: 1px solid rgba(131, 22, 20, 0.07);
 
     &:last-child {
       border-bottom: 0;
@@ -1466,12 +1358,7 @@ export const ModalOverlay = styled.div`
 
   padding: 20px;
 
-  background: rgba(
-    17,
-    17,
-    17,
-    0.55
-  );
+  background: rgba(17, 17, 17, 0.55);
 
   backdrop-filter: blur(6px);
 
@@ -1510,23 +1397,12 @@ export const Modal = styled.div`
   text-align: center;
 
   box-shadow:
-    0 30px 80px
-      rgba(
-        0,
-        0,
-        0,
-        0.25
-      );
+    0 30px 80px rgba(0, 0, 0, 0.25);
 
   animation:
     modalAppear
     0.3s
-    cubic-bezier(
-      0.16,
-      1,
-      0.3,
-      1
-    );
+    cubic-bezier(0.16, 1, 0.3, 1);
 
   .modal-icon {
     width: 54px;
@@ -1541,7 +1417,7 @@ export const Modal = styled.div`
 
     border-radius: 50%;
 
-    background: #fff7d0;
+    background: ${colors.cream};
 
     span {
       width: 28px;
@@ -1554,9 +1430,9 @@ export const Modal = styled.div`
 
       border-radius: 50%;
 
-      background: #ffdb53;
+      background: ${colors.yellow};
 
-      color: #831614;
+      color: ${colors.red};
 
       font-size: 1rem;
 
@@ -1567,7 +1443,7 @@ export const Modal = styled.div`
   h3 {
     margin: 0 0 8px;
 
-    color: #831614;
+    color: ${colors.red};
 
     font-size: 1.4rem;
 
@@ -1741,7 +1617,7 @@ export const ConfirmButton = styled.button`
 
   border-radius: 12px;
 
-  background: #831614;
+  background: ${colors.red};
 
   color: #fff;
 
@@ -1759,18 +1635,12 @@ export const ConfirmButton = styled.button`
     box-shadow 0.2s ease;
 
   &:hover {
-    background: #68110f;
+    background: ${colors.wine};
 
     transform: translateY(-2px);
 
     box-shadow:
-      0 9px 20px
-        rgba(
-          131,
-          22,
-          20,
-          0.2
-        );
+      0 9px 20px rgba(131, 22, 20, 0.2);
   }
 
   &:active {

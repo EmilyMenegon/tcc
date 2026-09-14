@@ -100,6 +100,23 @@ export default function EventosUsuario() {
 
 
   // ==========================================
+  // EFEITO DO MOUSE NOS BOTÕES (acompanha o cursor pra animação)
+  // ==========================================
+
+  function handleButtonMouseMove(event) {
+
+    const button = event.currentTarget;
+    const rect = button.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    button.style.setProperty("--mouse-x", `${x}px`);
+    button.style.setProperty("--mouse-y", `${y}px`);
+
+  }
+
+
+  // ==========================================
   // FORMATAR DATA
   // ==========================================
 
@@ -345,6 +362,7 @@ export default function EventosUsuario() {
 
                     <AccessButton
                       type="button"
+                      onPointerMove={handleButtonMouseMove}
                       onClick={(event) => {
 
                         event.stopPropagation();
@@ -353,7 +371,11 @@ export default function EventosUsuario() {
 
                       }}
                     >
-                      Ver evento
+
+                      <span className="buttonContent">
+                        Ver evento
+                      </span>
+
                     </AccessButton>
 
                   </EventFooter>
@@ -404,10 +426,13 @@ export default function EventosUsuario() {
               <CloseButton
                 type="button"
                 onClick={fecharEvento}
+                onPointerMove={handleButtonMouseMove}
                 aria-label="Fechar evento"
               >
 
-                <FiX />
+                <span className="buttonContent">
+                  <FiX />
+                </span>
 
               </CloseButton>
 

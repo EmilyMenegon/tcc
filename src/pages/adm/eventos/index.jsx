@@ -170,6 +170,20 @@ export default function Eventos() {
   }, []);
 
   // ====================================================
+  // EFEITO DO MOUSE NOS BOTÕES (acompanha o cursor pra animação)
+  // ====================================================
+
+  function handleButtonMouseMove(event) {
+    const button = event.currentTarget;
+    const rect = button.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    button.style.setProperty("--mouse-x", `${x}px`);
+    button.style.setProperty("--mouse-y", `${y}px`);
+  }
+
+  // ====================================================
   // LIMPAR FORMULÁRIO
   // ====================================================
 
@@ -461,12 +475,13 @@ export default function Eventos() {
                   <EventFooter>
                     <AccessButton
                       type="button"
+                      onPointerMove={handleButtonMouseMove}
                       onClick={(event) => {
                         event.stopPropagation();
                         setEventoSelecionadoId(evento.id);
                       }}
                     >
-                      Ver evento
+                      <span className="buttonContent">Ver evento</span>
                     </AccessButton>
 
                     <Actions>
@@ -509,8 +524,14 @@ export default function Eventos() {
           <Modal>
             <ModalHeader>
               <ModalTitle>{eventoEditando ? "Editar evento" : "Novo evento"}</ModalTitle>
-              <CloseButton type="button" onClick={fecharModal}>
-                <FiX />
+              <CloseButton
+                type="button"
+                onClick={fecharModal}
+                onPointerMove={handleButtonMouseMove}
+              >
+                <span className="buttonContent">
+                  <FiX />
+                </span>
               </CloseButton>
             </ModalHeader>
 
@@ -632,8 +653,14 @@ export default function Eventos() {
           <Modal>
             <ModalHeader>
               <ModalTitle>{eventoSelecionado.nome}</ModalTitle>
-              <CloseButton type="button" onClick={() => setEventoSelecionadoId(null)}>
-                <FiX />
+              <CloseButton
+                type="button"
+                onClick={() => setEventoSelecionadoId(null)}
+                onPointerMove={handleButtonMouseMove}
+              >
+                <span className="buttonContent">
+                  <FiX />
+                </span>
               </CloseButton>
             </ModalHeader>
 

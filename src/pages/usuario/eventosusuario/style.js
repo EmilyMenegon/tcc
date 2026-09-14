@@ -1,4 +1,80 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
+
+
+/* =====================================================
+   EFEITO DE BOTÃO (bolinha que cresce a partir do cursor)
+===================================================== */
+
+const ButtonEffect = css`
+  position: relative;
+
+  overflow: hidden;
+
+  isolation: isolate;
+
+  --mouse-x: 50%;
+
+  --mouse-y: 50%;
+
+  &::before {
+    content: "";
+
+    position: absolute;
+
+    left: var(--mouse-x);
+
+    top: var(--mouse-y);
+
+    width: 35px;
+
+    height: 35px;
+
+    border-radius: 50%;
+
+    background: #ffdb53;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    transition:
+      transform 0.5s
+      cubic-bezier(
+        0.16,
+        1,
+        0.3,
+        1
+      );
+
+    z-index: 0;
+
+    pointer-events: none;
+  }
+
+  &:hover::before {
+    transform:
+      translate(-50%, -50%)
+      scale(18);
+  }
+
+  .buttonContent {
+    position: relative;
+
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    width: 100%;
+
+    height: 100%;
+  }
+`;
 
 
 /* =====================================================
@@ -491,6 +567,8 @@ export const EventFooter = styled.div`
 
 
 export const AccessButton = styled.button`
+  ${ButtonEffect}
+
   flex: 1;
 
   min-height: 38px;
@@ -825,6 +903,8 @@ export const ModalTitle = styled.h2`
 
 
 export const CloseButton = styled.button`
+  ${ButtonEffect}
+
   width: 40px;
 
   height: 40px;
@@ -848,10 +928,19 @@ export const CloseButton = styled.button`
   transition: .2s;
 
 
+  svg {
+    transition: transform .3s ease;
+  }
+
+
   &:hover {
     background: #000000;
 
-    color: #f9be06;
+    color: #111111;
+  }
+
+  &:hover svg {
+    transform: rotate(90deg);
   }
 `;
 
