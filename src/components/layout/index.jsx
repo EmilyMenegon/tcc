@@ -33,7 +33,6 @@ export default function Layout() {
   const navRef = useRef(null);
   const indicatorRef = useRef(null);
   const hoveredItemRef = useRef(null);
-
   const links = [
     {
       label: "Início",
@@ -55,11 +54,15 @@ export default function Layout() {
       label: "Galeria",
       path: "/usuario/galeria",
     },
+    {
+      label: "Caderno",
+      path: "/usuario/notes",
+    },
   ];
 
-  // =========================================================
+  // =====================================================
   // CARREGA FOTO DO USUÁRIO
-  // =========================================================
+  // =====================================================
 
   useLayoutEffect(() => {
     const usuarioLogado = getUsuarioLogado();
@@ -81,17 +84,17 @@ export default function Layout() {
       .catch(() => {});
   }, []);
 
-  // =========================================================
-  // PEGA O ITEM ATIVO
-  // =========================================================
+  // =====================================================
+  // PEGA ITEM ATIVO
+  // =====================================================
 
   const getActiveItem = useCallback(() => {
     return navRef.current?.querySelector(".active");
   }, []);
 
-  // =========================================================
-  // MOVE O RETÂNGULO PRETO
-  // =========================================================
+  // =====================================================
+  // MOVE INDICADOR
+  // =====================================================
 
   const moveIndicator = useCallback(
     (element, duration = 0.55) => {
@@ -131,9 +134,9 @@ export default function Layout() {
     []
   );
 
-  // =========================================================
+  // =====================================================
   // RESET ITEM
-  // =========================================================
+  // =====================================================
 
   const resetItemColor = useCallback(
     (item) => {
@@ -159,9 +162,9 @@ export default function Layout() {
     []
   );
 
-  // =========================================================
+  // =====================================================
   // HOVER
-  // =========================================================
+  // =====================================================
 
   const activateHover = useCallback(
     (item) => {
@@ -204,9 +207,9 @@ export default function Layout() {
     ]
   );
 
-  // =========================================================
-  // VOLTA PARA O ITEM ATIVO
-  // =========================================================
+  // =====================================================
+  // RETORNA AO ITEM ATIVO
+  // =====================================================
 
   const returnToActive = useCallback(() => {
     if (window.innerWidth <= 700) {
@@ -254,9 +257,9 @@ export default function Layout() {
     moveIndicator,
   ]);
 
-  // =========================================================
+  // =====================================================
   // ANIMAÇÃO INICIAL
-  // =========================================================
+  // =====================================================
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -312,9 +315,9 @@ export default function Layout() {
     return () => ctx.revert();
   }, [getActiveItem]);
 
-  // =========================================================
+  // =====================================================
   // RESPONSIVIDADE
-  // =========================================================
+  // =====================================================
 
   useLayoutEffect(() => {
     const handleResize = () => {
@@ -343,9 +346,9 @@ export default function Layout() {
     moveIndicator,
   ]);
 
-  // =========================================================
+  // =====================================================
   // MOUSE ENTER
-  // =========================================================
+  // =====================================================
 
   const handleMouseEnter = (event) => {
     activateHover(
@@ -353,9 +356,9 @@ export default function Layout() {
     );
   };
 
-  // =========================================================
+  // =====================================================
   // MOUSE LEAVE ITEM
-  // =========================================================
+  // =====================================================
 
   const handleMouseLeave = (event) => {
     const item = event.currentTarget;
@@ -397,39 +400,48 @@ export default function Layout() {
     }
   };
 
-  // =========================================================
+  // =====================================================
   // MOUSE LEAVE NAVBAR
-  // =========================================================
+  // =====================================================
 
   const handleNavMouseLeave = () => {
     returnToActive();
   };
 
-  // =========================================================
+  // =====================================================
   // FECHA MENU MOBILE
-  // =========================================================
+  // =====================================================
 
   const closeMenu = () => {
     setMenuOpen(false);
   };
 
-  // =========================================================
+  // =====================================================
   // RENDER
-  // =========================================================
+  // =====================================================
 
   return (
     <Header ref={headerRef}>
 
+      {/* =================================================
+          NAVBAR
+      ================================================= */}
+
       <Navbar>
 
         {/* =================================================
-            LOGO
+            LOGO - LADO ESQUERDO
         ================================================= */}
 
         <Logo
-          src="/logo.png"
-          alt="Logo"
-        />
+          to="/usuario/home"
+          aria-label="Página inicial"
+        >
+          <img
+            src="/logo.png"
+            alt="Logo"
+          />
+        </Logo>
 
         {/* =================================================
             MENU
@@ -441,7 +453,7 @@ export default function Layout() {
           onMouseLeave={handleNavMouseLeave}
         >
 
-          {/* RETÂNGULO PRETO */}
+          {/* INDICADOR PRETO */}
 
           <span ref={indicatorRef} />
 
@@ -453,12 +465,8 @@ export default function Layout() {
               to={link.path}
               className="nav-item"
               onClick={closeMenu}
-              onMouseEnter={
-                handleMouseEnter
-              }
-              onMouseLeave={
-                handleMouseLeave
-              }
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
             >
               {link.label}
             </NavItem>
@@ -467,7 +475,7 @@ export default function Layout() {
         </NavCenter>
 
         {/* =================================================
-            PERFIL
+            PERFIL - LADO DIREITO
         ================================================= */}
 
         <ProfileIcon
@@ -475,7 +483,6 @@ export default function Layout() {
           $comFoto={!!foto}
           aria-label="Meu perfil"
         >
-
           {foto ? (
             <ProfilePhoto
               src={foto}
@@ -484,7 +491,6 @@ export default function Layout() {
           ) : (
             <FaUser />
           )}
-
         </ProfileIcon>
 
         {/* =================================================

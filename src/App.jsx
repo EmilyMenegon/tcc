@@ -11,6 +11,7 @@ import Mural from "./pages/usuario/mural";
 import Galeria from "./pages/usuario/galeria";
 import Profile from "./pages/usuario/profile";
 import EventosUsuario from "./pages/usuario/eventosusuario";
+import Notes from "./pages/usuario/notes";
 
 import Inscricaoadm from "./pages/adm/inscricaoadm";
 import Inicioadm from "./pages/adm/inicioadm";
@@ -96,6 +97,15 @@ export default function App() {
         element={
           <RotaProtegida tiposPermitidos={["aluno", "poeta"]}>
             <EventosUsuario />
+          </RotaProtegida>
+        }
+      />
+
+        <Route
+        path="/usuario/notes"
+        element={
+          <RotaProtegida tiposPermitidos={["aluno", "poeta"]}>
+            <Notes />
           </RotaProtegida>
         }
       />

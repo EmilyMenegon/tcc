@@ -21,6 +21,10 @@ export const Header = styled.header`
     28px 3%
     0;
 
+  font-family:
+    "Poppins",
+    sans-serif;
+
   box-sizing: border-box;
 
   position: relative;
@@ -57,6 +61,11 @@ export const Navbar = styled.nav`
   min-height: 100px;
 
   display: flex;
+
+  
+  font-family:
+    "Poppins",
+    sans-serif;
 
   align-items: center;
 
@@ -181,10 +190,6 @@ export const Logo = styled(Link)`
 
   z-index: 5;
 
-  /*
-    Área interna maior para a imagem.
-    A imagem nunca ultrapassa a navbar.
-  */
   padding: 5px;
 
   img {
@@ -194,19 +199,10 @@ export const Logo = styled(Link)`
 
     display: block;
 
-    /*
-      Mostra a imagem INTEIRA.
-      Não corta nenhum lado.
-    */
     object-fit: contain;
 
     object-position: center;
 
-    /*
-      IMPORTANTE:
-      Não usar scale aqui, pois poderia
-      fazer a imagem ultrapassar o espaço.
-    */
     transform: none;
 
     max-width: 100%;
@@ -299,6 +295,11 @@ export const NavCenter = styled.div`
     0 5px;
 
   box-sizing: border-box;
+
+  
+  font-family:
+    "Poppins",
+    sans-serif;
 
   position: relative;
 
@@ -464,6 +465,11 @@ export const NavItem = styled(NavLink)`
   display: flex;
 
   align-items: center;
+
+  
+  font-family:
+    "Poppins",
+    sans-serif;
 
   justify-content: center;
 
@@ -726,6 +732,11 @@ export const MenuButton = styled.button`
   height: 52px;
 
   flex-shrink: 0;
+
+  
+  font-family:
+    "Poppins",
+    sans-serif;
 
   padding: 0;
 
