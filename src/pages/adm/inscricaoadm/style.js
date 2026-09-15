@@ -107,13 +107,13 @@ export const TitleArea = styled.div`
   text-align: center;
 `;
 export const Title = styled.h1`
-  margin: 0 0 18px;
+  margin: 0 0 14px;
 
   color: #831614;
 
   font-size:
     clamp(
-      2.6rem,
+      2.8rem,
       5vw,
       4.8rem
     );
@@ -124,33 +124,56 @@ export const Title = styled.h1`
 
   line-height: 1.05;
 
+
   @media (max-width: 768px) {
+
     font-size:
       clamp(
-        2.4rem,
+        2.5rem,
         9vw,
         4rem
       );
 
     letter-spacing: -1.5px;
+
+  }
+
+
+  @media (max-width: 480px) {
+
+    font-size: 2.3rem;
+
   }
 `;
 
 export const Subtitle = styled.p`
-  margin: 0;
+  width: 100%;
 
-  color: ${COLORS.muted};
+  max-width: 700px;
 
-  font-size:
-    clamp(
-      .95rem,
-      1.2vw,
-      1.08rem
-    );
+  margin: 10px auto 0;
 
-  line-height: 1.7;
+  color: #777;
+
+  font-size: 1.55rem;
+
+  line-height: 1.6;
 
   text-align: center;
+
+
+  @media (max-width: 768px) {
+
+    font-size: 1.1rem;
+
+  }
+
+
+  @media (max-width: 480px) {
+
+    font-size: 1rem;
+
+  }
 `;
 
 export const Stats = styled.div`

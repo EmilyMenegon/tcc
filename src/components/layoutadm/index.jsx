@@ -10,6 +10,7 @@ import { gsap } from "gsap";
 import {
   Header,
   Navbar,
+  Logo,
   NavCenter,
   NavItem,
   ProfileIcon,
@@ -18,7 +19,10 @@ import {
 } from "./style";
 
 import { FaUser } from "react-icons/fa";
-import { getUsuarioLogado, getAuthHeaders } from "../../utils/auth";
+import {
+  getUsuarioLogado,
+  getAuthHeaders,
+} from "../../utils/auth";
 
 export default function Layoutadm() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -52,9 +56,9 @@ export default function Layoutadm() {
     },
   ];
 
-  /* =====================================================
-     CARREGA FOTO DO USUÁRIO
-  ===================================================== */
+  // =====================================================
+  // CARREGA FOTO DO USUÁRIO
+  // =====================================================
 
   useLayoutEffect(() => {
     const usuarioLogado = getUsuarioLogado();
@@ -63,7 +67,9 @@ export default function Layoutadm() {
 
     fetch(
       `http://localhost:3001/perfil/${usuarioLogado.email}`,
-      { headers: getAuthHeaders() }
+      {
+        headers: getAuthHeaders(),
+      }
     )
       .then((res) => res.json())
       .then((data) => {
@@ -74,17 +80,17 @@ export default function Layoutadm() {
       .catch(() => {});
   }, []);
 
-  /* =====================================================
-     PEGA ITEM ATIVO
-  ===================================================== */
+  // =====================================================
+  // PEGA ITEM ATIVO
+  // =====================================================
 
   const getActiveItem = useCallback(() => {
     return navRef.current?.querySelector(".active");
   }, []);
 
-  /* =====================================================
-     MOVE INDICADOR PRETO
-  ===================================================== */
+  // =====================================================
+  // MOVE INDICADOR
+  // =====================================================
 
   const moveIndicator = useCallback(
     (element, duration = 0.55) => {
@@ -113,26 +119,20 @@ export default function Layoutadm() {
       gsap.to(indicatorRef.current, {
         x,
         y,
-
         width: itemRect.width,
-
         height: itemRect.height,
-
         opacity: 1,
-
         duration,
-
         ease: "power3.out",
-
         overwrite: true,
       });
     },
     []
   );
 
-  /* =====================================================
-     RESET ITEM
-  ===================================================== */
+  // =====================================================
+  // RESET ITEM
+  // =====================================================
 
   const resetItemColor = useCallback(
     (item) => {
@@ -158,9 +158,9 @@ export default function Layoutadm() {
     []
   );
 
-  /* =====================================================
-     HOVER
-  ===================================================== */
+  // =====================================================
+  // HOVER
+  // =====================================================
 
   const activateHover = useCallback(
     (item) => {
@@ -187,13 +187,9 @@ export default function Layoutadm() {
 
       gsap.to(item, {
         color: "#fff",
-
         scale: 1.04,
-
         duration: 0.2,
-
         ease: "power2.out",
-
         overwrite: true,
       });
     },
@@ -203,9 +199,9 @@ export default function Layoutadm() {
     ]
   );
 
-  /* =====================================================
-     RETORNA AO ITEM ATIVO
-  ===================================================== */
+  // =====================================================
+  // RETORNA AO ITEM ATIVO
+  // =====================================================
 
   const returnToActive = useCallback(() => {
     if (window.innerWidth <= 700) {
@@ -218,13 +214,9 @@ export default function Layoutadm() {
     if (hovered) {
       gsap.to(hovered, {
         color: "#111",
-
         scale: 1,
-
         duration: 0.2,
-
         ease: "power2.out",
-
         overwrite: true,
       });
     }
@@ -238,13 +230,9 @@ export default function Layoutadm() {
 
       gsap.to(active, {
         color: "#fff",
-
         scale: 1,
-
         duration: 0.3,
-
         ease: "power2.out",
-
         overwrite: true,
       });
     }
@@ -253,9 +241,9 @@ export default function Layoutadm() {
     moveIndicator,
   ]);
 
-  /* =====================================================
-     ANIMAÇÃO INICIAL
-  ===================================================== */
+  // =====================================================
+  // ANIMAÇÃO INICIAL
+  // =====================================================
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -286,25 +274,17 @@ export default function Layoutadm() {
       gsap.set(indicatorRef.current, {
         x,
         y,
-
         width: itemRect.width,
-
         height: itemRect.height,
-
         opacity: 1,
-
         backgroundColor: "#111",
-
         scale: 0.85,
       });
 
       gsap.to(indicatorRef.current, {
         scale: 1,
-
         duration: 0.5,
-
         ease: "back.out(1.7)",
-
         overwrite: true,
       });
 
@@ -316,9 +296,9 @@ export default function Layoutadm() {
     return () => ctx.revert();
   }, [getActiveItem]);
 
-  /* =====================================================
-     RESPONSIVIDADE
-  ===================================================== */
+  // =====================================================
+  // RESPONSIVIDADE
+  // =====================================================
 
   useLayoutEffect(() => {
     const handleResize = () => {
@@ -347,17 +327,17 @@ export default function Layoutadm() {
     moveIndicator,
   ]);
 
-  /* =====================================================
-     MOUSE ENTER
-  ===================================================== */
+  // =====================================================
+  // MOUSE ENTER
+  // =====================================================
 
   const handleMouseEnter = (event) => {
     activateHover(event.currentTarget);
   };
 
-  /* =====================================================
-     MOUSE LEAVE ITEM
-  ===================================================== */
+  // =====================================================
+  // MOUSE LEAVE ITEM
+  // =====================================================
 
   const handleMouseLeave = (event) => {
     const item = event.currentTarget;
@@ -367,13 +347,9 @@ export default function Layoutadm() {
     ) {
       gsap.to(item, {
         color: "#111",
-
         scale: 1,
-
         duration: 0.2,
-
         ease: "power2.out",
-
         overwrite: true,
       });
 
@@ -386,67 +362,61 @@ export default function Layoutadm() {
 
         gsap.to(active, {
           color: "#fff",
-
           scale: 1,
-
           duration: 0.25,
-
           ease: "power2.out",
-
           overwrite: true,
         });
       }
     }
   };
 
-  /* =====================================================
-     MOUSE LEAVE NAVBAR
-  ===================================================== */
+  // =====================================================
+  // MOUSE LEAVE NAVBAR
+  // =====================================================
 
   const handleNavMouseLeave = () => {
     returnToActive();
   };
 
-  /* =====================================================
-     FECHA MENU
-  ===================================================== */
+  // =====================================================
+  // FECHA MENU
+  // =====================================================
 
   const closeMenu = () => {
     setMenuOpen(false);
   };
 
-  /* =====================================================
-     RENDER
-  ===================================================== */
+  // =====================================================
+  // RENDER
+  // =====================================================
 
   return (
     <Header ref={headerRef}>
-
-      {/* =================================================
-          PERFIL
-      ================================================= */}
-
-      <ProfileIcon
-        to="/adm/profileadm"
-        $comFoto={!!foto}
-        aria-label="Meu perfil"
-      >
-        {foto ? (
-          <ProfilePhoto
-            src={foto}
-            alt="Foto de perfil"
-          />
-        ) : (
-          <FaUser />
-        )}
-      </ProfileIcon>
-
 
       {/* =================================================
           NAVBAR
       ================================================= */}
 
       <Navbar>
+
+        {/* =================================================
+            LOGO - LADO ESQUERDO
+        ================================================= */}
+
+        <Logo
+          to="/adm/inicioadm"
+          aria-label="Página inicial"
+        >
+          <img
+            src="/logo.png"
+            alt="Logo"
+          />
+        </Logo>
+
+        {/* =================================================
+            MENU
+        ================================================= */}
 
         <NavCenter
           ref={navRef}
@@ -457,7 +427,6 @@ export default function Layoutadm() {
           {/* INDICADOR PRETO */}
 
           <span ref={indicatorRef} />
-
 
           {/* LINKS */}
 
@@ -476,6 +445,24 @@ export default function Layoutadm() {
 
         </NavCenter>
 
+        {/* =================================================
+            PERFIL - LADO DIREITO
+        ================================================= */}
+
+        <ProfileIcon
+          to="/adm/profileadm"
+          $comFoto={!!foto}
+          aria-label="Meu perfil"
+        >
+          {foto ? (
+            <ProfilePhoto
+              src={foto}
+              alt="Foto de perfil"
+            />
+          ) : (
+            <FaUser />
+          )}
+        </ProfileIcon>
 
         {/* =================================================
             BOTÃO MOBILE

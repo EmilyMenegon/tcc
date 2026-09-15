@@ -1,5 +1,8 @@
 import styled from "styled-components";
-import { NavLink, Link } from "react-router-dom";
+import {
+  NavLink,
+  Link,
+} from "react-router-dom";
 
 // =========================================================
 // HEADER
@@ -9,12 +12,14 @@ export const Header = styled.header`
   width: 100%;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
-  gap: 28px;
-
-  padding: 28px 5% 0;
+  padding:
+    28px 3%
+    0;
 
   box-sizing: border-box;
 
@@ -22,109 +27,283 @@ export const Header = styled.header`
 
   z-index: 100;
 
+
   @media (max-width: 1000px) {
-    gap: 20px;
-    padding: 24px 4%;
+    padding:
+      24px 3%
+      0;
   }
+
 
   @media (max-width: 700px) {
-    justify-content: space-between;
-
-    gap: 15px;
-
-    padding: 20px 4%;
+    padding:
+      20px 4%
+      0;
   }
 `;
+
 
 // =========================================================
 // NAVBAR
 // =========================================================
 
 export const Navbar = styled.nav`
-  width: min(1250px, 82vw);
+  width:
+    min(
+      1500px,
+      96vw
+    );
 
-  height: 86px;
+  min-height: 100px;
 
   display: flex;
+
   align-items: center;
-  justify-content: center;
+
+  justify-content: space-between;
+
+  gap: 20px;
 
   position: relative;
 
-  background: #ffdb53;
-
-  border: 1px solid rgba(255, 255, 255, 0.5);
-
-  border-radius: 45px;
+  padding:
+    10px 22px;
 
   box-sizing: border-box;
 
-  box-shadow:
-    0 16px 40px rgba(0, 0, 0, 0.09),
-    0 5px 14px rgba(0, 0, 0, 0.06);
+  background: #ffdb53;
 
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.5
+    );
+
+  border-radius: 50px;
+
+  box-shadow:
+    0
+    16px
+    40px
+    rgba(
+      0,
+      0,
+      0,
+      0.09
+    ),
+
+    0
+    5px
+    14px
+    rgba(
+      0,
+      0,
+      0,
+      0.06
+    );
+
+  backdrop-filter:
+    blur(12px);
+
+  -webkit-backdrop-filter:
+    blur(12px);
+
 
   @media (max-width: 1200px) {
-    width: min(1100px, 82vw);
+    width: 96vw;
 
-    height: 82px;
+    min-height: 94px;
 
-    border-radius: 30px;
+    gap: 15px;
+
+    padding:
+      9px 18px;
+
+    border-radius: 43px;
   }
+
 
   @media (max-width: 1000px) {
-    width: 82vw;
+    min-height: 88px;
 
-    height: 76px;
+    gap: 12px;
 
-    border-radius: 27px;
+    padding:
+      8px 15px;
+
+    border-radius: 36px;
   }
+
 
   @media (max-width: 700px) {
-    width: calc(100% - 67px);
+    width: 100%;
 
-    height: 64px;
+    min-height: 68px;
 
-    border-radius: 22px;
+    padding:
+      7px 10px;
+
+    gap: 8px;
+
+    border-radius: 24px;
   }
+
 
   @media (max-width: 500px) {
-    width: calc(100% - 63px);
+    min-height: 62px;
 
-    height: 60px;
-
-    border-radius: 20px;
+    border-radius: 21px;
   }
 `;
+
+
+export const Logo = styled(Link)`
+  width: 190px;
+
+  height: 82px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-decoration: none;
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+
+  z-index: 5;
+
+  /*
+    Área interna maior para a imagem.
+    A imagem nunca ultrapassa a navbar.
+  */
+  padding: 5px;
+
+  img {
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    /*
+      Mostra a imagem INTEIRA.
+      Não corta nenhum lado.
+    */
+    object-fit: contain;
+
+    object-position: center;
+
+    /*
+      IMPORTANTE:
+      Não usar scale aqui, pois poderia
+      fazer a imagem ultrapassar o espaço.
+    */
+    transform: none;
+
+    max-width: 100%;
+
+    max-height: 100%;
+
+    user-select: none;
+
+    pointer-events: none;
+  }
+
+  &:focus-visible {
+    outline: 3px solid rgba(0, 0, 0, 0.35);
+
+    outline-offset: 4px;
+
+    border-radius: 15px;
+  }
+
+  /* =================================================
+     1200px
+  ================================================= */
+
+  @media (max-width: 1200px) {
+    width: 165px;
+
+    height: 74px;
+
+    padding: 4px;
+  }
+
+  /* =================================================
+     1000px
+  ================================================= */
+
+  @media (max-width: 1000px) {
+    width: 140px;
+
+    height: 66px;
+
+    padding: 4px;
+  }
+
+  /* =================================================
+     MOBILE
+  ================================================= */
+
+  @media (max-width: 700px) {
+    width: 105px;
+
+    height: 52px;
+
+    padding: 3px;
+  }
+
+  /* =================================================
+     MOBILE PEQUENO
+  ================================================= */
+
+  @media (max-width: 500px) {
+    width: 92px;
+
+    height: 48px;
+
+    padding: 2px;
+  }
+`;
+
 
 // =========================================================
 // NAV CENTER
 // =========================================================
 
 export const NavCenter = styled.div`
-  width: 100%;
+  flex: 1;
+
+  min-width: 0;
+
   height: 100%;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 
-  gap: 8px;
+  gap: 6px;
 
-  padding: 0 18px;
+  padding:
+    0 5px;
 
   box-sizing: border-box;
 
   position: relative;
 
-  /*
-    Cria um novo contexto de composição.
-    Isso ajuda a manter o indicador independente
-    visualmente dos outros elementos.
-  */
   isolation: isolate;
+
 
   // =======================================================
   // RETÂNGULO PRETO
@@ -134,21 +313,17 @@ export const NavCenter = styled.div`
     position: absolute;
 
     top: 0;
+
     left: 0;
 
     width: 0;
+
     height: 0;
 
     display: block;
 
-    /*
-      COR PRETA TOTALMENTE SÓLIDA
-    */
     background-color: #111;
 
-    /*
-      Nunca fica transparente.
-    */
     opacity: 1;
 
     border-radius: 58px;
@@ -157,34 +332,38 @@ export const NavCenter = styled.div`
 
     pointer-events: none;
 
-    /*
-      O navegador prepara o elemento
-      para a animação do GSAP.
-    */
     will-change:
       transform,
       width,
       height;
 
-    /*
-      Não usamos transition aqui.
-      O GSAP controla a animação.
-    */
     transition: none;
 
     box-shadow:
-      0 8px 20px rgba(0, 0, 0, 0.2);
+      0
+      8px
+      20px
+      rgba(
+        0,
+        0,
+        0,
+        0.20
+      );
   }
 
-  // =======================================================
-  // TABLET
-  // =======================================================
+
+  @media (max-width: 1200px) {
+    gap: 4px;
+  }
+
 
   @media (max-width: 1000px) {
-    gap: 5px;
+    gap: 2px;
 
-    padding: 0 12px;
+    padding:
+      0 3px;
   }
+
 
   // =======================================================
   // MOBILE
@@ -193,7 +372,10 @@ export const NavCenter = styled.div`
   @media (max-width: 700px) {
     position: absolute;
 
-    top: calc(100% + 12px);
+    top:
+      calc(
+        100% + 12px
+      );
 
     right: 0;
 
@@ -218,38 +400,52 @@ export const NavCenter = styled.div`
     border-radius: 22px;
 
     box-shadow:
-      0 18px 40px rgba(0, 0, 0, 0.14);
+      0
+      18px
+      40px
+      rgba(
+        0,
+        0,
+        0,
+        0.14
+      );
 
     z-index: 1000;
 
-    opacity: ${({ $open }) =>
-      $open ? 1 : 0};
+    opacity:
+      ${({ $open }) =>
+        $open ? 1 : 0};
 
-    visibility: ${({ $open }) =>
-      $open ? "visible" : "hidden"};
+    visibility:
+      ${({ $open }) =>
+        $open
+          ? "visible"
+          : "hidden"};
 
-    pointer-events: ${({ $open }) =>
-      $open ? "auto" : "none"};
+    pointer-events:
+      ${({ $open }) =>
+        $open
+          ? "auto"
+          : "none"};
 
-    transform: ${({ $open }) =>
-      $open
-        ? "translateY(0)"
-        : "translateY(-10px)"};
+    transform:
+      ${({ $open }) =>
+        $open
+          ? "translateY(0)"
+          : "translateY(-10px)"};
 
     transition:
       opacity 0.25s ease,
       transform 0.25s ease,
       visibility 0.25s ease;
 
-    /*
-      No mobile o indicador preto do desktop
-      não é utilizado.
-    */
+
     & > span {
       display: none;
     }
   }
 `;
+
 
 // =========================================================
 // NAV ITEM
@@ -262,7 +458,8 @@ export const NavItem = styled(NavLink)`
 
   min-height: 58px;
 
-  padding: 0 25px;
+  padding:
+    0 20px;
 
   display: flex;
 
@@ -278,7 +475,7 @@ export const NavItem = styled(NavLink)`
 
   text-decoration: none;
 
-  font-size: 18px;
+  font-size: 17px;
 
   font-weight: 600;
 
@@ -286,65 +483,64 @@ export const NavItem = styled(NavLink)`
 
   white-space: nowrap;
 
-  /*
-    IMPORTANTE:
-    O GSAP controla color e transform.
-    Não deixamos o CSS disputar essas propriedades.
-  */
   transition: none;
+
 
   &:hover {
     color: #fff;
   }
 
+
   &.active {
     color: #111;
   }
 
+
   &:focus-visible {
-    outline: 3px solid rgba(0, 0, 0, 0.35);
+    outline:
+      3px solid
+      rgba(
+        0,
+        0,
+        0,
+        0.35
+      );
 
     outline-offset: 3px;
   }
 
-  // =======================================================
-  // 1100px
-  // =======================================================
 
-  @media (max-width: 1100px) {
-    min-height: 54px;
+  @media (max-width: 1200px) {
+    min-height: 55px;
 
-    padding: 0 20px;
+    padding:
+      0 16px;
 
-    font-size: 17px;
+    font-size: 16px;
 
     border-radius: 16px;
   }
 
-  // =======================================================
-  // 1000px
-  // =======================================================
 
   @media (max-width: 1000px) {
     min-height: 50px;
 
-    padding: 0 15px;
+    padding:
+      0 11px;
 
-    font-size: 15px;
+    font-size: 14px;
 
-    border-radius: 15px;
+    border-radius: 14px;
   }
 
-  // =======================================================
-  // MOBILE
-  // =======================================================
 
   @media (max-width: 700px) {
     width: 100%;
 
     min-height: 46px;
 
-    padding: 0 17px;
+    padding:
+      0 17px;
 
     justify-content: flex-start;
 
@@ -354,18 +550,12 @@ export const NavItem = styled(NavLink)`
 
     color: #111;
 
-    /*
-      No mobile o hover não precisa deixar
-      o texto branco.
-    */
+
     &:hover {
       color: #111;
     }
 
-    /*
-      No mobile o item ativo possui seu
-      próprio fundo preto.
-    */
+
     &.active {
       color: #fff;
 
@@ -374,14 +564,15 @@ export const NavItem = styled(NavLink)`
   }
 `;
 
+
 // =========================================================
 // PROFILE ICON
 // =========================================================
 
 export const ProfileIcon = styled(Link)`
-  width: 68px;
+  width: 72px;
 
-  height: 68px;
+  height: 72px;
 
   flex-shrink: 0;
 
@@ -399,54 +590,85 @@ export const ProfileIcon = styled(Link)`
 
   text-decoration: none;
 
-  background: ${({ $comFoto }) =>
-    $comFoto ? "#fff" : "#111"};
+  background:
+    ${({ $comFoto }) =>
+      $comFoto
+        ? "#fff"
+        : "#111"};
 
-  border: 3px solid #111;
+  border:
+    3px solid #111;
 
   box-shadow:
-    0 8px 22px rgba(0, 0, 0, 0.14);
+    0
+    8px
+    22px
+    rgba(
+      0,
+      0,
+      0,
+      0.14
+    );
 
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease;
 
+
   svg {
     color: #fff;
 
-    font-size: 25px;
+    font-size: 26px;
   }
+
 
   &:hover {
-    transform: scale(1.08);
+    transform:
+      scale(1.08);
 
     box-shadow:
-      0 12px 28px rgba(0, 0, 0, 0.18);
+      0
+      12px
+      28px
+      rgba(
+        0,
+        0,
+        0,
+        0.18
+      );
   }
 
+
   &:focus-visible {
-    outline: 3px solid #ffdb53;
+    outline:
+      3px solid
+      #ffdb53;
 
     outline-offset: 4px;
   }
 
-  // =======================================================
-  // 1000px
-  // =======================================================
+
+  @media (max-width: 1200px) {
+    width: 66px;
+
+    height: 66px;
+
+    svg {
+      font-size: 24px;
+    }
+  }
+
 
   @media (max-width: 1000px) {
-    width: 62px;
+    width: 60px;
 
-    height: 62px;
+    height: 60px;
 
     svg {
       font-size: 22px;
     }
   }
 
-  // =======================================================
-  // 700px
-  // =======================================================
 
   @media (max-width: 700px) {
     width: 52px;
@@ -458,9 +680,6 @@ export const ProfileIcon = styled(Link)`
     }
   }
 
-  // =======================================================
-  // 500px
-  // =======================================================
 
   @media (max-width: 500px) {
     width: 48px;
@@ -472,6 +691,7 @@ export const ProfileIcon = styled(Link)`
     }
   }
 `;
+
 
 // =========================================================
 // PROFILE PHOTO
@@ -493,6 +713,7 @@ export const ProfilePhoto = styled.img`
   pointer-events: none;
 `;
 
+
 // =========================================================
 // MENU BUTTON
 // =========================================================
@@ -512,7 +733,13 @@ export const MenuButton = styled.button`
 
   border-radius: 15px;
 
-  background: rgba(255, 255, 255, 0.35);
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.35
+    );
 
   cursor: pointer;
 
@@ -525,6 +752,7 @@ export const MenuButton = styled.button`
   gap: 6px;
 
   box-sizing: border-box;
+
 
   span {
     width: 25px;
@@ -542,9 +770,6 @@ export const MenuButton = styled.button`
       opacity 0.2s ease;
   }
 
-  // =======================================================
-  // MENU ABERTO
-  // =======================================================
 
   ${({ $open }) =>
     $open &&
@@ -566,6 +791,7 @@ export const MenuButton = styled.button`
       }
     `}
 
+
   &:hover {
     background: #111;
 
@@ -574,23 +800,25 @@ export const MenuButton = styled.button`
     }
   }
 
+
   &:focus-visible {
-    outline: 3px solid rgba(0, 0, 0, 0.35);
+    outline:
+      3px solid
+      rgba(
+        0,
+        0,
+        0,
+        0.35
+      );
 
     outline-offset: 3px;
   }
 
-  // =======================================================
-  // MOBILE
-  // =======================================================
 
   @media (max-width: 700px) {
     display: flex;
   }
 
-  // =======================================================
-  // 500px
-  // =======================================================
 
   @media (max-width: 500px) {
     width: 46px;

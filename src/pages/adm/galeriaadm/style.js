@@ -173,32 +173,30 @@ export const Header = styled.header`
 
 `;
 
-
 export const Title = styled.h1`
-
-  margin: 0;
+  margin: 0 0 14px;
 
   color: #831614;
 
   font-size:
     clamp(
-      2.6rem,
+      2.8rem,
       5vw,
       4.8rem
     );
 
   font-weight: 900;
 
-  line-height: 1.05;
-
   letter-spacing: -2px;
+
+  line-height: 1.05;
 
 
   @media (max-width: 768px) {
 
     font-size:
       clamp(
-        2.4rem,
+        2.5rem,
         9vw,
         4rem
       );
@@ -207,44 +205,43 @@ export const Title = styled.h1`
 
   }
 
+
+  @media (max-width: 480px) {
+
+    font-size: 2.3rem;
+
+  }
 `;
 
-
 export const Subtitle = styled.p`
+  width: 100%;
 
   max-width: 700px;
 
-  margin:
-    10px 0 0;
+  margin: 10px auto 0;
 
-  color: #777777;
+  color: #777;
 
-  font-size:
-    clamp(
-      .95rem,
-      1.2vw,
-      1.08rem
-    );
+  font-size: 1.55rem;
 
-  line-height: 1.7;
+  line-height: 1.6;
+
+  text-align: center;
 
 
   @media (max-width: 768px) {
 
-    width: 90%;
-
-    max-width: 90%;
-
-    font-size: .95rem;
+    font-size: 1.1rem;
 
   }
 
+
+  @media (max-width: 480px) {
+
+    font-size: 1rem;
+
+  }
 `;
-
-
-/* ==========================================
-   GALERIA
-========================================== */
 
 export const Gallery = styled.section`
 

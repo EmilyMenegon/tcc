@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { NavLink, Link } from "react-router-dom";
 
-
 /* =====================================================
    HEADER
 ===================================================== */
@@ -15,9 +14,7 @@ export const Header = styled.header`
 
   justify-content: center;
 
-  gap: 28px;
-
-  padding: 28px 5% 0;
+  padding: 28px 4% 0;
 
   box-sizing: border-box;
 
@@ -25,38 +22,29 @@ export const Header = styled.header`
 
   z-index: 100;
 
-
   @media (max-width: 1000px) {
-    gap: 20px;
-
-    padding: 24px 4%;
+    padding: 24px 3%;
   }
 
-
   @media (max-width: 700px) {
-    justify-content: space-between;
-
-    gap: 15px;
-
     padding: 20px 4%;
   }
 `;
-
 
 /* =====================================================
    NAVBAR
 ===================================================== */
 
 export const Navbar = styled.nav`
-  width: min(1250px, 82vw);
+  width: min(1450px, 94vw);
 
-  height: 86px;
+  min-height: 96px;
 
   display: flex;
 
   align-items: center;
 
-  justify-content: center;
+  justify-content: space-between;
 
   position: relative;
 
@@ -64,7 +52,9 @@ export const Navbar = styled.nav`
 
   border: 1px solid rgba(255, 255, 255, 0.5);
 
-  border-radius: 45px;
+  border-radius: 48px;
+
+  padding: 10px 22px;
 
   box-sizing: border-box;
 
@@ -76,45 +66,167 @@ export const Navbar = styled.nav`
 
   -webkit-backdrop-filter: blur(12px);
 
+  gap: 20px;
 
   @media (max-width: 1200px) {
-    width: min(1100px, 82vw);
+    width: 94vw;
 
-    height: 82px;
+    min-height: 90px;
 
-    border-radius: 30px;
+    border-radius: 40px;
+
+    padding: 9px 18px;
+
+    gap: 14px;
   }
-
 
   @media (max-width: 1000px) {
-    width: 82vw;
+    min-height: 82px;
 
-    height: 76px;
+    border-radius: 34px;
 
-    border-radius: 27px;
+    padding: 8px 15px;
+
+    gap: 10px;
   }
 
-
   @media (max-width: 700px) {
-    width: calc(100% - 67px);
+    width: 100%;
+
+    min-height: 64px;
 
     height: 64px;
 
     border-radius: 22px;
 
-    background: #ffdb53;
+    padding: 6px 8px;
 
-    box-shadow:
-      0 10px 25px rgba(0, 0, 0, 0.08);
+    gap: 8px;
   }
 
-
   @media (max-width: 500px) {
-    width: calc(100% - 63px);
+    min-height: 60px;
 
     height: 60px;
 
     border-radius: 20px;
+
+    padding: 5px 7px;
+  }
+`;
+
+export const Logo = styled(Link)`
+  width: 190px;
+
+  height: 82px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-decoration: none;
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+
+  z-index: 5;
+
+  /*
+    Área interna maior para a imagem.
+    A imagem nunca ultrapassa a navbar.
+  */
+  padding: 5px;
+
+  img {
+    width: 100%;
+
+    height: 100%;
+
+    display: block;
+
+    /*
+      Mostra a imagem INTEIRA.
+      Não corta nenhum lado.
+    */
+    object-fit: contain;
+
+    object-position: center;
+
+    /*
+      IMPORTANTE:
+      Não usar scale aqui, pois poderia
+      fazer a imagem ultrapassar o espaço.
+    */
+    transform: none;
+
+    max-width: 100%;
+
+    max-height: 100%;
+
+    user-select: none;
+
+    pointer-events: none;
+  }
+
+  &:focus-visible {
+    outline: 3px solid rgba(0, 0, 0, 0.35);
+
+    outline-offset: 4px;
+
+    border-radius: 15px;
+  }
+
+  /* =================================================
+     1200px
+  ================================================= */
+
+  @media (max-width: 1200px) {
+    width: 165px;
+
+    height: 74px;
+
+    padding: 4px;
+  }
+
+  /* =================================================
+     1000px
+  ================================================= */
+
+  @media (max-width: 1000px) {
+    width: 140px;
+
+    height: 66px;
+
+    padding: 4px;
+  }
+
+  /* =================================================
+     MOBILE
+  ================================================= */
+
+  @media (max-width: 700px) {
+    width: 105px;
+
+    height: 52px;
+
+    padding: 3px;
+  }
+
+  /* =================================================
+     MOBILE PEQUENO
+  ================================================= */
+
+  @media (max-width: 500px) {
+    width: 92px;
+
+    height: 48px;
+
+    padding: 2px;
   }
 `;
 
@@ -124,9 +236,11 @@ export const Navbar = styled.nav`
 ===================================================== */
 
 export const NavCenter = styled.div`
-  width: 100%;
+  flex: 1;
 
-  height: 100%;
+  min-width: 0;
+
+  height: 76px;
 
   display: flex;
 
@@ -134,16 +248,15 @@ export const NavCenter = styled.div`
 
   justify-content: center;
 
-  gap: 8px;
+  gap: 6px;
 
-  padding: 0 18px;
+  padding: 0 8px;
 
   box-sizing: border-box;
 
   position: relative;
 
   isolation: isolate;
-
 
   /* =================================================
      INDICADOR PRETO
@@ -183,13 +296,19 @@ export const NavCenter = styled.div`
       0 8px 20px rgba(0, 0, 0, 0.2);
   }
 
+  @media (max-width: 1200px) {
+    gap: 4px;
 
-  @media (max-width: 1000px) {
-    gap: 5px;
-
-    padding: 0 12px;
+    padding: 0 5px;
   }
 
+  @media (max-width: 1000px) {
+    height: 66px;
+
+    gap: 3px;
+
+    padding: 0 3px;
+  }
 
   /* =================================================
      MOBILE
@@ -246,16 +365,14 @@ export const NavCenter = styled.div`
       transform 0.25s ease,
       visibility 0.25s ease;
 
-
     & > span {
       display: none;
     }
   }
 `;
 
-
 /* =====================================================
-   LINKS
+   NAV ITEM
 ===================================================== */
 
 export const NavItem = styled(NavLink)`
@@ -265,7 +382,7 @@ export const NavItem = styled(NavLink)`
 
   min-height: 58px;
 
-  padding: 0 25px;
+  padding: 0 22px;
 
   display: flex;
 
@@ -291,16 +408,13 @@ export const NavItem = styled(NavLink)`
 
   transition: none;
 
-
   &:hover {
     color: #fff;
   }
 
-
   &.active {
     color: #fff;
   }
-
 
   &:focus-visible {
     outline: 3px solid rgba(0, 0, 0, 0.35);
@@ -308,28 +422,25 @@ export const NavItem = styled(NavLink)`
     outline-offset: 3px;
   }
 
-
-  @media (max-width: 1100px) {
+  @media (max-width: 1200px) {
     min-height: 54px;
 
-    padding: 0 20px;
+    padding: 0 17px;
 
     font-size: 17px;
 
     border-radius: 16px;
   }
 
-
   @media (max-width: 1000px) {
     min-height: 50px;
 
-    padding: 0 15px;
+    padding: 0 12px;
 
     font-size: 15px;
 
     border-radius: 15px;
   }
-
 
   @media (max-width: 700px) {
     width: 100%;
@@ -346,13 +457,11 @@ export const NavItem = styled(NavLink)`
 
     color: #111;
 
-
     &:hover {
       color: #111;
 
       transform: none;
     }
-
 
     &.active {
       color: #fff;
@@ -362,9 +471,8 @@ export const NavItem = styled(NavLink)`
   }
 `;
 
-
 /* =====================================================
-   PERFIL
+   PERFIL - LADO DIREITO
 ===================================================== */
 
 export const ProfileIcon = styled(Link)`
@@ -402,13 +510,13 @@ export const ProfileIcon = styled(Link)`
     transform 0.25s ease,
     box-shadow 0.25s ease;
 
+  z-index: 5;
 
   svg {
     color: #fff;
 
     font-size: 25px;
   }
-
 
   &:hover {
     transform: scale(1.08);
@@ -417,50 +525,42 @@ export const ProfileIcon = styled(Link)`
       0 12px 28px rgba(0, 0, 0, 0.18);
   }
 
-
   &:focus-visible {
     outline: 3px solid #ffdb53;
 
     outline-offset: 4px;
   }
 
-
   @media (max-width: 1000px) {
     width: 62px;
 
     height: 62px;
-
 
     svg {
       font-size: 22px;
     }
   }
 
-
   @media (max-width: 700px) {
     width: 52px;
 
     height: 52px;
-
 
     svg {
       font-size: 19px;
     }
   }
 
-
   @media (max-width: 500px) {
     width: 48px;
 
     height: 48px;
-
 
     svg {
       font-size: 17px;
     }
   }
 `;
-
 
 /* =====================================================
    FOTO DE PERFIL
@@ -481,7 +581,6 @@ export const ProfilePhoto = styled.img`
 
   pointer-events: none;
 `;
-
 
 /* =====================================================
    BOTÃO MOBILE
@@ -516,7 +615,6 @@ export const MenuButton = styled.button`
 
   box-sizing: border-box;
 
-
   span {
     width: 25px;
 
@@ -533,11 +631,6 @@ export const MenuButton = styled.button`
       opacity 0.2s ease,
       background 0.2s ease;
   }
-
-
-  /* =================================================
-     MENU ABERTO
-  ================================================= */
 
   ${({ $open }) =>
     $open &&
@@ -559,7 +652,6 @@ export const MenuButton = styled.button`
       }
     `}
 
-
   &:hover {
     background: #111;
 
@@ -568,24 +660,20 @@ export const MenuButton = styled.button`
     }
   }
 
-
   &:focus-visible {
     outline: 3px solid rgba(0, 0, 0, 0.35);
 
     outline-offset: 3px;
   }
 
-
   @media (max-width: 700px) {
     display: flex;
   }
-
 
   @media (max-width: 500px) {
     width: 46px;
 
     height: 46px;
-
 
     span {
       width: 23px;

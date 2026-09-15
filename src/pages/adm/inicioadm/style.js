@@ -193,32 +193,42 @@ export const BadgeDot = styled.span`
 ============================================================ */
 
 export const Title = styled.h1`
-  margin: 0 0 18px;
+  margin: 0 0 14px;
 
   color: #111;
 
   font-size:
     clamp(
-      2.6rem,
+      2.8rem,
       5vw,
       4.8rem
     );
-
-  line-height: 1.05;
 
   font-weight: 900;
 
   letter-spacing: -2px;
 
+  line-height: 1.05;
+
+
   @media (max-width: 768px) {
+
     font-size:
       clamp(
-        2.4rem,
+        2.5rem,
         9vw,
         4rem
       );
 
     letter-spacing: -1.5px;
+
+  }
+
+
+  @media (max-width: 480px) {
+
+    font-size: 2.3rem;
+
   }
 `;
 
@@ -235,33 +245,33 @@ export const Highlight = styled.span`
 ============================================================ */
 
 export const Description = styled.p`
-  width: 100%;
+ width: 100%;
 
   max-width: 700px;
 
   margin: 0;
 
-  color: #555;
+  color: #777;
 
-  font-size:
-    clamp(
-      .95rem,
-      1.2vw,
-      1.08rem
-    );
+  font-size: 1.55rem;
 
-  line-height: 1.7;
+  line-height: 1.6;
 
-  strong {
-    color: #111;
-
-    font-weight: 800;
-  }
+strong{
+color: #111;
+}
 
   @media (max-width: 768px) {
-    margin: 0 auto;
 
-    font-size: .95rem;
+    font-size: 1.1rem;
+
+  }
+
+
+  @media (max-width: 480px) {
+
+    font-size: 1rem;
+
   }
 `;
 

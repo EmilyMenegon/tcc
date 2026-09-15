@@ -176,29 +176,29 @@ export const TitleArea = styled.div`
 `;
 
 export const Title = styled.h1`
- margin: 0;
+  margin: 0 0 14px;
 
   color: #831614;
 
   font-size:
     clamp(
-      2.6rem,
+      2.8rem,
       5vw,
       4.8rem
     );
 
   font-weight: 900;
 
-  line-height: 1.05;
-
   letter-spacing: -2px;
+
+  line-height: 1.05;
 
 
   @media (max-width: 768px) {
 
     font-size:
       clamp(
-        2.4rem,
+        2.5rem,
         9vw,
         4rem
       );
@@ -206,34 +206,42 @@ export const Title = styled.h1`
     letter-spacing: -1.5px;
 
   }
+
+
+  @media (max-width: 480px) {
+
+    font-size: 2.3rem;
+
+  }
 `;
 
-/* =====================================================
-   SUBTITLE
-===================================================== */
-
 export const Subtitle = styled.p`
-  max-width: 600px;
+  width: 100%;
 
-  margin:
-    10px 0 0;
+  max-width: 700px;
 
-  color: #777777;
+  margin: 10px auto 0;
 
-  font-size:
-    clamp(
-      .85rem,
-      1.5vw,
-      1rem
-    );
+  color: #777;
 
-  line-height: 1.5;
+  font-size: 1.55rem;
+
+  line-height: 1.6;
+
+  text-align: center;
 
 
-  @media (max-width: 600px) {
-    width: 90%;
+  @media (max-width: 768px) {
 
-    font-size: 14px;
+    font-size: 1.1rem;
+
+  }
+
+
+  @media (max-width: 480px) {
+
+    font-size: 1rem;
+
   }
 `;
 

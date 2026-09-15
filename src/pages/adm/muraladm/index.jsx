@@ -569,7 +569,7 @@ export default function Muraladm() {
         <Header>
 
           <Title>
-            Mural
+            Mural de avisos
           </Title>
 
           <Subtitle>

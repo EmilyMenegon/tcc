@@ -4,11 +4,13 @@ import {
   useRef,
   useState,
 } from "react";
+
 import { gsap } from "gsap";
 
 import {
   Header,
   Navbar,
+  Logo,
   NavCenter,
   NavItem,
   ProfileIcon,
@@ -17,7 +19,11 @@ import {
 } from "./style";
 
 import { FaUser } from "react-icons/fa";
-import { getUsuarioLogado, getAuthHeaders } from "../../utils/auth";
+
+import {
+  getUsuarioLogado,
+  getAuthHeaders,
+} from "../../utils/auth";
 
 export default function Layout() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -62,7 +68,9 @@ export default function Layout() {
 
     fetch(
       `http://localhost:3001/perfil/${usuarioLogado.email}`,
-      { headers: getAuthHeaders() }
+      {
+        headers: getAuthHeaders(),
+      }
     )
       .then((res) => res.json())
       .then((data) => {
@@ -114,12 +122,7 @@ export default function Layout() {
         y,
         width: itemRect.width,
         height: itemRect.height,
-
-        // IMPORTANTE:
-        // Não animamos opacity.
-        // O retângulo permanece sempre sólido.
         opacity: 1,
-
         duration,
         ease: "power3.out",
         overwrite: true,
@@ -129,7 +132,7 @@ export default function Layout() {
   );
 
   // =========================================================
-  // RESET DE ITEM
+  // RESET ITEM
   // =========================================================
 
   const resetItemColor = useCallback(
@@ -147,7 +150,9 @@ export default function Layout() {
         scale: 1,
 
         duration: 0.2,
+
         ease: "power2.out",
+
         overwrite: true,
       });
     },
@@ -179,19 +184,24 @@ export default function Layout() {
 
       hoveredItemRef.current = item;
 
-      // Move o retângulo preto
       moveIndicator(item);
 
-      // Texto fica branco sobre o fundo preto
       gsap.to(item, {
         color: "#fff",
+
         scale: 1.04,
+
         duration: 0.2,
+
         ease: "power2.out",
+
         overwrite: true,
       });
     },
-    [moveIndicator, resetItemColor]
+    [
+      moveIndicator,
+      resetItemColor,
+    ]
   );
 
   // =========================================================
@@ -209,9 +219,13 @@ export default function Layout() {
     if (hovered) {
       gsap.to(hovered, {
         color: "#111",
+
         scale: 1,
+
         duration: 0.2,
+
         ease: "power2.out",
+
         overwrite: true,
       });
     }
@@ -225,16 +239,23 @@ export default function Layout() {
 
       gsap.to(active, {
         color: "#fff",
+
         scale: 1,
+
         duration: 0.3,
+
         ease: "power2.out",
+
         overwrite: true,
       });
     }
-  }, [getActiveItem, moveIndicator]);
+  }, [
+    getActiveItem,
+    moveIndicator,
+  ]);
 
   // =========================================================
-  // ANIMAÇÃO INICIAL DO INDICADOR
+  // ANIMAÇÃO INICIAL
   // =========================================================
 
   useLayoutEffect(() => {
@@ -263,27 +284,16 @@ export default function Layout() {
         itemRect.top -
         navRect.top;
 
-      // =====================================================
-      // IMPORTANTE:
-      // O indicador já nasce PRETO e 100% OPACO.
-      // Não usamos opacity: 0.
-      // =====================================================
-
       gsap.set(indicatorRef.current, {
         x,
         y,
         width: itemRect.width,
         height: itemRect.height,
-
         opacity: 1,
-
         backgroundColor: "#111",
-
         scale: 0.85,
       });
 
-      // Anima somente o scale.
-      // O preto continua sólido durante toda a animação.
       gsap.to(indicatorRef.current, {
         scale: 1,
 
@@ -294,7 +304,6 @@ export default function Layout() {
         overwrite: true,
       });
 
-      // Item ativo começa branco
       gsap.set(active, {
         color: "#fff",
       });
@@ -339,11 +348,13 @@ export default function Layout() {
   // =========================================================
 
   const handleMouseEnter = (event) => {
-    activateHover(event.currentTarget);
+    activateHover(
+      event.currentTarget
+    );
   };
 
   // =========================================================
-  // MOUSE LEAVE DO ITEM
+  // MOUSE LEAVE ITEM
   // =========================================================
 
   const handleMouseLeave = (event) => {
@@ -354,9 +365,13 @@ export default function Layout() {
     ) {
       gsap.to(item, {
         color: "#111",
+
         scale: 1,
+
         duration: 0.2,
+
         ease: "power2.out",
+
         overwrite: true,
       });
 
@@ -369,9 +384,13 @@ export default function Layout() {
 
         gsap.to(active, {
           color: "#fff",
+
           scale: 1,
+
           duration: 0.25,
+
           ease: "power2.out",
+
           overwrite: true,
         });
       }
@@ -379,7 +398,7 @@ export default function Layout() {
   };
 
   // =========================================================
-  // MOUSE LEAVE DA NAVBAR
+  // MOUSE LEAVE NAVBAR
   // =========================================================
 
   const handleNavMouseLeave = () => {
@@ -400,44 +419,33 @@ export default function Layout() {
 
   return (
     <Header ref={headerRef}>
-      {/* ===================================================
-          PERFIL
-      =================================================== */}
-
-      <ProfileIcon
-        to="/usuario/profile"
-        $comFoto={!!foto}
-        aria-label="Meu perfil"
-      >
-        {foto ? (
-          <ProfilePhoto
-            src={foto}
-            alt="Foto de perfil"
-          />
-        ) : (
-          <FaUser />
-        )}
-      </ProfileIcon>
-
-      {/* ===================================================
-          NAVBAR
-      =================================================== */}
 
       <Navbar>
+
+        {/* =================================================
+            LOGO
+        ================================================= */}
+
+        <Logo
+          src="/logo.png"
+          alt="Logo"
+        />
+
+        {/* =================================================
+            MENU
+        ================================================= */}
+
         <NavCenter
           ref={navRef}
           $open={menuOpen}
           onMouseLeave={handleNavMouseLeave}
         >
-          {/* =================================================
-              RETÂNGULO PRETO ANIMADO
-          ================================================= */}
+
+          {/* RETÂNGULO PRETO */}
 
           <span ref={indicatorRef} />
 
-          {/* =================================================
-              LINKS
-          ================================================= */}
+          {/* LINKS */}
 
           {links.map((link) => (
             <NavItem
@@ -445,13 +453,39 @@ export default function Layout() {
               to={link.path}
               className="nav-item"
               onClick={closeMenu}
-              onMouseEnter={handleMouseEnter}
-              onMouseLeave={handleMouseLeave}
+              onMouseEnter={
+                handleMouseEnter
+              }
+              onMouseLeave={
+                handleMouseLeave
+              }
             >
               {link.label}
             </NavItem>
           ))}
+
         </NavCenter>
+
+        {/* =================================================
+            PERFIL
+        ================================================= */}
+
+        <ProfileIcon
+          to="/usuario/profile"
+          $comFoto={!!foto}
+          aria-label="Meu perfil"
+        >
+
+          {foto ? (
+            <ProfilePhoto
+              src={foto}
+              alt="Foto de perfil"
+            />
+          ) : (
+            <FaUser />
+          )}
+
+        </ProfileIcon>
 
         {/* =================================================
             BOTÃO MOBILE
@@ -476,7 +510,9 @@ export default function Layout() {
           <span />
           <span />
         </MenuButton>
+
       </Navbar>
+
     </Header>
   );
 }

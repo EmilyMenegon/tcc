@@ -251,7 +251,7 @@ export const EventBadge = styled.div`
 
   color: #fff;
 
-  font-size: .72rem;
+ font-size: 1.0rem;
 
   font-weight: 800;
 
@@ -380,17 +380,16 @@ export const Description = styled.p`
   }
 `;
 
-
-/* ============================================================
-   AÇÕES
-============================================================ */
-
 export const Actions = styled.div`
   display: flex;
 
   align-items: center;
 
   gap: 13px;
+
+  width: 100%;
+
+  max-width: 100%;
 
   animation:
     ${fadeUp}
@@ -399,6 +398,10 @@ export const Actions = styled.div`
 
   a {
     text-decoration: none;
+
+    display: flex;
+
+    width: auto;
   }
 
 
@@ -406,21 +409,23 @@ export const Actions = styled.div`
     flex-direction: column;
 
     width: 100%;
+
+    gap: 13px;
+
+
+    a {
+      width: 100%;
+    }
   }
 `;
 
 
-/* ============================================================
-   PRIMARY LINK
-   ANIMAÇÃO IGUAL À TELA INICIAL
-============================================================ */
-
 export const PrimaryLink = styled.button`
   position: relative;
 
-  min-height: 56px;
+  min-height: 70px;
 
-  padding: 16px 24px;
+  padding: 20px 25px;
 
   display: flex;
 
@@ -429,6 +434,8 @@ export const PrimaryLink = styled.button`
   justify-content: center;
 
   gap: 14px;
+
+  width: auto;
 
   border: none;
 
@@ -442,7 +449,7 @@ export const PrimaryLink = styled.button`
     "Poppins",
     sans-serif;
 
-  font-size: .95rem;
+  font-size: 1.2rem;
 
   font-weight: 800;
 
@@ -458,10 +465,6 @@ export const PrimaryLink = styled.button`
     color .3s ease,
     transform .25s ease;
 
-
-  /* ==========================================================
-     EFEITO LÍQUIDO
-  ========================================================== */
 
   &::before {
     content: "";
@@ -501,10 +504,6 @@ export const PrimaryLink = styled.button`
   }
 
 
-  /* ==========================================================
-     CONTEÚDO
-  ========================================================== */
-
   span {
     position: relative;
 
@@ -525,10 +524,6 @@ export const PrimaryLink = styled.button`
   }
 
 
-  /* ==========================================================
-     HOVER
-  ========================================================== */
-
   &:hover {
     color: #fff;
 
@@ -543,10 +538,6 @@ export const PrimaryLink = styled.button`
       scale(18);
   }
 
-
-  /* ==========================================================
-     SETA
-  ========================================================== */
 
   svg {
     flex-shrink: 0;
@@ -568,10 +559,6 @@ export const PrimaryLink = styled.button`
   }
 
 
-  /* ==========================================================
-     ACTIVE
-  ========================================================== */
-
   &:active {
     transform:
       translateY(0)
@@ -579,26 +566,22 @@ export const PrimaryLink = styled.button`
   }
 
 
-  /* ==========================================================
-     RESPONSIVO
-  ========================================================== */
-
   @media (max-width: 600px) {
     width: 100%;
 
-    min-width: 250px;
+    min-width: 0;
+
+    min-height: 70px;
+
+    padding: 20px 15px;
   }
 `;
 
 
-/* ============================================================
-   SECONDARY LINK
-============================================================ */
-
 export const SecondaryLink = styled.div`
-  min-height: 56px;
+  min-height: 70px;
 
-  padding: 16px 20px;
+  padding: 20px 25px;
 
   display: flex;
 
@@ -606,8 +589,9 @@ export const SecondaryLink = styled.div`
 
   justify-content: center;
 
-
   gap: 9px;
+
+  width: auto;
 
   border: 1.5px solid #000;
 
@@ -621,7 +605,7 @@ export const SecondaryLink = styled.div`
     "Poppins",
     sans-serif;
 
-  font-size: .9rem;
+  font-size: 1.2rem;
 
   font-weight: 700;
 
@@ -658,14 +642,13 @@ export const SecondaryLink = styled.div`
   @media (max-width: 600px) {
     width: 100%;
 
-    min-width: 250px;
+    min-width: 0;
+
+    min-height: 70px;
+
+    padding: 20px 15px;
   }
 `;
-
-
-/* ============================================================
-   IMAGEM
-============================================================ */
 
 export const ImageBox = styled.div`
   width: 46%;
@@ -689,29 +672,20 @@ export const ImageBox = styled.div`
 
   @media (max-width: 1100px) {
     width: 43%;
+
     min-height: 500px;
   }
 
 
   @media (max-width: 900px) {
     width: 40%;
+
     min-height: 450px;
   }
 
 
   @media (max-width: 768px) {
-    width: 75%;
-
-    min-height: 400px;
-
-    max-width: 500px;
-  }
-
-
-  @media (max-width: 500px) {
-    width: 90%;
-
-    min-height: 330px;
+    display: none;
   }
 `;
 

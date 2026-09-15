@@ -123,7 +123,7 @@ export default function Home() {
 
               Estão abertas as inscrições para o
               <strong>
-                {" "}Slam Interescolar Etecamp!
+                {" "}Slam Interescolar ETECAMP!
               </strong>
 
             </Description>

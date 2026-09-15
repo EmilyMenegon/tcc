@@ -255,7 +255,7 @@ export default function Mural() {
         <Header>
 
           <Title>
-            Mural
+            Mural de avisos
           </Title>
 
           <Subtitle>

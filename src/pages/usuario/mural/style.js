@@ -133,11 +133,6 @@ export const Title = styled.h1`
   }
 `;
 
-
-// =====================================================
-// SUBTITLE
-// =====================================================
-
 export const Subtitle = styled.p`
   width: 100%;
 
@@ -168,11 +163,6 @@ export const Subtitle = styled.p`
   }
 `;
 
-
-// =====================================================
-// CARDS
-// =====================================================
-
 export const Cards = styled.section`
   width: 100%;
 
@@ -180,58 +170,41 @@ export const Cards = styled.section`
 
   grid-template-columns:
     repeat(
-      auto-fill,
+      auto-fit,
       minmax(
-        280px,
-        1fr
+        430px,
+        520px
       )
     );
 
-  gap: 26px;
+  justify-content: center;
+
+  gap: 32px;
 
   align-items: stretch;
 
 
-  @media (max-width: 1000px) {
-
-    grid-template-columns:
-      repeat(
-        3,
-        1fr
-      );
-
-    gap: 22px;
-
-  }
-
-
-  @media (max-width: 750px) {
-
+  @media (max-width: 1100px) {
     grid-template-columns:
       repeat(
         2,
-        1fr
+        minmax(
+          0,
+          1fr
+        )
       );
 
-    gap: 20px;
-
+    gap: 28px;
   }
 
 
-  @media (max-width: 500px) {
-
+  @media (max-width: 700px) {
     grid-template-columns: 1fr;
 
-    gap: 18px;
-
+    gap: 24px;
   }
 `;
 
-
-// =====================================================
-// CARD
-// IGUAL AO ADM
-// =====================================================
 
 export const PostIt = styled.article`
   position: relative;
@@ -240,11 +213,11 @@ export const PostIt = styled.article`
 
   min-width: 0;
 
-  min-height: 220px;
+  min-height: 380px;
 
   padding:
-    28px 25px
-    22px;
+    45px 50px
+    36px;
 
   box-sizing: border-box;
 
@@ -260,19 +233,19 @@ export const PostIt = styled.article`
 
   flex-direction: column;
 
-  border-radius: 17px;
+  border-radius: 26px;
 
   overflow: hidden;
 
   box-shadow:
     0
-    7px
-    18px
+    12px
+    28px
     rgba(
       0,
       0,
       0,
-      0.10
+      0.12
     );
 
   transition:
@@ -281,42 +254,50 @@ export const PostIt = styled.article`
 
 
   &:hover {
-
     transform:
-      translateY(-7px);
+      translateY(-9px);
 
     box-shadow:
       0
-      14px
-      28px
+      20px
+      40px
       rgba(
         0,
         0,
         0,
-        0.16
+        0.18
       );
-
   }
 
 
   &:focus-visible {
-
     outline:
-      3px solid #000000;
+      4px solid #000000;
 
-    outline-offset: 4px;
+    outline-offset: 5px;
+  }
 
+
+  @media (max-width: 1100px) {
+    padding:
+      40px 40px
+      32px;
+  }
+
+
+  @media (max-width: 700px) {
+    padding:
+      36px 32px
+      30px;
   }
 
 
   @media (max-width: 500px) {
-
-    min-height: 205px;
+    min-height: 310px;
 
     padding:
-      25px 22px
-      20px;
-
+      34px 28px
+      28px;
   }
 `;
 
@@ -345,12 +326,6 @@ export const PostItTitle = styled.h2`
   word-break: break-word;
 `;
 
-
-// =====================================================
-// CARD MESSAGE
-// IGUAL AO ADM
-// =====================================================
-
 export const PostItMessage = styled.p`
   margin: 0;
 
@@ -360,11 +335,11 @@ export const PostItMessage = styled.p`
     "Poppins",
     sans-serif;
 
-  font-size: 14px;
+  font-size: 18px;
 
   font-weight: 400;
 
-  line-height: 1.55;
+  line-height: 1.65;
 
   word-break: break-word;
 
@@ -373,23 +348,39 @@ export const PostItMessage = styled.p`
   display:
     -webkit-box;
 
-  -webkit-line-clamp: 5;
+  -webkit-line-clamp: 6;
 
   -webkit-box-orient: vertical;
 
   overflow: hidden;
+
+
+  @media (max-width: 1000px) {
+    font-size: 17px;
+  }
+
+
+  @media (max-width: 750px) {
+    font-size: 16px;
+
+    line-height: 1.6;
+  }
+
+
+  @media (max-width: 500px) {
+    font-size: 15px;
+
+    line-height: 1.6;
+
+    -webkit-line-clamp: 7;
+  }
 `;
 
-
-// =====================================================
-// CARD FOOTER
-// IGUAL AO ADM
-// =====================================================
 
 export const PostItFooter = styled.div`
   margin-top: auto;
 
-  padding-top: 20px;
+  padding-top: 30px;
 
   display: flex;
 
@@ -397,14 +388,15 @@ export const PostItFooter = styled.div`
 
   align-items: center;
 
-  gap: 7px;
+  gap: 10px;
+
+
+  @media (max-width: 500px) {
+    padding-top: 25px;
+
+    gap: 9px;
+  }
 `;
-
-
-// =====================================================
-// CLIQUE PARA VISUALIZAR
-// IGUAL AO ADM
-// =====================================================
 
 export const ReadMore = styled.span`
   display: inline-flex;
@@ -415,10 +407,10 @@ export const ReadMore = styled.span`
 
   width: fit-content;
 
-  min-height: 27px;
+  min-height: 45px;
 
   padding:
-    4px 13px;
+    10px 25px;
 
   box-sizing: border-box;
 
@@ -429,7 +421,7 @@ export const ReadMore = styled.span`
       255,
       255,
       255,
-      0.45
+      0.48
     );
 
   color:
@@ -437,27 +429,31 @@ export const ReadMore = styled.span`
       0,
       0,
       0,
-      0.62
+      0.65
     );
 
   font-family:
     "Poppins",
     sans-serif;
 
-  font-size: 11px;
+  font-size: 17px;
 
-  font-weight: 500;
+  font-weight: 600;
 
   line-height: 1.3;
 
   white-space: nowrap;
+
+
+  @media (max-width: 500px) {
+    min-height: 31px;
+
+    padding:
+      5px 15px;
+
+    font-size: 13px;
+  }
 `;
-
-
-// =====================================================
-// DATA
-// IGUAL AO ADM
-// =====================================================
 
 export const PostDate = styled.span`
   display: block;
@@ -468,11 +464,16 @@ export const PostDate = styled.span`
     "Poppins",
     sans-serif;
 
-  font-size: 11px;
+  font-size: 14px;
 
   font-weight: 500;
 
   line-height: 1.4;
+
+
+  @media (max-width: 500px) {
+    font-size: 13px;
+  }
 `;
 
 
