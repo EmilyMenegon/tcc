@@ -159,7 +159,8 @@ export const Title = styled.h1`
       4.8rem
     );
 
-  font-weight: 900;
+  font-weight:
+    900;
 
   letter-spacing:
     -2px;
@@ -251,7 +252,7 @@ export const Notebook = styled.section`
     35px;
 
   background:
-    #831614;
+    ${theme.primary};
 
   border:
     1px solid
@@ -307,9 +308,11 @@ export const NotebookHeader = styled.div`
   margin-bottom:
     22px;
 
-  display: flex;
+  display:
+    flex;
 
-  align-items: center;
+  align-items:
+    center;
 
   justify-content:
     space-between;
@@ -334,6 +337,10 @@ export const NotebookHeader = styled.div`
 `;
 
 
+// =====================================================
+// NOTEBOOK HEADER TITLE
+// =====================================================
+
 export const NotebookHeaderTitle =
   styled.h2`
 
@@ -341,7 +348,7 @@ export const NotebookHeaderTitle =
     0;
 
   color:
-    ${theme.black};
+    ${theme.white};
 
   font-size:
     20px;
@@ -352,16 +359,23 @@ export const NotebookHeaderTitle =
   line-height:
     1.35;
 
-    color: #fff;
-
 `;
 
+
+// =====================================================
+// NOTEBOOK HEADER INFO
+// =====================================================
 
 export const NotebookHeaderInfo =
   styled.span`
 
   color:
-    ${theme.muted};
+    rgba(
+      255,
+      255,
+      255,
+      .75
+    );
 
   font-size:
     13px;
@@ -371,7 +385,7 @@ export const NotebookHeaderInfo =
 
   white-space:
     nowrap;
-  color: #fff;
+
 `;
 
 
@@ -418,6 +432,14 @@ export const Pages = styled.div`
     pan-y;
 
 
+  &:active {
+
+    cursor:
+      grabbing;
+
+  }
+
+
   @media (max-width: 900px) {
 
     min-height:
@@ -448,18 +470,17 @@ export const PageCard = styled.article`
   width:
     100%;
 
-  min-width:
-    0;
-
   min-height:
     650px;
 
+  display:
+    grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
   background:
     ${theme.white};
-
-  border:
-    1px solid
-    ${theme.border};
 
   border-radius:
     24px;
@@ -472,81 +493,89 @@ export const PageCard = styled.article`
       0,
       0,
       0,
-      .07
+      .10
     );
 
   transform-style:
     preserve-3d;
 
-  backface-visibility:
-    hidden;
-
-  will-change:
-    transform,
-    box-shadow,
-    filter;
-
-  transform:
-    translateZ(0);
-
-  transform-origin:
-    left center;
-
   overflow:
     visible;
 
 
-  > div {
+  @media (max-width: 900px) {
 
-    position:
-      absolute;
+    min-height:
+      570px;
 
-    inset:
-      0;
+  }
 
-    padding:
-      35px
-      40px
-      28px;
 
-    display:
-      flex;
+  @media (max-width: 700px) {
 
-    flex-direction:
-      column;
+    min-height:
+      480px;
 
-    background:
-      ${theme.white};
+  }
+
+
+  @media (max-width: 500px) {
+
+    min-height:
+      430px;
 
     border-radius:
-      24px;
-
-    backface-visibility:
-      hidden;
-
-    overflow:
-      hidden;
+      20px;
 
   }
 
-
-  > div:first-child {
-
-    transform:
-      rotateY(0deg);
-
-  }
+`;
 
 
-  > .page-back {
+// =====================================================
+// PAGE SIDE
+// =====================================================
 
-    transform:
-      rotateY(180deg);
+export const PageSide = styled.div`
 
-  }
+  position:
+    relative;
+
+  min-width:
+    0;
+
+  min-height:
+    100%;
+
+  padding:
+    35px
+    40px
+    28px;
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  background:
+    ${theme.white};
+
+  overflow:
+    hidden;
+
+  backface-visibility:
+    hidden;
+
+  transform-style:
+    preserve-3d;
 
 
-  > div::before {
+  /*
+   * LINHAS DO CADERNO
+   */
+
+  &::before {
 
     content:
       "";
@@ -579,7 +608,11 @@ export const PageCard = styled.article`
   }
 
 
-  > div::after {
+  /*
+   * ILUMINAÇÃO LATERAL
+   */
+
+  &::after {
 
     content:
       "";
@@ -618,39 +651,162 @@ export const PageCard = styled.article`
   }
 
 
+  /*
+   * NÃO EXISTE BORDA CENTRAL.
+   * As páginas ficam unidas visualmente.
+   */
+
+
+  /*
+   * =================================================
+   * FOLHAS DE ANIMAÇÃO
+   * =================================================
+   */
+
+  &.turning-page {
+
+    position:
+      absolute;
+
+    top:
+      0;
+
+    bottom:
+      0;
+
+    width:
+      50%;
+
+    z-index:
+      50;
+
+    padding:
+      35px
+      40px
+      28px;
+
+    pointer-events:
+      none;
+
+    transform-style:
+      preserve-3d;
+
+    backface-visibility:
+      hidden;
+
+    will-change:
+      transform;
+
+    box-shadow:
+      none;
+
+  }
+
+
+  /*
+   * FOLHA DIREITA
+   * Gira para a esquerda.
+   */
+
+  &.turning-page.next-page {
+
+    left:
+      50%;
+
+    right:
+      auto;
+
+    transform-origin:
+      left center;
+
+  }
+
+
+  /*
+   * FOLHA ESQUERDA
+   * Gira para a direita.
+   */
+
+  &.turning-page.previous-page {
+
+    left:
+      0;
+
+    right:
+      auto;
+
+    transform-origin:
+      right center;
+
+  }
+
+
+  /*
+   * Durante a animação,
+   * aumenta a profundidade.
+   */
+
+  &.turning-page.active {
+
+    z-index:
+      100;
+
+  }
+
+
   @media (max-width: 900px) {
 
-    min-height:
-      570px;
+    padding:
+      30px
+      28px
+      24px;
+
+
+    &.turning-page {
+
+      padding:
+        30px
+        28px
+        24px;
+
+    }
 
   }
 
 
   @media (max-width: 700px) {
 
-    min-height:
-      480px;
-
-  }
-
-
-  @media (max-width: 500px) {
-
-    min-height:
-      430px;
-
-    border-radius:
+    padding:
+      25px
+      22px
       20px;
 
 
-    > div {
+    &.turning-page {
 
       padding:
         25px
         22px
         20px;
 
-      border-radius:
+    }
+
+  }
+
+
+  @media (max-width: 500px) {
+
+    padding:
+      25px
+      22px
+      20px;
+
+
+    &.turning-page {
+
+      padding:
+        25px
+        22px
         20px;
 
     }
@@ -898,6 +1054,14 @@ export const WritingArea = styled.textarea`
   }
 
 
+  &:read-only {
+
+    cursor:
+      default;
+
+  }
+
+
   @media (max-width: 500px) {
 
     font-size:
@@ -948,7 +1112,8 @@ export const PageFooter = styled.footer`
     1px solid
     ${theme.border};
 
-  color: #fff;
+  color:
+    ${theme.muted};
 
   font-size:
     10px;
@@ -1231,7 +1396,12 @@ export const DragHint = styled.div`
     7px;
 
   color:
-    ${theme.muted};
+    rgba(
+      255,
+      255,
+      255,
+      .75
+    );
 
   font-size:
     11px;
@@ -1261,10 +1431,10 @@ export const DragHint = styled.div`
       50%;
 
     background:
-      ${theme.primary};
+      ${theme.white};
 
     color:
-      ${theme.white};
+      ${theme.primary};
 
     font-size:
       13px;

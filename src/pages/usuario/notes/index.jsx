@@ -19,6 +19,7 @@ import {
   NotebookHeaderInfo,
   Pages,
   PageCard,
+  PageSide,
   PageHeader,
   PageNumber,
   PageTitle,
@@ -57,9 +58,25 @@ export default function Notes() {
   const [isTurning, setIsTurning] =
     useState(false);
 
+  const [turningDirection, setTurningDirection] =
+    useState(null);
 
-  const pagesRef =
+
+  /*
+   * Folha que anima quando vai para frente.
+   * É a página direita.
+   */
+  const nextPageRef =
     useRef(null);
+
+
+  /*
+   * Folha que anima quando volta.
+   * É a página esquerda.
+   */
+  const previousPageRef =
+    useRef(null);
+
 
   const dragStartX =
     useRef(null);
@@ -83,7 +100,7 @@ export default function Notes() {
 
 
   // =====================================================
-  // ATUALIZAR PÁGINA
+  // ATUALIZA PÁGINA
   // =====================================================
 
   const updatePage = (
@@ -111,36 +128,16 @@ export default function Notes() {
 
 
   // =====================================================
-  // ANIMAÇÃO DA FOLHA
+  // RESET DA FOLHA
   // =====================================================
 
-  const animatePageTurn = (
-    direction
+  const resetTurningPage = (
+    page
   ) => {
 
-    if (
-      isTurning ||
-      !pagesRef.current
-    ) {
+    if (!page) {
       return;
     }
-
-
-    const page =
-      pagesRef.current;
-
-
-    const isNext =
-      direction === "next";
-
-
-    const rotation =
-      isNext
-        ? -180
-        : 180;
-
-
-    setIsTurning(true);
 
 
     gsap.killTweensOf(page);
@@ -152,23 +149,74 @@ export default function Notes() {
 
       rotationZ: 0,
 
-      scaleX: 1,
-
-      scaleY: 1,
+      scale: 1,
 
       x: 0,
 
-      transformPerspective: 2200,
+      zIndex: 1,
 
-      transformOrigin:
-        isNext
-          ? "left center"
-          : "right center",
+      opacity: 1,
+
+      clearProps:
+        "transform,boxShadow,filter",
+
+    });
+
+  };
+
+
+  // =====================================================
+  // ANIMAÇÃO PARA FRENTE
+  // DIREITA -> ESQUERDA
+  // =====================================================
+
+  const animateNextPage = () => {
+
+    const page =
+      nextPageRef.current;
+
+
+    if (
+      !page ||
+      isTurning
+    ) {
+      return;
+    }
+
+
+    setIsTurning(true);
+
+    setTurningDirection("next");
+
+
+    gsap.killTweensOf(page);
+
+
+    /*
+     * A página começa exatamente
+     * na posição da página direita.
+     */
+    gsap.set(page, {
+
+      rotationY: 0,
+
+      rotationZ: 0,
+
+      scale: 1,
+
+      x: 0,
+
+      opacity: 1,
+
+      zIndex: 100,
+
+      transformPerspective: 2200,
 
       transformStyle:
         "preserve-3d",
 
-      zIndex: 20,
+      transformOrigin:
+        "left center",
 
       force3D: true,
 
@@ -186,31 +234,14 @@ export default function Notes() {
 
           setCurrentSpread(
             (previous) =>
-              isNext
-                ? previous + 1
-                : previous - 1
+              previous + 1
           );
 
 
-          gsap.set(page, {
+          resetTurningPage(page);
 
-            rotationY: 0,
 
-            rotationZ: 0,
-
-            scaleX: 1,
-
-            scaleY: 1,
-
-            x: 0,
-
-            zIndex: 1,
-
-            clearProps:
-              "transform,boxShadow,filter",
-
-          });
-
+          setTurningDirection(null);
 
           setIsTurning(false);
 
@@ -219,40 +250,29 @@ export default function Notes() {
       });
 
 
-    // ===================================================
-    // LEVANTA A FOLHA
-    // ===================================================
+    // -----------------------------------------------------
+    // LEVANTA
+    // -----------------------------------------------------
 
     timeline.to(page, {
 
       rotationY:
-        isNext
-          ? -16
-          : 16,
+        -12,
 
       rotationZ:
-        isNext
-          ? -0.7
-          : 0.7,
+        -0.4,
 
-      scaleX:
-        0.99,
+      scale:
+        0.995,
 
       x:
-        isNext
-          ? 3
-          : -3,
+        2,
 
       boxShadow:
-        isNext
-          ? "-7px 8px 18px rgba(0,0,0,.10)"
-          : "7px 8px 18px rgba(0,0,0,.10)",
-
-      filter:
-        "brightness(.99)",
+        "-5px 7px 18px rgba(0,0,0,.10)",
 
       duration:
-        0.16,
+        0.14,
 
       ease:
         "power1.out",
@@ -260,81 +280,59 @@ export default function Notes() {
     });
 
 
-    // ===================================================
-    // DOBRA A FOLHA
-    // ===================================================
+    // -----------------------------------------------------
+    // COMEÇA A VIRAR
+    // -----------------------------------------------------
 
     timeline.to(page, {
 
       rotationY:
-        isNext
-          ? -72
-          : 72,
+        -55,
 
       rotationZ:
-        isNext
-          ? -1.7
-          : 1.7,
+        -1,
 
-      scaleX:
-        0.945,
+      scale:
+        0.97,
 
       x:
-        isNext
-          ? 13
-          : -13,
+        7,
 
       boxShadow:
-        isNext
-          ? "-20px 14px 34px rgba(0,0,0,.17)"
-          : "20px 14px 34px rgba(0,0,0,.17)",
-
-      filter:
-        "brightness(.94)",
+        "-18px 12px 30px rgba(0,0,0,.17)",
 
       duration:
-        0.23,
+        0.22,
 
       ease:
-        "power2.in",
+        "power1.in",
 
     });
 
 
-    // ===================================================
-    // PERFIL DA FOLHA
-    // ===================================================
+    // -----------------------------------------------------
+    // MEIO DA VIRADA
+    // -----------------------------------------------------
 
     timeline.to(page, {
 
       rotationY:
-        isNext
-          ? -100
-          : 100,
+        -90,
 
       rotationZ:
-        isNext
-          ? -2
-          : 2,
+        -1.5,
 
-      scaleX:
-        0.90,
+      scale:
+        0.94,
 
       x:
-        isNext
-          ? 18
-          : -18,
+        13,
 
       boxShadow:
-        isNext
-          ? "-30px 13px 40px rgba(0,0,0,.22)"
-          : "30px 13px 40px rgba(0,0,0,.22)",
-
-      filter:
-        "brightness(.89)",
+        "-26px 14px 38px rgba(0,0,0,.21)",
 
       duration:
-        0.12,
+        0.14,
 
       ease:
         "power1.inOut",
@@ -342,40 +340,29 @@ export default function Notes() {
     });
 
 
-    // ===================================================
+    // -----------------------------------------------------
     // PASSA PARA O OUTRO LADO
-    // ===================================================
+    // -----------------------------------------------------
 
     timeline.to(page, {
 
       rotationY:
-        isNext
-          ? -145
-          : 145,
+        -135,
 
       rotationZ:
-        isNext
-          ? -1.3
-          : 1.3,
+        -1,
 
-      scaleX:
-        0.96,
+      scale:
+        0.97,
 
       x:
-        isNext
-          ? 10
-          : -10,
+        8,
 
       boxShadow:
-        isNext
-          ? "-18px 11px 30px rgba(0,0,0,.15)"
-          : "18px 11px 30px rgba(0,0,0,.15)",
-
-      filter:
-        "brightness(.95)",
+        "-17px 10px 28px rgba(0,0,0,.15)",
 
       duration:
-        0.20,
+        0.18,
 
       ease:
         "power2.out",
@@ -383,35 +370,29 @@ export default function Notes() {
     });
 
 
-    // ===================================================
-    // ASSENTA A FOLHA
-    // ===================================================
+    // -----------------------------------------------------
+    // ASSENTA
+    // -----------------------------------------------------
 
     timeline.to(page, {
 
       rotationY:
-        rotation,
+        -180,
 
       rotationZ:
         0,
 
-      scaleX:
-        1,
-
-      scaleY:
+      scale:
         1,
 
       x:
         0,
 
       boxShadow:
-        "0 8px 25px rgba(0,0,0,.06)",
-
-      filter:
-        "brightness(1)",
+        "0 8px 20px rgba(0,0,0,.04)",
 
       duration:
-        0.16,
+        0.20,
 
       ease:
         "power2.out",
@@ -422,7 +403,244 @@ export default function Notes() {
 
 
   // =====================================================
-  // PRÓXIMO SPREAD
+  // ANIMAÇÃO PARA TRÁS
+  // ESQUERDA -> DIREITA
+  // =====================================================
+
+  const animatePreviousPage = () => {
+
+    const page =
+      previousPageRef.current;
+
+
+    if (
+      !page ||
+      isTurning
+    ) {
+      return;
+    }
+
+
+    setIsTurning(true);
+
+    setTurningDirection("previous");
+
+
+    gsap.killTweensOf(page);
+
+
+    /*
+     * A página começa exatamente
+     * na posição da página esquerda.
+     */
+    gsap.set(page, {
+
+      rotationY: 0,
+
+      rotationZ: 0,
+
+      scale: 1,
+
+      x: 0,
+
+      opacity: 1,
+
+      zIndex: 100,
+
+      transformPerspective: 2200,
+
+      transformStyle:
+        "preserve-3d",
+
+      transformOrigin:
+        "right center",
+
+      force3D: true,
+
+    });
+
+
+    const timeline =
+      gsap.timeline({
+
+        defaults: {
+          overwrite: "auto",
+        },
+
+        onComplete: () => {
+
+          setCurrentSpread(
+            (previous) =>
+              previous - 1
+          );
+
+
+          resetTurningPage(page);
+
+
+          setTurningDirection(null);
+
+          setIsTurning(false);
+
+        },
+
+      });
+
+
+    // -----------------------------------------------------
+    // LEVANTA
+    // -----------------------------------------------------
+
+    timeline.to(page, {
+
+      rotationY:
+        12,
+
+      rotationZ:
+        0.4,
+
+      scale:
+        0.995,
+
+      x:
+        -2,
+
+      boxShadow:
+        "5px 7px 18px rgba(0,0,0,.10)",
+
+      duration:
+        0.14,
+
+      ease:
+        "power1.out",
+
+    });
+
+
+    // -----------------------------------------------------
+    // COMEÇA A VIRAR
+    // -----------------------------------------------------
+
+    timeline.to(page, {
+
+      rotationY:
+        55,
+
+      rotationZ:
+        1,
+
+      scale:
+        0.97,
+
+      x:
+        -7,
+
+      boxShadow:
+        "18px 12px 30px rgba(0,0,0,.17)",
+
+      duration:
+        0.22,
+
+      ease:
+        "power1.in",
+
+    });
+
+
+    // -----------------------------------------------------
+    // MEIO DA VIRADA
+    // -----------------------------------------------------
+
+    timeline.to(page, {
+
+      rotationY:
+        90,
+
+      rotationZ:
+        1.5,
+
+      scale:
+        0.94,
+
+      x:
+        -13,
+
+      boxShadow:
+        "26px 14px 38px rgba(0,0,0,.21)",
+
+      duration:
+        0.14,
+
+      ease:
+        "power1.inOut",
+
+    });
+
+
+    // -----------------------------------------------------
+    // PASSA PARA O OUTRO LADO
+    // -----------------------------------------------------
+
+    timeline.to(page, {
+
+      rotationY:
+        135,
+
+      rotationZ:
+        1,
+
+      scale:
+        0.97,
+
+      x:
+        -8,
+
+      boxShadow:
+        "17px 10px 28px rgba(0,0,0,.15)",
+
+      duration:
+        0.18,
+
+      ease:
+        "power2.out",
+
+    });
+
+
+    // -----------------------------------------------------
+    // ASSENTA
+    // -----------------------------------------------------
+
+    timeline.to(page, {
+
+      rotationY:
+        180,
+
+      rotationZ:
+        0,
+
+      scale:
+        1,
+
+      x:
+        0,
+
+      boxShadow:
+        "0 8px 20px rgba(0,0,0,.04)",
+
+      duration:
+        0.20,
+
+      ease:
+        "power2.out",
+
+    });
+
+  };
+
+
+  // =====================================================
+  // NAVEGAÇÃO
   // =====================================================
 
   const nextSpread = () => {
@@ -436,14 +654,10 @@ export default function Notes() {
     }
 
 
-    animatePageTurn("next");
+    animateNextPage();
 
   };
 
-
-  // =====================================================
-  // SPREAD ANTERIOR
-  // =====================================================
 
   const previousSpread = () => {
 
@@ -455,13 +669,13 @@ export default function Notes() {
     }
 
 
-    animatePageTurn("previous");
+    animatePreviousPage();
 
   };
 
 
   // =====================================================
-  // POINTER DOWN
+  // DRAG
   // =====================================================
 
   const handlePointerDown = (
@@ -495,10 +709,6 @@ export default function Notes() {
 
   };
 
-
-  // =====================================================
-  // POINTER UP
-  // =====================================================
 
   const handlePointerUp = (
     event
@@ -548,10 +758,6 @@ export default function Notes() {
   };
 
 
-  // =====================================================
-  // POINTER CANCEL
-  // =====================================================
-
   const handlePointerCancel =
     () => {
 
@@ -563,6 +769,10 @@ export default function Notes() {
 
     };
 
+
+  // =====================================================
+  // RENDER
+  // =====================================================
 
   return (
     <Page>
@@ -598,8 +808,10 @@ export default function Notes() {
 
 
             <NotebookHeaderInfo>
-              {leftPage.number} —{" "}
-              {rightPage.number} de{" "}
+              {leftPage.number}
+              {" — "}
+              {rightPage.number}
+              {" de "}
               {TOTAL_PAGES}
             </NotebookHeaderInfo>
 
@@ -622,14 +834,13 @@ export default function Notes() {
             aria-label="Caderno de notas"
           >
 
-            <PageCard
-              ref={pagesRef}
-              $turning={isTurning}
-            >
+            <PageCard>
 
-              {/* FRENTE */}
+              {/* =================================================
+                  PÁGINA ESQUERDA NORMAL
+              ================================================= */}
 
-              <div>
+              <PageSide>
 
                 <PageHeader>
 
@@ -679,12 +890,16 @@ export default function Notes() {
                   {leftPage.number}
                 </PageFooter>
 
-              </div>
+              </PageSide>
 
 
-              {/* VERSO */}
+              {/* =================================================
+                  PÁGINA DIREITA NORMAL
+              ================================================= */}
 
-              <div className="page-back">
+              <PageSide
+                className="right-page"
+              >
 
                 <PageHeader>
 
@@ -734,7 +949,109 @@ export default function Notes() {
                   {rightPage.number}
                 </PageFooter>
 
-              </div>
+              </PageSide>
+
+
+              {/* =================================================
+                  FOLHA DIREITA -> ESQUERDA
+              ================================================= */}
+
+              <PageSide
+                ref={nextPageRef}
+                className={
+                  `turning-page next-page ${
+                    turningDirection === "next"
+                      ? "active"
+                      : ""
+                  }`
+                }
+              >
+
+                <PageHeader>
+
+                  <PageTitle>
+                    Página{" "}
+                    {rightPage.number}
+                  </PageTitle>
+
+
+                  <PageNumber>
+                    {String(
+                      rightPage.number
+                    ).padStart(2, "0")}
+                  </PageNumber>
+
+                </PageHeader>
+
+
+                <WritingArea
+                  value={
+                    rightPage.content
+                  }
+
+                  readOnly
+
+                  tabIndex={-1}
+                />
+
+
+                <PageFooter>
+                  Página{" "}
+                  {rightPage.number}
+                </PageFooter>
+
+              </PageSide>
+
+
+              {/* =================================================
+                  FOLHA ESQUERDA -> DIREITA
+              ================================================= */}
+
+              <PageSide
+                ref={previousPageRef}
+                className={
+                  `turning-page previous-page ${
+                    turningDirection === "previous"
+                      ? "active"
+                      : ""
+                  }`
+                }
+              >
+
+                <PageHeader>
+
+                  <PageTitle>
+                    Página{" "}
+                    {leftPage.number}
+                  </PageTitle>
+
+
+                  <PageNumber>
+                    {String(
+                      leftPage.number
+                    ).padStart(2, "0")}
+                  </PageNumber>
+
+                </PageHeader>
+
+
+                <WritingArea
+                  value={
+                    leftPage.content
+                  }
+
+                  readOnly
+
+                  tabIndex={-1}
+                />
+
+
+                <PageFooter>
+                  Página{" "}
+                  {leftPage.number}
+                </PageFooter>
+
+              </PageSide>
 
             </PageCard>
 
