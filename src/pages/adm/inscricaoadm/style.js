@@ -1,4 +1,3 @@
-
 import styled, { keyframes } from "styled-components";
 
 /* =====================================================
@@ -19,7 +18,6 @@ const COLORS = {
   dangerDark: "#b71c1c",
 };
 
-
 /* =====================================================
    PAGE
 ===================================================== */
@@ -38,7 +36,6 @@ export const Page = styled.div`
 
   overflow-x: hidden;
 `;
-
 
 /* =====================================================
    CONTENT
@@ -61,7 +58,6 @@ export const Content = styled.main`
     margin: 25px auto 45px;
   }
 `;
-
 
 /* =====================================================
    HEADER
@@ -90,7 +86,6 @@ export const Header = styled.header`
   }
 `;
 
-
 /* =====================================================
    TITLE AREA
 ===================================================== */
@@ -106,17 +101,17 @@ export const TitleArea = styled.div`
 
   text-align: center;
 `;
+
 export const Title = styled.h1`
   margin: 0 0 14px;
 
   color: #831614;
 
-  font-size:
-    clamp(
-      2.8rem,
-      5vw,
-      4.8rem
-    );
+  font-size: clamp(
+    2.8rem,
+    5vw,
+    4.8rem
+  );
 
   font-weight: 900;
 
@@ -124,27 +119,22 @@ export const Title = styled.h1`
 
   line-height: 1.05;
 
-
   @media (max-width: 768px) {
-
-    font-size:
-      clamp(
-        2.5rem,
-        9vw,
-        4rem
-      );
+    font-size: clamp(
+      2.5rem,
+      9vw,
+      4rem
+    );
 
     letter-spacing: -1.5px;
-
   }
-
 
   @media (max-width: 480px) {
-
     font-size: 2.3rem;
-
   }
 `;
+
+
 
 export const Subtitle = styled.p`
   width: 100%;
@@ -161,20 +151,18 @@ export const Subtitle = styled.p`
 
   text-align: center;
 
-
   @media (max-width: 768px) {
-
     font-size: 1.1rem;
-
   }
-
 
   @media (max-width: 480px) {
-
     font-size: 1rem;
-
   }
 `;
+
+/* =====================================================
+   STATS
+===================================================== */
 
 export const Stats = styled.div`
   position: absolute;
@@ -200,7 +188,6 @@ export const Stats = styled.div`
     width: 100%;
   }
 `;
-
 
 /* =====================================================
    STAT CARD
@@ -233,7 +220,6 @@ export const StatCard = styled.div`
   }
 `;
 
-
 /* =====================================================
    STAT ICON
 ===================================================== */
@@ -251,13 +237,13 @@ export const StatIcon = styled.div`
 
   border-radius: 11px;
 
-  background: ${({ $color }) => `${$color}12`};
+  background: ${({ $color }) =>
+    `${$color}12`};
 
   color: ${({ $color }) => $color};
 
   font-size: 20px;
 `;
-
 
 /* =====================================================
    STAT CONTENT
@@ -273,7 +259,6 @@ export const StatContent = styled.div`
   gap: 1px;
 `;
 
-
 /* =====================================================
    STAT NUMBER
 ===================================================== */
@@ -288,7 +273,6 @@ export const StatNumber = styled.strong`
   line-height: 1.2;
 `;
 
-
 /* =====================================================
    STAT LABEL
 ===================================================== */
@@ -300,7 +284,6 @@ export const StatLabel = styled.span`
 
   white-space: nowrap;
 `;
-
 
 /* =====================================================
    FILTROS
@@ -337,7 +320,6 @@ export const FilterContainer = styled.div`
   }
 `;
 
-
 /* =====================================================
    FILTRO
 ===================================================== */
@@ -363,10 +345,14 @@ export const FilterButton = styled.button`
   border-radius: 9px;
 
   background: ${({ $active }) =>
-    $active ? COLORS.primary : "transparent"};
+    $active
+      ? COLORS.primary
+      : "transparent"};
 
   color: ${({ $active }) =>
-    $active ? "#ffffff" : "#666666"};
+    $active
+      ? "#ffffff"
+      : "#666666"};
 
   font-family: inherit;
 
@@ -382,7 +368,13 @@ export const FilterButton = styled.button`
 
   transition:
     color 0.25s ease,
-    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.25s
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      ),
     box-shadow 0.25s ease;
 
   &::before {
@@ -399,24 +391,26 @@ export const FilterButton = styled.button`
     border-radius: 50%;
 
     background: ${({ $active }) =>
-      $active ? COLORS.primaryDark : COLORS.yellow};
+      $active
+        ? COLORS.primaryDark
+        : COLORS.yellow};
 
     transform:
       translate(-50%, -50%)
       scale(0);
 
     transition:
-      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+      transform 0.55s
+      cubic-bezier(
+        0.16,
+        1,
+        0.3,
+        1
+      );
 
     z-index: -1;
 
     pointer-events: none;
-  }
-
-  & > * {
-    position: relative;
-
-    z-index: 2;
   }
 
   &:hover {
@@ -439,12 +433,9 @@ export const FilterButton = styled.button`
     transform: scale(0.97);
   }
 
-  &:focus {
-    outline: none;
-  }
-
   &:focus-visible {
-    outline: 2px solid ${COLORS.yellow};
+    outline: 2px solid
+      ${COLORS.yellow};
 
     outline-offset: 2px;
   }
@@ -465,14 +456,24 @@ export const FilterButton = styled.button`
     border-radius: 50%;
 
     background: ${({ $active }) =>
-      $active ? "rgba(255,255,255,0.16)" : "#f1f1f1"};
+      $active
+        ? "rgba(255,255,255,0.16)"
+        : "#f1f1f1"};
 
     color: ${({ $active }) =>
-      $active ? "#ffffff" : "#777777"};
+      $active
+        ? "#ffffff"
+        : "#777777"};
 
     font-size: 10px;
 
     font-weight: 700;
+  }
+
+  span {
+    position: relative;
+
+    z-index: 2;
   }
 
   @media (max-width: 600px) {
@@ -487,7 +488,6 @@ export const FilterButton = styled.button`
     font-size: 12px;
   }
 `;
-
 
 /* =====================================================
    ERROR
@@ -530,7 +530,6 @@ export const ErrorMessage = styled.div`
   }
 `;
 
-
 /* =====================================================
    LOADING
 ===================================================== */
@@ -552,7 +551,6 @@ export const LoadingState = styled.div`
   font-size: 13px;
 `;
 
-
 /* =====================================================
    SPINNER
 ===================================================== */
@@ -573,9 +571,10 @@ export const Spinner = styled.div`
 
   border-radius: 50%;
 
-  animation: ${spin} 0.8s linear infinite;
+  animation:
+    ${spin}
+    0.8s linear infinite;
 `;
-
 
 /* =====================================================
    TABLE CONTAINER
@@ -586,16 +585,17 @@ export const TableContainer = styled.section`
 
   background: #ffffff;
 
-  border: 1px solid ${COLORS.border};
+  border: 1px solid
+    ${COLORS.border};
 
   border-radius: 18px;
 
   overflow: hidden;
 
   box-shadow:
-    0 12px 35px rgba(0, 0, 0, 0.065);
+    0 12px 35px
+    rgba(0, 0, 0, 0.065);
 `;
-
 
 /* =====================================================
    TABLE HEADER
@@ -611,6 +611,8 @@ export const TableHeader = styled.div`
   align-items: center;
   justify-content: space-between;
 
+  gap: 20px;
+
   box-sizing: border-box;
 
   border-bottom: 1px solid #eeeeee;
@@ -622,7 +624,6 @@ export const TableHeader = styled.div`
   }
 `;
 
-
 /* =====================================================
    TABLE HEADER INFO
 ===================================================== */
@@ -633,8 +634,9 @@ export const TableHeaderInfo = styled.div`
   flex-direction: column;
 
   gap: 3px;
-`;
 
+  min-width: 0;
+`;
 
 /* =====================================================
    TABLE TITLE
@@ -650,7 +652,6 @@ export const TableTitle = styled.h2`
   font-weight: 700;
 `;
 
-
 /* =====================================================
    TABLE DESCRIPTION
 ===================================================== */
@@ -663,6 +664,156 @@ export const TableDescription = styled.p`
   font-size: 12px;
 `;
 
+/* =====================================================
+   DOWNLOAD BUTTON
+===================================================== */
+
+export const DownloadButton = styled.button`
+  position: relative;
+
+  min-height: 40px;
+
+  padding: 0 15px;
+
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  flex-shrink: 0;
+
+  border: 1px solid
+    ${COLORS.primary};
+
+  border-radius: 9px;
+
+  background: ${COLORS.primary};
+
+  color: #ffffff;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  overflow: hidden;
+
+  isolation: isolate;
+
+  transition:
+    color 0.25s ease,
+    transform 0.25s
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      ),
+    box-shadow 0.25s ease;
+
+  &::before {
+    content: "";
+
+    position: absolute;
+
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+
+    width: 18px;
+    height: 18px;
+
+    border-radius: 50%;
+
+    background: ${COLORS.yellow};
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    transition:
+      transform 0.55s
+      cubic-bezier(
+        0.16,
+        1,
+        0.3,
+        1
+      );
+
+    z-index: -1;
+
+    pointer-events: none;
+  }
+
+  svg {
+    position: relative;
+
+    z-index: 2;
+
+    width: 17px;
+    height: 17px;
+
+    flex-shrink: 0;
+
+    stroke-width: 2.3;
+  }
+
+  span {
+    position: relative;
+
+    z-index: 2;
+  }
+
+  &:hover {
+    color: #111111;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+      0 8px 18px
+      rgba(131, 22, 20, 0.2);
+
+    &::before {
+      transform:
+        translate(-50%, -50%)
+        scale(14);
+    }
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &:focus-visible {
+    outline: 2px solid
+      ${COLORS.yellow};
+
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 600px) {
+    min-height: 38px;
+
+    padding: 0 11px;
+
+    font-size: 11px;
+
+    gap: 6px;
+
+    span {
+      display: none;
+    }
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+`;
 
 /* =====================================================
    TABLE WRAPPER
@@ -690,16 +841,11 @@ export const TableWrapper = styled.div`
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #e1c33a;
+    background: #c9aa1f;
 
     border-radius: 20px;
   }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background: #c9aa1f;
-  }
 `;
-
 
 /* =====================================================
    TABLE
@@ -756,7 +902,8 @@ export const Table = styled.table`
 
     font-size: 13px;
 
-    border-bottom: 1px solid #eeeeee;
+    border-bottom: 1px solid
+      #eeeeee;
 
     vertical-align: middle;
 
@@ -779,10 +926,6 @@ export const Table = styled.table`
 
   tbody tr:hover {
     background: #fffbed;
-  }
-
-  tbody tr:last-child td {
-    border-bottom: none;
   }
 
   th:nth-child(1),
@@ -843,7 +986,6 @@ export const Table = styled.table`
   }
 `;
 
-
 /* =====================================================
    STUDENT CELL
 ===================================================== */
@@ -857,7 +999,6 @@ export const StudentCell = styled.div`
 
   min-width: 0;
 `;
-
 
 /* =====================================================
    STUDENT AVATAR
@@ -894,7 +1035,6 @@ export const StudentAvatar = styled.div`
     rgba(0, 0, 0, 0.04);
 `;
 
-
 /* =====================================================
    STUDENT INFO
 ===================================================== */
@@ -908,7 +1048,6 @@ export const StudentInfo = styled.div`
 
   gap: 2px;
 `;
-
 
 /* =====================================================
    STUDENT NAME
@@ -931,7 +1070,6 @@ export const StudentName = styled.span`
 
   line-height: 1.3;
 `;
-
 
 /* =====================================================
    BADGE
@@ -978,7 +1116,6 @@ export const Badge = styled.span`
   }
 `;
 
-
 /* =====================================================
    TURNO BADGE
 ===================================================== */
@@ -1007,15 +1144,19 @@ export const TurnoBadge = styled.span`
     border-radius: 50%;
 
     background: ${({ $turno }) => {
-      if ($turno === "Manhã") return "#f0b900";
-      if ($turno === "Tarde") return "#e87927";
-      if ($turno === "Noite") return "#6256b7";
+      if ($turno === "Manhã")
+        return "#f0b900";
+
+      if ($turno === "Tarde")
+        return "#e87927";
+
+      if ($turno === "Noite")
+        return "#6256b7";
 
       return "#999";
     }};
   }
 `;
-
 
 /* =====================================================
    ACTIONS
@@ -1029,7 +1170,6 @@ export const Actions = styled.div`
 
   gap: 14px;
 `;
-
 
 /* =====================================================
    ACTION BUTTON
@@ -1061,8 +1201,6 @@ export const ActionButton = styled.button`
 
   cursor: pointer;
 
-  box-shadow: none;
-
   overflow: hidden;
 
   isolation: isolate;
@@ -1071,7 +1209,13 @@ export const ActionButton = styled.button`
 
   transition:
     color 0.25s ease,
-    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.25s
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      ),
     box-shadow 0.25s ease;
 
   &::before {
@@ -1097,7 +1241,13 @@ export const ActionButton = styled.button`
       scale(0);
 
     transition:
-      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+      transform 0.55s
+      cubic-bezier(
+        0.16,
+        1,
+        0.3,
+        1
+      );
 
     z-index: -1;
 
@@ -1140,17 +1290,13 @@ export const ActionButton = styled.button`
     transform: scale(0.9);
   }
 
-  &:focus {
-    outline: none;
-  }
-
   &:focus-visible {
-    outline: 2px solid ${COLORS.yellow};
+    outline: 2px solid
+      ${COLORS.yellow};
 
     outline-offset: 3px;
   }
 `;
-
 
 /* =====================================================
    EMPTY STATE
@@ -1170,11 +1316,6 @@ export const EmptyState = styled.div`
 
   text-align: center;
 `;
-
-
-/* =====================================================
-   EMPTY ICON
-===================================================== */
 
 export const EmptyIcon = styled.div`
   width: 58px;
@@ -1196,11 +1337,6 @@ export const EmptyIcon = styled.div`
   font-size: 24px;
 `;
 
-
-/* =====================================================
-   EMPTY TITLE
-===================================================== */
-
 export const EmptyTitle = styled.h3`
   margin: 0 0 5px;
 
@@ -1210,11 +1346,6 @@ export const EmptyTitle = styled.h3`
 
   font-weight: 700;
 `;
-
-
-/* =====================================================
-   EMPTY TEXT
-===================================================== */
 
 export const EmptyText = styled.p`
   max-width: 400px;
@@ -1227,7 +1358,6 @@ export const EmptyText = styled.p`
 
   line-height: 1.5;
 `;
-
 
 /* =====================================================
    MODAL OVERLAY
@@ -1249,13 +1379,17 @@ export const ModalOverlay = styled.div`
 
   box-sizing: border-box;
 
-  background: rgba(20, 15, 15, 0.58);
+  background: rgba(
+    20,
+    15,
+    15,
+    0.58
+  );
 
   backdrop-filter: blur(7px);
 
   overflow-y: auto;
 `;
-
 
 /* =====================================================
    MODAL
@@ -1294,17 +1428,24 @@ export const Modal = styled.div`
 
   background: #ffffff;
 
-  border: 1px solid rgba(255, 255, 255, 0.8);
+  border: 1px solid
+    rgba(255, 255, 255, 0.8);
 
   border-radius: 20px;
 
   box-shadow:
-    0 30px 80px rgba(0, 0, 0, 0.25);
+    0 30px 80px
+    rgba(0, 0, 0, 0.25);
 
   animation:
     ${modalAppear}
     0.25s
-    cubic-bezier(0.22, 1, 0.36, 1);
+    cubic-bezier(
+      0.22,
+      1,
+      0.36,
+      1
+    );
 
   @media (max-width: 600px) {
     padding: 23px 19px;
@@ -1312,7 +1453,6 @@ export const Modal = styled.div`
     border-radius: 17px;
   }
 `;
-
 
 /* =====================================================
    MODAL HEADER
@@ -1329,16 +1469,13 @@ export const ModalHeader = styled.div`
   margin-bottom: 22px;
 `;
 
-
-/* =====================================================
-   MODAL TITLE
-===================================================== */
-
 export const ModalTitle = styled.h2`
   margin: 0 0 5px;
 
   color: ${({ $danger }) =>
-    $danger ? COLORS.danger : COLORS.primary};
+    $danger
+      ? COLORS.danger
+      : COLORS.primary};
 
   font-size: 21px;
 
@@ -1346,11 +1483,6 @@ export const ModalTitle = styled.h2`
 
   line-height: 1.2;
 `;
-
-
-/* =====================================================
-   MODAL DESCRIPTION
-===================================================== */
 
 export const ModalDescription = styled.p`
   margin: 0;
@@ -1361,11 +1493,6 @@ export const ModalDescription = styled.p`
 
   line-height: 1.5;
 `;
-
-
-/* =====================================================
-   MODAL CLOSE
-===================================================== */
 
 export const ModalClose = styled.button`
   position: relative;
@@ -1421,7 +1548,13 @@ export const ModalClose = styled.button`
       scale(0);
 
     transition:
-      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+      transform 0.55s
+      cubic-bezier(
+        0.16,
+        1,
+        0.3,
+        1
+      );
 
     z-index: -1;
 
@@ -1453,17 +1586,13 @@ export const ModalClose = styled.button`
     }
   }
 
-  &:focus {
-    outline: none;
-  }
-
   &:focus-visible {
-    outline: 2px solid ${COLORS.yellow};
+    outline: 2px solid
+      ${COLORS.yellow};
 
     outline-offset: 2px;
   }
 `;
-
 
 /* =====================================================
    FORM
@@ -1477,11 +1606,6 @@ export const Form = styled.div`
   gap: 15px;
 `;
 
-
-/* =====================================================
-   FORM GROUP
-===================================================== */
-
 export const FormGroup = styled.div`
   display: flex;
 
@@ -1489,11 +1613,6 @@ export const FormGroup = styled.div`
 
   gap: 7px;
 `;
-
-
-/* =====================================================
-   LABEL
-===================================================== */
 
 export const Label = styled.label`
   color: #444;
@@ -1506,11 +1625,6 @@ export const Label = styled.label`
     color: ${COLORS.danger};
   }
 `;
-
-
-/* =====================================================
-   INPUT
-===================================================== */
 
 export const Input = styled.input`
   width: 100%;
@@ -1544,25 +1658,22 @@ export const Input = styled.input`
     color: #aaa;
   }
 
-  &:hover {
-    border-color: #cfcfcf;
-  }
-
   &:focus {
-    border-color: ${COLORS.yellowDark};
+    border-color:
+      ${COLORS.yellowDark};
 
     background: #ffffff;
 
     box-shadow:
       0 0 0 3px
-      rgba(255, 219, 83, 0.16);
+      rgba(
+        255,
+        219,
+        83,
+        0.16
+      );
   }
 `;
-
-
-/* =====================================================
-   SELECT
-===================================================== */
 
 export const Select = styled.select`
   width: 100%;
@@ -1594,21 +1705,22 @@ export const Select = styled.select`
     background 0.2s ease,
     box-shadow 0.2s ease;
 
-  &:hover {
-    border-color: #cfcfcf;
-  }
-
   &:focus {
-    border-color: ${COLORS.yellowDark};
+    border-color:
+      ${COLORS.yellowDark};
 
     background: #ffffff;
 
     box-shadow:
       0 0 0 3px
-      rgba(255, 219, 83, 0.16);
+      rgba(
+        255,
+        219,
+        83,
+        0.16
+      );
   }
 `;
-
 
 /* =====================================================
    MODAL BUTTONS
@@ -1631,7 +1743,6 @@ export const ModalButtons = styled.div`
     width: 100%;
   }
 `;
-
 
 /* =====================================================
    SAVE BUTTON
@@ -1666,7 +1777,13 @@ export const SaveButton = styled.button`
 
   transition:
     color 0.25s ease,
-    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.25s
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      ),
     box-shadow 0.25s ease;
 
   &::before {
@@ -1689,17 +1806,17 @@ export const SaveButton = styled.button`
       scale(0);
 
     transition:
-      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+      transform 0.55s
+      cubic-bezier(
+        0.16,
+        1,
+        0.3,
+        1
+      );
 
     z-index: -1;
 
     pointer-events: none;
-  }
-
-  & > * {
-    position: relative;
-
-    z-index: 2;
   }
 
   &:hover {
@@ -1722,15 +1839,17 @@ export const SaveButton = styled.button`
     transform: scale(0.97);
   }
 
-  &:focus {
-    outline: none;
+  &:focus-visible {
+    outline: 2px solid
+      ${COLORS.yellow};
+
+    outline-offset: 2px;
   }
 
   @media (max-width: 430px) {
     width: 100%;
   }
 `;
-
 
 /* =====================================================
    CANCEL BUTTON
@@ -1765,7 +1884,13 @@ export const CancelButton = styled.button`
 
   transition:
     color 0.25s ease,
-    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.25s
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      ),
     box-shadow 0.25s ease;
 
   &::before {
@@ -1788,7 +1913,13 @@ export const CancelButton = styled.button`
       scale(0);
 
     transition:
-      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+      transform 0.55s
+      cubic-bezier(
+        0.16,
+        1,
+        0.3,
+        1
+      );
 
     z-index: -1;
 
@@ -1798,7 +1929,8 @@ export const CancelButton = styled.button`
   &:hover {
     color: #111;
 
-    border-color: ${COLORS.yellow};
+    border-color:
+      ${COLORS.yellow};
 
     transform: translateY(-2px);
 
@@ -1817,15 +1949,17 @@ export const CancelButton = styled.button`
     transform: scale(0.97);
   }
 
-  &:focus {
-    outline: none;
+  &:focus-visible {
+    outline: 2px solid
+      ${COLORS.yellow};
+
+    outline-offset: 2px;
   }
 
   @media (max-width: 430px) {
     width: 100%;
   }
 `;
-
 
 /* =====================================================
    CONFIRM BUTTON
@@ -1860,7 +1994,13 @@ export const ConfirmButton = styled.button`
 
   transition:
     color 0.25s ease,
-    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.25s
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      ),
     box-shadow 0.25s ease,
     opacity 0.2s ease;
 
@@ -1884,7 +2024,13 @@ export const ConfirmButton = styled.button`
       scale(0);
 
     transition:
-      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+      transform 0.55s
+      cubic-bezier(
+        0.16,
+        1,
+        0.3,
+        1
+      );
 
     z-index: -1;
 
@@ -1898,7 +2044,12 @@ export const ConfirmButton = styled.button`
 
     box-shadow:
       0 8px 18px
-      rgba(214, 40, 40, 0.2);
+      rgba(
+        214,
+        40,
+        40,
+        0.2
+      );
 
     &::before {
       transform:
@@ -1917,15 +2068,17 @@ export const ConfirmButton = styled.button`
     cursor: not-allowed;
   }
 
-  &:focus {
-    outline: none;
+  &:focus-visible {
+    outline: 2px solid
+      ${COLORS.yellow};
+
+    outline-offset: 2px;
   }
 
   @media (max-width: 430px) {
     width: 100%;
   }
 `;
-
 
 /* =====================================================
    WARNING BOX
@@ -1983,4 +2136,411 @@ export const WarningBox = styled.div`
     font-size: 11px;
   }
 `;
+/* =====================================================
+   CARDS DE ANOS
+===================================================== */
 
+export const YearsWrapper = styled.div`
+  width: 100%;
+
+  margin: 70px auto 90px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 16px;
+
+  @media (max-width: 600px) {
+    gap: 8px;
+
+    margin-bottom: 25px;
+  }
+`;
+
+export const YearsContainer = styled.div`
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 14px;
+
+  @media (max-width: 700px) {
+    gap: 8px;
+  }
+
+  @media (max-width: 520px) {
+    gap: 6px;
+  }
+`;
+
+/* =====================================================
+   SETAS DOS ANOS
+===================================================== */
+
+export const YearArrow = styled.button`
+  position: relative;
+
+  width: 44px;
+  height: 44px;
+
+  flex-shrink: 0;
+
+  padding: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+
+  border-radius: 12px;
+
+  background: ${COLORS.primary};
+
+  color: #ffffff;
+
+  cursor: pointer;
+
+  overflow: hidden;
+
+  isolation: isolate;
+
+  transition:
+    transform 0.25s
+      cubic-bezier(
+        0.22,
+        1,
+        0.36,
+        1
+      ),
+    box-shadow 0.25s ease,
+    opacity 0.2s ease;
+
+  &::before {
+    content: "";
+
+    position: absolute;
+
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+
+    width: 18px;
+    height: 18px;
+
+    border-radius: 50%;
+
+    background: ${COLORS.yellow};
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    transition:
+      transform 0.55s
+      cubic-bezier(
+        0.16,
+        1,
+        0.3,
+        1
+      );
+
+    z-index: -1;
+
+    pointer-events: none;
+  }
+
+  svg {
+    position: relative;
+
+    z-index: 2;
+
+    width: 20px;
+    height: 20px;
+
+    stroke-width: 2.5;
+  }
+
+  &:hover:not(:disabled) {
+    color: #111111;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+      0 8px 18px
+      rgba(131, 22, 20, 0.2);
+
+    &::before {
+      transform:
+        translate(-50%, -50%)
+        scale(8);
+    }
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.94);
+  }
+
+  &:disabled {
+    opacity: 0.25;
+
+    cursor: not-allowed;
+
+    box-shadow: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid
+      ${COLORS.yellow};
+
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 700px) {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 10px;
+
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+`;
+
+export const YearCard = styled.button`
+  position: relative;
+  width: 230px;
+  height: 155px;
+  flex-shrink: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  box-sizing: border-box;
+
+  border: 2px solid ${({ $active }) =>
+    $active ? COLORS.primary : "#eeeeee"};
+
+  border-radius: 22px;
+
+  background: ${({ $active }) =>
+    $active ? COLORS.primary : "#ffffff"};
+
+  color: ${({ $active }) =>
+    $active ? "#ffffff" : "#111111"};
+
+  font-family: inherit;
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.3s ease;
+
+  /* ANIMAÇÃO AMARELA SEGUINDO O MOUSE */
+  &::before {
+    content: "";
+
+    position: absolute;
+
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+
+    width: 35px;
+    height: 35px;
+
+    border-radius: 50%;
+
+    background: ${COLORS.yellow};
+
+    transform: translate(-50%, -50%) scale(0);
+
+    transition:
+      transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* MANTÉM A ANIMAÇÃO AO PASSAR O MOUSE */
+  &:hover {
+    transform: translateY(-8px);
+
+    border-color: ${COLORS.primary};
+
+    box-shadow:
+      0 18px 35px rgba(131, 22, 20, 0.16);
+
+    &::before {
+      transform:
+        translate(-50%, -50%)
+        scale(11);
+    }
+  }
+
+  &:active {
+    transform: translateY(-3px) scale(0.98);
+  }
+
+  &:focus-visible {
+    outline: 3px solid ${COLORS.yellow};
+    outline-offset: 4px;
+  }
+
+  @media (max-width: 900px) {
+    width: 200px;
+    height: 140px;
+  }
+
+  @media (max-width: 700px) {
+    width: 165px;
+    height: 120px;
+    padding: 15px;
+    border-radius: 19px;
+    gap: 9px;
+  }
+
+  @media (max-width: 520px) {
+    width: 140px;
+    height: 105px;
+    padding: 12px;
+    border-radius: 16px;
+  }
+
+  @media (max-width: 390px) {
+    width: 120px;
+    height: 95px;
+    padding: 9px;
+    border-radius: 14px;
+  }
+`;
+
+
+export const YearIcon = styled.div`
+  width: 48px;
+  height: 48px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: ${({ $active }) =>
+    $active
+      ? COLORS.yellow
+      : "rgba(255, 219, 83, 0.22)"};
+
+  color: ${COLORS.primary};
+
+  font-size: 22px;
+
+  transition:
+    transform 0.3s ease,
+    background 0.25s ease;
+
+  ${YearCard}:hover & {
+    transform: scale(1.12) rotate(2deg);
+  }
+
+  @media (max-width: 900px) {
+    width: 43px;
+    height: 43px;
+    font-size: 20px;
+  }
+
+  @media (max-width: 700px) {
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+  }
+
+  @media (max-width: 520px) {
+    width: 32px;
+    height: 32px;
+    font-size: 15px;
+  }
+`;
+
+
+export const YearNumber = styled.strong`
+  position: relative;
+  z-index: 2;
+
+  color: ${({ $active }) =>
+    $active ? "#ffffff" : COLORS.primary};
+
+  font-size: 2rem;
+  font-weight: 850;
+
+  line-height: 1;
+
+  transition:
+    color 0.25s ease,
+    transform 0.3s ease;
+
+  ${YearCard}:hover & {
+    color: #111111;
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 900px) {
+    font-size: 1.8rem;
+  }
+
+  @media (max-width: 700px) {
+    font-size: 1.5rem;
+  }
+
+  @media (max-width: 520px) {
+    font-size: 1.25rem;
+  }
+
+  @media (max-width: 390px) {
+    font-size: 1.1rem;
+  }
+`;
+
+export const YearDescription = styled.span`
+  position: relative;
+
+  z-index: 2;
+
+  color: ${({ $active }) =>
+    $active
+      ? "rgba(255,255,255,0.72)"
+      : "#999999"};
+
+  font-size: 10px;
+
+  font-weight: 500;
+
+  line-height: 1.2;
+
+  text-align: center;
+
+  white-space: nowrap;
+
+  transition:
+    color 0.25s ease;
+
+  ${YearCard}:hover & {
+    color: #5e4900;
+  }
+
+  @media (max-width: 520px) {
+    font-size: 8px;
+  }
+`;

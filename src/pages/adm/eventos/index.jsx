@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-
 import Layoutadm from "../../../components/Layoutadm";
 import { getAuthHeaders } from "../../../utils/auth";
-
 import {
   FiPlus,
   FiTrash2,
@@ -16,7 +14,6 @@ import {
   FiUsers,
   FiAward,
 } from "react-icons/fi";
-
 import {
   Page,
   Content,
@@ -41,18 +38,15 @@ import {
   EmptyTitle,
   EmptyText,
   FloatingButton,
-
   ModalOverlay,
   Modal,
   ModalHeader,
   ModalTitle,
   CloseButton,
-
   Form,
   Label,
   Input,
   TextArea,
-
   ImageUpload,
   ImageUploadInput,
   ImageUploadContent,
@@ -60,24 +54,19 @@ import {
   ImageUploadText,
   ImagePreview,
   RemoveImageButton,
-
   FormRow,
   FormGroup,
-
   ParticipantsBox,
   ParticipantsIcon,
   ParticipantsText,
-
   FormFooter,
   SaveButton,
-
   DeleteModal,
   DeleteModalTitle,
   DeleteModalText,
   ModalButtons,
   CancelButton,
   ConfirmButton,
-
   RankingSection,
   RankingHeader,
   RankingTitle,
@@ -97,10 +86,6 @@ import {
 
 const API_URL = "http://localhost:3001";
 
-// ======================================================
-// FETCH AUTENTICADO
-// ======================================================
-
 async function apiFetch(caminho, opcoes = {}) {
   const res = await fetch(`${API_URL}${caminho}`, {
     ...opcoes,
@@ -119,26 +104,15 @@ async function apiFetch(caminho, opcoes = {}) {
   return data;
 }
 
-// ======================================================
-// COMPONENTE
-// ======================================================
-
 export default function Eventos() {
-  // Eventos
   const [eventos, setEventos] = useState([]);
   const [carregando, setCarregando] = useState(true);
-
-  // Resultados (notas) do evento aberto no momento
   const [resultados, setResultados] = useState([]);
-
-  // Modais
   const [modalAberto, setModalAberto] = useState(false);
   const [eventoSelecionadoId, setEventoSelecionadoId] = useState(null);
   const [eventoEditando, setEventoEditando] = useState(null);
   const [modalExcluirAberto, setModalExcluirAberto] = useState(false);
   const [eventoParaExcluir, setEventoParaExcluir] = useState(null);
-
-  // Formulário de evento
   const [imagem, setImagem] = useState("");
   const [imagemPreview, setImagemPreview] = useState("");
   const [nome, setNome] = useState("");
@@ -149,12 +123,12 @@ export default function Eventos() {
 
   const eventoSelecionado = useMemo(() => {
     if (!eventoSelecionadoId) return null;
-    return eventos.find((evento) => String(evento.id) === String(eventoSelecionadoId)) || null;
+    return (
+      eventos.find(
+        (evento) => String(evento.id) === String(eventoSelecionadoId)
+      ) || null
+    );
   }, [eventos, eventoSelecionadoId]);
-
-  // ====================================================
-  // CARREGAR EVENTOS
-  // ====================================================
 
   async function carregarEventos() {
     try {
@@ -170,10 +144,6 @@ export default function Eventos() {
   useEffect(() => {
     carregarEventos();
   }, []);
-
-  // ====================================================
-  // CARREGAR RESULTADOS DO EVENTO ABERTO
-  // ====================================================
 
   async function carregarResultados(eventoId) {
     try {
@@ -194,23 +164,12 @@ export default function Eventos() {
     carregarResultados(eventoSelecionadoId);
   }, [eventoSelecionadoId]);
 
-  // ====================================================
-  // EFEITO DO MOUSE NOS BOTÕES (acompanha o cursor pra animação)
-  // ====================================================
-
   function handleButtonMouseMove(event) {
     const button = event.currentTarget;
     const rect = button.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-
-    button.style.setProperty("--mouse-x", `${x}px`);
-    button.style.setProperty("--mouse-y", `${y}px`);
+    button.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`);
+    button.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`);
   }
-
-  // ====================================================
-  // LIMPAR FORMULÁRIO
-  // ====================================================
 
   function limparFormulario() {
     setNome("");
@@ -222,24 +181,15 @@ export default function Eventos() {
     setImagemPreview("");
   }
 
-  // ====================================================
-  // NOVO EVENTO
-  // ====================================================
-
   function abrirModal() {
     setEventoEditando(null);
     limparFormulario();
     setModalAberto(true);
   }
 
-  // ====================================================
-  // EDITAR EVENTO
-  // ====================================================
-
   function abrirEdicao(evento) {
     setEventoSelecionadoId(null);
     setEventoEditando(evento);
-
     setNome(evento.nome || "");
     setDescricao(evento.descricao || "");
     setData(evento.data || "");
@@ -247,23 +197,14 @@ export default function Eventos() {
     setLocal(evento.local || "");
     setImagem(evento.imagem || "");
     setImagemPreview(evento.imagem || "");
-
     setModalAberto(true);
   }
-
-  // ====================================================
-  // FECHAR MODAL
-  // ====================================================
 
   function fecharModal() {
     setModalAberto(false);
     setEventoEditando(null);
     limparFormulario();
   }
-
-  // ====================================================
-  // IMAGEM
-  // ====================================================
 
   function handleImagem(event) {
     const arquivo = event.target.files?.[0];
@@ -294,37 +235,34 @@ export default function Eventos() {
     setImagemPreview("");
   }
 
-  // ====================================================
-  // VALIDAR
-  // ====================================================
-
   function validarFormulario() {
     if (!nome.trim()) {
       alert("Digite o nome do evento.");
       return false;
     }
+
     if (!descricao.trim()) {
       alert("Digite a descrição do evento.");
       return false;
     }
+
     if (!data) {
       alert("Informe a data do evento.");
       return false;
     }
+
     if (!horario) {
       alert("Informe o horário do evento.");
       return false;
     }
+
     if (!local.trim()) {
       alert("Informe o local do evento.");
       return false;
     }
+
     return true;
   }
-
-  // ====================================================
-  // SALVAR EVENTO (criar ou editar)
-  // ====================================================
 
   async function salvarEvento(event) {
     event.preventDefault();
@@ -342,13 +280,20 @@ export default function Eventos() {
 
     try {
       if (eventoEditando) {
-        const eventoAtualizado = await apiFetch(`/eventos/${eventoEditando.id}`, {
-          method: "PUT",
-          body: JSON.stringify(corpo),
-        });
+        const eventoAtualizado = await apiFetch(
+          `/eventos/${eventoEditando.id}`,
+          {
+            method: "PUT",
+            body: JSON.stringify(corpo),
+          }
+        );
 
         setEventos((atuais) =>
-          atuais.map((evento) => (evento.id === eventoAtualizado.id ? eventoAtualizado : evento))
+          atuais.map((evento) =>
+            evento.id === eventoAtualizado.id
+              ? eventoAtualizado
+              : evento
+          )
         );
       } else {
         const novoEvento = await apiFetch("/eventos", {
@@ -365,10 +310,6 @@ export default function Eventos() {
     }
   }
 
-  // ====================================================
-  // EXCLUSÃO DE EVENTO
-  // ====================================================
-
   function abrirConfirmacaoExclusao(evento) {
     setEventoSelecionadoId(null);
     setEventoParaExcluir(evento);
@@ -384,9 +325,14 @@ export default function Eventos() {
     if (!eventoParaExcluir) return;
 
     try {
-      await apiFetch(`/eventos/${eventoParaExcluir.id}`, { method: "DELETE" });
+      await apiFetch(`/eventos/${eventoParaExcluir.id}`, {
+        method: "DELETE",
+      });
 
-      setEventos((atuais) => atuais.filter((evento) => evento.id !== eventoParaExcluir.id));
+      setEventos((atuais) =>
+        atuais.filter((evento) => evento.id !== eventoParaExcluir.id)
+      );
+
       setEventoSelecionadoId(null);
     } catch (err) {
       alert(err.message);
@@ -396,14 +342,13 @@ export default function Eventos() {
     }
   }
 
-  // ====================================================
-  // DATA / TEMPO
-  // ====================================================
-
   function formatarData(dataEvento) {
     if (!dataEvento) return "";
+
     const partes = dataEvento.split("-");
+
     if (partes.length !== 3) return dataEvento;
+
     return `${partes[2]}/${partes[1]}/${partes[0]}`;
   }
 
@@ -415,10 +360,6 @@ export default function Eventos() {
 
     return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
   }
-
-  // ====================================================
-  // ESC
-  // ====================================================
 
   useEffect(() => {
     function handleKeyDown(event) {
@@ -432,12 +373,9 @@ export default function Eventos() {
     }
 
     window.addEventListener("keydown", handleKeyDown);
+
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
-
-  // ====================================================
-  // RENDER
-  // ====================================================
 
   return (
     <Page>
@@ -451,7 +389,6 @@ export default function Eventos() {
           </TitleArea>
         </Header>
 
-        {/* CARDS DOS EVENTOS */}
         <Cards>
           {carregando ? null : eventos.length === 0 ? (
             <EmptyState>
@@ -459,7 +396,9 @@ export default function Eventos() {
                 <FiCalendar />
               </EmptyIcon>
               <EmptyTitle>Nenhum evento cadastrado</EmptyTitle>
-              <EmptyText>Clique no botão + para criar seu primeiro evento.</EmptyText>
+              <EmptyText>
+                Clique no botão + para criar seu primeiro evento.
+              </EmptyText>
             </EmptyState>
           ) : (
             eventos.map((evento) => (
@@ -543,12 +482,14 @@ export default function Eventos() {
         </Cards>
       </Content>
 
-      {/* BOTÃO + */}
-      <FloatingButton type="button" onClick={abrirModal} aria-label="Adicionar evento">
+      <FloatingButton
+        type="button"
+        onClick={abrirModal}
+        aria-label="Adicionar evento"
+      >
         <FiPlus size={30} />
       </FloatingButton>
 
-      {/* MODAL CRIAR / EDITAR */}
       {modalAberto && (
         <ModalOverlay
           onClick={(event) => {
@@ -557,7 +498,10 @@ export default function Eventos() {
         >
           <Modal>
             <ModalHeader>
-              <ModalTitle>{eventoEditando ? "Editar evento" : "Novo evento"}</ModalTitle>
+              <ModalTitle>
+                {eventoEditando ? "Editar evento" : "Novo evento"}
+              </ModalTitle>
+
               <CloseButton
                 type="button"
                 onClick={fecharModal}
@@ -583,7 +527,11 @@ export default function Eventos() {
                 {imagemPreview ? (
                   <ImagePreview>
                     <img src={imagemPreview} alt="Prévia" />
-                    <RemoveImageButton type="button" onClick={removerImagem}>
+
+                    <RemoveImageButton
+                      type="button"
+                      onClick={removerImagem}
+                    >
                       <FiX />
                     </RemoveImageButton>
                   </ImagePreview>
@@ -605,6 +553,7 @@ export default function Eventos() {
               </ImageUpload>
 
               <Label>Título</Label>
+
               <Input
                 type="text"
                 placeholder="Ex: Semifinal"
@@ -614,6 +563,7 @@ export default function Eventos() {
               />
 
               <Label>Descrição</Label>
+
               <TextArea
                 placeholder="Digite a descrição do evento..."
                 value={descricao}
@@ -624,6 +574,7 @@ export default function Eventos() {
               <FormRow>
                 <FormGroup>
                   <Label>Data</Label>
+
                   <Input
                     type="date"
                     value={data}
@@ -633,6 +584,7 @@ export default function Eventos() {
 
                 <FormGroup>
                   <Label>Horário</Label>
+
                   <Input
                     type="time"
                     value={horario}
@@ -642,6 +594,7 @@ export default function Eventos() {
               </FormRow>
 
               <Label>Local</Label>
+
               <Input
                 type="text"
                 placeholder="Ex: Auditório"
@@ -660,8 +613,9 @@ export default function Eventos() {
                 <ParticipantsText>
                   <strong>Participantes do evento</strong>
                   <span>
-                    O matemático seleciona este evento ao lançar cada nota. Os resultados
-                    aparecem aqui automaticamente assim que as notas forem lançadas.
+                    O matemático seleciona este evento ao lançar cada nota. Os
+                    resultados aparecem aqui automaticamente assim que as
+                    notas forem lançadas.
                   </span>
                 </ParticipantsText>
               </ParticipantsBox>
@@ -669,7 +623,9 @@ export default function Eventos() {
               <FormFooter>
                 <SaveButton type="submit">
                   {eventoEditando ? <FiEdit /> : <FiPlus />}
-                  {eventoEditando ? "Salvar alterações" : "Criar evento"}
+                  {eventoEditando
+                    ? "Salvar alterações"
+                    : "Criar evento"}
                 </SaveButton>
               </FormFooter>
             </Form>
@@ -677,16 +633,18 @@ export default function Eventos() {
         </ModalOverlay>
       )}
 
-      {/* MODAL DO EVENTO */}
       {eventoSelecionado && (
         <ModalOverlay
           onClick={(event) => {
-            if (event.target === event.currentTarget) setEventoSelecionadoId(null);
+            if (event.target === event.currentTarget) {
+              setEventoSelecionadoId(null);
+            }
           }}
         >
           <Modal>
             <ModalHeader>
               <ModalTitle>{eventoSelecionado.nome}</ModalTitle>
+
               <CloseButton
                 type="button"
                 onClick={() => setEventoSelecionadoId(null)}
@@ -700,7 +658,10 @@ export default function Eventos() {
 
             {eventoSelecionado.imagem ? (
               <ImagePreview>
-                <img src={eventoSelecionado.imagem} alt={eventoSelecionado.nome} />
+                <img
+                  src={eventoSelecionado.imagem}
+                  alt={eventoSelecionado.nome}
+                />
               </ImagePreview>
             ) : (
               <EventImagePlaceholder>
@@ -709,7 +670,9 @@ export default function Eventos() {
             )}
 
             <EventTitle>{eventoSelecionado.nome}</EventTitle>
-            <EventDescription>{eventoSelecionado.descricao}</EventDescription>
+            <EventDescription>
+              {eventoSelecionado.descricao}
+            </EventDescription>
 
             <InfoList>
               <InfoItem>
@@ -728,7 +691,6 @@ export default function Eventos() {
               </InfoItem>
             </InfoList>
 
-            {/* RESULTADOS (notas lançadas pelo matemático para este evento) */}
             <RankingSection>
               <RankingHeader>
                 <RankingTitle>
@@ -737,9 +699,10 @@ export default function Eventos() {
                 </RankingTitle>
 
                 <RankingDescription>
-                  Notas lançadas pelo matemático para este evento. A maior e a menor nota de
-                  cada poeta já foram descartadas — o resultado é a média das três restantes,
-                  menos o desconto por tempo excedido.
+                  Notas lançadas pelo matemático para este evento. A maior e a
+                  menor nota de cada poeta já foram descartadas — o resultado é
+                  a média das três restantes, menos o desconto por tempo
+                  excedido.
                 </RankingDescription>
               </RankingHeader>
 
@@ -748,7 +711,8 @@ export default function Eventos() {
                   <FiAward />
                   <strong>Nenhum resultado ainda</strong>
                   <span>
-                    As notas lançadas pelo matemático para este evento aparecerão aqui.
+                    As notas lançadas pelo matemático para este evento
+                    aparecerão aqui.
                   </span>
                 </RankingEmpty>
               ) : (
@@ -772,7 +736,10 @@ export default function Eventos() {
 
                     <tbody>
                       {resultados.map((resultado, index) => (
-                        <RankingRow key={resultado.id} $primeiro={index === 0}>
+                        <RankingRow
+                          key={resultado.id}
+                          $primeiro={index === 0}
+                        >
                           <td>
                             <Position>
                               {index === 0 && <FiAward />}
@@ -781,31 +748,45 @@ export default function Eventos() {
                           </td>
 
                           <td>
-                            <ParticipantName>{resultado.nomeAluno}</ParticipantName>
+                            <ParticipantName>
+                              {resultado.nomeAluno}
+                            </ParticipantName>
                           </td>
 
                           <td>
-                            <Score>{resultado.n1?.toFixed(1) ?? "-"}</Score>
+                            <Score>
+                              {resultado.n1?.toFixed(1) ?? "-"}
+                            </Score>
                           </td>
 
                           <td>
-                            <Score>{resultado.n2?.toFixed(1) ?? "-"}</Score>
+                            <Score>
+                              {resultado.n2?.toFixed(1) ?? "-"}
+                            </Score>
                           </td>
 
                           <td>
-                            <Score>{resultado.n3?.toFixed(1) ?? "-"}</Score>
+                            <Score>
+                              {resultado.n3?.toFixed(1) ?? "-"}
+                            </Score>
                           </td>
 
                           <td>
-                            <Score>{resultado.n4?.toFixed(1) ?? "-"}</Score>
+                            <Score>
+                              {resultado.n4?.toFixed(1) ?? "-"}
+                            </Score>
                           </td>
 
                           <td>
-                            <Score>{resultado.n5?.toFixed(1) ?? "-"}</Score>
+                            <Score>
+                              {resultado.n5?.toFixed(1) ?? "-"}
+                            </Score>
                           </td>
 
                           <td>
-                            <Average>{resultado.media?.toFixed(2) ?? "-"}</Average>
+                            <Average>
+                              {resultado.media?.toFixed(2) ?? "-"}
+                            </Average>
                           </td>
 
                           <td>
@@ -824,7 +805,9 @@ export default function Eventos() {
                           </td>
 
                           <td>
-                            <FinalScore>{resultado.resultado?.toFixed(2) ?? "-"}</FinalScore>
+                            <FinalScore>
+                              {resultado.resultado?.toFixed(2) ?? "-"}
+                            </FinalScore>
                           </td>
                         </RankingRow>
                       ))}
@@ -837,12 +820,14 @@ export default function Eventos() {
         </ModalOverlay>
       )}
 
-      {/* MODAL EXCLUSÃO */}
       {modalExcluirAberto && (
         <ModalOverlay>
           <DeleteModal>
             <DeleteModalTitle>Excluir evento</DeleteModalTitle>
-            <DeleteModalText>Tem certeza que deseja excluir esse evento?</DeleteModalText>
+
+            <DeleteModalText>
+              Tem certeza que deseja excluir esse evento?
+            </DeleteModalText>
 
             {eventoParaExcluir && (
               <DeleteModalText>
@@ -851,13 +836,23 @@ export default function Eventos() {
             )}
 
             <ModalButtons>
-              <CancelButton type="button" onClick={cancelarExclusao}>
-                Cancelar
+              <CancelButton
+                type="button"
+                onPointerMove={handleButtonMouseMove}
+                onClick={cancelarExclusao}
+              >
+                <span className="buttonContent">Cancelar</span>
               </CancelButton>
 
-              <ConfirmButton type="button" onClick={confirmarExclusao}>
-                <FiTrash2 />
-                Sim, excluir
+              <ConfirmButton
+                type="button"
+                onPointerMove={handleButtonMouseMove}
+                onClick={confirmarExclusao}
+              >
+                <span className="buttonContent">
+                  <FiTrash2 />
+                  Sim, excluir
+                </span>
               </ConfirmButton>
             </ModalButtons>
           </DeleteModal>
