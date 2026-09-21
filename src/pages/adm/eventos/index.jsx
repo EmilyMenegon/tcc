@@ -13,6 +13,8 @@ import {
   FiUpload,
   FiUsers,
   FiAward,
+  FiChevronLeft,
+  FiChevronRight,
 } from "react-icons/fi";
 import {
   Page,
@@ -21,6 +23,13 @@ import {
   TitleArea,
   Title,
   Subtitle,
+  YearsWrapper,
+  YearsContainer,
+  YearArrow,
+  YearCard,
+  YearIcon,
+  YearNumber,
+  YearDescription,
   Cards,
   EventCard,
   EventImage,
@@ -120,6 +129,14 @@ export default function Eventos() {
   const [data, setData] = useState("");
   const [horario, setHorario] = useState("");
   const [local, setLocal] = useState("");
+
+  const [anoInicial, setAnoInicial] = useState(2026);
+  const [anoSelecionado, setAnoSelecionado] = useState(2026);
+
+  const anosVisiveis = Array.from(
+    { length: 3 },
+    (_, index) => anoInicial + index
+  );
 
   const eventoSelecionado = useMemo(() => {
     if (!eventoSelecionadoId) return null;
@@ -361,6 +378,46 @@ export default function Eventos() {
     return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
   }
 
+  function descobrirAno(evento) {
+    const valor = evento?.data;
+
+    if (!valor) return 2026;
+
+    const dataConvertida = new Date(valor);
+
+    if (!Number.isNaN(dataConvertida.getTime())) {
+      return dataConvertida.getFullYear();
+    }
+
+    const numero = Number(valor);
+
+    return numero >= 2000 && numero <= 2100 ? numero : 2026;
+  }
+
+  function avancarAnos() {
+    const novoAno = anoInicial + 3;
+    setAnoInicial(novoAno);
+    setAnoSelecionado(novoAno);
+  }
+
+  function voltarAnos() {
+    const novoAno = Math.max(2026, anoInicial - 3);
+    setAnoInicial(novoAno);
+    setAnoSelecionado(novoAno);
+  }
+
+  function selecionarAno(ano) {
+    setAnoSelecionado(ano);
+  }
+
+  function quantidadePorAno(ano) {
+    return eventos.filter((evento) => descobrirAno(evento) === ano).length;
+  }
+
+  const eventosDoAno = eventos.filter(
+    (evento) => descobrirAno(evento) === anoSelecionado
+  );
+
   useEffect(() => {
     function handleKeyDown(event) {
       if (event.key !== "Escape") return;
@@ -389,6 +446,62 @@ export default function Eventos() {
           </TitleArea>
         </Header>
 
+        <YearsWrapper>
+          <YearArrow
+            type="button"
+            onClick={voltarAnos}
+            onMouseMove={handleButtonMouseMove}
+            disabled={anoInicial === 2026}
+            aria-label="Anos anteriores"
+          >
+            <span className="buttonContent">
+              <FiChevronLeft />
+            </span>
+          </YearArrow>
+
+          <YearsContainer>
+            {anosVisiveis.map((ano) => {
+              const quantidade = quantidadePorAno(ano);
+              const ativo = anoSelecionado === ano;
+
+              return (
+                <YearCard
+                  key={ano}
+                  type="button"
+                  $active={ativo}
+                  onClick={() => selecionarAno(ano)}
+                  onMouseMove={handleButtonMouseMove}
+                >
+                  <YearIcon $active={ativo}>
+                    <FiCalendar />
+                  </YearIcon>
+
+                  <YearNumber $active={ativo}>{ano}</YearNumber>
+
+                  <YearDescription $active={ativo}>
+                    {quantidade === 0
+                      ? "Nenhum evento"
+                      : quantidade === 1
+                      ? "1 evento"
+                      : `${quantidade} eventos`}
+                  </YearDescription>
+                </YearCard>
+              );
+            })}
+          </YearsContainer>
+
+          <YearArrow
+            type="button"
+            onClick={avancarAnos}
+            onMouseMove={handleButtonMouseMove}
+            aria-label="Próximos anos"
+          >
+            <span className="buttonContent">
+              <FiChevronRight />
+            </span>
+          </YearArrow>
+        </YearsWrapper>
+
         <Cards>
           {carregando ? null : eventos.length === 0 ? (
             <EmptyState>
@@ -400,8 +513,18 @@ export default function Eventos() {
                 Clique no botão + para criar seu primeiro evento.
               </EmptyText>
             </EmptyState>
+          ) : eventosDoAno.length === 0 ? (
+            <EmptyState>
+              <EmptyIcon>
+                <FiCalendar />
+              </EmptyIcon>
+              <EmptyTitle>Nenhum evento neste ano</EmptyTitle>
+              <EmptyText>
+                Não existem eventos cadastrados em {anoSelecionado}.
+              </EmptyText>
+            </EmptyState>
           ) : (
-            eventos.map((evento) => (
+            eventosDoAno.map((evento) => (
               <EventCard
                 key={evento.id}
                 onClick={() => setEventoSelecionadoId(evento.id)}
@@ -485,9 +608,12 @@ export default function Eventos() {
       <FloatingButton
         type="button"
         onClick={abrirModal}
+        onPointerMove={handleButtonMouseMove}
         aria-label="Adicionar evento"
       >
-        <FiPlus size={30} />
+        <span className="buttonContent">
+          <FiPlus size={30} />
+        </span>
       </FloatingButton>
 
       {modalAberto && (
@@ -621,11 +747,13 @@ export default function Eventos() {
               </ParticipantsBox>
 
               <FormFooter>
-                <SaveButton type="submit">
-                  {eventoEditando ? <FiEdit /> : <FiPlus />}
-                  {eventoEditando
-                    ? "Salvar alterações"
-                    : "Criar evento"}
+                <SaveButton type="submit" onPointerMove={handleButtonMouseMove}>
+                  <span className="buttonContent">
+                    {eventoEditando ? <FiEdit /> : <FiPlus />}
+                    {eventoEditando
+                      ? "Salvar alterações"
+                      : "Criar evento"}
+                  </span>
                 </SaveButton>
               </FormFooter>
             </Form>
