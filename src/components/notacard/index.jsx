@@ -171,7 +171,7 @@ export default function NotaCard({
 
                         <Label>Nota final</Label>
 
-                        <Media aprovado={aprovado}>
+                        <Media $aprovado={aprovado}>
 
                             {notaFinal.toFixed(1)}
 

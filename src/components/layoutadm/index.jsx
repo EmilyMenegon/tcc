@@ -54,6 +54,10 @@ export default function Layoutadm() {
       label: "Galeria",
       path: "/adm/galeriaadm",
     },
+    {
+      label: "TV",
+      path: "/adm/tvexibicao",
+    },
   ];
 
   // =====================================================

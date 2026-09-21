@@ -19,6 +19,7 @@ import Profileadm from "./pages/adm/profileadm";
 import Galeriaadm from "./pages/adm/galeriaadm";
 import Eventos from "./pages/adm/eventos";
 import Muraladm from "./pages/adm/muraladm";
+import TvExibicao from "./pages/adm/tvexibicao";
 
 import Mat from "./pages/mat";
 
@@ -157,6 +158,12 @@ export default function App() {
           </RotaProtegida>
         }
       />
+
+     <Route 
+     path="/adm/tvexibicao" 
+     element={<RotaProtegida tiposPermitidos={["organizador"]}>
+           <TvExibicao />
+          </RotaProtegida>} />
 
       <Route
         path="/adm/muraladm"

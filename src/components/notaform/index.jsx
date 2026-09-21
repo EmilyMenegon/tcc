@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { FaTimes, FaPlay, FaStop, FaRedo } from "react-icons/fa";
+import { io } from "socket.io-client";
 
 import {
     Overlay,
@@ -33,6 +34,7 @@ import {
     Select,
 
     AutocompleteWrapper,
+    PoetaInput,
     SuggestionsList,
     SuggestionItem,
     SuggestionEmpty,
@@ -65,8 +67,6 @@ import {
 
 const API_URL = "http://localhost:3001";
 
-const LIMIT = 180;
-const TOLERANCE_END = 190;
 const CIRCUMFERENCE = 603.19;
 
 
@@ -77,19 +77,15 @@ export default function NotaForm({
     onSave
 }) {
 
+    const socketRef = useRef(null);
+
     const [alunos, setAlunos] = useState([]);
 
-    // Campo único: exibe o texto digitado/selecionado e filtra a lista.
     const [buscaAluno, setBuscaAluno] = useState("");
 
     const [selectedAluno, setSelectedAluno] = useState("");
 
-    const [sugestoesAbertas, setSugestoesAbertas] = useState(false);
-
-    // Evita re-preencher o campo de busca depois que o usuário já mexeu nele.
-    const [poetaSincronizado, setPoetaSincronizado] = useState(false);
-
-    const inputRef = useRef(null);
+    const [mostrarSugestoes, setMostrarSugestoes] = useState(false);
 
 
     const [eventos, setEventos] = useState([]);
@@ -103,6 +99,8 @@ export default function NotaForm({
 
     const [resultado, setResultado] = useState(null);
 
+    const [salvando, setSalvando] = useState(false);
+
 
     // ============================
     // TIMER
@@ -112,6 +110,50 @@ export default function NotaForm({
     const [startTs, setStartTs] = useState(null);
     const [accumulated, setAccumulated] = useState(0);
     const [elapsed, setElapsed] = useState(0);
+
+
+    // ==========================================================
+    // MODO DEMO (TCC) — REMOVER DEPOIS DA APRESENTAÇÃO
+    // Não altera a regra (continua 3min + 10s oficial); só permite
+    // pular o cronômetro pra um ponto de partida, pra não esperar
+    // do zero. Pra reverter: apague a função "pularPara" e os
+    // botões dela lá embaixo, no JSX.
+    // ==========================================================
+
+    const LIMIT = 180;
+    const TOLERANCE_END = 190;
+
+    function pularPara(segundos) {
+
+        if (running) return;
+
+        setStartTs(null);
+        setRunning(false);
+        setAccumulated(segundos);
+        setElapsed(segundos);
+
+    }
+
+    // ==================== FIM DA VARIÁVEL DE DEMO ====================
+
+
+    // ============================
+    // SOCKET.IO — conecta só enquanto o form está aberto
+    // ============================
+
+    useEffect(() => {
+
+        if (!visible) return;
+
+        const socket = io(API_URL);
+        socketRef.current = socket;
+
+        return () => {
+            socket.disconnect();
+            socketRef.current = null;
+        };
+
+    }, [visible]);
 
 
     // ============================
@@ -210,10 +252,6 @@ export default function NotaForm({
 
         setBuscaAluno("");
 
-        setPoetaSincronizado(false);
-
-        setSugestoesAbertas(false);
-
         setResultado(null);
 
         setError("");
@@ -230,31 +268,7 @@ export default function NotaForm({
 
 
     // ============================
-    // PREENCHER O CAMPO COM O NOME DO POETA JÁ SELECIONADO
-    // (só roda uma vez por abertura, assim que a lista de poetas carrega)
-    // ============================
-
-    useEffect(() => {
-
-        if (!visible || !nota || poetaSincronizado) return;
-
-        const aluno = alunos.find(
-            (item) => String(item.id) === String(nota.idAluno)
-        );
-
-        if (aluno) {
-
-            setBuscaAluno(aluno.nome);
-
-            setPoetaSincronizado(true);
-
-        }
-
-    }, [visible, nota, alunos, poetaSincronizado]);
-
-
-    // ============================
-    // BUSCA DE POETA (autocomplete)
+    // BUSCA DE POETA
     // ============================
 
     const alunosFiltrados = alunos.filter((aluno) => {
@@ -274,29 +288,32 @@ export default function NotaForm({
     });
 
 
-    function handleBuscaChange(valor) {
-
-        setBuscaAluno(valor);
-
-        // Enquanto o usuário digita algo diferente do poeta já
-        // selecionado, a seleção deixa de ser válida até ele
-        // escolher de novo na lista.
-        setSelectedAluno("");
-
-        setSugestoesAbertas(true);
-
-    }
+    const poetaSelecionado = alunos.find(
+        (aluno) => String(aluno.id) === String(selectedAluno)
+    );
 
 
-    function selecionarAluno(aluno) {
+    // ============================
+    // PREENCHER O TEXTO DO COMBOBOX
+    // (quando edita uma nota, o poeta já vem selecionado por id;
+    //  assim que a lista de poetas carrega, escreve o nome dele)
+    // ============================
 
-        setSelectedAluno(String(aluno.id));
+    useEffect(() => {
 
-        setBuscaAluno(aluno.nome);
+        if (!visible) return;
 
-        setSugestoesAbertas(false);
+        if (!selectedAluno) return;
 
-    }
+        const poeta = alunos.find(
+            (aluno) => String(aluno.id) === String(selectedAluno)
+        );
+
+        if (poeta) {
+            setBuscaAluno(poeta.nome);
+        }
+
+    }, [visible, alunos, selectedAluno]);
 
 
     // ============================
@@ -398,14 +415,50 @@ export default function NotaForm({
 
 
     // ============================
+    // TRANSMITIR AO VIVO PRA TV
+    // (dispara a cada mudança relevante, enquanto o form está aberto)
+    // ============================
+
+    useEffect(() => {
+
+        if (!visible) return;
+
+        socketRef.current?.emit("aoVivoAtualizar", {
+            poeta: poetaSelecionado?.nome || "",
+            notas: notes.map((n) => (n === "" ? null : Number(n))),
+            tempo: Math.floor(elapsed)
+        });
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [visible, selectedAluno, notes, elapsed]);
+
+
+    // ============================
     // NOTAS
     // ============================
 
     function handleNoteChange(index, value) {
 
+        // permite campo vazio e "em digitação" (ex: "1." ou "-")
+        if (value !== "" && !/^-?\d*\.?\d*$/.test(value)) {
+            return;
+        }
+
+        let valorFinal = value;
+
+        const numero = parseFloat(value.replace(",", "."));
+
+        if (!isNaN(numero)) {
+
+            if (numero < 0) valorFinal = "0";
+
+            if (numero > 10) valorFinal = "10";
+
+        }
+
         const newNotes = [...notes];
 
-        newNotes[index] = value;
+        newNotes[index] = valorFinal;
 
         setNotes(newNotes);
 
@@ -528,7 +581,8 @@ export default function NotaForm({
 
     // ============================
     // SALVAR
-    // (delega o fetch de verdade pro pai, via onSave)
+    // (o POST/PUT de verdade é feito pelo pai via onSave;
+    //  só emite "finalizado" pro socket se o pai confirmar sucesso)
     // ============================
 
     async function handleSalvar() {
@@ -563,7 +617,44 @@ export default function NotaForm({
         };
 
 
-        await onSave(payload);
+        setSalvando(true);
+
+        try {
+
+            const sucesso = await onSave(payload);
+
+            if (sucesso) {
+
+                socketRef.current?.emit("aoVivoFinalizar", {
+                    poeta: poetaSelecionado?.nome || "",
+                    notas: resultado.values,
+                    media: resultado.baseAverage,
+                    desconto: resultado.penalty,
+                    resultado: resultado.finalScore
+                });
+
+                socketRef.current?.emit("aoVivoLimpar");
+
+            }
+
+        } finally {
+
+            setSalvando(false);
+
+        }
+
+    }
+
+
+    // ============================
+    // FECHAR (avisa a TV que zerou também)
+    // ============================
+
+    function handleFechar() {
+
+        socketRef.current?.emit("aoVivoLimpar");
+
+        onClose();
 
     }
 
@@ -600,7 +691,7 @@ export default function NotaForm({
 
 
                     <CloseButton
-                        onClick={onClose}
+                        onClick={handleFechar}
                     >
 
                         <FaTimes />
@@ -614,6 +705,63 @@ export default function NotaForm({
                 {/* TIMER */}
 
                 <TimerCard>
+
+
+                    {/* ==========================================================
+                        MODO DEMO (TCC) — REMOVER ESTE BLOCO INTEIRO DEPOIS
+                        (junto com o state "limiteDemo" lá em cima)
+                    ========================================================== */}
+
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            gap: 8,
+                            flexWrap: "wrap",
+                            marginBottom: 18
+                        }}
+                    >
+
+                        {[
+                            { label: "Normal (do zero)", value: 0 },
+                            { label: "Demo (começa em 1 min)", value: 60 },
+                            { label: "Demo (começa em 3 min)", value: 180 }
+                        ].map((opcao) => (
+
+                            <button
+                                key={opcao.value}
+                                type="button"
+                                disabled={running}
+                                onClick={() => pularPara(opcao.value)}
+                                style={{
+                                    padding: "7px 16px",
+                                    borderRadius: 999,
+                                    border: "none",
+                                    fontWeight: 700,
+                                    fontSize: 12,
+                                    fontFamily: "inherit",
+                                    cursor: running ? "not-allowed" : "pointer",
+                                    background:
+                                        Math.floor(accumulated) === opcao.value
+                                            ? "#ffdb53"
+                                            : "#f1f1f1",
+                                    color:
+                                        Math.floor(accumulated) === opcao.value
+                                            ? "#111111"
+                                            : "#777777",
+                                    opacity: running ? 0.6 : 1,
+                                    transition: "0.2s"
+                                }}
+                            >
+                                {opcao.label}
+                            </button>
+
+                        ))}
+
+                    </div>
+
+                    {/* ==================== FIM DO MODO DEMO ==================== */}
 
 
                     <RingWrap>
@@ -643,7 +791,7 @@ export default function NotaForm({
                                     (1 - progress)
                                 }
 
-                                penalty={
+                                $penalty={
                                     elapsed > TOLERANCE_END
                                 }
 
@@ -655,7 +803,7 @@ export default function NotaForm({
                         <RingCenter>
 
                             <TimeDisplay
-                                penalty={
+                                $penalty={
                                     elapsed >
                                     TOLERANCE_END
                                 }
@@ -667,7 +815,7 @@ export default function NotaForm({
 
 
                             <ZoneLabel
-                                penalty={
+                                $penalty={
                                     elapsed >
                                     TOLERANCE_END
                                 }
@@ -693,7 +841,7 @@ export default function NotaForm({
 
 
                     <PenaltyBadge
-                        visible={
+                        $visible={
                             penalty > 0
                         }
                     >
@@ -712,7 +860,7 @@ export default function NotaForm({
 
                         <TimerButton
                             onClick={startTimer}
-                            primary
+                            $primary
                         >
 
                             {running
@@ -755,9 +903,8 @@ export default function NotaForm({
 
 
                     <SectionSub>
-                        Selecione o evento, digite pra buscar o poeta pelo
-                        nome, turma ou curso e escolha na lista, e informe
-                        as 5 notas — a maior e a menor serão descartadas.
+                        Selecione o evento, o poeta e informe as 5 notas.
+                        A maior e a menor nota serão descartadas.
                     </SectionSub>
 
 
@@ -810,7 +957,7 @@ export default function NotaForm({
                     )}
 
 
-                    {/* AUTOCOMPLETE DO POETA */}
+                    {/* POETA — busca e seleção integradas */}
 
                     <SelectLabel>
                         Poeta
@@ -819,35 +966,41 @@ export default function NotaForm({
 
                     <AutocompleteWrapper>
 
-                        <NoteInput
-
-                            ref={inputRef}
+                        <PoetaInput
 
                             type="text"
 
-                            placeholder="Digite o nome, turma ou curso..."
+                            placeholder="Digite o nome, turma ou curso do poeta..."
 
                             value={buscaAluno}
 
-                            onChange={(e) =>
-                                handleBuscaChange(
-                                    e.target.value
-                                )
-                            }
+                            autoComplete="off"
+
+                            onChange={(e) => {
+
+                                setBuscaAluno(e.target.value);
+
+                                setSelectedAluno("");
+
+                                setMostrarSugestoes(true);
+
+                            }}
 
                             onFocus={() =>
-                                setSugestoesAbertas(true)
+                                setMostrarSugestoes(true)
                             }
 
-                            style={{
-                                width: "100%",
-                                textAlign: "left"
-                            }}
+                            onBlur={() =>
+                                setTimeout(
+                                    () => setMostrarSugestoes(false),
+                                    150
+                                )
+                            }
 
                         />
 
 
-                        {sugestoesAbertas && (
+                        {mostrarSugestoes && (
 
                             <SuggestionsList>
 
@@ -861,36 +1014,38 @@ export default function NotaForm({
 
                                     alunosFiltrados.map((aluno) => (
 
-                                        <li key={aluno.id}>
+                                        <SuggestionItem
 
-                                            <SuggestionItem
+                                            key={aluno.id}
 
-                                                type="button"
+                                            type="button"
 
-                                                $selected={
-                                                    String(aluno.id) ===
-                                                    selectedAluno
-                                                }
+                                            $selected={
+                                                String(aluno.id) ===
+                                                String(selectedAluno)
+                                            }
 
-                                                onMouseDown={(e) =>
-                                                    e.preventDefault()
-                                                }
+                                            onMouseDown={() => {
 
-                                                onClick={() =>
-                                                    selecionarAluno(aluno)
-                                                }
+                                                setSelectedAluno(
+                                                    String(aluno.id)
+                                                );
 
-                                            >
+                                                setBuscaAluno(aluno.nome);
 
-                                                {aluno.nome}
-                                                {aluno.turma
-                                                    ? ` — ${aluno.turma}`
-                                                    : ""
-                                                }
+                                                setMostrarSugestoes(false);
 
-                                            </SuggestionItem>
+                                            }}
 
-                                        </li>
+                                        >
+
+                                            {aluno.nome}
+                                            {aluno.turma
+                                                ? ` — ${aluno.turma}`
+                                                : ""
+                                            }
+
+                                        </SuggestionItem>
 
                                     ))
 
@@ -903,10 +1058,10 @@ export default function NotaForm({
                     </AutocompleteWrapper>
 
 
-                    {!selectedAluno && buscaAluno.trim() && !sugestoesAbertas && (
+                    {!selectedAluno && buscaAluno.trim() && (
 
                         <ErrorMessage>
-                            Selecione um poeta na lista de sugestões.
+                            Selecione um poeta da lista de sugestões.
                         </ErrorMessage>
 
                     )}
@@ -1044,7 +1199,7 @@ export default function NotaForm({
 
                                             <ResultsRow
                                                 key={index}
-                                                discarded={
+                                                $discarded={
                                                     isDiscarded
                                                 }
                                             >
@@ -1120,7 +1275,7 @@ export default function NotaForm({
                                     Desconto por tempo
                                 </span>
 
-                                <SummaryValue penalty>
+                                <SummaryValue $penalty>
 
                                     -
                                     {resultado.penalty
@@ -1162,9 +1317,13 @@ export default function NotaForm({
 
                         <SaveButton
                             onClick={handleSalvar}
+                            disabled={salvando}
                         >
 
-                            Salvar nota
+                            {salvando
+                                ? "Salvando..."
+                                : "Salvar nota"
+                            }
 
                         </SaveButton>
 

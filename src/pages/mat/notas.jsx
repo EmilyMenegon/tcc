@@ -93,7 +93,7 @@ export default function Notas() {
                     "Erro ao salvar a nota."
                 );
 
-                return;
+                return false;
 
             }
 
@@ -103,6 +103,8 @@ export default function Notas() {
 
             await loadNotas();
 
+            return true;
+
         } catch (err) {
 
             console.error(err);
@@ -110,6 +112,8 @@ export default function Notas() {
             alert(
                 "Não foi possível salvar a nota."
             );
+
+            return false;
 
         }
 

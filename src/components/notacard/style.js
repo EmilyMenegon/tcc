@@ -1,11 +1,13 @@
 import styled from "styled-components";
 
 export const Card = styled.div`
-    background: #ffffff !important;
+    background: #ffffff;
+
+    border-left: 5px solid #ffdb53;
 
     border-radius: 16px;
 
-    padding: 16px;
+    padding: 18px 22px;
 
     display: flex;
 
@@ -13,13 +15,23 @@ export const Card = styled.div`
 
     justify-content: space-between;
 
+    gap: 16px;
+
     width: 100%;
 
     box-sizing: border-box;
 
-    box-shadow: 0 4px 12px rgba(106, 45, 45, 0.15);
+    box-shadow: 0 4px 14px rgba(87, 17, 17, 0.12);
 
     margin-bottom: 12px;
+
+    transition: transform .2s ease, box-shadow .2s ease;
+
+    &:hover {
+        transform: translateY(-3px);
+
+        box-shadow: 0 10px 26px rgba(87, 17, 17, 0.18);
+    }
 `;
 
 export const Content = styled.div`
@@ -28,6 +40,8 @@ export const Content = styled.div`
     flex-direction: column;
 
     gap: 12px;
+
+    min-width: 0;
 `;
 
 export const Aluno = styled.h3`
@@ -35,15 +49,15 @@ export const Aluno = styled.h3`
 
     font-size: 18px;
 
-    font-weight: 600;
+    font-weight: 700;
 
-    color: #1a1a2e;
+    color: #010000;
 `;
 
 export const Notas = styled.div`
     display: flex;
 
-    gap: 20px;
+    gap: 10px;
 
     flex-wrap: wrap;
 `;
@@ -54,31 +68,49 @@ export const NotaItem = styled.div`
     flex-direction: column;
 
     align-items: center;
+
+    justify-content: center;
+
+    gap: 3px;
+
+    min-width: 52px;
+
+    padding: 8px 12px;
+
+    background: #fff7d0;
+
+    border-radius: 10px;
 `;
 
 export const Label = styled.span`
-    font-size: 12px;
-
-    color: #666666;
-`;
-
-export const Valor = styled.span`
-    font-size: 18px;
+    font-size: 10px;
 
     font-weight: 700;
 
-    color: #1a1a2e;
+    color: #571111;
+
+    text-transform: uppercase;
+
+    letter-spacing: .04em;
+`;
+
+export const Valor = styled.span`
+    font-size: 17px;
+
+    font-weight: 700;
+
+    color: #010000;
 `;
 
 export const Media = styled.span`
     font-size: 20px;
 
-    font-weight: 700;
+    font-weight: 800;
 
-    color: ${({ aprovado }) =>
-        aprovado
-            ? "#16a34a"
-            : "#dc2626"};
+    color: ${({ $aprovado }) =>
+        $aprovado
+            ? "#2e7d32"
+            : "#831614"};
 `;
 
 export const Actions = styled.div`
@@ -87,6 +119,8 @@ export const Actions = styled.div`
     flex-direction: column;
 
     gap: 8px;
+
+    flex-shrink: 0;
 `;
 
 
@@ -109,13 +143,13 @@ export const EditButton = styled.button`
 
     border: 0 !important;
 
-    border-radius: 8px !important;
+    border-radius: 10px !important;
 
     background-color: #ffdb53 !important;
 
     background: #ffdb53 !important;
 
-    color: #111111 !important;
+    color: #010000 !important;
 
     opacity: 1 !important;
 
@@ -144,11 +178,11 @@ export const EditButton = styled.button`
     text-decoration: none !important;
 
     &:hover {
-        background-color: #e5b500 !important;
+        background-color: #831614 !important;
 
-        background: #e5b500 !important;
+        background: #831614 !important;
 
-        color: #000000 !important;
+        color: #fff7d0 !important;
 
         opacity: 1 !important;
 
@@ -158,11 +192,11 @@ export const EditButton = styled.button`
     }
 
     &:focus {
-        background-color: #f4c430 !important;
+        background-color: #ffdb53 !important;
 
-        background: #f4c430 !important;
+        background: #ffdb53 !important;
 
-        color: #111111 !important;
+        color: #010000 !important;
 
         opacity: 1 !important;
 
@@ -170,11 +204,11 @@ export const EditButton = styled.button`
     }
 
     &:active {
-        background-color: #d9aa00 !important;
+        background-color: #571111 !important;
 
-        background: #d9aa00 !important;
+        background: #571111 !important;
 
-        color: #111111 !important;
+        color: #fff7d0 !important;
 
         opacity: 1 !important;
 
@@ -186,9 +220,9 @@ export const EditButton = styled.button`
 
         height: 18px !important;
 
-        color: #111111 !important;
+        color: inherit !important;
 
-        fill: #111111 !important;
+        fill: currentColor !important;
 
         opacity: 1 !important;
 
@@ -216,13 +250,13 @@ export const DeleteButton = styled.button`
 
     border: 0 !important;
 
-    border-radius: 8px !important;
+    border-radius: 10px !important;
 
-    background-color: #dc2626 !important;
+    background-color: #831614 !important;
 
-    background: #dc2626 !important;
+    background: #831614 !important;
 
-    color: #ffffff !important;
+    color: #fff7d0 !important;
 
     opacity: 1 !important;
 
@@ -251,11 +285,11 @@ export const DeleteButton = styled.button`
     text-decoration: none !important;
 
     &:hover {
-        background-color: #b91c1c !important;
+        background-color: #571111 !important;
 
-        background: #b91c1c !important;
+        background: #571111 !important;
 
-        color: #ffffff !important;
+        color: #ffdb53 !important;
 
         opacity: 1 !important;
 
@@ -265,11 +299,11 @@ export const DeleteButton = styled.button`
     }
 
     &:focus {
-        background-color: #dc2626 !important;
+        background-color: #831614 !important;
 
-        background: #dc2626 !important;
+        background: #831614 !important;
 
-        color: #ffffff !important;
+        color: #fff7d0 !important;
 
         opacity: 1 !important;
 
@@ -277,11 +311,11 @@ export const DeleteButton = styled.button`
     }
 
     &:active {
-        background-color: #991b1b !important;
+        background-color: #010000 !important;
 
-        background: #991b1b !important;
+        background: #010000 !important;
 
-        color: #ffffff !important;
+        color: #ffdb53 !important;
 
         opacity: 1 !important;
 
@@ -293,9 +327,9 @@ export const DeleteButton = styled.button`
 
         height: 18px !important;
 
-        color: #ffffff !important;
+        color: inherit !important;
 
-        fill: #ffffff !important;
+        fill: currentColor !important;
 
         opacity: 1 !important;
 

@@ -48,7 +48,7 @@ export const Fab = styled.button`
   border-radius: 50%;
 
   background: #ffdb53;
-  color: #111;
+  color: #010000;
 
   display: flex;
   align-items: center;
@@ -56,7 +56,7 @@ export const Fab = styled.button`
 
   cursor: pointer;
 
-  box-shadow: 0 10px 25px rgba(0, 0, 0, .2);
+  box-shadow: 0 10px 25px rgba(87, 17, 17, .25);
 
   transition: .25s;
 
@@ -75,8 +75,8 @@ export const Fab = styled.button`
   }
 
   &:hover {
-    background: #111;
-    color: #ffdb53;
+    background: #831614;
+    color: #fff7d0;
 
     transform: translateY(-3px);
   }
@@ -120,7 +120,7 @@ export const Overlay = styled.div`
   justify-content: center;
   align-items: flex-start;
 
-  background: rgba(15, 15, 15, .45);
+  background: rgba(1, 0, 0, .55);
 
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
@@ -164,7 +164,7 @@ export const CronometroPage = styled.div`
 
   padding: 35px 0 60px;
 
-  color: #111;
+  color: #010000;
 
   background: transparent;
 
@@ -201,7 +201,9 @@ export const TopBar = styled.div`
 
   border-radius: 22px;
 
-  box-shadow: 0 12px 35px rgba(0, 0, 0, .08);
+  border-top: 5px solid #831614;
+
+  box-shadow: 0 12px 35px rgba(87, 17, 17, .10);
 
   display: flex;
 
@@ -238,13 +240,13 @@ export const TopBar = styled.div`
 export const Eyebrow = styled.div`
   margin-bottom: 7px;
 
-  color: #999;
+  color: #831614;
 
   font-family: "Poppins", sans-serif;
 
   font-size: 11px;
 
-  font-weight: 600;
+  font-weight: 700;
 
   letter-spacing: .08em;
 
@@ -258,7 +260,7 @@ export const Eyebrow = styled.div`
 export const MainTitle = styled.h1`
   margin: 0;
 
-  color: #111;
+  color: #010000;
 
   font-family: "Poppins", sans-serif;
 
@@ -285,13 +287,13 @@ export const CloseButton = styled.button`
 
   min-width: 46px;
 
-  border: 1px solid #e5e5e5;
+  border: 1px solid #eee2c0;
 
   border-radius: 50%;
 
-  background: #f7f7f7;
+  background: #fff7d0;
 
-  color: #555;
+  color: #571111;
 
   display: flex;
 
@@ -307,9 +309,9 @@ export const CloseButton = styled.button`
   transition: .25s;
 
   &:hover {
-    background: #111;
+    background: #831614;
 
-    border-color: #111;
+    border-color: #831614;
 
     color: #ffdb53;
 
@@ -334,9 +336,11 @@ export const TimerCard = styled.div`
 
   border-radius: 22px;
 
+  border-top: 5px solid #ffdb53;
+
   padding: 35px 25px 30px;
 
-  box-shadow: 0 12px 35px rgba(0, 0, 0, .08);
+  box-shadow: 0 12px 35px rgba(87, 17, 17, .10);
 
   display: flex;
 
@@ -398,7 +402,7 @@ export const RingSvg = styled.svg`
 export const RingTrack = styled.circle`
   fill: none;
 
-  stroke: #eeeeee;
+  stroke: #fff7d0;
 
   stroke-width: 10;
 `;
@@ -406,10 +410,10 @@ export const RingTrack = styled.circle`
 export const RingProgress = styled.circle`
   fill: none;
 
-  stroke: ${({ penalty }) =>
-    penalty
-      ? "#e6484f"
-      : "#f9be06"
+  stroke: ${({ $penalty }) =>
+    $penalty
+      ? "#831614"
+      : "#ffdb53"
   };
 
   stroke-width: 10;
@@ -446,10 +450,10 @@ export const RingCenter = styled.div`
 // ========================================
 
 export const TimeDisplay = styled.div`
-  color: ${({ penalty }) =>
-    penalty
-      ? "#e6484f"
-      : "#111"
+  color: ${({ $penalty }) =>
+    $penalty
+      ? "#831614"
+      : "#010000"
   };
 
   font-family: "Poppins", sans-serif;
@@ -472,10 +476,10 @@ export const TimeDisplay = styled.div`
 // ========================================
 
 export const ZoneLabel = styled.div`
-  color: ${({ penalty }) =>
-    penalty
-      ? "#e6484f"
-      : "#999"
+  color: ${({ $penalty }) =>
+    $penalty
+      ? "#831614"
+      : "#383131"
   };
 
   font-family: "Poppins", sans-serif;
@@ -496,8 +500,8 @@ export const ZoneLabel = styled.div`
 // ========================================
 
 export const PenaltyBadge = styled.div`
-  visibility: ${({ visible }) =>
-    visible
+  visibility: ${({ $visible }) =>
+    $visible
       ? "visible"
       : "hidden"
   };
@@ -508,15 +512,15 @@ export const PenaltyBadge = styled.div`
 
   border-radius: 999px;
 
-  background: #fff1f1;
+  background: #fff7d0;
 
-  border: 1px solid rgba(230, 72, 79, .2);
+  border: 1px solid rgba(131, 22, 20, .25);
 
-  color: #e6484f;
+  color: #831614;
 
   font-size: 12px;
 
-  font-weight: 600;
+  font-weight: 700;
 
   text-align: center;
 `;
@@ -556,7 +560,7 @@ export const TimerButton = styled.button`
 
   background: #ffdb53;
 
-  color: #111;
+  color: #010000;
 
   display: flex;
 
@@ -570,22 +574,22 @@ export const TimerButton = styled.button`
 
   font-size: 15px;
 
-  font-weight: 600;
+  font-weight: 700;
 
   cursor: pointer;
 
   transition: .25s;
 
   &:hover {
-    background: #111;
+    background: #831614;
 
-    color: #ffdb53;
+    color: #fff7d0;
 
     transform: translateY(-2px);
 
     box-shadow:
       0 10px 25px
-      rgba(0, 0, 0, .12);
+      rgba(87, 17, 17, .25);
   }
 
   &:active {
@@ -616,13 +620,13 @@ export const ResetButton = styled.button`
 
   padding: 15px 24px;
 
-  border: 1px solid #e5e5e5;
+  border: 1px solid #eee2c0;
 
   border-radius: 14px;
 
-  background: #f7f7f7;
+  background: #fff7d0;
 
-  color: #555;
+  color: #383131;
 
   display: flex;
 
@@ -643,9 +647,9 @@ export const ResetButton = styled.button`
   transition: .25s;
 
   &:hover {
-    background: #111;
+    background: #383131;
 
-    border-color: #111;
+    border-color: #383131;
 
     color: #ffdb53;
 
@@ -684,9 +688,11 @@ export const NotesCard = styled.div`
 
   border-radius: 22px;
 
+  border-top: 5px solid #831614;
+
   padding: 30px;
 
-  box-shadow: 0 12px 35px rgba(0, 0, 0, .08);
+  box-shadow: 0 12px 35px rgba(87, 17, 17, .10);
 
   animation: cardShow .3s ease;
 
@@ -716,7 +722,7 @@ export const NotesCard = styled.div`
 export const SectionTitle = styled.h2`
   margin: 0 0 5px;
 
-  color: #111;
+  color: #010000;
 
   font-family: "Poppins", sans-serif;
 
@@ -730,7 +736,7 @@ export const SectionTitle = styled.h2`
 export const SectionSub = styled.p`
   margin: 0 0 22px;
 
-  color: #777;
+  color: #383131;
 
   font-family: "Poppins", sans-serif;
 
@@ -748,13 +754,13 @@ export const SelectLabel = styled.label`
 
   margin-bottom: 7px;
 
-  color: #666;
+  color: #571111;
 
   font-family: "Poppins", sans-serif;
 
   font-size: 12px;
 
-  font-weight: 600;
+  font-weight: 700;
 
   letter-spacing: .04em;
 
@@ -768,17 +774,17 @@ export const SelectLabel = styled.label`
 export const Select = styled.select`
   width: 100%;
 
-  padding: 14px 15px;
+  padding: 16px 18px;
 
   margin-bottom: 25px;
 
-  border: 1px solid #e5e5e5;
+  border: 2px solid #ffdb53;
 
-  border-radius: 14px;
+  border-radius: 16px;
 
-  background: #f7f7f7;
+  background: #fffdf0;
 
-  color: #222;
+  color: #010000;
 
   font-family: "Poppins", sans-serif;
 
@@ -788,22 +794,27 @@ export const Select = styled.select`
 
   cursor: pointer;
 
-  transition: .25s;
+  transition:
+    background .25s ease,
+    border-color .25s ease,
+    box-shadow .25s ease;
 
   &:hover {
-    border-color: #ffdb53;
+    border-color: #f9be06;
 
-    background: #fff;
+    background: #fffaf0;
+
+    box-shadow: 0 4px 12px rgba(249, 190, 6, .12);
   }
 
   &:focus {
-    border-color: #ffdb53;
+    border-color: #f9be06;
 
-    background: #fff;
+    background: #fffbe6;
 
     box-shadow:
-      0 0 0 4px
-      rgba(249, 190, 6, .15);
+      0 0 0 3px
+      rgba(255, 219, 83, .22);
   }
 `;
 
@@ -854,17 +865,19 @@ export const NoteLabel = styled.label`
 
   margin-bottom: 7px;
 
-  color: #777;
+  color: #571111;
 
   font-family: "Poppins", sans-serif;
 
   font-size: 11px;
 
-  font-weight: 600;
+  font-weight: 700;
 
   letter-spacing: .04em;
 
   text-transform: uppercase;
+
+  text-align: center;
 `;
 
 // ========================================
@@ -876,42 +889,56 @@ export const NoteInput = styled.input`
 
   min-width: 0;
 
-  padding: 13px 10px;
+  padding: 15px 12px;
 
-  border: 1px solid #e5e5e5;
+  border: 2px solid #ffdb53;
 
-  border-radius: 13px;
+  border-radius: 16px;
 
-  background: #f7f7f7;
+  background: #fffdf0;
 
-  color: #111;
+  color: #010000;
 
   font-family: "Poppins", sans-serif;
 
   font-size: 17px;
 
-  font-weight: 600;
+  font-weight: 700;
 
   text-align: center;
 
   outline: none;
 
-  transition: .25s;
+  transition:
+    background .25s ease,
+    border-color .25s ease,
+    box-shadow .25s ease,
+    transform .2s ease;
+
+  &::placeholder {
+    color: #a89768;
+
+    opacity: .8;
+
+    font-weight: 400;
+  }
 
   &:hover {
-    border-color: #ffdb53;
+    border-color: #f9be06;
 
-    background: #fff;
+    background: #fffaf0;
+
+    box-shadow: 0 4px 12px rgba(249, 190, 6, .12);
   }
 
   &:focus {
-    border-color: #ffdb53;
+    border-color: #f9be06;
 
-    background: #fff;
+    background: #fffbe6;
 
     box-shadow:
-      0 0 0 4px
-      rgba(249, 190, 6, .15);
+      0 0 0 3px
+      rgba(255, 219, 83, .22);
 
     transform: translateY(-1px);
   }
@@ -937,7 +964,7 @@ export const CalculateButton = styled.button`
 
   background: #ffdb53;
 
-  color: #111;
+  color: #010000;
 
   display: flex;
 
@@ -951,22 +978,22 @@ export const CalculateButton = styled.button`
 
   font-size: 15px;
 
-  font-weight: 600;
+  font-weight: 700;
 
   cursor: pointer;
 
   transition: .25s;
 
   &:hover {
-    background: #111;
+    background: #831614;
 
-    color: #ffdb53;
+    color: #fff7d0;
 
     transform: translateY(-2px);
 
     box-shadow:
       0 10px 25px
-      rgba(0, 0, 0, .12);
+      rgba(87, 17, 17, .25);
   }
 
   &:active {
@@ -985,15 +1012,17 @@ export const ErrorMessage = styled.div`
 
   border-radius: 10px;
 
-  background: #fff1f1;
+  background: #fff7d0;
 
-  color: #e6484f;
+  border: 1px solid rgba(131, 22, 20, .2);
+
+  color: #831614;
 
   font-family: "Poppins", sans-serif;
 
   font-size: 13px;
 
-  font-weight: 500;
+  font-weight: 600;
 
   text-align: center;
 `;
@@ -1011,9 +1040,11 @@ export const ResultsCard = styled.div`
 
   border-radius: 22px;
 
+  border-top: 5px solid #ffdb53;
+
   padding: 30px;
 
-  box-shadow: 0 12px 35px rgba(0, 0, 0, .08);
+  box-shadow: 0 12px 35px rgba(87, 17, 17, .10);
 
   animation: resultShow .35s ease;
 
@@ -1055,15 +1086,15 @@ export const ResultsTable = styled.table`
 export const ResultsHeader = styled.th`
   padding: 11px 8px;
 
-  border-bottom: 1px solid #eee;
+  border-bottom: 2px solid #fff7d0;
 
-  color: #999;
+  color: #571111;
 
   font-family: "Poppins", sans-serif;
 
   font-size: 11px;
 
-  font-weight: 600;
+  font-weight: 700;
 
   text-align: left;
 
@@ -1073,22 +1104,22 @@ export const ResultsHeader = styled.th`
 `;
 
 export const ResultsRow = styled.tr`
-  color: ${({ discarded }) =>
-    discarded
-      ? "#aaa"
-      : "#333"
+  color: ${({ $discarded }) =>
+    $discarded
+      ? "#a89a9a"
+      : "#010000"
   };
 
   transition: background .2s;
 
   &:hover {
-    background: #fafafa;
+    background: #fff7d0;
   }
 
   td {
     padding: 12px 8px;
 
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f2ecd8;
 
     font-family: "Poppins", sans-serif;
 
@@ -1107,15 +1138,15 @@ export const Tag = styled.span`
 
   border-radius: 999px;
 
-  background: #fff7d6;
+  background: #fff7d0;
 
-  color: #a87800;
+  color: #571111;
 
   font-family: "Poppins", sans-serif;
 
   font-size: 10px;
 
-  font-weight: 600;
+  font-weight: 700;
 
   letter-spacing: .04em;
 
@@ -1145,7 +1176,7 @@ export const SummaryRow = styled.div`
 
   gap: 20px;
 
-  color: #777;
+  color: #383131;
 
   font-family: "Poppins", sans-serif;
 
@@ -1153,17 +1184,17 @@ export const SummaryRow = styled.div`
 `;
 
 export const SummaryValue = styled.span`
-  color: ${({ penalty }) =>
-    penalty
-      ? "#e6484f"
-      : "#222"
+  color: ${({ $penalty }) =>
+    $penalty
+      ? "#831614"
+      : "#010000"
   };
 
   font-family: "Poppins", sans-serif;
 
   font-size: 15px;
 
-  font-weight: 600;
+  font-weight: 700;
 `;
 
 // ========================================
@@ -1183,11 +1214,11 @@ export const FinalRow = styled.div`
 
   padding-top: 18px;
 
-  border-top: 1px solid #eee;
+  border-top: 2px solid #fff7d0;
 `;
 
 export const FinalLabel = styled.span`
-  color: #111;
+  color: #010000;
 
   font-family: "Poppins", sans-serif;
 
@@ -1197,13 +1228,13 @@ export const FinalLabel = styled.span`
 `;
 
 export const FinalValue = styled.span`
-  color: #f0b500;
+  color: #831614;
 
   font-family: "Poppins", sans-serif;
 
   font-size: 34px;
 
-  font-weight: 700;
+  font-weight: 800;
 
   letter-spacing: -.5px;
 `;
@@ -1223,9 +1254,9 @@ export const SaveButton = styled.button`
 
   border-radius: 14px;
 
-  background: #ffdb53;
+  background: #831614;
 
-  color: #111;
+  color: #fff7d0;
 
   display: flex;
 
@@ -1239,14 +1270,14 @@ export const SaveButton = styled.button`
 
   font-size: 15px;
 
-  font-weight: 600;
+  font-weight: 700;
 
   cursor: pointer;
 
   transition: .25s;
 
   &:hover {
-    background: #111;
+    background: #571111;
 
     color: #ffdb53;
 
@@ -1254,13 +1285,83 @@ export const SaveButton = styled.button`
 
     box-shadow:
       0 10px 25px
-      rgba(0, 0, 0, .12);
+      rgba(87, 17, 17, .3);
   }
 
   &:active {
     transform: scale(.98);
   }
+
+  &:disabled {
+    opacity: .6;
+
+    cursor: not-allowed;
+
+    transform: none;
+  }
 `;
+
+// ========================================
+// INPUT DO POETA (combobox)
+// ========================================
+
+export const PoetaInput = styled.input`
+  display: block;
+
+  width: 100%;
+
+  height: 56px;
+
+  padding: 0 18px;
+
+  border: 2px solid #ffdb53;
+
+  border-radius: 16px;
+
+  background: #fffdf0;
+
+  color: #010000;
+
+  font-family: "Poppins", sans-serif;
+
+  font-size: 15px;
+
+  font-weight: 500;
+
+  text-align: left;
+
+  outline: none;
+
+  transition:
+    background .25s ease,
+    border-color .25s ease,
+    box-shadow .25s ease;
+
+  &::placeholder {
+    color: #a89768;
+
+    opacity: .8;
+  }
+
+  &:hover {
+    border-color: #f9be06;
+
+    background: #fffaf0;
+
+    box-shadow: 0 4px 12px rgba(249, 190, 6, .12);
+  }
+
+  &:focus {
+    border-color: #f9be06;
+
+    background: #fffbe6;
+
+    box-shadow:
+      0 0 0 3px
+      rgba(255, 219, 83, .22);
+  }
+`;
+
 // ========================================
 // AUTOCOMPLETE DO POETA
 // ========================================
@@ -1276,7 +1377,7 @@ export const AutocompleteWrapper = styled.div`
 export const SuggestionsList = styled.ul`
   position: absolute;
 
-  top: calc(100% + 6px);
+  top: calc(100% + 8px);
 
   left: 0;
   right: 0;
@@ -1294,11 +1395,11 @@ export const SuggestionsList = styled.ul`
 
   background: #fff;
 
-  border: 1px solid #e5e5e5;
+  border: 2px solid #ffdb53;
 
-  border-radius: 14px;
+  border-radius: 16px;
 
-  box-shadow: 0 12px 30px rgba(0, 0, 0, .12);
+  box-shadow: 0 14px 32px rgba(87, 17, 17, .18);
 `;
 
 export const SuggestionItem = styled.button`
@@ -1306,25 +1407,26 @@ export const SuggestionItem = styled.button`
 
   width: 100%;
 
-  padding: 11px 12px;
+  padding: 12px 14px;
 
   border: none;
-  border-radius: 10px;
+  border-radius: 11px;
 
   background: ${({ $selected }) =>
-    $selected ? "#fff7d6" : "transparent"};
+    $selected ? "#fffbe6" : "transparent"};
 
-  color: #222;
+  color: ${({ $selected }) =>
+    $selected ? "#571111" : "#010000"};
 
   font-family: "Poppins", sans-serif;
   font-size: 14px;
-  font-weight: ${({ $selected }) => ($selected ? 600 : 400)};
+  font-weight: ${({ $selected }) => ($selected ? 700 : 500)};
 
   text-align: left;
 
   cursor: pointer;
 
-  transition: background .15s;
+  transition: background .15s ease;
 
   &:hover {
     background: #fff3c4;
@@ -1334,7 +1436,7 @@ export const SuggestionItem = styled.button`
 export const SuggestionEmpty = styled.li`
   padding: 11px 12px;
 
-  color: #999;
+  color: #383131;
 
   font-family: "Poppins", sans-serif;
   font-size: 13px;

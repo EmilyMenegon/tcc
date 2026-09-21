@@ -97,7 +97,27 @@ db.exec(`
     FOREIGN KEY (evento_id) REFERENCES evento (id_evento)
   )
 `);
+db.exec(`
+  CREATE TABLE IF NOT EXISTS anotacoes (
+    id_anotacao INTEGER PRIMARY KEY AUTOINCREMENT,
+    usuario_id INTEGER NOT NULL,
+    numero_pagina INTEGER NOT NULL,
+    titulo TEXT NOT NULL DEFAULT '',
+    conteudo TEXT NOT NULL DEFAULT '',
+    atualizado_em TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (usuario_id) REFERENCES usuario (id),
+    UNIQUE (usuario_id, numero_pagina)
+  )
+`);
 
+// Migração: adiciona a coluna "titulo" caso o banco já exista
+// de uma versão anterior desta tabela, sem perder dados.
+const colunasAnotacoes = db.prepare("PRAGMA table_info(anotacoes)").all();
+const temColunaTitulo = colunasAnotacoes.some((coluna) => coluna.name === "titulo");
+
+if (!temColunaTitulo) {
+  db.exec("ALTER TABLE anotacoes ADD COLUMN titulo TEXT NOT NULL DEFAULT ''");
+}
 
 try {
   db.exec(`ALTER TABLE notas ADD COLUMN evento_id INTEGER REFERENCES evento (id_evento)`);

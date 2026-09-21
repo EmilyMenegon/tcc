@@ -564,12 +564,6 @@ export const PageSide = styled.div`
   overflow:
     hidden;
 
-  backface-visibility:
-    hidden;
-
-  transform-style:
-    preserve-3d;
-
 
   /*
    * LINHAS DO CADERNO
@@ -943,6 +937,116 @@ export const PageNumber = styled.span`
 
 
 // =====================================================
+// TÍTULO DA POESIA
+// =====================================================
+
+export const TitleInput = styled.input`
+
+  position:
+    relative;
+
+  z-index:
+    3;
+
+  width:
+    100%;
+
+  flex-shrink:
+    0;
+
+  margin-bottom:
+    14px;
+
+  padding:
+    0 2px 10px;
+
+  border:
+    none;
+
+  border-bottom:
+    2px dashed
+    ${theme.border};
+
+  outline:
+    none;
+
+  background:
+    transparent;
+
+  /*
+   * Mesmo motivo do WritingArea: garante que o
+   * cursor de texto apareça dentro do contexto 3D
+   * usado pela animação de virar página.
+   */
+  transform:
+    translateZ(0);
+
+  color:
+    ${theme.primary};
+
+  font-family:
+    "Poppins",
+    sans-serif;
+
+  font-size:
+    19px;
+
+  font-weight:
+    700;
+
+  transition:
+    border-color .2s ease;
+
+
+  &::placeholder {
+
+    color:
+      rgba(
+        131,
+        22,
+        20,
+        .35
+      );
+
+    font-weight:
+      600;
+
+  }
+
+
+  &:focus {
+
+    border-bottom-style:
+      solid;
+
+    border-bottom-color:
+      ${theme.primary};
+
+  }
+
+
+  &:read-only {
+
+    cursor:
+      default;
+
+  }
+
+
+  @media (max-width: 500px) {
+
+    font-size:
+      16px;
+
+    margin-bottom:
+      10px;
+
+  }
+
+`;
+
+
+// =====================================================
 // WRITING AREA
 // =====================================================
 
@@ -977,6 +1081,15 @@ export const WritingArea = styled.textarea`
 
   background:
     transparent;
+
+  /*
+   * Força o textarea pra sua própria camada de
+   * renderização — corrige o cursor de texto (caret)
+   * sumindo por causa do transform-style: preserve-3d
+   * do PageCard (bug conhecido do Chrome).
+   */
+  transform:
+    translateZ(0);
 
   color:
     ${theme.text};
@@ -1449,6 +1562,247 @@ export const DragHint = styled.div`
 
     font-size:
       10px;
+
+  }
+
+`;
+
+
+// =====================================================
+// ESTADO DE SALVAMENTO
+// =====================================================
+
+export const SaveStatus = styled.span`
+
+  flex-shrink:
+    0;
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      .75
+    );
+
+  font-size:
+    12px;
+
+  font-weight:
+    500;
+
+  white-space:
+    nowrap;
+
+`;
+
+
+// =====================================================
+// BLOQUEIO (usuário sem inscrição)
+// =====================================================
+
+export const LockedState = styled.div`
+
+  width: 100%;
+
+  min-height:
+    420px;
+
+  padding:
+    60px 30px;
+
+  display:
+    flex;
+
+  flex-direction:
+    column;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  text-align:
+    center;
+
+  gap:
+    14px;
+
+  background:
+    ${theme.white};
+
+  border-radius:
+    24px;
+
+  box-shadow:
+    0
+    10px
+    28px
+    rgba(
+      0,
+      0,
+      0,
+      .10
+    );
+
+
+  @media (max-width: 600px) {
+
+    min-height:
+      340px;
+
+    padding:
+      40px 20px;
+
+  }
+
+`;
+
+
+export const LockedIcon = styled.div`
+
+  width: 80px;
+  height: 80px;
+
+  margin-bottom:
+    6px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  border-radius:
+    50%;
+
+  background:
+    rgba(
+      131,
+      22,
+      20,
+      .10
+    );
+
+  color:
+    ${theme.primary};
+
+  font-size:
+    34px;
+
+`;
+
+
+export const LockedTitle = styled.h2`
+
+  margin: 0;
+
+  color:
+    ${theme.black};
+
+  font-size:
+    24px;
+
+  font-weight:
+    700;
+
+
+  @media (max-width: 600px) {
+
+    font-size:
+      20px;
+
+  }
+
+`;
+
+
+export const LockedText = styled.p`
+
+  max-width:
+    460px;
+
+  margin: 0;
+
+  color:
+    ${theme.muted};
+
+  font-size:
+    15px;
+
+  line-height:
+    1.6;
+
+
+  @media (max-width: 600px) {
+
+    font-size:
+      14px;
+
+  }
+
+`;
+
+
+export const LockedButton = styled.button`
+
+  margin-top:
+    10px;
+
+  min-height:
+    48px;
+
+  padding:
+    0 26px;
+
+  border: none;
+
+  border-radius:
+    999px;
+
+  background:
+    ${theme.primary};
+
+  color:
+    ${theme.white};
+
+  font-family:
+    "Poppins",
+    sans-serif;
+
+  font-size:
+    14px;
+
+  font-weight:
+    700;
+
+  cursor:
+    pointer;
+
+  transition:
+    background .2s ease,
+    transform .2s ease;
+
+
+  &:hover {
+
+    background:
+      ${theme.primaryDark};
+
+    transform:
+      translateY(-2px);
+
+  }
+
+
+  &:active {
+
+    transform:
+      translateY(0);
 
   }
 
