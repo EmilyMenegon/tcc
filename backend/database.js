@@ -67,16 +67,7 @@ db.exec(`
   )
 `);
 
-/* ==========================================
-   NOTAS (avaliação dos poetas pelos jurados)
-   - 5 notas (N1 a N5); a maior e a menor
-     são descartadas no cálculo do resultado
-   - "media"     = média das 3 notas válidas
-   - "desconto"  = penalidade por tempo excedido
-   - "resultado" = nota final (media - desconto)
-   - "tempo"     = tempo do poeta no cronômetro, em segundos
-   - "evento_id" = evento ao qual essa nota pertence
-========================================== */
+
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS notas (
@@ -97,6 +88,7 @@ db.exec(`
     FOREIGN KEY (evento_id) REFERENCES evento (id_evento)
   )
 `);
+
 db.exec(`
   CREATE TABLE IF NOT EXISTS anotacoes (
     id_anotacao INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -110,19 +102,40 @@ db.exec(`
   )
 `);
 
-// Migração: adiciona a coluna "titulo" caso o banco já exista
-// de uma versão anterior desta tabela, sem perder dados.
+
 const colunasAnotacoes = db.prepare("PRAGMA table_info(anotacoes)").all();
-const temColunaTitulo = colunasAnotacoes.some((coluna) => coluna.name === "titulo");
+
+const temColunaTitulo = colunasAnotacoes.some(
+  (coluna) => coluna.name === "titulo"
+);
 
 if (!temColunaTitulo) {
-  db.exec("ALTER TABLE anotacoes ADD COLUMN titulo TEXT NOT NULL DEFAULT ''");
+  db.exec(
+    "ALTER TABLE anotacoes ADD COLUMN titulo TEXT NOT NULL DEFAULT ''"
+  );
 }
 
 try {
-  db.exec(`ALTER TABLE notas ADD COLUMN evento_id INTEGER REFERENCES evento (id_evento)`);
+  db.exec(`
+    ALTER TABLE notas
+    ADD COLUMN evento_id INTEGER
+    REFERENCES evento (id_evento)
+  `);
 } catch (err) {
-  // coluna já existe — segue o jogo
+
+}
+
+
+try {
+  db.exec(`
+    CREATE UNIQUE INDEX IF NOT EXISTS idx_notas_poeta_evento
+    ON notas (usuario_id, evento_id)
+  `);
+} catch (err) {
+  console.error(
+    "Não foi possível criar a regra de resultado único por poeta/evento.",
+    err.message
+  );
 }
 
 export default db;
