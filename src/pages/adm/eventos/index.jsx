@@ -11,7 +11,6 @@ import {
   FiMapPin,
   FiImage,
   FiUpload,
-  FiUsers,
   FiAward,
   FiChevronLeft,
   FiChevronRight,
@@ -66,7 +65,6 @@ import {
   FormRow,
   FormGroup,
   ParticipantsBox,
-  ParticipantsIcon,
   ParticipantsText,
   FormFooter,
   SaveButton,
@@ -130,10 +128,9 @@ export default function Eventos() {
   const [horario, setHorario] = useState("");
   const [local, setLocal] = useState("");
 
-  // Poetas disponíveis (alunos inscritos que viraram poeta) e quais estão
-  // marcados como participantes do evento que está sendo criado/editado.
   const [poetas, setPoetas] = useState([]);
-  const [participantesSelecionados, setParticipantesSelecionados] = useState([]);
+  const [participantesSelecionados, setParticipantesSelecionados] =
+    useState([]);
 
   const [anoInicial, setAnoInicial] = useState(2026);
   const [anoSelecionado, setAnoSelecionado] = useState(2026);
@@ -145,6 +142,7 @@ export default function Eventos() {
 
   const eventoSelecionado = useMemo(() => {
     if (!eventoSelecionadoId) return null;
+
     return (
       eventos.find(
         (evento) => String(evento.id) === String(eventoSelecionadoId)
@@ -167,8 +165,6 @@ export default function Eventos() {
     carregarEventos();
   }, []);
 
-  // Carrega a lista de poetas (alunos que se inscreveram e viraram poeta)
-  // uma única vez, pra usar no seletor de participantes do modal.
   useEffect(() => {
     apiFetch("/poetas")
       .then(setPoetas)
@@ -197,8 +193,16 @@ export default function Eventos() {
   function handleButtonMouseMove(event) {
     const button = event.currentTarget;
     const rect = button.getBoundingClientRect();
-    button.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`);
-    button.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`);
+
+    button.style.setProperty(
+      "--mouse-x",
+      `${event.clientX - rect.left}px`
+    );
+
+    button.style.setProperty(
+      "--mouse-y",
+      `${event.clientY - rect.top}px`
+    );
   }
 
   function limparFormulario() {
@@ -221,6 +225,7 @@ export default function Eventos() {
   async function abrirEdicao(evento) {
     setEventoSelecionadoId(null);
     setEventoEditando(evento);
+
     setNome(evento.nome || "");
     setDescricao(evento.descricao || "");
     setData(evento.data || "");
@@ -230,8 +235,13 @@ export default function Eventos() {
     setImagemPreview(evento.imagem || "");
 
     try {
-      const participantes = await apiFetch(`/eventos/${evento.id}/participantes`);
-      setParticipantesSelecionados(participantes.map((p) => p.usuarioId));
+      const participantes = await apiFetch(
+        `/eventos/${evento.id}/participantes`
+      );
+
+      setParticipantesSelecionados(
+        participantes.map((p) => p.usuarioId)
+      );
     } catch (err) {
       console.error(err);
       setParticipantesSelecionados([]);
@@ -249,6 +259,7 @@ export default function Eventos() {
 
   function handleImagem(event) {
     const arquivo = event.target.files?.[0];
+
     if (!arquivo) return;
 
     if (arquivo.size > 5 * 1024 * 1024) {
@@ -351,16 +362,16 @@ export default function Eventos() {
         eventoId = novoEvento.id;
       }
 
-      // Sincroniza os participantes marcados no formulário com o evento
-      // recém-criado/atualizado.
       await apiFetch(`/eventos/${eventoId}/participantes`, {
         method: "PUT",
-        body: JSON.stringify({ usuarioIds: participantesSelecionados }),
+        body: JSON.stringify({
+          usuarioIds: participantesSelecionados,
+        }),
       });
 
-      // Atualiza a lista de poetas pra refletir o novo vínculo (evita que
-      // um poeta apareça disponível em outro evento logo em seguida).
-      apiFetch("/poetas").then(setPoetas).catch(console.error);
+      apiFetch("/poetas")
+        .then(setPoetas)
+        .catch(console.error);
 
       fecharModal();
     } catch (err) {
@@ -388,7 +399,9 @@ export default function Eventos() {
       });
 
       setEventos((atuais) =>
-        atuais.filter((evento) => evento.id !== eventoParaExcluir.id)
+        atuais.filter(
+          (evento) => evento.id !== eventoParaExcluir.id
+        )
       );
 
       setEventoSelecionadoId(null);
@@ -416,7 +429,10 @@ export default function Eventos() {
     const m = Math.floor(segundos / 60);
     const s = Math.floor(segundos % 60);
 
-    return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+    return `${String(m).padStart(2, "0")}:${String(s).padStart(
+      2,
+      "0"
+    )}`;
   }
 
   function descobrirAno(evento) {
@@ -437,12 +453,14 @@ export default function Eventos() {
 
   function avancarAnos() {
     const novoAno = anoInicial + 3;
+
     setAnoInicial(novoAno);
     setAnoSelecionado(novoAno);
   }
 
   function voltarAnos() {
     const novoAno = Math.max(2026, anoInicial - 3);
+
     setAnoInicial(novoAno);
     setAnoSelecionado(novoAno);
   }
@@ -452,7 +470,9 @@ export default function Eventos() {
   }
 
   function quantidadePorAno(ano) {
-    return eventos.filter((evento) => descobrirAno(evento) === ano).length;
+    return eventos.filter(
+      (evento) => descobrirAno(evento) === ano
+    ).length;
   }
 
   const eventosDoAno = eventos.filter(
@@ -472,7 +492,8 @@ export default function Eventos() {
 
     window.addEventListener("keydown", handleKeyDown);
 
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () =>
+      window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   return (
@@ -517,7 +538,9 @@ export default function Eventos() {
                     <FiCalendar />
                   </YearIcon>
 
-                  <YearNumber $active={ativo}>{ano}</YearNumber>
+                  <YearNumber $active={ativo}>
+                    {ano}
+                  </YearNumber>
 
                   <YearDescription $active={ativo}>
                     {quantidade === 0
@@ -549,7 +572,11 @@ export default function Eventos() {
               <EmptyIcon>
                 <FiCalendar />
               </EmptyIcon>
-              <EmptyTitle>Nenhum evento cadastrado</EmptyTitle>
+
+              <EmptyTitle>
+                Nenhum evento cadastrado
+              </EmptyTitle>
+
               <EmptyText>
                 Clique no botão + para criar seu primeiro evento.
               </EmptyText>
@@ -559,7 +586,11 @@ export default function Eventos() {
               <EmptyIcon>
                 <FiCalendar />
               </EmptyIcon>
-              <EmptyTitle>Nenhum evento neste ano</EmptyTitle>
+
+              <EmptyTitle>
+                Nenhum evento neste ano
+              </EmptyTitle>
+
               <EmptyText>
                 Não existem eventos cadastrados em {anoSelecionado}.
               </EmptyText>
@@ -568,11 +599,16 @@ export default function Eventos() {
             eventosDoAno.map((evento) => (
               <EventCard
                 key={evento.id}
-                onClick={() => setEventoSelecionadoId(evento.id)}
+                onClick={() =>
+                  setEventoSelecionadoId(evento.id)
+                }
                 tabIndex={0}
                 role="button"
                 onKeyDown={(event) => {
-                  if (event.key === "Enter" || event.key === " ") {
+                  if (
+                    event.key === "Enter" ||
+                    event.key === " "
+                  ) {
                     event.preventDefault();
                     setEventoSelecionadoId(evento.id);
                   }
@@ -580,7 +616,10 @@ export default function Eventos() {
               >
                 {evento.imagem ? (
                   <EventImage>
-                    <img src={evento.imagem} alt={evento.nome} />
+                    <img
+                      src={evento.imagem}
+                      alt={evento.nome}
+                    />
                   </EventImage>
                 ) : (
                   <EventImagePlaceholder>
@@ -590,12 +629,17 @@ export default function Eventos() {
 
                 <EventContent>
                   <EventTitle>{evento.nome}</EventTitle>
-                  <EventDescription>{evento.descricao}</EventDescription>
+
+                  <EventDescription>
+                    {evento.descricao}
+                  </EventDescription>
 
                   <InfoList>
                     <InfoItem>
                       <FiCalendar />
-                      <span>{formatarData(evento.data)}</span>
+                      <span>
+                        {formatarData(evento.data)}
+                      </span>
                     </InfoItem>
 
                     <InfoItem>
@@ -618,7 +662,9 @@ export default function Eventos() {
                         setEventoSelecionadoId(evento.id);
                       }}
                     >
-                      <span className="buttonContent">Ver evento</span>
+                      <span className="buttonContent">
+                        Ver evento
+                      </span>
                     </AccessButton>
 
                     <Actions>
@@ -660,13 +706,17 @@ export default function Eventos() {
       {modalAberto && (
         <ModalOverlay
           onClick={(event) => {
-            if (event.target === event.currentTarget) fecharModal();
+            if (event.target === event.currentTarget) {
+              fecharModal();
+            }
           }}
         >
           <Modal>
             <ModalHeader>
               <ModalTitle>
-                {eventoEditando ? "Editar evento" : "Novo evento"}
+                {eventoEditando
+                  ? "Editar evento"
+                  : "Novo evento"}
               </ModalTitle>
 
               <CloseButton
@@ -693,7 +743,10 @@ export default function Eventos() {
 
                 {imagemPreview ? (
                   <ImagePreview>
-                    <img src={imagemPreview} alt="Prévia" />
+                    <img
+                      src={imagemPreview}
+                      alt="Prévia"
+                    />
 
                     <RemoveImageButton
                       type="button"
@@ -709,9 +762,17 @@ export default function Eventos() {
                     </ImageUploadIcon>
 
                     <ImageUploadText>
-                      <strong>Adicionar imagem</strong>
-                      <span>Clique para escolher uma imagem</span>
-                      <small>PNG, JPG ou WEBP até 5MB</small>
+                      <strong>
+                        Adicionar imagem
+                      </strong>
+
+                      <span>
+                        Clique para escolher uma imagem
+                      </span>
+
+                      <small>
+                        PNG, JPG ou WEBP até 5MB
+                      </small>
                     </ImageUploadText>
 
                     <FiUpload />
@@ -725,7 +786,9 @@ export default function Eventos() {
                 type="text"
                 placeholder="Ex: Semifinal"
                 value={nome}
-                onChange={(event) => setNome(event.target.value)}
+                onChange={(event) =>
+                  setNome(event.target.value)
+                }
                 maxLength={100}
               />
 
@@ -734,7 +797,9 @@ export default function Eventos() {
               <TextArea
                 placeholder="Digite a descrição do evento..."
                 value={descricao}
-                onChange={(event) => setDescricao(event.target.value)}
+                onChange={(event) =>
+                  setDescricao(event.target.value)
+                }
                 maxLength={500}
               />
 
@@ -745,7 +810,9 @@ export default function Eventos() {
                   <Input
                     type="date"
                     value={data}
-                    onChange={(event) => setData(event.target.value)}
+                    onChange={(event) =>
+                      setData(event.target.value)
+                    }
                   />
                 </FormGroup>
 
@@ -755,7 +822,9 @@ export default function Eventos() {
                   <Input
                     type="time"
                     value={horario}
-                    onChange={(event) => setHorario(event.target.value)}
+                    onChange={(event) =>
+                      setHorario(event.target.value)
+                    }
                   />
                 </FormGroup>
               </FormRow>
@@ -766,60 +835,81 @@ export default function Eventos() {
                 type="text"
                 placeholder="Ex: Auditório"
                 value={local}
-                onChange={(event) => setLocal(event.target.value)}
+                onChange={(event) =>
+                  setLocal(event.target.value)
+                }
                 maxLength={150}
               />
 
               <Label>Participantes do evento</Label>
 
               <ParticipantsBox
-                style={{ flexDirection: "column", alignItems: "stretch", gap: 6 }}
+                style={{
+                  flexDirection: "column",
+                  alignItems: "stretch",
+                  gap: 6,
+                }}
               >
                 {poetas.length === 0 ? (
                   <ParticipantsText>
-                    <span>Nenhum poeta inscrito ainda.</span>
+                    <span>
+                      Nenhum poeta inscrito ainda.
+                    </span>
                   </ParticipantsText>
                 ) : (
-                  poetas.map((poeta) => {
-                    const jaEmOutroEvento =
-                      poeta.eventoId && poeta.eventoId !== eventoEditando?.id;
-
-                    return (
-                      <label
-                        key={poeta.usuarioId}
-                        style={{
-                          display: "flex",
-                          gap: 8,
-                          alignItems: "center",
-                          opacity: jaEmOutroEvento ? 0.5 : 1,
-                        }}
-                      >
-                        <input
-                          type="checkbox"
-                          disabled={jaEmOutroEvento}
-                          checked={participantesSelecionados.includes(
-                            poeta.usuarioId
-                          )}
-                          onChange={(event) => {
-                            setParticipantesSelecionados((atuais) =>
+                  poetas.map((poeta) => (
+                    <label
+                      key={poeta.usuarioId}
+                      style={{
+                        display: "flex",
+                        gap: 8,
+                        alignItems: "center",
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={participantesSelecionados.includes(
+                          poeta.usuarioId
+                        )}
+                        onChange={(event) => {
+                          setParticipantesSelecionados(
+                            (atuais) =>
                               event.target.checked
-                                ? [...atuais, poeta.usuarioId]
-                                : atuais.filter((id) => id !== poeta.usuarioId)
-                            );
-                          }}
-                        />
-                        {poeta.nome_poeta} — {poeta.turma}
-                        {jaEmOutroEvento && " (já em outro evento)"}
-                      </label>
-                    );
-                  })
+                                ? atuais.includes(
+                                    poeta.usuarioId
+                                  )
+                                  ? atuais
+                                  : [
+                                      ...atuais,
+                                      poeta.usuarioId,
+                                    ]
+                                : atuais.filter(
+                                    (id) =>
+                                      id !==
+                                      poeta.usuarioId
+                                  )
+                          );
+                        }}
+                      />
+
+                      {poeta.nome_poeta} — {poeta.turma}
+                    </label>
+                  ))
                 )}
               </ParticipantsBox>
 
               <FormFooter>
-                <SaveButton type="submit" onPointerMove={handleButtonMouseMove}>
+                <SaveButton
+                  type="submit"
+                  onPointerMove={handleButtonMouseMove}
+                >
                   <span className="buttonContent">
-                    {eventoEditando ? <FiEdit /> : <FiPlus />}
+                    {eventoEditando ? (
+                      <FiEdit />
+                    ) : (
+                      <FiPlus />
+                    )}
+
                     {eventoEditando
                       ? "Salvar alterações"
                       : "Criar evento"}
@@ -841,11 +931,15 @@ export default function Eventos() {
         >
           <Modal>
             <ModalHeader>
-              <ModalTitle>{eventoSelecionado.nome}</ModalTitle>
+              <ModalTitle>
+                {eventoSelecionado.nome}
+              </ModalTitle>
 
               <CloseButton
                 type="button"
-                onClick={() => setEventoSelecionadoId(null)}
+                onClick={() =>
+                  setEventoSelecionadoId(null)
+                }
                 onPointerMove={handleButtonMouseMove}
               >
                 <span className="buttonContent">
@@ -867,7 +961,10 @@ export default function Eventos() {
               </EventImagePlaceholder>
             )}
 
-            <EventTitle>{eventoSelecionado.nome}</EventTitle>
+            <EventTitle>
+              {eventoSelecionado.nome}
+            </EventTitle>
+
             <EventDescription>
               {eventoSelecionado.descricao}
             </EventDescription>
@@ -875,17 +972,25 @@ export default function Eventos() {
             <InfoList>
               <InfoItem>
                 <FiCalendar />
-                <span>{formatarData(eventoSelecionado.data)}</span>
+                <span>
+                  {formatarData(
+                    eventoSelecionado.data
+                  )}
+                </span>
               </InfoItem>
 
               <InfoItem>
                 <FiClock />
-                <span>{eventoSelecionado.horario}</span>
+                <span>
+                  {eventoSelecionado.horario}
+                </span>
               </InfoItem>
 
               <InfoItem>
                 <FiMapPin />
-                <span>{eventoSelecionado.local}</span>
+                <span>
+                  {eventoSelecionado.local}
+                </span>
               </InfoItem>
             </InfoList>
 
@@ -897,20 +1002,25 @@ export default function Eventos() {
                 </RankingTitle>
 
                 <RankingDescription>
-                  Notas lançadas pelo matemático para este evento. A maior e a
-                  menor nota de cada poeta já foram descartadas — o resultado é
-                  a média das três restantes, menos o desconto por tempo
-                  excedido.
+                  Notas lançadas pelo matemático para este
+                  evento. A maior e a menor nota de cada poeta
+                  já foram descartadas — o resultado é a média
+                  das três restantes, menos o desconto por
+                  tempo excedido.
                 </RankingDescription>
               </RankingHeader>
 
               {resultados.length === 0 ? (
                 <RankingEmpty>
                   <FiAward />
-                  <strong>Nenhum resultado ainda</strong>
+
+                  <strong>
+                    Nenhum resultado ainda
+                  </strong>
+
                   <span>
-                    As notas lançadas pelo matemático para este evento
-                    aparecerão aqui.
+                    As notas lançadas pelo matemático para este
+                    evento aparecerão aqui.
                   </span>
                 </RankingEmpty>
               ) : (
@@ -933,82 +1043,103 @@ export default function Eventos() {
                     </thead>
 
                     <tbody>
-                      {resultados.map((resultado, index) => (
-                        <RankingRow
-                          key={resultado.id}
-                          $primeiro={index === 0}
-                        >
-                          <td>
-                            <Position>
-                              {index === 0 && <FiAward />}
-                              {index + 1}º
-                            </Position>
-                          </td>
+                      {resultados.map(
+                        (resultado, index) => (
+                          <RankingRow
+                            key={resultado.id}
+                            $primeiro={index === 0}
+                          >
+                            <td>
+                              <Position>
+                                {index === 0 && (
+                                  <FiAward />
+                                )}
 
-                          <td>
-                            <ParticipantName>
-                              {resultado.nomeAluno}
-                            </ParticipantName>
-                          </td>
+                                {index + 1}º
+                              </Position>
+                            </td>
 
-                          <td>
-                            <Score>
-                              {resultado.n1?.toFixed(1) ?? "-"}
-                            </Score>
-                          </td>
+                            <td>
+                              <ParticipantName>
+                                {resultado.nomeAluno}
+                              </ParticipantName>
+                            </td>
 
-                          <td>
-                            <Score>
-                              {resultado.n2?.toFixed(1) ?? "-"}
-                            </Score>
-                          </td>
+                            <td>
+                              <Score>
+                                {resultado.n1?.toFixed(1) ??
+                                  "-"}
+                              </Score>
+                            </td>
 
-                          <td>
-                            <Score>
-                              {resultado.n3?.toFixed(1) ?? "-"}
-                            </Score>
-                          </td>
+                            <td>
+                              <Score>
+                                {resultado.n2?.toFixed(1) ??
+                                  "-"}
+                              </Score>
+                            </td>
 
-                          <td>
-                            <Score>
-                              {resultado.n4?.toFixed(1) ?? "-"}
-                            </Score>
-                          </td>
+                            <td>
+                              <Score>
+                                {resultado.n3?.toFixed(1) ??
+                                  "-"}
+                              </Score>
+                            </td>
 
-                          <td>
-                            <Score>
-                              {resultado.n5?.toFixed(1) ?? "-"}
-                            </Score>
-                          </td>
+                            <td>
+                              <Score>
+                                {resultado.n4?.toFixed(1) ??
+                                  "-"}
+                              </Score>
+                            </td>
 
-                          <td>
-                            <Average>
-                              {resultado.media?.toFixed(2) ?? "-"}
-                            </Average>
-                          </td>
+                            <td>
+                              <Score>
+                                {resultado.n5?.toFixed(1) ??
+                                  "-"}
+                              </Score>
+                            </td>
 
-                          <td>
-                            <Time>
-                              <FiClock />
-                              {formatarTempo(resultado.tempo)}
-                            </Time>
-                          </td>
+                            <td>
+                              <Average>
+                                {resultado.media?.toFixed(2) ??
+                                  "-"}
+                              </Average>
+                            </td>
 
-                          <td>
-                            <Penalty $penalidade={resultado.desconto > 0}>
-                              {resultado.desconto > 0
-                                ? `-${resultado.desconto.toFixed(1)}`
-                                : "0"}
-                            </Penalty>
-                          </td>
+                            <td>
+                              <Time>
+                                <FiClock />
+                                {formatarTempo(
+                                  resultado.tempo
+                                )}
+                              </Time>
+                            </td>
 
-                          <td>
-                            <FinalScore>
-                              {resultado.resultado?.toFixed(2) ?? "-"}
-                            </FinalScore>
-                          </td>
-                        </RankingRow>
-                      ))}
+                            <td>
+                              <Penalty
+                                $penalidade={
+                                  resultado.desconto > 0
+                                }
+                              >
+                                {resultado.desconto > 0
+                                  ? `-${resultado.desconto.toFixed(
+                                      1
+                                    )}`
+                                  : "0"}
+                              </Penalty>
+                            </td>
+
+                            <td>
+                              <FinalScore>
+                                {resultado.resultado?.toFixed(
+                                  2
+                                ) ?? "-"}
+                              </FinalScore>
+                            </td>
+                          </RankingRow>
+                        )
+                      )}
                     </tbody>
                   </RankingTable>
                 </RankingTableWrapper>
@@ -1021,7 +1152,9 @@ export default function Eventos() {
       {modalExcluirAberto && (
         <ModalOverlay>
           <DeleteModal>
-            <DeleteModalTitle>Excluir evento</DeleteModalTitle>
+            <DeleteModalTitle>
+              Excluir evento
+            </DeleteModalTitle>
 
             <DeleteModalText>
               Tem certeza que deseja excluir esse evento?
@@ -1029,7 +1162,9 @@ export default function Eventos() {
 
             {eventoParaExcluir && (
               <DeleteModalText>
-                <strong>{eventoParaExcluir.nome}</strong>
+                <strong>
+                  {eventoParaExcluir.nome}
+                </strong>
               </DeleteModalText>
             )}
 
@@ -1039,7 +1174,9 @@ export default function Eventos() {
                 onPointerMove={handleButtonMouseMove}
                 onClick={cancelarExclusao}
               >
-                <span className="buttonContent">Cancelar</span>
+                <span className="buttonContent">
+                  Cancelar
+                </span>
               </CancelButton>
 
               <ConfirmButton
@@ -1059,3 +1196,4 @@ export default function Eventos() {
     </Page>
   );
 }
+

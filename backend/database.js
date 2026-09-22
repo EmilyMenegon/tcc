@@ -67,8 +67,6 @@ db.exec(`
   )
 `);
 
-
-
 db.exec(`
   CREATE TABLE IF NOT EXISTS notas (
     id_notas INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -102,7 +100,6 @@ db.exec(`
   )
 `);
 
-
 const colunasAnotacoes = db.prepare("PRAGMA table_info(anotacoes)").all();
 
 const temColunaTitulo = colunasAnotacoes.some(
@@ -122,7 +119,6 @@ try {
     REFERENCES evento (id_evento)
   `);
 } catch (err) {
-
 }
 
 try {
@@ -131,7 +127,6 @@ try {
     ADD COLUMN publicado INTEGER NOT NULL DEFAULT 0
   `);
 } catch (err) {
-
 }
 
 try {
@@ -141,7 +136,54 @@ try {
     REFERENCES evento (id_evento)
   `);
 } catch (err) {
+}
 
+/*
+ * NOVA ESTRUTURA:
+ *
+ * Um poeta pode participar de vários eventos.
+ *
+ * Exemplo:
+ *
+ * usuario_id | evento_id
+ * -----------|----------
+ * 5          | 1
+ * 5          | 2
+ * 5          | 3
+ *
+ * Assim o mesmo poeta pode estar na classificatória,
+ * semifinal e final.
+ */
+db.exec(`
+  CREATE TABLE IF NOT EXISTS participantes_evento (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    usuario_id INTEGER NOT NULL,
+    evento_id INTEGER NOT NULL,
+    FOREIGN KEY (usuario_id) REFERENCES usuario (id),
+    FOREIGN KEY (evento_id) REFERENCES evento (id_evento),
+    UNIQUE (usuario_id, evento_id)
+  )
+`);
+
+/*
+ * Migra os vínculos antigos que estavam em usuario.evento_id
+ * para a nova tabela.
+ *
+ * Isso preserva os participantes que já estavam cadastrados
+ * antes desta alteração.
+ */
+try {
+  db.exec(`
+    INSERT OR IGNORE INTO participantes_evento (usuario_id, evento_id)
+    SELECT id, evento_id
+    FROM usuario
+    WHERE evento_id IS NOT NULL
+  `);
+} catch (err) {
+  console.error(
+    "Erro ao migrar os participantes antigos:",
+    err.message
+  );
 }
 
 try {
