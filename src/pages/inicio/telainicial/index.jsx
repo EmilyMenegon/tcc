@@ -1,7 +1,9 @@
-import { useLayoutEffect, useRef, useState } from "react";
+import { getAuthHeaders } from "../../../utils/auth";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Draggable } from "gsap/Draggable";
 
 import {
   FaArrowRight,
@@ -13,6 +15,9 @@ import {
   FaTrophy,
   FaBookOpen,
   FaMicrophone,
+  FaChevronLeft,
+  FaChevronRight,
+  FaImages,
 } from "react-icons/fa";
 
 import {
@@ -36,6 +41,7 @@ import {
   Circle,
   PixelImage,
   MarqueeSection,
+  InkPaint,
   MarqueeReveal,
   MarqueeTrack,
   AnimatedImage,
@@ -60,12 +66,16 @@ import {
   FeatureIcon,
   FeatureTitle,
   FeatureText,
-  NumbersSection,
-  NumbersContainer,
-  NumberItem,
-  NumberValue,
-  NumberLabel,
-  NumberDivider,
+  GallerySection,
+  GalleryWrapper,
+  GalleryHint,
+  GalleryViewport,
+  GalleryTrack,
+  GalleryCard,
+  GalleryImage,
+  GalleryState,
+  GalleryArrows,
+  GalleryArrowButton,
   CTASection,
   CTAContainer,
   CTAIcon,
@@ -75,11 +85,9 @@ import {
   CTALink,
 } from "./style";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, Draggable);
 
-/* ============================================================
-   PALAVRAS DO CAÇA-PALAVRAS
-============================================================ */
+const API_URL = "http://localhost:3001";
 
 const words = [
   "SLAM",
@@ -93,10 +101,6 @@ const words = [
   "CONFIANÇA",
   "EXPRESSÃO",
 ];
-
-/* ============================================================
-   TABULEIRO
-============================================================ */
 
 const board = [
   ["P", "O", "R", "H", "C", "D", "W", "J", "M", "N", "S", "R"],
@@ -113,38 +117,45 @@ const board = [
   ["Y", "A", "E", "P", "Y", "J", "Z", "V", "Z", "A", "S", "S"],
 ];
 
+function ehVideo(imagem) {
+  return (
+    typeof imagem === "string" &&
+    imagem.startsWith("data:video")
+  );
+}
+
 export default function TelaInicial() {
   const pageRef = useRef(null);
   const marqueeRef = useRef(null);
-  const numbersRef = useRef(null);
-
   const gameRef = useRef(null);
   const feedbackRef = useRef(null);
+
+  const galleryViewportRef = useRef(null);
+  const galleryTrackRef = useRef(null);
+  const galleryDraggableRef = useRef(null);
 
   const [selected, setSelected] = useState([]);
   const [found, setFound] = useState([]);
   const [foundCells, setFoundCells] = useState([]);
   const [feedback, setFeedback] = useState("");
 
-  /* ============================================================
-     BOTÃO LÍQUIDO
-  ============================================================ */
+  const [fotos, setFotos] = useState([]);
+  const [galleryLoading, setGalleryLoading] = useState(true);
 
   function handleButtonMove(event) {
     const button = event.currentTarget;
-
     const rect = button.getBoundingClientRect();
 
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+    button.style.setProperty(
+      "--mouse-x",
+      `${event.clientX - rect.left}px`
+    );
 
-    button.style.setProperty("--mouse-x", `${x}px`);
-    button.style.setProperty("--mouse-y", `${y}px`);
+    button.style.setProperty(
+      "--mouse-y",
+      `${event.clientY - rect.top}px`
+    );
   }
-
-  /* ============================================================
-     MOSTRAR FEEDBACK
-  ============================================================ */
 
   function showFeedback(message, success = false) {
     setFeedback(message);
@@ -185,10 +196,6 @@ export default function TelaInicial() {
     }, 30);
   }
 
-  /* ============================================================
-     ANIMAÇÃO DE ERRO
-  ============================================================ */
-
   function shakeGame() {
     if (!gameRef.current) return;
 
@@ -199,43 +206,32 @@ export default function TelaInicial() {
       .to(gameRef.current, {
         x: -10,
         duration: 0.07,
-        ease: "power1.inOut",
       })
       .to(gameRef.current, {
         x: 10,
         duration: 0.07,
-        ease: "power1.inOut",
       })
       .to(gameRef.current, {
         x: -8,
         duration: 0.06,
-        ease: "power1.inOut",
       })
       .to(gameRef.current, {
         x: 8,
         duration: 0.06,
-        ease: "power1.inOut",
       })
       .to(gameRef.current, {
         x: -5,
         duration: 0.05,
-        ease: "power1.inOut",
       })
       .to(gameRef.current, {
         x: 5,
         duration: 0.05,
-        ease: "power1.inOut",
       })
       .to(gameRef.current, {
         x: 0,
         duration: 0.08,
-        ease: "power1.out",
       });
   }
-
-  /* ============================================================
-     SELECIONAR LETRAS
-  ============================================================ */
 
   function selectLetter(row, col) {
     const position = `${row}-${col}`;
@@ -247,28 +243,29 @@ export default function TelaInicial() {
 
     const [r1, c1] = selected[0].split("-").map(Number);
 
-    const r2 = row;
-    const c2 = col;
-
     let cells = [];
 
-    if (r1 === r2) {
-      const start = Math.min(c1, c2);
-      const end = Math.max(c1, c2);
-
-      for (let c = start; c <= end; c++) {
+    if (r1 === row) {
+      for (
+        let c = Math.min(c1, col);
+        c <= Math.max(c1, col);
+        c++
+      ) {
         cells.push(`${r1}-${c}`);
       }
-    } else if (c1 === c2) {
-      const start = Math.min(r1, r2);
-      const end = Math.max(r1, r2);
-
-      for (let r = start; r <= end; r++) {
+    } else if (c1 === col) {
+      for (
+        let r = Math.min(r1, row);
+        r <= Math.max(r1, row);
+        r++
+      ) {
         cells.push(`${r}-${c1}`);
       }
-    } else if (Math.abs(r1 - r2) === Math.abs(c1 - c2)) {
-      const rowStep = r2 > r1 ? 1 : -1;
-      const colStep = c2 > c1 ? 1 : -1;
+    } else if (
+      Math.abs(r1 - row) === Math.abs(c1 - col)
+    ) {
+      const rowStep = row > r1 ? 1 : -1;
+      const colStep = col > c1 ? 1 : -1;
 
       let r = r1;
       let c = c1;
@@ -276,7 +273,9 @@ export default function TelaInicial() {
       while (true) {
         cells.push(`${r}-${c}`);
 
-        if (r === r2 && c === c2) break;
+        if (r === row && c === col) {
+          break;
+        }
 
         r += rowStep;
         c += colStep;
@@ -285,11 +284,11 @@ export default function TelaInicial() {
 
     const letters = cells.map((item) => {
       const [r, c] = item.split("-").map(Number);
-
       return board[r][c];
     });
 
     const word = letters.join("");
+
     const reverse = word.split("").reverse().join("");
 
     const correctWord = words.find(
@@ -302,10 +301,7 @@ export default function TelaInicial() {
       setFound(newFound);
 
       setFoundCells((prev) => [
-        ...new Set([
-          ...prev,
-          ...cells,
-        ]),
+        ...new Set([...prev, ...cells]),
       ]);
 
       setSelected([]);
@@ -322,21 +318,186 @@ export default function TelaInicial() {
       return;
     }
 
-    if (correctWord && found.includes(correctWord)) {
+    if (
+      correctWord &&
+      found.includes(correctWord)
+    ) {
       setSelected([]);
       return;
     }
 
     setSelected([]);
-
     shakeGame();
-
-    showFeedback("Credo!", false);
+    showFeedback("Credo!");
   }
 
-  /* ============================================================
-     GSAP
-  ============================================================ */
+  useEffect(() => {
+  let ativo = true;
+
+  async function carregarGaleria() {
+    try {
+      setGalleryLoading(true);
+
+      const response = await fetch(
+        `${API_URL}/galeria`,
+        {
+          method: "GET",
+          headers: getAuthHeaders(),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          `Erro HTTP ${response.status}`
+        );
+      }
+
+      const data = await response.json();
+
+      console.log("GALERIA HOME:", data);
+
+      if (!ativo) return;
+
+      if (Array.isArray(data)) {
+        setFotos(data);
+      } else {
+        setFotos([]);
+      }
+    } catch (error) {
+      console.error(
+        "ERRO AO CARREGAR GALERIA HOME:",
+        error
+      );
+
+      if (ativo) {
+        setFotos([]);
+      }
+    } finally {
+      if (ativo) {
+        setGalleryLoading(false);
+      }
+    }
+  }
+
+  carregarGaleria();
+
+  return () => {
+    ativo = false;
+  };
+}, []);
+
+  useLayoutEffect(() => {
+    if (
+      galleryLoading ||
+      fotos.length <= 1 ||
+      !galleryViewportRef.current ||
+      !galleryTrackRef.current
+    ) {
+      return;
+    }
+
+    const viewport = galleryViewportRef.current;
+    const track = galleryTrackRef.current;
+
+    const getLimit = () => {
+      return Math.max(
+        0,
+        track.scrollWidth - viewport.clientWidth
+      );
+    };
+
+    galleryDraggableRef.current?.kill();
+
+    galleryDraggableRef.current =
+      Draggable.create(track, {
+        type: "x",
+
+        bounds: () => ({
+          minX: -getLimit(),
+          maxX: 0,
+        }),
+
+        edgeResistance: 0.85,
+        cursor: "grab",
+        activeCursor: "grabbing",
+        allowNativeTouchScrolling: false,
+      })[0];
+
+    gsap.fromTo(
+      track.children,
+      {
+        opacity: 0,
+        y: 20,
+      },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        stagger: 0.08,
+        ease: "power3.out",
+      }
+    );
+
+    function resize() {
+      if (!galleryDraggableRef.current) return;
+
+      galleryDraggableRef.current.applyBounds({
+        minX: -getLimit(),
+        maxX: 0,
+      });
+    }
+
+    window.addEventListener("resize", resize);
+
+    return () => {
+      window.removeEventListener("resize", resize);
+
+      galleryDraggableRef.current?.kill();
+
+      galleryDraggableRef.current = null;
+    };
+  }, [fotos, galleryLoading]);
+
+  function moverGaleria(direcao) {
+    const track = galleryTrackRef.current;
+    const viewport = galleryViewportRef.current;
+    const draggable = galleryDraggableRef.current;
+
+    if (!track || !viewport || !draggable) {
+      return;
+    }
+
+    const limite = Math.max(
+      0,
+      track.scrollWidth - viewport.clientWidth
+    );
+
+    const passo = Math.min(
+      320,
+      viewport.clientWidth * 0.8
+    );
+
+    const atual = Number(
+      gsap.getProperty(track, "x") || 0
+    );
+
+    let destino =
+      atual + direcao * -passo;
+
+    destino = Math.max(
+      -limite,
+      Math.min(0, destino)
+    );
+
+    gsap.to(track, {
+      x: destino,
+      duration: 0.5,
+      ease: "power3.out",
+      onUpdate: () => {
+        draggable.update();
+      },
+    });
+  }
 
   useLayoutEffect(() => {
     const page = pageRef.current;
@@ -362,7 +523,7 @@ export default function TelaInicial() {
             opacity: 0,
             duration: 0.6,
           },
-          "-=0.4"
+          "-=.4"
         )
         .from(
           ".hero-title",
@@ -371,7 +532,7 @@ export default function TelaInicial() {
             opacity: 0,
             duration: 0.8,
           },
-          "-=0.25"
+          "-=.25"
         )
         .from(
           ".hero-description",
@@ -380,7 +541,7 @@ export default function TelaInicial() {
             opacity: 0,
             duration: 0.6,
           },
-          "-=0.4"
+          "-=.4"
         )
         .from(
           ".hero-buttons",
@@ -389,7 +550,7 @@ export default function TelaInicial() {
             opacity: 0,
             duration: 0.5,
           },
-          "-=0.3"
+          "-=.3"
         )
         .from(
           ".hero-image",
@@ -399,7 +560,7 @@ export default function TelaInicial() {
             scale: 0.94,
             duration: 0.8,
           },
-          "-=0.5"
+          "-=.5"
         )
         .from(
           ".hero-circle",
@@ -410,7 +571,7 @@ export default function TelaInicial() {
             duration: 0.4,
             ease: "back.out(1.8)",
           },
-          "-=0.5"
+          "-=.5"
         )
         .from(
           ".hero-pixel",
@@ -422,73 +583,61 @@ export default function TelaInicial() {
             duration: 0.6,
             ease: "back.out(1.8)",
           },
-          "-=0.35"
+          "-=.35"
         );
 
-      /* ========================================================
-         3 IMAGENS FLUTUANTES
-      ======================================================== */
+      gsap.utils
+        .toArray(".hero-pixel")
+        .forEach((pixel, index) => {
+          gsap.to(pixel, {
+            y:
+              index === 0
+                ? -18
+                : index === 1
+                ? 20
+                : -15,
 
-      gsap.utils.toArray(".hero-pixel").forEach((pixel, index) => {
-        gsap.to(pixel, {
-          y:
-            index === 0
-              ? -18
-              : index === 1
-              ? 20
-              : -15,
+            x:
+              index === 0
+                ? 12
+                : index === 1
+                ? -12
+                : 10,
 
-          x:
-            index === 0
-              ? 12
-              : index === 1
-              ? -12
-              : 10,
+            rotation:
+              index === 0
+                ? 6
+                : index === 1
+                ? -7
+                : 5,
 
-          rotation:
-            index === 0
-              ? 6
-              : index === 1
-              ? -7
-              : 5,
-
-          duration: 2.8 + index * 0.45,
-
-          repeat: -1,
-
-          yoyo: true,
-
-          ease: "sine.inOut",
-
-          delay: index * 0.2,
+            duration: 2.8 + index * 0.45,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut",
+          });
         });
-      });
 
-      /* ========================================================
-         CÍRCULOS FLUTUANTES
-      ======================================================== */
+      gsap.utils
+        .toArray(".hero-circle")
+        .forEach((circle, index) => {
+          gsap.to(circle, {
+            y:
+              index % 2 === 0
+                ? -20
+                : 20,
 
-      gsap.utils.toArray(".hero-circle").forEach((circle, index) => {
-        gsap.to(circle, {
-          y: index % 2 === 0 ? -20 : 20,
+            x:
+              index % 3 === 0
+                ? 12
+                : -12,
 
-          x: index % 3 === 0 ? 12 : -12,
-
-          duration: 3 + index * 0.25,
-
-          repeat: -1,
-
-          yoyo: true,
-
-          ease: "sine.inOut",
-
-          delay: index * 0.1,
+            duration: 3 + index * 0.25,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut",
+          });
         });
-      });
-
-      /* ========================================================
-         MARQUEE
-      ======================================================== */
 
       if (marqueeRef.current) {
         gsap.set(marqueeRef.current, {
@@ -503,22 +652,17 @@ export default function TelaInicial() {
         page.querySelector(".marquee-track");
 
       if (marqueeTrack) {
-        const getMarqueeWidth = () =>
+        const getWidth = () =>
           marqueeTrack.scrollWidth / 2;
 
         gsap.to(marqueeTrack, {
-          x: () => -getMarqueeWidth(),
-
+          x: () => -getWidth(),
           duration: 25,
-
           repeat: -1,
-
           ease: "none",
-
           modifiers: {
             x: gsap.utils.unitize((value) => {
-              const width = getMarqueeWidth();
-
+              const width = getWidth();
               const number = parseFloat(value);
 
               return number <= -width
@@ -529,84 +673,23 @@ export default function TelaInicial() {
         });
       }
 
-      /* ========================================================
-         NÚMEROS
-      ======================================================== */
-
-      if (numbersRef.current) {
-        const numberElements =
-          numbersRef.current.querySelectorAll(
-            ".number-value"
-          );
-
-        numberElements.forEach((element) => {
-          const target =
-            Number(element.dataset.target) || 0;
-
-          const suffix =
-            element.dataset.suffix || "";
-
-          const counter = {
-            value: 0,
-          };
-
-          element.textContent = `0${suffix}`;
-
-          gsap.to(counter, {
-            value: target,
-
-            duration: 1.8,
-
-            ease: "power2.out",
-
-            snap: {
-              value: 1,
-            },
-
-            scrollTrigger: {
-              trigger: numbersRef.current,
-
-              start: "top 80%",
-
-              toggleActions:
-                "play none none none",
-
-              once: true,
-            },
-
-            onUpdate: () => {
-              element.textContent =
-                `${Math.round(counter.value)}${suffix}`;
-            },
-          });
-        });
-      }
-
-      requestAnimationFrame(() => {
-        ScrollTrigger.refresh();
-      });
+      requestAnimationFrame(() =>
+        ScrollTrigger.refresh()
+      );
     }, page);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+    };
   }, []);
 
   return (
     <>
-      {/* ========================================================
-          RESET DO BODY / HTML / ROOT
-      ======================================================== */}
-
       <GlobalStyle />
 
       <Page ref={pageRef}>
-
-        {/* ======================================================
-            HERO
-        ====================================================== */}
-
         <HeroWrapper>
           <Hero>
-
             <Header>
               <Logo className="hero-logo">
                 <img
@@ -618,7 +701,6 @@ export default function TelaInicial() {
               <HeaderBar />
 
               <SocialIcons className="hero-social">
-
                 <SocialIcon
                   href="https://instagram.com"
                   target="_blank"
@@ -638,47 +720,43 @@ export default function TelaInicial() {
                 >
                   <FaYoutube />
                 </SocialIcon>
-
               </SocialIcons>
             </Header>
 
             <Container>
-
               <LeftSide>
-
                 <BigText className="hero-title">
-                  DAS RUAS PARA AS <span>ESCOLAS</span>
+                  DAS RUAS PARA AS{" "}
+                  <span>ESCOLAS</span>
                   <br />
-                  DAS ESCOLAS PARA AS <span>RUAS</span>
+                  DAS ESCOLAS PARA AS{" "}
+                  <span>RUAS</span>
                 </BigText>
 
                 <SmallText className="hero-description">
-                  O Slam Etecamp celebra a expressão,
-                  criatividade e o poder da palavra entre
-                  jovens estudantes.
+                  O Slam Etecamp celebra a
+                  expressão, criatividade e o
+                  poder da palavra entre jovens
+                  estudantes.
                 </SmallText>
 
                 <Buttons className="hero-buttons">
-
                   <RouterLink to="/login">
-
                     <PrimaryButton
-                      onPointerMove={handleButtonMove}
+                      onPointerMove={
+                        handleButtonMove
+                      }
                     >
                       <span className="button-content">
                         Participar do Slam Etecamp
                         <FaArrowRight />
                       </span>
                     </PrimaryButton>
-
                   </RouterLink>
-
                 </Buttons>
-
               </LeftSide>
 
               <ImageBox className="hero-image">
-
                 <PixelImage
                   className="hero-pixel hero-pixel-01"
                   src="/pixel01.png"
@@ -743,155 +821,95 @@ export default function TelaInicial() {
                   src="/inicialimg.png"
                   alt="Ilustração do Slam Etecamp"
                 />
-
               </ImageBox>
-
             </Container>
-
           </Hero>
         </HeroWrapper>
 
-        {/* ======================================================
-            MARQUEE
-        ====================================================== */}
-
         <MarqueeSection>
-
           <MarqueeReveal ref={marqueeRef}>
-
             <MarqueeTrack className="marquee-track">
-
               <Phrase>LIBERDADE</Phrase>
-              <AnimatedImage
-                src="/icons.png"
-                alt="Slam"
-              />
+              <AnimatedImage src="/icons.png" alt="Slam" />
 
               <Phrase>RESPEITO</Phrase>
-              <AnimatedImage
-                src="/icons.png"
-                alt="Slam"
-              />
+              <AnimatedImage src="/icons.png" alt="Slam" />
 
               <Phrase>ESFORÇO</Phrase>
-              <AnimatedImage
-                src="/icons.png"
-                alt="Slam"
-              />
+              <AnimatedImage src="/icons.png" alt="Slam" />
 
               <Phrase>AUTENTICIDADE</Phrase>
-              <AnimatedImage
-                src="/icons.png"
-                alt="Slam"
-              />
+              <AnimatedImage src="/icons.png" alt="Slam" />
 
               <Phrase>EVOLUÇÃO</Phrase>
-              <AnimatedImage
-                src="/icons.png"
-                alt="Slam"
-              />
+              <AnimatedImage src="/icons.png" alt="Slam" />
 
               <Phrase>CORAGEM</Phrase>
-              <AnimatedImage
-                src="/icons.png"
-                alt="Slam"
-              />
+              <AnimatedImage src="/icons.png" alt="Slam" />
 
               <Phrase>UNIÃO</Phrase>
-              <AnimatedImage
-                src="/icons.png"
-                alt="Slam"
-              />
+              <AnimatedImage src="/icons.png" alt="Slam" />
 
               <Phrase>LIBERDADE</Phrase>
-              <AnimatedImage
-                src="/icons.png"
-                alt="Slam"
-              />
+              <AnimatedImage src="/icons.png" alt="Slam" />
 
               <Phrase>RESPEITO</Phrase>
-              <AnimatedImage
-                src="/icons.png"
-                alt="Slam"
-              />
+              <AnimatedImage src="/icons.png" alt="Slam" />
 
               <Phrase>ESFORÇO</Phrase>
-              <AnimatedImage
-                src="/icons.png"
-                alt="Slam"
-              />
+              <AnimatedImage src="/icons.png" alt="Slam" />
 
               <Phrase>AUTENTICIDADE</Phrase>
-              <AnimatedImage
-                src="/icons.png"
-                alt="Slam"
-              />
+              <AnimatedImage src="/icons.png" alt="Slam" />
 
               <Phrase>EVOLUÇÃO</Phrase>
-              <AnimatedImage
-                src="/icons.png"
-                alt="Slam"
-              />
+              <AnimatedImage src="/icons.png" alt="Slam" />
 
               <Phrase>CORAGEM</Phrase>
-              <AnimatedImage
-                src="/icons.png"
-                alt="Slam"
-              />
+              <AnimatedImage src="/icons.png" alt="Slam" />
 
               <Phrase>UNIÃO</Phrase>
-              <AnimatedImage
-                src="/icons.png"
-                alt="Slam"
-              />
+              <AnimatedImage src="/icons.png" alt="Slam" />
 
               <Phrase>CULTURA</Phrase>
-
             </MarqueeTrack>
-
           </MarqueeReveal>
 
+          <InkPaint />
         </MarqueeSection>
 
-        {/* ======================================================
-            SOBRE O SLAM
-        ====================================================== */}
-
         <AboutSection>
-
           <AboutTitle>
             SOBRE O <span>SLAM</span>
           </AboutTitle>
 
           <AboutContainer>
-
             <AboutContent>
-
               <AboutText>
-                O <b>Slam</b> Interescolar é uma competição
-                de <b>poesia</b> falada que reúne estudantes
-                de diferentes escolas para compartilharem
-                suas ideias, <b>sentimentos</b> e vivências
+                O <b>Slam</b> Interescolar é uma
+                competição de <b>poesia</b> falada
+                que reúne estudantes de diferentes
+                escolas para compartilharem suas
+                ideias, <b>sentimentos</b> e vivências
                 por meio da <b>arte</b> e da palavra.
 
                 <br />
                 <br />
 
-                Além de incentivar a <b>escrita</b> e a
-                <b> oralidade</b>, a iniciativa fortalece
-                a autoestima, o pensamento crítico e o
-                respeito. Entre <b>rimas</b>, emoções e
-                <b> performances</b>, os jovens desenvolvem
-                <b> confiança</b> e ampliam suas formas de
-                <b> expressão</b>.
+                Além de incentivar a <b>escrita</b> e
+                a <b>oralidade</b>, a iniciativa
+                fortalece a autoestima, o pensamento
+                crítico e o respeito. Entre{" "}
+                <b>rimas</b>, emoções e{" "}
+                <b>performances</b>, os jovens
+                desenvolvem <b>confiança</b> e ampliam
+                suas formas de <b>expressão</b>.
               </AboutText>
 
               <AboutFindBox>
-
                 <h3>Encontre:</h3>
 
                 <AboutWords>
-
                   {words.map((word) => (
                     <AboutWord
                       key={word}
@@ -900,19 +918,17 @@ export default function TelaInicial() {
                       {word}
                     </AboutWord>
                   ))}
-
                 </AboutWords>
-
               </AboutFindBox>
-
             </AboutContent>
 
             <AboutGame>
-
               {feedback && (
                 <GameFeedback
                   ref={feedbackRef}
-                  $success={feedback.startsWith("PARABÉNS")}
+                  $success={feedback.startsWith(
+                    "PARABÉNS"
+                  )}
                 >
                   {feedback}
                 </GameFeedback>
@@ -920,23 +936,25 @@ export default function TelaInicial() {
 
               <AboutBoard
                 ref={gameRef}
-                $completed={found.length === words.length}
+                $completed={
+                  found.length === words.length
+                }
               >
-
                 {board.map((row, i) => (
-
                   <AboutRow key={i}>
-
                     {row.map((letter, j) => {
-
                       const position = `${i}-${j}`;
 
                       return (
                         <AboutLetter
                           type="button"
                           key={j}
-                          $active={selected.includes(position)}
-                          $found={foundCells.includes(position)}
+                          $active={selected.includes(
+                            position
+                          )}
+                          $found={foundCells.includes(
+                            position
+                          )}
                           onClick={() =>
                             selectLetter(i, j)
                           }
@@ -944,35 +962,22 @@ export default function TelaInicial() {
                           {letter}
                         </AboutLetter>
                       );
-
                     })}
-
                   </AboutRow>
-
                 ))}
-
               </AboutBoard>
-
             </AboutGame>
-
           </AboutContainer>
-
         </AboutSection>
 
-        {/* ======================================================
-            FEATURES
-        ====================================================== */}
-
         <FeaturesSection>
-
           <SectionTitle>
-            O QUE VOCÊ ENCONTRA <span>AQUI</span>
+            O QUE VOCÊ ENCONTRA{" "}
+            <span>AQUI</span>
           </SectionTitle>
 
           <FeaturesGrid>
-
             <FeatureCard>
-
               <FeatureIcon>
                 <FaFileAlt />
               </FeatureIcon>
@@ -982,13 +987,12 @@ export default function TelaInicial() {
               </FeatureTitle>
 
               <FeatureText>
-                Faça sua inscrição de forma simples e rápida.
+                Faça sua inscrição de forma
+                simples e rápida.
               </FeatureText>
-
             </FeatureCard>
 
             <FeatureCard>
-
               <FeatureIcon>
                 <FaCalendarAlt />
               </FeatureIcon>
@@ -998,14 +1002,13 @@ export default function TelaInicial() {
               </FeatureTitle>
 
               <FeatureText>
-                Acompanhe todas as fases do Slam Interescolar
-                e não perca nada!
+                Acompanhe todas as fases
+                do Slam Interescolar e não
+                perca nada!
               </FeatureText>
-
             </FeatureCard>
 
             <FeatureCard>
-
               <FeatureIcon>
                 <FaTrophy />
               </FeatureIcon>
@@ -1015,14 +1018,12 @@ export default function TelaInicial() {
               </FeatureTitle>
 
               <FeatureText>
-                Veja as notas, classificações e o ranking
-                dos slammers.
+                Veja as notas, classificações
+                e o ranking dos slammers.
               </FeatureText>
-
             </FeatureCard>
 
             <FeatureCard>
-
               <FeatureIcon>
                 <FaBookOpen />
               </FeatureIcon>
@@ -1032,124 +1033,112 @@ export default function TelaInicial() {
               </FeatureTitle>
 
               <FeatureText>
-                Fique por dentro das regras do Slam e prepare
-                sua melhor poesia.
+                Fique por dentro das regras
+                do Slam e prepare sua melhor
+                poesia.
               </FeatureText>
-
             </FeatureCard>
-
           </FeaturesGrid>
-
         </FeaturesSection>
 
-        {/* ======================================================
-            NÚMEROS
-        ====================================================== */}
+        <GallerySection>
+          <SectionTitle>
+            GALERIA DO <span>SLAM</span>
+          </SectionTitle>
 
-        <NumbersSection ref={numbersRef}>
+          <GalleryWrapper>
+            {galleryLoading ? (
+              <GalleryState>
+                Carregando fotos...
+              </GalleryState>
+            ) : fotos.length === 0 ? (
+              <GalleryState>
+                <FaImages
+                  style={{
+                    marginRight: 8,
+                  }}
+                />
+                Nenhuma foto encontrada.
+              </GalleryState>
+            ) : (
+              <>
+                <GalleryHint>
+                  Arraste para o lado para ver
+                  mais fotos
+                </GalleryHint>
 
-          <NumbersContainer>
+                <GalleryViewport
+                  ref={galleryViewportRef}
+                >
+                  <GalleryTrack
+                    ref={galleryTrackRef}
+                  >
+                    {fotos.map((foto) => (
+                      <GalleryCard
+                        key={foto.id}
+                      >
+                        {ehVideo(foto.imagem) ? (
+                          <video
+                            src={foto.imagem}
+                            muted
+                            loop
+                            autoPlay
+                            playsInline
+                            preload="metadata"
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              objectFit: "cover",
+                              display: "block",
+                            }}
+                          />
+                        ) : (
+                          <GalleryImage
+                            src={foto.imagem}
+                            alt="Foto do Slam Etecamp"
+                            draggable={false}
+                          />
+                        )}
+                      </GalleryCard>
+                    ))}
+                  </GalleryTrack>
+                </GalleryViewport>
 
-            <SectionTitle $dark>
-              O SLAM EM <span>NÚMEROS</span>
-            </SectionTitle>
+                {fotos.length > 1 && (
+                  <GalleryArrows>
+                    <GalleryArrowButton
+                      type="button"
+                      onClick={() =>
+                        moverGaleria(-1)
+                      }
+                      aria-label="Anterior"
+                    >
+                      <FaChevronLeft />
+                    </GalleryArrowButton>
 
-            <NumberItem>
-
-              <NumberValue
-                className="number-value"
-                data-target="500"
-                data-suffix="+"
-              >
-                0+
-              </NumberValue>
-
-              <NumberLabel>
-                POESIAS
-                <br />
-                ESCRITAS
-              </NumberLabel>
-
-            </NumberItem>
-
-            <NumberDivider />
-
-            <NumberItem>
-
-              <NumberValue
-                className="number-value"
-                data-target="400"
-                data-suffix="+"
-              >
-                0+
-              </NumberValue>
-
-              <NumberLabel>
-                ESCOLAS
-                <br />
-                CONECTADAS
-              </NumberLabel>
-
-            </NumberItem>
-
-            <NumberDivider />
-
-            <NumberItem>
-
-              <NumberValue
-                className="number-value"
-                data-target="300"
-                data-suffix="+"
-              >
-                0+
-              </NumberValue>
-
-              <NumberLabel>
-                ALUNOS
-                <br />
-                INSCRITOS
-              </NumberLabel>
-
-            </NumberItem>
-
-            <NumberDivider />
-
-            <NumberItem>
-
-              <NumberValue
-                className="number-value"
-                data-target="10"
-                data-suffix=""
-              >
-                0
-              </NumberValue>
-
-              <NumberLabel>
-                ANOS
-                <br />
-                DE EVENTO
-              </NumberLabel>
-
-            </NumberItem>
-
-          </NumbersContainer>
-
-        </NumbersSection>
-
-        {/* ======================================================
-            CTA
-        ====================================================== */}
+                    <GalleryArrowButton
+                      type="button"
+                      onClick={() =>
+                        moverGaleria(1)
+                      }
+                      aria-label="Próxima"
+                    >
+                      <FaChevronRight />
+                    </GalleryArrowButton>
+                  </GalleryArrows>
+                )}
+              </>
+            )}
+          </GalleryWrapper>
+        </GallerySection>
 
         <CTASection>
-
           <CTAContainer>
-
             <CTAIcon>
               <FaMicrophone />
             </CTAIcon>
 
             <CTAText>
-
               <CTATitle>
                 SUA VOZ TEM PODER.
               </CTATitle>
@@ -1157,7 +1146,6 @@ export default function TelaInicial() {
               <CTASubtitle>
                 PARTICIPE, PERFORME E TRANSFORME!
               </CTASubtitle>
-
             </CTAText>
 
             <CTALink
@@ -1169,11 +1157,8 @@ export default function TelaInicial() {
                 <FaArrowRight />
               </span>
             </CTALink>
-
           </CTAContainer>
-
         </CTASection>
-
       </Page>
     </>
   );
