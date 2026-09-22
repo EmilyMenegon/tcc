@@ -112,3 +112,14 @@ export function excluirInscricao(req, res) {
   res.status(200).json({ mensagem: "Inscrição excluída com sucesso!" });
 
 }
+export function listarPoetas(req, res) {
+  const poetas = db.prepare(`
+    SELECT u.id AS usuarioId, u.evento_id AS eventoId, i.nome_poeta, i.turma, i.turno, i.curso
+    FROM usuario u
+    JOIN inscricoes i ON i.id_inscricoes = u.inscricao_id
+    WHERE u.tipo_usuario = 'poeta'
+    ORDER BY i.nome_poeta
+  `).all();
+
+  res.json(poetas);
+}

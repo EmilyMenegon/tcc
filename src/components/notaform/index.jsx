@@ -157,18 +157,28 @@ export default function NotaForm({
 
 
     // ============================
-    // CARREGAR POETAS (só quando o form abre)
+    // CARREGAR POETAS
+    // Só busca depois que um evento é escolhido, e filtra pelo evento
+    // (só aparecem os poetas que o organizador marcou como participantes
+    // daquele evento). Refaz a busca sempre que o evento muda.
     // ============================
 
     useEffect(() => {
 
         if (!visible) return;
 
+        if (!selectedEvento) {
+            setAlunos([]);
+            return;
+        }
+
         (async () => {
 
             try {
 
-                const res = await fetch(`${API_URL}/notas/poetas`);
+                const res = await fetch(
+                    `${API_URL}/notas/poetas?eventoId=${selectedEvento}`
+                );
 
                 const data = await res.json();
 
@@ -184,7 +194,7 @@ export default function NotaForm({
 
         })();
 
-    }, [visible]);
+    }, [visible, selectedEvento]);
 
 
     // ============================
@@ -291,6 +301,22 @@ export default function NotaForm({
     const poetaSelecionado = alunos.find(
         (aluno) => String(aluno.id) === String(selectedAluno)
     );
+
+
+    // ============================
+    // TROCAR DE EVENTO
+    // Limpa o poeta selecionado, já que a lista de poetas muda junto
+    // com o evento (um poeta escolhido no evento anterior pode nem
+    // aparecer na lista do novo evento).
+    // ============================
+
+    function handleEventoChange(valor) {
+
+        setSelectedEvento(valor);
+        setSelectedAluno("");
+        setBuscaAluno("");
+
+    }
 
 
     // ============================
@@ -920,7 +946,7 @@ export default function NotaForm({
                         value={selectedEvento}
 
                         onChange={(e) =>
-                            setSelectedEvento(
+                            handleEventoChange(
                                 e.target.value
                             )
                         }
@@ -957,7 +983,7 @@ export default function NotaForm({
                     )}
 
 
-                    {/* POETA — busca e seleção integradas */}
+                    {/* POETA — busca e seleção integradas, filtradas pelo evento */}
 
                     <SelectLabel>
                         Poeta
@@ -970,9 +996,15 @@ export default function NotaForm({
 
                             type="text"
 
-                            placeholder="Digite o nome, turma ou curso do poeta..."
+                            placeholder={
+                                selectedEvento
+                                    ? "Digite o nome, turma ou curso do poeta..."
+                                    : "Selecione um evento primeiro"
+                            }
 
                             value={buscaAluno}
+
+                            disabled={!selectedEvento}
 
                             autoComplete="off"
 
@@ -987,6 +1019,7 @@ export default function NotaForm({
                             }}
 
                             onFocus={() =>
+                                selectedEvento &&
                                 setMostrarSugestoes(true)
                             }
 
@@ -1000,14 +1033,14 @@ export default function NotaForm({
                         />
 
 
-                        {mostrarSugestoes && (
+                        {mostrarSugestoes && selectedEvento && (
 
                             <SuggestionsList>
 
                                 {alunosFiltrados.length === 0 ? (
 
                                     <SuggestionEmpty>
-                                        Nenhum poeta encontrado.
+                                        Nenhum poeta participante deste evento.
                                     </SuggestionEmpty>
 
                                 ) : (

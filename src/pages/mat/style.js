@@ -483,3 +483,107 @@ export const PainelSubtitle = styled.p`
 
   line-height: 1.5;
 `;
+
+
+// ===============================
+// GRUPOS DE NOTAS POR EVENTO
+// (usado na tela do matemático pra separar os cards
+//  de cada evento e mostrar o botão de publicar)
+// ===============================
+
+export const EventoGroup = styled.section`
+  width: 90%;
+  max-width: 1400px;
+
+  margin: 0 auto 45px;
+`;
+
+export const EventoGroupHeader = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+
+  gap: 14px;
+
+  margin-bottom: 20px;
+
+  padding-bottom: 14px;
+
+  border-bottom: 2px solid #fff7d0;
+`;
+
+export const EventoGroupTitle = styled.h2`
+  margin: 0;
+
+  color: #831614;
+
+  font-size: 22px;
+  font-weight: 800;
+`;
+
+export const PublishButton = styled.button`
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 12px 22px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: linear-gradient(135deg, #571111, #831614);
+
+  color: #ffdb53;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.25s;
+
+  svg {
+    font-size: 14px;
+  }
+
+  &:hover:not(:disabled) {
+    background: #ffdb53;
+    color: #831614;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 10px 25px rgba(87, 17, 17, 0.25);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+`;
+
+export const PublishedBadge = styled.span`
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 10px 18px;
+
+  border-radius: 12px;
+
+  background: #e9f7ec;
+  color: #2e7d4f;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  svg {
+    font-size: 14px;
+  }
+`;

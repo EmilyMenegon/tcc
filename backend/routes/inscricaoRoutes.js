@@ -5,6 +5,7 @@ import {
   listarInscricoes,
   atualizarInscricao,
   excluirInscricao,
+  listarPoetas,
 } from "../controllers/inscricaoController.js";
 import { exigirLogin, exigirTipo } from "../middlewares/auth.js";
 
@@ -16,5 +17,7 @@ router.get("/inscricao/:email", exigirLogin, buscarInscricaoPorEmail);
 router.get("/inscricoes", exigirLogin, exigirTipo(["organizador"]), listarInscricoes);
 router.put("/inscricao/:id", exigirLogin, exigirTipo(["organizador"]), atualizarInscricao);
 router.delete("/inscricao/:id", exigirLogin, exigirTipo(["organizador"]), excluirInscricao);
+
+router.get("/poetas", exigirLogin, exigirTipo(["organizador"]), listarPoetas);
 
 export default router;

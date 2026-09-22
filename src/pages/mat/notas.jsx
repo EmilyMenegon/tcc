@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from "react";
-import { FaPlus } from "react-icons/fa";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { FaPlus, FaCheckCircle, FaPaperPlane } from "react-icons/fa";
 
 import NotaCard from "../../components/notacard";
 import NotaForm from "../../components/notaform";
@@ -14,7 +14,12 @@ import {
     ModalText,
     Buttons,
     CancelButton,
-    DeleteButton
+    DeleteButton,
+    EventoGroup,
+    EventoGroupHeader,
+    EventoGroupTitle,
+    PublishButton,
+    PublishedBadge
 } from "./style";
 
 
@@ -32,6 +37,8 @@ export default function Notas() {
     const [deleteModal, setDeleteModal] = useState(false);
 
     const [idDelete, setIdDelete] = useState(null);
+
+    const [publicando, setPublicando] = useState(null);
 
 
     const loadNotas = useCallback(async () => {
@@ -58,6 +65,39 @@ export default function Notas() {
         loadNotas();
 
     }, [loadNotas]);
+
+
+    // ============================
+    // AGRUPAR NOTAS POR EVENTO
+    // Cada evento vira um bloco separado, com seu próprio
+    // botão de publicar (ou selo de "Publicado").
+    // ============================
+
+    const gruposPorEvento = useMemo(() => {
+
+        const grupos = new Map();
+
+        notas.forEach((nota) => {
+
+            const chave = nota.eventoId ?? "sem-evento";
+
+            if (!grupos.has(chave)) {
+
+                grupos.set(chave, {
+                    eventoId: nota.eventoId,
+                    eventoNome: nota.eventoNome || "Sem evento",
+                    notas: []
+                });
+
+            }
+
+            grupos.get(chave).notas.push(nota);
+
+        });
+
+        return Array.from(grupos.values());
+
+    }, [notas]);
 
 
     async function handleSave(payload) {
@@ -175,34 +215,157 @@ export default function Notas() {
     }
 
 
+    // ============================
+    // PUBLICAR RESULTADOS DO EVENTO
+    // Só a partir daqui as notas aparecem na tela de resultados
+    // do organizador (e, futuramente, do aluno).
+    // ============================
+
+    async function handlePublicar(eventoId) {
+
+        if (!eventoId) return;
+
+        setPublicando(eventoId);
+
+        try {
+
+            const res = await fetch(
+                `${API_URL}/eventos/${eventoId}/notas/publicar`,
+                { method: "PUT" }
+            );
+
+            const data = await res.json();
+
+            if (!res.ok) {
+
+                alert(
+                    data.erro ||
+                    "Erro ao publicar os resultados."
+                );
+
+                return;
+
+            }
+
+            await loadNotas();
+
+        } catch (err) {
+
+            console.error(err);
+
+            alert(
+                "Não foi possível publicar os resultados."
+            );
+
+        } finally {
+
+            setPublicando(null);
+
+        }
+
+    }
+
+
     return (
 
         <>
 
-            <List>
+            {notas.length === 0 ? (
 
-                {notas.length === 0 ? (
+                <EmptyState
+                    message="Nenhuma nota cadastrada"
+                />
 
-                    <EmptyState
-                        message="Nenhuma nota cadastrada"
-                    />
+            ) : (
 
-                ) : (
+                gruposPorEvento.map((grupo) => {
 
-                    notas.map((nota) => (
+                    const todasPublicadas = grupo.notas.every(
+                        (nota) => nota.publicado
+                    );
 
-                        <NotaCard
-                            key={nota.id}
-                            nota={nota}
-                            onEdit={handleEdit}
-                            onDelete={handleDelete}
-                        />
+                    return (
 
-                    ))
+                        <EventoGroup
+                            key={grupo.eventoId ?? "sem-evento"}
+                        >
 
-                )}
+                            <EventoGroupHeader>
 
-            </List>
+                                <EventoGroupTitle>
+
+                                    {grupo.eventoNome}
+
+                                </EventoGroupTitle>
+
+
+                                {grupo.eventoId && (
+
+                                    todasPublicadas ? (
+
+                                        <PublishedBadge>
+
+                                            <FaCheckCircle />
+
+                                            Publicado
+
+                                        </PublishedBadge>
+
+                                    ) : (
+
+                                        <PublishButton
+
+                                            onClick={() =>
+                                                handlePublicar(
+                                                    grupo.eventoId
+                                                )
+                                            }
+
+                                            disabled={
+                                                publicando ===
+                                                grupo.eventoId
+                                            }
+
+                                        >
+
+                                            <FaPaperPlane />
+
+                                            {publicando === grupo.eventoId
+                                                ? "Publicando..."
+                                                : `Publicar resultados (${grupo.notas.length})`
+                                            }
+
+                                        </PublishButton>
+
+                                    )
+
+                                )}
+
+                            </EventoGroupHeader>
+
+
+                            <List>
+
+                                {grupo.notas.map((nota) => (
+
+                                    <NotaCard
+                                        key={nota.id}
+                                        nota={nota}
+                                        onEdit={handleEdit}
+                                        onDelete={handleDelete}
+                                    />
+
+                                ))}
+
+                            </List>
+
+                        </EventoGroup>
+
+                    );
+
+                })
+
+            )}
 
 
             <Fab

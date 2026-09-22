@@ -125,6 +125,24 @@ try {
 
 }
 
+try {
+  db.exec(`
+    ALTER TABLE notas
+    ADD COLUMN publicado INTEGER NOT NULL DEFAULT 0
+  `);
+} catch (err) {
+
+}
+
+try {
+  db.exec(`
+    ALTER TABLE usuario
+    ADD COLUMN evento_id INTEGER
+    REFERENCES evento (id_evento)
+  `);
+} catch (err) {
+
+}
 
 try {
   db.exec(`

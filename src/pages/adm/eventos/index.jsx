@@ -130,6 +130,11 @@ export default function Eventos() {
   const [horario, setHorario] = useState("");
   const [local, setLocal] = useState("");
 
+  // Poetas disponíveis (alunos inscritos que viraram poeta) e quais estão
+  // marcados como participantes do evento que está sendo criado/editado.
+  const [poetas, setPoetas] = useState([]);
+  const [participantesSelecionados, setParticipantesSelecionados] = useState([]);
+
   const [anoInicial, setAnoInicial] = useState(2026);
   const [anoSelecionado, setAnoSelecionado] = useState(2026);
 
@@ -160,6 +165,14 @@ export default function Eventos() {
 
   useEffect(() => {
     carregarEventos();
+  }, []);
+
+  // Carrega a lista de poetas (alunos que se inscreveram e viraram poeta)
+  // uma única vez, pra usar no seletor de participantes do modal.
+  useEffect(() => {
+    apiFetch("/poetas")
+      .then(setPoetas)
+      .catch((err) => console.error(err));
   }, []);
 
   async function carregarResultados(eventoId) {
@@ -201,10 +214,11 @@ export default function Eventos() {
   function abrirModal() {
     setEventoEditando(null);
     limparFormulario();
+    setParticipantesSelecionados([]);
     setModalAberto(true);
   }
 
-  function abrirEdicao(evento) {
+  async function abrirEdicao(evento) {
     setEventoSelecionadoId(null);
     setEventoEditando(evento);
     setNome(evento.nome || "");
@@ -214,6 +228,15 @@ export default function Eventos() {
     setLocal(evento.local || "");
     setImagem(evento.imagem || "");
     setImagemPreview(evento.imagem || "");
+
+    try {
+      const participantes = await apiFetch(`/eventos/${evento.id}/participantes`);
+      setParticipantesSelecionados(participantes.map((p) => p.usuarioId));
+    } catch (err) {
+      console.error(err);
+      setParticipantesSelecionados([]);
+    }
+
     setModalAberto(true);
   }
 
@@ -221,6 +244,7 @@ export default function Eventos() {
     setModalAberto(false);
     setEventoEditando(null);
     limparFormulario();
+    setParticipantesSelecionados([]);
   }
 
   function handleImagem(event) {
@@ -296,6 +320,8 @@ export default function Eventos() {
     };
 
     try {
+      let eventoId;
+
       if (eventoEditando) {
         const eventoAtualizado = await apiFetch(
           `/eventos/${eventoEditando.id}`,
@@ -312,6 +338,8 @@ export default function Eventos() {
               : evento
           )
         );
+
+        eventoId = eventoAtualizado.id;
       } else {
         const novoEvento = await apiFetch("/eventos", {
           method: "POST",
@@ -319,7 +347,20 @@ export default function Eventos() {
         });
 
         setEventos((atuais) => [novoEvento, ...atuais]);
+
+        eventoId = novoEvento.id;
       }
+
+      // Sincroniza os participantes marcados no formulário com o evento
+      // recém-criado/atualizado.
+      await apiFetch(`/eventos/${eventoId}/participantes`, {
+        method: "PUT",
+        body: JSON.stringify({ usuarioIds: participantesSelecionados }),
+      });
+
+      // Atualiza a lista de poetas pra refletir o novo vínculo (evita que
+      // um poeta apareça disponível em outro evento logo em seguida).
+      apiFetch("/poetas").then(setPoetas).catch(console.error);
 
       fecharModal();
     } catch (err) {
@@ -729,21 +770,50 @@ export default function Eventos() {
                 maxLength={150}
               />
 
-              <Label>Participantes</Label>
+              <Label>Participantes do evento</Label>
 
-              <ParticipantsBox>
-                <ParticipantsIcon>
-                  <FiUsers />
-                </ParticipantsIcon>
+              <ParticipantsBox
+                style={{ flexDirection: "column", alignItems: "stretch", gap: 6 }}
+              >
+                {poetas.length === 0 ? (
+                  <ParticipantsText>
+                    <span>Nenhum poeta inscrito ainda.</span>
+                  </ParticipantsText>
+                ) : (
+                  poetas.map((poeta) => {
+                    const jaEmOutroEvento =
+                      poeta.eventoId && poeta.eventoId !== eventoEditando?.id;
 
-                <ParticipantsText>
-                  <strong>Participantes do evento</strong>
-                  <span>
-                    O matemático seleciona este evento ao lançar cada nota. Os
-                    resultados aparecem aqui automaticamente assim que as
-                    notas forem lançadas.
-                  </span>
-                </ParticipantsText>
+                    return (
+                      <label
+                        key={poeta.usuarioId}
+                        style={{
+                          display: "flex",
+                          gap: 8,
+                          alignItems: "center",
+                          opacity: jaEmOutroEvento ? 0.5 : 1,
+                        }}
+                      >
+                        <input
+                          type="checkbox"
+                          disabled={jaEmOutroEvento}
+                          checked={participantesSelecionados.includes(
+                            poeta.usuarioId
+                          )}
+                          onChange={(event) => {
+                            setParticipantesSelecionados((atuais) =>
+                              event.target.checked
+                                ? [...atuais, poeta.usuarioId]
+                                : atuais.filter((id) => id !== poeta.usuarioId)
+                            );
+                          }}
+                        />
+                        {poeta.nome_poeta} — {poeta.turma}
+                        {jaEmOutroEvento && " (já em outro evento)"}
+                      </label>
+                    );
+                  })
+                )}
               </ParticipantsBox>
 
               <FormFooter>
