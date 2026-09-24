@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+
 import { useNavigate } from "react-router-dom";
+
 import { FaEye, FaEyeSlash, FaArrowLeft } from "react-icons/fa";
 
 import {
@@ -12,8 +14,12 @@ import {
 import {
   GlobalStyle,
   Page,
-  Container,
   BackButton,
+  Container,
+  PixelArea,
+  Pixel01,
+  Pixel02,
+  Pixel03,
   ProfileBox,
   AvatarWrapper,
   Avatar,
@@ -52,14 +58,24 @@ export default function Profile() {
   const [photo, setPhoto] = useState("/perfil.png");
   const [fotoBase64, setFotoBase64] = useState(null);
 
+  const [codigo, setCodigo] = useState("");
+  const [codigoEnviado, setCodigoEnviado] = useState(false);
+  const [carregandoCodigo, setCarregandoCodigo] = useState(false);
+  const [verificandoCodigo, setVerificandoCodigo] = useState(false);
+
   useEffect(() => {
     const usuarioLogado = getUsuarioLogado();
 
     if (!usuarioLogado?.email) return;
 
-    fetch(`http://localhost:3001/perfil/${usuarioLogado.email}`, {
-      headers: getAuthHeaders(),
-    })
+    fetch(
+      `http://localhost:3001/perfil/${encodeURIComponent(
+        usuarioLogado.email
+      )}`,
+      {
+        headers: getAuthHeaders(),
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         setNome(data.nome);
@@ -74,13 +90,8 @@ export default function Profile() {
       });
   }, []);
 
-  // ==========================================
-  // POSIÇÃO DO MOUSE PARA AS ANIMAÇÕES
-  // ==========================================
-
   const handleButtonMouseMove = (e) => {
     const button = e.currentTarget;
-
     const rect = button.getBoundingClientRect();
 
     const x = e.clientX - rect.left;
@@ -89,10 +100,6 @@ export default function Profile() {
     button.style.setProperty("--mouse-x", `${x}px`);
     button.style.setProperty("--mouse-y", `${y}px`);
   };
-
-  // ==========================================
-  // ALTERAR FOTO
-  // ==========================================
 
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
@@ -113,29 +120,157 @@ export default function Profile() {
     reader.readAsDataURL(file);
   };
 
-  // ==========================================
-  // SALVAR ALTERAÇÕES
-  // ==========================================
+  async function solicitarCodigo() {
+    setErro("");
+    setSucesso("");
+    setCarregandoCodigo(true);
+
+    try {
+      const res = await fetch(
+        `http://localhost:3001/perfil/${encodeURIComponent(
+          emailAtual
+        )}/solicitar-codigo`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...getAuthHeaders(),
+          },
+          body: JSON.stringify({
+            nome,
+            senha: novaSenha || undefined,
+            novoEmail: novoEmail.trim() || undefined,
+            foto: fotoBase64 || undefined,
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setErro(data.erro || "Erro ao gerar código.");
+        return;
+      }
+
+      setCodigo("");
+      setCodigoEnviado(true);
+
+      setSucesso(
+        "Código de confirmação gerado. Confira o terminal do backend."
+      );
+    } catch (err) {
+      console.error(err);
+      setErro("Não foi possível conectar ao servidor.");
+    } finally {
+      setCarregandoCodigo(false);
+    }
+  }
+
+  async function verificarCodigo() {
+    setErro("");
+    setSucesso("");
+
+    if (!codigo.trim()) {
+      setErro("Digite o código de confirmação.");
+      return;
+    }
+
+    setVerificandoCodigo(true);
+
+    try {
+      const res = await fetch(
+        `http://localhost:3001/perfil/${encodeURIComponent(
+          emailAtual
+        )}/verificar-codigo`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...getAuthHeaders(),
+          },
+          body: JSON.stringify({
+            codigo: codigo.trim(),
+          }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setErro(data.erro || "Código de confirmação inválido.");
+        return;
+      }
+
+      salvarUsuarioLogado({
+        ...getUsuarioLogado(),
+        nome: data.nome,
+        email: data.email,
+      });
+
+      setNome(data.nome);
+      setEmailAtual(data.email);
+
+      setNovoEmail("");
+      setNovaSenha("");
+      setCodigo("");
+      setCodigoEnviado(false);
+      setFotoBase64(null);
+
+      if (data.foto) {
+        setPhoto(data.foto);
+      }
+
+      setSucesso("Perfil atualizado com sucesso!");
+    } catch (err) {
+      console.error(err);
+      setErro("Não foi possível conectar ao servidor.");
+    } finally {
+      setVerificandoCodigo(false);
+    }
+  }
+
+  function cancelarCodigo() {
+    setCodigo("");
+    setCodigoEnviado(false);
+    setErro("");
+    setSucesso("");
+  }
 
   async function handleSalvar() {
     setErro("");
     setSucesso("");
 
+    if (!nome.trim()) {
+      setErro("Preencha o nome.");
+      return;
+    }
+
+    /*
+     * Se houver alteração de email ou senha,
+     * primeiro solicita o código de confirmação.
+     */
+    if (novoEmail.trim() || novaSenha) {
+      await solicitarCodigo();
+      return;
+    }
+
+    /*
+     * Nome e foto continuam sendo salvos
+     * normalmente, sem código.
+     */
     try {
       const res = await fetch(
-        `http://localhost:3001/perfil/${emailAtual}`,
+        `http://localhost:3001/perfil/${encodeURIComponent(
+          emailAtual
+        )}`,
         {
           method: "PUT",
-
           headers: {
             "Content-Type": "application/json",
             ...getAuthHeaders(),
           },
-
           body: JSON.stringify({
             nome,
-            senha: novaSenha || undefined,
-            novoEmail: novoEmail || undefined,
             foto: fotoBase64 || undefined,
           }),
         }
@@ -154,27 +289,23 @@ export default function Profile() {
         email: data.email,
       });
 
+      setNome(data.nome);
       setEmailAtual(data.email);
-
-      setNovoEmail("");
-      setNovaSenha("");
       setFotoBase64(null);
+
+      if (data.foto) {
+        setPhoto(data.foto);
+      }
 
       setSucesso("Perfil atualizado com sucesso!");
     } catch (err) {
       console.error(err);
-
       setErro("Não foi possível conectar ao servidor.");
     }
   }
 
-  // ==========================================
-  // LOGOUT
-  // ==========================================
-
   function handleLogout() {
     logout();
-
     navigate("/login");
   }
 
@@ -183,33 +314,22 @@ export default function Profile() {
       <GlobalStyle />
 
       <Page>
-
-        {/* ==========================================
-            VOLTAR
-        ========================================== */}
-
         <BackButton to="/usuario/home">
           <FaArrowLeft />
         </BackButton>
 
+        <PixelArea>
+          <Pixel01 src="/pixel01.png" alt="" />
+          <Pixel02 src="/pixel02.png" alt="" />
+          <Pixel03 src="/pixel03.png" alt="" />
+        </PixelArea>
+
         <Container>
-
-          {/* ==========================================
-              FOTO
-          ========================================== */}
-
           <ProfileBox>
-
             <AvatarWrapper>
+              <Avatar src={photo} alt="Foto de perfil" />
 
-              <Avatar
-                src={photo}
-                alt="Foto de perfil"
-              />
-
-              <EditButton
-                onMouseMove={handleButtonMouseMove}
-              >
+              <EditButton onMouseMove={handleButtonMouseMove}>
                 <input
                   type="file"
                   accept="image/*"
@@ -220,54 +340,24 @@ export default function Profile() {
                   Editar
                 </span>
               </EditButton>
-
             </AvatarWrapper>
-
           </ProfileBox>
 
-          {/* ==========================================
-              NOME
-          ========================================== */}
-
-          <UserName>
-            {nome}
-          </UserName>
-
-          {/* ==========================================
-              EMAIL
-          ========================================== */}
-
-          <UserEmail>
-            {emailAtual}
-          </UserEmail>
-
-          {/* ==========================================
-              NOME
-          ========================================== */}
+          <UserName>{nome}</UserName>
+          <UserEmail>{emailAtual}</UserEmail>
 
           <Field>
-
-            <Label>
-              Nome
-            </Label>
+            <Label>Nome</Label>
 
             <Input
               type="text"
               value={nome}
               onChange={(e) => setNome(e.target.value)}
             />
-
           </Field>
 
-          {/* ==========================================
-              EMAIL ATUAL
-          ========================================== */}
-
           <Field>
-
-            <Label>
-              Email atual
-            </Label>
+            <Label>Email atual</Label>
 
             <Input
               type="email"
@@ -275,15 +365,9 @@ export default function Profile() {
               readOnly
               disabled
             />
-
           </Field>
 
-          {/* ==========================================
-              NOVO EMAIL
-          ========================================== */}
-
           <Field>
-
             <Label>
               Novo email (deixe em branco para manter o atual)
             </Label>
@@ -293,21 +377,14 @@ export default function Profile() {
               value={novoEmail}
               onChange={(e) => setNovoEmail(e.target.value)}
             />
-
           </Field>
 
-          {/* ==========================================
-              NOVA SENHA
-          ========================================== */}
-
           <Field>
-
             <Label>
               Nova senha (deixe em branco para manter a atual)
             </Label>
 
             <PasswordBox>
-
               <Input
                 type={showPassword ? "text" : "password"}
                 value={novaSenha}
@@ -315,9 +392,7 @@ export default function Profile() {
               />
 
               <span
-                onClick={() =>
-                  setShowPassword(!showPassword)
-                }
+                onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? (
                   <FaEyeSlash size={18} />
@@ -325,100 +400,109 @@ export default function Profile() {
                   <FaEye size={18} />
                 )}
               </span>
-
             </PasswordBox>
-
           </Field>
 
-          {/* ==========================================
-              AVISO DE ERRO
-              COM ANIMAÇÃO
-          ========================================== */}
+          {codigoEnviado && (
+            <Field>
+              <Label>Código de confirmação</Label>
+
+              <Input
+                type="text"
+                value={codigo}
+                onChange={(e) =>
+                  setCodigo(
+                    e.target.value.replace(/\D/g, "").slice(0, 6)
+                  )
+                }
+                placeholder="Digite o código de 6 dígitos"
+                inputMode="numeric"
+                maxLength={6}
+              />
+
+              <SaveButton
+                type="button"
+                onClick={verificarCodigo}
+                onMouseMove={handleButtonMouseMove}
+                disabled={
+                  verificandoCodigo || codigo.length !== 6
+                }
+              >
+                <span className="buttonContent">
+                  {verificandoCodigo
+                    ? "Verificando..."
+                    : "Confirmar código"}
+                </span>
+              </SaveButton>
+
+              <CancelButton
+                type="button"
+                onClick={cancelarCodigo}
+                onMouseMove={handleButtonMouseMove}
+              >
+                <span className="buttonContent">
+                  Cancelar
+                </span>
+              </CancelButton>
+            </Field>
+          )}
 
           {erro && (
-            <Aviso
-              onMouseMove={handleButtonMouseMove}
-            >
+            <Aviso onMouseMove={handleButtonMouseMove}>
               <span className="avisoContent">
                 {erro}
               </span>
             </Aviso>
           )}
 
-          {/* ==========================================
-              AVISO DE SUCESSO
-              COM ANIMAÇÃO
-          ========================================== */}
-
           {sucesso && (
-            <AvisoSucesso
-              onMouseMove={handleButtonMouseMove}
-            >
+            <AvisoSucesso onMouseMove={handleButtonMouseMove}>
               <span className="avisoContent">
                 {sucesso}
               </span>
             </AvisoSucesso>
           )}
 
-          {/* ==========================================
-              SALVAR
-          ========================================== */}
-
-          <SaveButton
-            type="button"
-            onClick={handleSalvar}
-            onMouseMove={handleButtonMouseMove}
-          >
-            <span className="buttonContent">
-              Salvar alterações
-            </span>
-          </SaveButton>
-
-          {/* ==========================================
-              SAIR
-          ========================================== */}
+          {!codigoEnviado && (
+            <SaveButton
+              type="button"
+              onClick={handleSalvar}
+              onMouseMove={handleButtonMouseMove}
+              disabled={carregandoCodigo}
+            >
+              <span className="buttonContent">
+                {carregandoCodigo
+                  ? "Gerando código..."
+                  : "Salvar alterações"}
+              </span>
+            </SaveButton>
+          )}
 
           <LogoutLink
             onClick={() => setShowLogoutModal(true)}
           >
             Sair da conta
           </LogoutLink>
-
         </Container>
-
-        {/* ==========================================
-            MODAL LOGOUT
-        ========================================== */}
 
         {showLogoutModal && (
           <ModalOverlay>
-
             <Modal>
-
-              <h3>
-                Sair da conta
-              </h3>
+              <h3>Sair da conta</h3>
 
               <p>
                 Tem certeza que deseja sair da sua conta?
               </p>
 
               <ModalButtons>
-
-                {/* CANCELAR */}
-
                 <CancelButton
-                  onClick={() =>
-                    setShowLogoutModal(false)
-                  }
+                  onClick={() => setShowLogoutModal(false)}
                   onMouseMove={handleButtonMouseMove}
                 >
                   <span className="buttonContent">
                     Cancelar
                   </span>
                 </CancelButton>
-
-                {/* CONFIRMAR */}
 
                 <ConfirmButton
                   onClick={handleLogout}
@@ -428,14 +512,10 @@ export default function Profile() {
                     Sim, sair
                   </span>
                 </ConfirmButton>
-
               </ModalButtons>
-
             </Modal>
-
           </ModalOverlay>
         )}
-
       </Page>
     </>
   );

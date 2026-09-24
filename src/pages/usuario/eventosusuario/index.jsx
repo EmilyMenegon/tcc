@@ -5,7 +5,6 @@ import {
   FiClock,
   FiMapPin,
   FiImage,
-  FiUsers,
   FiX,
   FiAward,
 } from "react-icons/fi";
@@ -594,27 +593,6 @@ export default function EventosUsuario() {
 
                   <span>
                     {eventoSelecionado.local}
-                  </span>
-
-                </div>
-
-              </ModalInfoItem>
-
-
-              <ModalInfoItem>
-
-                <FiUsers />
-
-                <div>
-
-                  <strong>
-                    Participantes
-                  </strong>
-
-                  <span>
-                    {eventoSelecionado.participantes?.length || 0}
-                    {" "}
-                    participante(s)
                   </span>
 
                 </div>

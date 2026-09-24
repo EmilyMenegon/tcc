@@ -1,31 +1,34 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaEye, FaEyeSlash, FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft } from "react-icons/fa";
 import {
   getUsuarioLogado,
   salvarUsuarioLogado,
   logout,
   getAuthHeaders,
 } from "../../../utils/auth";
-
 import {
   GlobalStyle,
   Page,
-  Container,
+  Pixel01,
+  Pixel02,
+  Pixel03,
   BackButton,
-  ProfileBox,
+  Container,
+  ProfileCard,
+  ProfileHeader,
   AvatarWrapper,
   Avatar,
   EditButton,
   UserName,
   UserEmail,
+  Form,
   Field,
   Label,
   Input,
-  PasswordBox,
   SaveButton,
   LogoutLink,
+  Message,
   ModalOverlay,
   Modal,
   ModalButtons,
@@ -36,43 +39,48 @@ import {
 export default function Profileadm() {
   const navigate = useNavigate();
 
-  const [showPassword, setShowPassword] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [erro, setErro] = useState("");
   const [sucesso, setSucesso] = useState("");
-
   const [nome, setNome] = useState("");
   const [emailAtual, setEmailAtual] = useState("");
-  const [novoEmail, setNovoEmail] = useState("");
-  const [novaSenha, setNovaSenha] = useState("");
   const [photo, setPhoto] = useState("/perfil.png");
   const [fotoBase64, setFotoBase64] = useState(null);
 
   useEffect(() => {
     const usuarioLogado = getUsuarioLogado();
 
-    if (!usuarioLogado?.email) return;
+    if (!usuarioLogado?.email) {
+      navigate("/login");
+      return;
+    }
 
-    fetch(`http://localhost:3001/perfil/${usuarioLogado.email}`, {
-      headers: getAuthHeaders(),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setNome(data.nome);
-        setEmailAtual(data.email);
+    fetch(
+      `http://localhost:3001/perfil/${encodeURIComponent(
+        usuarioLogado.email
+      )}`,
+      {
+        headers: getAuthHeaders(),
+      }
+    )
+      .then(async (res) => {
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.erro || "Não foi possível carregar o perfil.");
+        }
+
+        setNome(data.nome || "");
+        setEmailAtual(data.email || usuarioLogado.email);
 
         if (data.foto) {
           setPhoto(data.foto);
         }
       })
-      .catch(() => {
-        setErro("Não foi possível carregar o perfil.");
+      .catch((err) => {
+        setErro(err.message || "Não foi possível carregar o perfil.");
       });
-  }, []);
-
-  // ==========================================
-  // ANIMAÇÃO DOS BOTÕES
-  // ==========================================
+  }, [navigate]);
 
   const handleButtonMouseMove = (e) => {
     const button = e.currentTarget;
@@ -86,15 +94,22 @@ export default function Profileadm() {
   };
 
   const handlePhotoChange = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
 
     if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setErro("Selecione uma imagem válida.");
+      return;
+    }
 
     const reader = new FileReader();
 
     reader.onload = () => {
       setPhoto(reader.result);
       setFotoBase64(reader.result);
+      setErro("");
+      setSucesso("");
     };
 
     reader.onerror = () => {
@@ -104,49 +119,59 @@ export default function Profileadm() {
     reader.readAsDataURL(file);
   };
 
-  async function handleSalvar() {
+  async function handleSalvar(e) {
+    e.preventDefault();
+
     setErro("");
     setSucesso("");
 
+    if (!nome.trim()) {
+      setErro("Preencha o nome.");
+      return;
+    }
+
     try {
-      const res = await fetch(`http://localhost:3001/perfil/${emailAtual}`, {
-        method: "PUT",
-
-        headers: {
-          "Content-Type": "application/json",
-          ...getAuthHeaders(),
-        },
-
-        body: JSON.stringify({
-          nome,
-          senha: novaSenha || undefined,
-          novoEmail: novoEmail || undefined,
-          foto: fotoBase64 || undefined,
-        }),
-      });
+      const res = await fetch(
+        `http://localhost:3001/perfil/${encodeURIComponent(emailAtual)}`,
+        {
+          method: "PUT",
+          headers: {
+            ...getAuthHeaders(),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nome: nome.trim(),
+            foto: fotoBase64,
+          }),
+        }
+      );
 
       const data = await res.json();
 
       if (!res.ok) {
-        setErro(data.erro || "Erro ao salvar.");
+        setErro(data.erro || "Não foi possível atualizar o perfil.");
         return;
       }
 
+      const usuario = getUsuarioLogado();
+
       salvarUsuarioLogado({
-        ...getUsuarioLogado(),
-        nome: data.nome,
-        email: data.email,
+        ...usuario,
+        nome: data.nome || nome.trim(),
+        email: emailAtual,
+        foto: data.foto || fotoBase64 || photo,
       });
 
-      setEmailAtual(data.email);
-      setNovoEmail("");
-      setNovaSenha("");
-      setFotoBase64(null);
+      setNome(data.nome || nome.trim());
 
+      if (data.foto) {
+        setPhoto(data.foto);
+      }
+
+      setFotoBase64(null);
       setSucesso("Perfil atualizado com sucesso!");
-    } catch (err) {
-      console.error(err);
-      setErro("Não foi possível conectar ao servidor.");
+    } catch {
+      setErro("Não foi possível atualizar o perfil.");
     }
   }
 
@@ -160,194 +185,132 @@ export default function Profileadm() {
       <GlobalStyle />
 
       <Page>
+        <Pixel01 src="/pixel01.png" alt="" />
+        <Pixel02 src="/pixel02.png" alt="" />
+        <Pixel03 src="/pixel03.png" alt="" />
 
-        {/* VOLTAR - SEM ANIMAÇÃO */}
-        <BackButton to="/adm/inicioadm">
-          <FaArrowLeft />
+        <BackButton
+          to="/adm/inicioadm"
+          onMouseMove={handleButtonMouseMove}
+          aria-label="Voltar"
+        >
+          <span className="button-content">
+            <FaArrowLeft />
+          </span>
         </BackButton>
 
         <Container>
+          <ProfileCard>
+            <ProfileHeader>
+              <AvatarWrapper>
+                <Avatar src={photo} alt="Foto de perfil" />
 
-          <ProfileBox>
-            <AvatarWrapper>
+                <EditButton
+                  htmlFor="fotoPerfil"
+                  onMouseMove={handleButtonMouseMove}
+                >
+                  <span className="button-content">Editar</span>
 
-              <Avatar
-                src={photo}
-                alt="Foto de perfil"
-              />
+                  <input
+                    id="fotoPerfil"
+                    type="file"
+                    accept="image/*"
+                    onChange={handlePhotoChange}
+                  />
+                </EditButton>
+              </AvatarWrapper>
 
-              {/* EDITAR - COM ANIMAÇÃO */}
-              <EditButton onMouseMove={handleButtonMouseMove}>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handlePhotoChange}
+              <UserName>{nome || "Administrador"}</UserName>
+              <UserEmail>{emailAtual}</UserEmail>
+            </ProfileHeader>
+
+            <Form onSubmit={handleSalvar}>
+              <Field>
+                <Label htmlFor="nome">Nome</Label>
+
+                <Input
+                  id="nome"
+                  type="text"
+                  value={nome}
+                  onChange={(e) => {
+                    setNome(e.target.value);
+                    setErro("");
+                    setSucesso("");
+                  }}
+                  placeholder="Digite seu nome"
+                  autoComplete="name"
                 />
+              </Field>
 
-                <span className="buttonContent">
-                  Editar
-                </span>
-              </EditButton>
+              <Field>
+                <Label htmlFor="email">Email</Label>
 
-            </AvatarWrapper>
-          </ProfileBox>
+                <Input
+                  id="email"
+                  type="email"
+                  value={emailAtual}
+                  disabled
+                  readOnly
+                />
+              </Field>
 
-          <UserName>
-            {nome}
-          </UserName>
+              {erro && <Message $error>{erro}</Message>}
 
-          <UserEmail>
-            {emailAtual}
-          </UserEmail>
+              {sucesso && <Message $success>{sucesso}</Message>}
 
-          <Field>
-            <Label>
-              Nome
-            </Label>
-
-            <Input
-              type="text"
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
-            />
-          </Field>
-
-          <Field>
-            <Label>
-              Email atual
-            </Label>
-
-            <Input
-              type="email"
-              value={emailAtual}
-              readOnly
-              disabled
-            />
-          </Field>
-
-          <Field>
-            <Label>
-              Novo email (deixe em branco para manter o atual)
-            </Label>
-
-            <Input
-              type="email"
-              value={novoEmail}
-              onChange={(e) => setNovoEmail(e.target.value)}
-            />
-          </Field>
-
-          <Field>
-            <Label>
-              Nova senha (deixe em branco para manter a atual)
-            </Label>
-
-            <PasswordBox>
-
-              <Input
-                type={showPassword ? "text" : "password"}
-                value={novaSenha}
-                onChange={(e) => setNovaSenha(e.target.value)}
-              />
-
-              <span
-                onClick={() => setShowPassword(!showPassword)}
+              <SaveButton
+                type="submit"
+                onMouseMove={handleButtonMouseMove}
               >
-                {showPassword ? (
-                  <FaEyeSlash size={18} />
-                ) : (
-                  <FaEye size={18} />
-                )}
-              </span>
+                <span className="button-content">
+                  Salvar alterações
+                </span>
+              </SaveButton>
+            </Form>
 
-            </PasswordBox>
-          </Field>
-
-          {erro && (
-            <p
-              style={{
-                color: "red",
-                fontSize: "0.9rem",
-              }}
+            <LogoutLink
+              type="button"
+              onClick={() => setShowLogoutModal(true)}
             >
-              {erro}
-            </p>
-          )}
-
-          {sucesso && (
-            <p
-              style={{
-                color: "#2e7d32",
-                fontSize: "0.9rem",
-              }}
-            >
-              {sucesso}
-            </p>
-          )}
-
-          {/* SALVAR - COM ANIMAÇÃO */}
-          <SaveButton
-            type="button"
-            onClick={handleSalvar}
-            onMouseMove={handleButtonMouseMove}
-          >
-            <span className="buttonContent">
-              Salvar alterações
-            </span>
-          </SaveButton>
-
-          <LogoutLink
-            onClick={() => setShowLogoutModal(true)}
-          >
-            Sair da conta
-          </LogoutLink>
-
-          {showLogoutModal && (
-            <ModalOverlay>
-
-              <Modal>
-
-                <h3>
-                  Sair da conta
-                </h3>
-
-                <p>
-                  Tem certeza que deseja sair da sua conta?
-                </p>
-
-                <ModalButtons>
-
-                  {/* CANCELAR - COM ANIMAÇÃO */}
-                  <CancelButton
-                    onClick={() => setShowLogoutModal(false)}
-                    onMouseMove={handleButtonMouseMove}
-                  >
-                    <span className="buttonContent">
-                      Cancelar
-                    </span>
-                  </CancelButton>
-
-                  {/* SIM, SAIR - COM ANIMAÇÃO */}
-                  <ConfirmButton
-                    onClick={handleLogout}
-                    onMouseMove={handleButtonMouseMove}
-                  >
-                    <span className="buttonContent">
-                      Sim, sair
-                    </span>
-                  </ConfirmButton>
-
-                </ModalButtons>
-
-              </Modal>
-
-            </ModalOverlay>
-          )}
-
+              Sair da conta
+            </LogoutLink>
+          </ProfileCard>
         </Container>
 
+        {showLogoutModal && (
+          <ModalOverlay>
+            <Modal>
+              <h3>Sair da conta?</h3>
+
+              <p>
+                Tem certeza que deseja sair da sua conta?
+              </p>
+
+              <ModalButtons>
+                <CancelButton
+                  type="button"
+                  onClick={() => setShowLogoutModal(false)}
+                  onMouseMove={handleButtonMouseMove}
+                >
+                  <span className="button-content">
+                    Cancelar
+                  </span>
+                </CancelButton>
+
+                <ConfirmButton
+                  type="button"
+                  onClick={handleLogout}
+                  onMouseMove={handleButtonMouseMove}
+                >
+                  <span className="button-content">
+                    Sair
+                  </span>
+                </ConfirmButton>
+              </ModalButtons>
+            </Modal>
+          </ModalOverlay>
+        )}
       </Page>
     </>
   );
 }
-

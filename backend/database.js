@@ -198,4 +198,16 @@ try {
   );
 }
 
+db.exec(`
+  CREATE TABLE IF NOT EXISTS recuperacao_senha (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    usuario_id INTEGER NOT NULL,
+    codigo_hash TEXT NOT NULL,
+    expiracao INTEGER NOT NULL,
+    usado INTEGER NOT NULL DEFAULT 0,
+    criado_em TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (usuario_id) REFERENCES usuario (id)
+  )
+`);
+
 export default db;

@@ -1,356 +1,529 @@
-import styled, { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle, keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 
-/* ==========================================
-   RESET GLOBAL
-========================================== */
+const colors = {
+  yellow: "#FFDB53",
+  yellowStrong: "#F9BE06",
+  cream: "#FFF7D0",
+  input: "#FFFDF0",
+  red: "#831614",
+  wine: "#571111",
+  black: "#010000",
+  white: "#fff",
+  gray: "#666",
+};
+
+const flutuar = keyframes`
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+
+  50% {
+    transform: translateY(-10px) rotate(3deg);
+  }
+`;
+
+const aparecer = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+`;
 
 export const GlobalStyle = createGlobalStyle`
   * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
   }
 
   html,
   body,
   #root {
-    margin: 0;
-    padding: 0;
-
     width: 100%;
-    min-width: 100%;
-
     min-height: 100%;
   }
 
-  html,
-  body {
-    min-height: 100vh;
-    min-height: 100dvh;
+  html {
+    background: ${colors.cream};
   }
 
   body {
-    margin: 0;
-    padding: 0;
-
+    min-height: 100vh;
+    overflow-x: hidden;
+    background: ${colors.cream};
     font-family: "Poppins", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  button,
+  input {
+    font-family: inherit;
+  }
+
+  button {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  input {
+    -webkit-appearance: none;
+    appearance: none;
   }
 `;
 
-/* ==========================================
-   PAGE
-========================================== */
+/* ============================================================
+   PÁGINA
+============================================================ */
 
-export const Page = styled.div`
+export const Page = styled.main`
+  position: relative;
   width: 100%;
-
   min-height: 100vh;
   min-height: 100dvh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: hidden;
+  padding: 50px 20px 70px;
+  background: ${colors.cream};
+  color: ${colors.black};
+  isolation: isolate;
 
-  margin: 0;
-  padding: 0;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        circle at 50% 15%,
+        rgba(255, 219, 83, 0.16) 0%,
+        rgba(255, 247, 208, 0.08) 28%,
+        rgba(255, 247, 208, 0) 58%
+      ),
+      radial-gradient(
+        circle at 12% 80%,
+        rgba(87, 17, 17, 0.045) 0%,
+        rgba(87, 17, 17, 0) 25%
+      ),
+      radial-gradient(
+        circle at 88% 25%,
+        rgba(131, 22, 20, 0.035) 0%,
+        rgba(131, 22, 20, 0) 24%
+      ),
+      linear-gradient(
+        180deg,
+        #f9f2ce 0%,
+        #fff7d0 42%,
+        #ffffff 100%
+      );
+    z-index: -3;
+    pointer-events: none;
+  }
 
-  box-sizing: border-box;
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 6px;
+    background: ${colors.red};
+    z-index: 20;
+  }
 
-  font-family: "Poppins", sans-serif;
+  @media (max-width: 700px) {
+    padding: 78px 14px 25px;
+    align-items: flex-start;
 
-  background: linear-gradient(
-    to bottom,
-    #ffdb53 0%,
-    #f9be06 32%,
-    #f8f8f8 32%,
-    #f8f8f8 100%
-  );
-
-  overflow-x: hidden;
-
-  @media (max-width: 600px) {
-    width: 100%;
-
-    min-height: 100vh;
-    min-height: 100dvh;
-
-    margin: 0;
-    padding: 0;
-
-    background: linear-gradient(
-      to bottom,
-      #ffdb53 0%,
-      #ffdb53 25%,
-      #f8f8f8 25%,
-      #f8f8f8 100%
-    );
+    &::before {
+      background:
+        radial-gradient(
+          circle at 50% 12%,
+          rgba(255, 219, 83, 0.15) 0%,
+          rgba(255, 247, 208, 0) 52%
+        ),
+        linear-gradient(
+          180deg,
+          #f9f2ce 0%,
+          #fff7d0 38%,
+          #ffffff 100%
+        );
+    }
   }
 `;
 
-/* ==========================================
-   BOTÃO VOLTAR
-========================================== */
+/* ============================================================
+   BICHINHOS
+============================================================ */
+
+export const PixelArea = styled.div`
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+`;
+
+export const Pixel01 = styled.img`
+  position: absolute;
+  width: clamp(70px, 10vw, 155px);
+  max-height: 20vh;
+  top: clamp(20px, 7vh, 70px);
+  left: clamp(16px, 5vw, 75px);
+  object-fit: contain;
+  z-index: 3;
+  pointer-events: none;
+  user-select: none;
+  animation:
+    ${flutuar}
+    4s
+    ease-in-out
+    infinite;
+  filter:
+    drop-shadow(7px 7px 0 #fff)
+    drop-shadow(10px 10px 0 ${colors.yellow});
+
+  @media (max-width: 700px) {
+    width: clamp(55px, 17vw, 100px);
+    top: 18px;
+    left: 8px;
+  }
+`;
+
+export const Pixel02 = styled.img`
+  position: absolute;
+  width: clamp(75px, 11vw, 175px);
+  max-height: 20vh;
+  top: clamp(22px, 9vh, 85px);
+  right: clamp(16px, 5vw, 75px);
+  object-fit: contain;
+  z-index: 3;
+  pointer-events: none;
+  user-select: none;
+  animation:
+    ${flutuar}
+    4.6s
+    ease-in-out
+    infinite
+    reverse;
+  filter:
+    drop-shadow(-7px 7px 0 #fff)
+    drop-shadow(-10px 10px 0 ${colors.yellow});
+
+  @media (max-width: 700px) {
+    width: clamp(58px, 19vw, 105px);
+    top: 22px;
+    right: 8px;
+  }
+`;
+
+export const Pixel03 = styled.img`
+  position: absolute;
+  width: clamp(65px, 9vw, 150px);
+  max-height: 20vh;
+  bottom: clamp(40px, 10vh, 100px);
+  left: clamp(12px, 4vw, 55px);
+  object-fit: contain;
+  z-index: 3;
+  pointer-events: none;
+  user-select: none;
+  animation:
+    ${flutuar}
+    5s
+    ease-in-out
+    infinite;
+  filter:
+    drop-shadow(7px 7px 0 #fff)
+    drop-shadow(10px 10px 0 ${colors.yellow});
+
+  @media (max-width: 700px) {
+    width: clamp(50px, 16vw, 95px);
+    bottom: 18px;
+    left: 2px;
+  }
+`;
+
+/* ============================================================
+   VOLTAR
+============================================================ */
 
 export const BackButton = styled(Link)`
   position: fixed;
-
-  top: 25px;
-  left: 25px;
-
-  width: 60px;
-  height: 60px;
-
+  top: 2%;
+  left: 2%;
+  width: 58px;
+  height: 58px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: ${colors.yellow};
+  color: ${colors.black};
   display: flex;
-
   align-items: center;
   justify-content: center;
-
   text-decoration: none;
-
-  color: #111;
-
-  font-size: 28px;
-  font-weight: bold;
-
-  background: transparent;
-
-  border: none;
-
-  box-shadow: none;
-
-  border-radius: 0;
-
-  transition:
-    color 0.2s ease,
-    transform 0.2s ease;
-
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  transform: translateZ(0);
   z-index: 999;
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.18);
+  transition:
+    color 0.3s ease,
+    transform 0.25s ease;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background: ${colors.red};
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+    pointer-events: none;
+    z-index: 0;
+    transition:
+      transform 0.55s
+      cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 2px solid rgba(255, 255, 255, 0.18);
+    pointer-events: none;
+  }
+
+  svg {
+    position: relative;
+    z-index: 2;
+    font-size: 24px;
+    transition:
+      transform 0.25s ease;
+  }
 
   &:hover {
-    background: transparent;
-
-    color: #000;
-
-    transform: translateX(-3px);
+    color: ${colors.white};
+    transform: translateY(-3px);
   }
 
-  &:focus,
-  &:focus-visible {
-    outline: none;
-
-    background: transparent;
+  &:hover::before {
+    transform:
+      translate(-50%, -50%)
+      scale(3.5);
   }
 
-  @media (max-width: 600px) {
-    top: 15px;
-    left: 15px;
+  &:hover svg {
+    transform: translateX(-2px);
+  }
 
-    width: 45px;
-    height: 45px;
+  &:active {
+    transform: scale(0.95);
+  }
 
-    font-size: 20px;
+  @media (max-width: 768px) {
+    top: 14px;
+    left: 14px;
+    width: 48px;
+    height: 48px;
+
+    svg {
+      font-size: 20px;
+    }
+  }
+
+  @media (max-width: 500px) {
+    top: 10px;
+    left: 10px;
+    width: 44px;
+    height: 44px;
+
+    svg {
+      font-size: 18px;
+    }
   }
 `;
 
-/* ==========================================
+/* ============================================================
    CONTAINER
-========================================== */
+============================================================ */
 
 export const Container = styled.div`
-  width: 100%;
-
-  max-width: 460px;
-
-  box-sizing: border-box;
-
-  margin: 70px auto 30px;
-
-  background: #fff;
-
-  border-radius: 28px;
-
+  position: relative;
+  z-index: 5;
+  width: min(520px, 100%);
   padding: 40px;
-
   display: flex;
-
   flex-direction: column;
-
-  gap: 22px;
-
+  align-items: stretch;
+  gap: 20px;
+  background: ${colors.white};
+  border-radius: 28px;
   box-shadow:
-    0 18px 45px
-    rgba(0, 0, 0, 0.12);
+    0 25px 65px rgba(0, 0, 0, 0.15),
+    10px 10px 0 ${colors.red};
+  overflow: hidden;
+  isolation: isolate;
+  animation:
+    ${aparecer}
+    0.6s
+    ease;
 
-  @media (max-width: 600px) {
-    width: 100%;
-
-    max-width: none;
-
-    min-height: 100vh;
-    min-height: 100dvh;
-
-    margin: 0;
-
-    padding: 80px 20px 30px;
-
-    border-radius: 0;
-
-    box-shadow: none;
-
-    gap: 18px;
+  &::before {
+    content: "";
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    top: -145px;
+    right: -100px;
+    background: ${colors.yellow};
+    border-radius: 50%;
+    opacity: 0.75;
+    z-index: -1;
   }
 
-  @media (max-width: 360px) {
-    padding: 75px 16px 25px;
+  &::after {
+    content: "";
+    position: absolute;
+    width: 130px;
+    height: 8px;
+    bottom: 20px;
+    left: -35px;
+    background: ${colors.red};
+    border-radius: 10px;
+    transform: rotate(-20deg);
+    opacity: 0.85;
+    z-index: -1;
+  }
+
+  @media (max-width: 700px) {
+    width: 100%;
+    padding: 30px 22px 28px;
+    border-radius: 24px;
+    box-shadow:
+      0 20px 45px rgba(0, 0, 0, 0.13),
+      7px 7px 0 ${colors.red};
   }
 `;
 
-/* ==========================================
-   PROFILE BOX
-========================================== */
+/* ============================================================
+   PERFIL
+============================================================ */
 
 export const ProfileBox = styled.div`
   display: flex;
-
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-
   width: 100%;
+  margin-bottom: 8px;
 `;
-
-/* ==========================================
-   AVATAR WRAPPER
-========================================== */
 
 export const AvatarWrapper = styled.div`
   position: relative;
-
-  width: 170px;
-  height: 170px;
+  width: 165px;
+  height: 165px;
+  margin-bottom: 20px;
 
   @media (max-width: 600px) {
-    width: 130px;
-    height: 130px;
+    width: 135px;
+    height: 135px;
+    margin-bottom: 16px;
   }
 `;
-
-/* ==========================================
-   AVATAR
-========================================== */
 
 export const Avatar = styled.img`
-  width: 170px;
-  height: 170px;
-
+  width: 100%;
+  height: 100%;
   display: block;
-
   border-radius: 50%;
-
   object-fit: cover;
-
-  border: 6px solid #ffdb53;
-
+  border: 6px solid ${colors.yellow};
+  background: ${colors.cream};
   box-shadow:
-    0 12px 25px
-    rgba(0, 0, 0, 0.18);
-
-  @media (max-width: 600px) {
-    width: 130px;
-    height: 130px;
-
-    border-width: 5px;
-  }
+    0 10px 25px rgba(0, 0, 0, 0.16);
 `;
 
-/* ==========================================
-   EDITAR FOTO
-========================================== */
+/* ============================================================
+   EDITAR
+============================================================ */
 
 export const EditButton = styled.label`
   position: absolute;
-
-  bottom: 8px;
-  right: -5px;
-
-  background: #111;
-
-  color: white;
-
-  padding: 8px 14px;
-
+  right: -8px;
+  bottom: 5px;
+  min-width: 78px;
+  height: 40px;
+  padding: 0 16px;
   border-radius: 20px;
-
-  font-size: 13px;
-
-  font-weight: 600;
-
+  background: ${colors.red};
+  color: ${colors.white};
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-
-  white-space: nowrap;
-
   overflow: hidden;
-
   isolation: isolate;
-
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow:
+    4px 4px 0 ${colors.yellow};
   transition:
-    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.25s ease,
     color 0.25s ease,
     box-shadow 0.25s ease;
 
   &::before {
     content: "";
-
     position: absolute;
-
     left: var(--mouse-x, 50%);
     top: var(--mouse-y, 50%);
-
-    width: 20px;
-    height: 20px;
-
+    width: 25px;
+    height: 25px;
     border-radius: 50%;
-
-    background: #ffdb53;
-
+    background: ${colors.yellow};
     transform:
       translate(-50%, -50%)
       scale(0);
-
-    transition:
-      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-
     z-index: -1;
-
     pointer-events: none;
+    transition:
+      transform 0.6s
+      cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .buttonContent {
     position: relative;
-
     z-index: 2;
   }
 
   &:hover {
-    color: #111;
-
+    color: ${colors.black};
     transform: translateY(-3px);
+  }
 
-    box-shadow:
-      0 10px 22px
-      rgba(0, 0, 0, 0.20);
-
-    &::before {
-      transform:
-        translate(-50%, -50%)
-        scale(18);
-    }
+  &:hover::before {
+    transform:
+      translate(-50%, -50%)
+      scale(7);
   }
 
   &:active {
-    transform:
-      translateY(0)
-      scale(0.97);
-
-    transition:
-      transform 0.08s ease;
-  }
-
-  &:focus {
-    outline: none;
+    transform: scale(0.97);
   }
 
   input {
@@ -358,444 +531,245 @@ export const EditButton = styled.label`
   }
 
   @media (max-width: 600px) {
+    right: -6px;
     bottom: 2px;
-    right: -8px;
-
-    padding: 7px 11px;
-
+    min-width: 70px;
+    height: 35px;
+    padding: 0 13px;
     font-size: 11px;
   }
 `;
 
-/* ==========================================
-   NOME
-========================================== */
+/* ============================================================
+   NOME / EMAIL
+============================================================ */
 
 export const UserName = styled.h2`
-  margin-top: -8px;
-  margin-bottom: -18px;
-
+  margin: 0 0 5px;
+  color: ${colors.red};
   text-align: center;
-
-  font-size: 28px;
-
-  font-weight: 700;
-
-  color: #111;
-
+  font-size:
+    clamp(1.5rem, 4vw, 2.2rem);
+  line-height: 1.15;
+  font-weight: 900;
   word-break: break-word;
-
   overflow-wrap: anywhere;
-
-  @media (max-width: 600px) {
-    margin-top: 0;
-
-    margin-bottom: -10px;
-
-    font-size: 22px;
-
-    line-height: 1.3;
-  }
-
-  @media (max-width: 360px) {
-    font-size: 20px;
-  }
 `;
-
-/* ==========================================
-   EMAIL
-========================================== */
 
 export const UserEmail = styled.p`
-  text-align: center;
-
-  color: #666;
-
-  font-size: 15px;
-
-  word-break: break-word;
-
-  overflow-wrap: anywhere;
-
   margin: 0;
-
-  @media (max-width: 600px) {
-    font-size: 13px;
-  }
+  color: ${colors.gray};
+  text-align: center;
+  font-size: 0.92rem;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 `;
 
-/* ==========================================
-   FIELD
-========================================== */
+/* ============================================================
+   FORM
+============================================================ */
 
 export const Field = styled.div`
   display: flex;
-
   flex-direction: column;
-
   gap: 8px;
-
   width: 100%;
-
-  box-sizing: border-box;
 `;
-
-/* ==========================================
-   LABEL
-========================================== */
 
 export const Label = styled.label`
-  font-size: 14px;
-
+  color: #7c7040;
+  font-size: 0.76rem;
   font-weight: 600;
-
-  color: #333;
-
-  @media (max-width: 600px) {
-    font-size: 13px;
-  }
+  padding-left: 4px;
 `;
 
-/* ==========================================
-   INPUT
-========================================== */
+/* ============================================================
+   INPUTS
+============================================================ */
 
 export const Input = styled.input`
+  display: block;
   width: 100%;
-
-  box-sizing: border-box;
-
-  padding: 14px 16px;
-
-  border-radius: 12px;
-
-  border: none;
-
-  background: #f3f3f3;
-
-  font-size: 15px;
-
-  color: #111;
-
+  height: 60px;
+  padding: 14px 18px;
+  border: 2px solid ${colors.yellow};
+  border-radius: 16px;
   outline: none;
+  background: ${colors.input};
+  color: #111;
+  font-size: 0.95rem;
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 
-  transition: 0.2s;
+  &:hover {
+    background: #fffaf0;
+    border-color: ${colors.yellowStrong};
+    box-shadow:
+      0 4px 12px
+      rgba(249, 190, 6, 0.1);
+  }
 
   &:focus {
-    outline: none;
-
-    background: #f3f3f3;
-
-    border: none;
-
-    box-shadow: none;
+    border-color: ${colors.yellowStrong};
+    background: #fffbe6;
+    box-shadow:
+      0 0 0 3px
+      rgba(255, 219, 83, 0.18);
   }
 
   &::placeholder {
-    color: #888;
+    color: #7c7040;
+    opacity: 0.7;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.75;
+    background: #f7f5e8;
   }
 
   @media (max-width: 600px) {
-    padding: 13px 14px;
-
-    font-size: 14px;
+    height: 56px;
+    padding: 13px 16px;
+    border-radius: 13px;
+    font-size: 0.88rem;
   }
 `;
 
-/* ==========================================
-   PASSWORD
-========================================== */
+/* ============================================================
+   SENHA
+============================================================ */
 
 export const PasswordBox = styled.div`
   position: relative;
-
   width: 100%;
+
+  ${Input} {
+    padding-right: 55px;
+  }
 
   span {
     position: absolute;
-
-    right: 16px;
-
     top: 50%;
-
+    right: 17px;
     transform: translateY(-50%);
-
+    width: 30px;
+    height: 30px;
     display: flex;
-
     align-items: center;
-
+    justify-content: center;
+    color: #888;
     cursor: pointer;
-
-    color: #666;
-
-    transition: 0.2s;
+    transition:
+      color 0.2s ease;
 
     &:hover {
-      color: #ffdb53;
+      color: ${colors.red};
     }
   }
 `;
 
-/* ==========================================
-   AVISO DE ERRO
-   ANIMAÇÃO CIRCULAR
-========================================== */
+/* ============================================================
+   MENSAGENS
+============================================================ */
 
-export const Aviso = styled.p`
-  position: relative;
-
+export const Aviso = styled.div`
   width: 100%;
-
-  margin: 0;
-
-  padding: 10px 14px;
-
+  margin: -2px 0 0;
+  padding: 9px 12px;
   border-radius: 10px;
-
+  background: rgba(198, 40, 40, 0.07);
+  color: #c62828;
+  font-size: 0.82rem;
+  line-height: 1.35;
   text-align: center;
-
-  color: #d62828;
-
-  background: transparent;
-
-  font-size: 0.9rem;
-
-  font-weight: 500;
-
-  cursor: default;
-
-  overflow: hidden;
-
-  isolation: isolate;
-
-  transition:
-    color 0.25s ease,
-    transform 0.25s ease;
-
-  &::before {
-    content: "";
-
-    position: absolute;
-
-    left: var(--mouse-x, 50%);
-    top: var(--mouse-y, 50%);
-
-    width: 20px;
-    height: 20px;
-
-    border-radius: 50%;
-
-    background: #831614;
-
-    transform:
-      translate(-50%, -50%)
-      scale(0);
-
-    transition:
-      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-
-    z-index: -1;
-
-    pointer-events: none;
-  }
-
-  .avisoContent {
-    position: relative;
-
-    z-index: 2;
-  }
-
-  &:hover {
-    color: #fff;
-
-    transform: translateY(-2px);
-
-    &::before {
-      transform:
-        translate(-50%, -50%)
-        scale(15);
-    }
-  }
 `;
 
-/* ==========================================
-   AVISO DE SUCESSO
-   ANIMAÇÃO CIRCULAR
-========================================== */
-
-export const AvisoSucesso = styled.p`
-  position: relative;
-
+export const AvisoSucesso = styled.div`
   width: 100%;
-
-  margin: 0;
-
-  padding: 10px 14px;
-
+  margin: -2px 0 0;
+  padding: 9px 12px;
   border-radius: 10px;
-
-  text-align: center;
-
+  background: rgba(46, 125, 50, 0.08);
   color: #2e7d32;
-
-  background: transparent;
-
-  font-size: 0.9rem;
-
-  font-weight: 500;
-
-  cursor: default;
-
-  overflow: hidden;
-
-  isolation: isolate;
-
-  transition:
-    color 0.25s ease,
-    transform 0.25s ease;
-
-  &::before {
-    content: "";
-
-    position: absolute;
-
-    left: var(--mouse-x, 50%);
-    top: var(--mouse-y, 50%);
-
-    width: 20px;
-    height: 20px;
-
-    border-radius: 50%;
-
-    background: #ffdb53;
-
-    transform:
-      translate(-50%, -50%)
-      scale(0);
-
-    transition:
-      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-
-    z-index: -1;
-
-    pointer-events: none;
-  }
-
-  .avisoContent {
-    position: relative;
-
-    z-index: 2;
-  }
-
-  &:hover {
-    color: #111;
-
-    transform: translateY(-2px);
-
-    &::before {
-      transform:
-        translate(-50%, -50%)
-        scale(15);
-    }
-  }
+  font-size: 0.82rem;
+  line-height: 1.35;
+  text-align: center;
 `;
 
-/* ==========================================
-   BOTÃO SALVAR
-========================================== */
+/* ============================================================
+   SALVAR
+============================================================ */
 
 export const SaveButton = styled.button`
   position: relative;
-
   width: 100%;
-
-  height: 50px;
-
-  margin-top: 10px;
-
-  border: none;
-
-  border-radius: 12px;
-
-  background: #ffdb53;
-
-  color: #111;
-
-  font-size: 16px;
-
-  font-weight: bold;
-
+  height: 58px;
+  margin-top: 4px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 16px;
+  background: ${colors.yellow};
+  color: ${colors.black};
+  font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
-
   overflow: hidden;
-
   isolation: isolate;
-
+  transform: translateZ(0);
   transition:
-    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-    color 0.25s ease,
-    box-shadow 0.25s ease;
+    color 0.3s ease,
+    transform 0.25s ease,
+    box-shadow 0.3s ease;
 
   &::before {
     content: "";
-
     position: absolute;
-
     left: var(--mouse-x, 50%);
     top: var(--mouse-y, 50%);
-
-    width: 20px;
-    height: 20px;
-
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-
-    background: #831614;
-
+    background: ${colors.red};
     transform:
       translate(-50%, -50%)
       scale(0);
-
-    transition:
-      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-
-    z-index: 0;
-
     pointer-events: none;
+    z-index: 0;
+    transition:
+      transform 0.65s
+      cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .buttonContent {
     position: relative;
-
     z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
   }
 
   &:hover {
-    color: #fff;
-
+    color: ${colors.white};
     transform: translateY(-3px);
-
     box-shadow:
-      0 10px 22px
-      rgba(123, 30, 58, 0.25);
+      0 10px 25px
+      rgba(0, 0, 0, 0.17);
+  }
 
-    &::before {
-      transform:
-        translate(-50%, -50%)
-        scale(25);
-    }
+  &:hover::before {
+    transform:
+      translate(-50%, -50%)
+      scale(18);
   }
 
   &:active {
     transform:
-      translateY(0)
-      scale(0.97);
-
-    box-shadow:
-      0 4px 10px
-      rgba(0, 0, 0, 0.15);
-
-    transition:
-      transform 0.08s ease;
+      translateY(1px)
+      scale(0.98);
   }
 
   &:focus {
@@ -803,384 +777,258 @@ export const SaveButton = styled.button`
   }
 
   &:focus-visible {
-    outline: 2px solid #7b1e3a;
-
+    outline:
+      2px solid ${colors.red};
     outline-offset: 3px;
   }
 
   @media (max-width: 600px) {
-    height: 48px;
-
-    font-size: 15px;
+    height: 54px;
+    border-radius: 14px;
+    font-size: 0.92rem;
   }
 `;
 
-/* ==========================================
-   SAIR DA CONTA
-========================================== */
+/* ============================================================
+   SAIR
+============================================================ */
 
-export const LogoutLink = styled.span`
-  margin-top: 10px;
-
-  text-align: center;
-
-  color: #d62828;
-
-  font-size: 15px;
-
-  font-weight: 600;
-
+export const LogoutLink = styled.button`
+  width: 100%;
+  margin-top: 17px;
+  border: 0;
+  background: transparent;
+  color: ${colors.red};
+  font-size: 0.9rem;
+  font-weight: 700;
   cursor: pointer;
-
-  transition: 0.2s ease;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
 
   &:hover {
-    color: #000;
-
-    opacity: 0.7;
-  }
-
-  @media (max-width: 600px) {
-    font-size: 14px;
+    color: ${colors.black};
+    transform: translateY(-1px);
   }
 `;
 
-/* ==========================================
-   MODAL OVERLAY
-========================================== */
+/* ============================================================
+   MODAL
+============================================================ */
 
 export const ModalOverlay = styled.div`
   position: fixed;
-
   inset: 0;
-
   width: 100%;
-
   height: 100%;
-
-  background: rgba(0, 0, 0, 0.45);
-
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
-  z-index: 9999;
-
-  backdrop-filter: blur(3px);
-
   padding: 20px;
-
-  box-sizing: border-box;
+  background:
+    rgba(87, 17, 17, 0.35);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
 `;
-
-/* ==========================================
-   MODAL
-========================================== */
 
 export const Modal = styled.div`
-  width: 400px;
-
-  max-width: 100%;
-
-  background: #fff;
-
-  border-radius: 20px;
-
-  padding: 30px;
-
-  text-align: center;
-
-  box-shadow:
-    0 20px 45px
-    rgba(0, 0, 0, 0.2);
-
-  animation: modalAppear 0.25s ease;
-
-  box-sizing: border-box;
-
-  h2,
-  h3 {
-    margin: 0 0 12px;
-
-    color: #111;
-
-    font-size: 24px;
-  }
-
-  p {
-    color: #666;
-
-    font-size: 16px;
-
-    margin: 0 0 30px;
-
-    line-height: 1.5;
-  }
-
-  @keyframes modalAppear {
-    from {
-      opacity: 0;
-
-      transform:
-        translateY(15px)
-        scale(0.95);
-    }
-
-    to {
-      opacity: 1;
-
-      transform:
-        translateY(0)
-        scale(1);
-    }
-  }
-
-  @media (max-width: 600px) {
-    padding: 24px 18px;
-
-    border-radius: 18px;
-
-    h2,
-    h3 {
-      font-size: 20px;
-    }
-
-    p {
-      font-size: 14px;
-
-      margin-bottom: 22px;
-    }
-  }
-`;
-
-/* ==========================================
-   MODAL BUTTONS
-========================================== */
-
-export const ModalButtons = styled.div`
-  display: flex;
-
-  justify-content: center;
-
-  align-items: center;
-
-  gap: 15px;
-
-  width: 100%;
-
-  @media (max-width: 400px) {
-    flex-direction: column;
-
-    gap: 10px;
-  }
-`;
-
-/* ==========================================
-   CANCELAR
-========================================== */
-
-export const CancelButton = styled.button`
   position: relative;
-
-  width: 140px;
-
-  height: 46px;
-
-  padding: 0;
-
-  border: none;
-
-  border-radius: 10px;
-
-  background: #ececec;
-
-  color: #111;
-
-  font-size: 15px;
-
-  font-weight: 600;
-
-  cursor: pointer;
-
-  overflow: hidden;
-
-  isolation: isolate;
-
-  transition:
-    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-    color 0.25s ease,
-    box-shadow 0.25s ease;
+  width: 420px;
+  max-width: 100%;
+  padding: 32px;
+  background: ${colors.white};
+  border-radius: 22px;
+  text-align: center;
+  box-shadow:
+    8px 8px 0 ${colors.red},
+    0 20px 50px
+    rgba(0, 0, 0, 0.2);
+  animation:
+    ${aparecer}
+    0.25s
+    ease;
 
   &::before {
     content: "";
-
     position: absolute;
+    width: 90px;
+    height: 90px;
+    top: -35px;
+    right: -35px;
+    background: ${colors.yellow};
+    border-radius: 50%;
+    z-index: -1;
+  }
 
+  h3 {
+    margin: 0 0 10px;
+    color: ${colors.red};
+    font-size: 1.4rem;
+    font-weight: 900;
+  }
+
+  p {
+    margin: 0 0 25px;
+    color: ${colors.gray};
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 500px) {
+    padding: 26px 20px;
+    border-radius: 18px;
+
+    h3 {
+      font-size: 1.2rem;
+    }
+
+    p {
+      font-size: 0.85rem;
+    }
+  }
+`;
+
+export const ModalButtons = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+
+  @media (max-width: 420px) {
+    flex-direction: column;
+  }
+`;
+
+/* ============================================================
+   CANCELAR
+============================================================ */
+
+export const CancelButton = styled.button`
+  position: relative;
+  width: 145px;
+  height: 46px;
+  border: 2px solid ${colors.yellow};
+  border-radius: 12px;
+  background: ${colors.cream};
+  color: ${colors.black};
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    color 0.3s ease,
+    transform 0.25s ease;
+
+  &::before {
+    content: "";
+    position: absolute;
     left: var(--mouse-x, 50%);
     top: var(--mouse-y, 50%);
-
-    width: 20px;
-
-    height: 20px;
-
+    width: 25px;
+    height: 25px;
     border-radius: 50%;
-
-    background: #ffdb53;
-
+    background: ${colors.yellow};
     transform:
       translate(-50%, -50%)
       scale(0);
-
-    transition:
-      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-
-    z-index: 0;
-
     pointer-events: none;
+    z-index: 0;
+    transition:
+      transform 0.55s
+      cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .buttonContent {
     position: relative;
-
     z-index: 2;
   }
 
   &:hover {
-    color: #111;
+    transform: translateY(-2px);
+  }
 
-    transform: translateY(-3px);
-
-    box-shadow:
-      0 10px 22px
-      rgba(123, 30, 58, 0.25);
-
-    &::before {
-      transform:
-        translate(-50%, -50%)
-        scale(15);
-    }
+  &:hover::before {
+    transform:
+      translate(-50%, -50%)
+      scale(10);
   }
 
   &:active {
-    transform:
-      translateY(0)
-      scale(0.97);
-
-    transition:
-      transform 0.08s ease;
+    transform: scale(0.97);
   }
 
-  &:focus {
-    outline: none;
-  }
-
-  @media (max-width: 400px) {
+  @media (max-width: 420px) {
     width: 100%;
   }
 `;
 
-/* ==========================================
+/* ============================================================
    CONFIRMAR
-========================================== */
+============================================================ */
 
 export const ConfirmButton = styled.button`
   position: relative;
-
-  width: 140px;
-
+  width: 145px;
   height: 46px;
-
-  padding: 0;
-
-  border: none;
-
-  border-radius: 10px;
-
-  background: #d62828;
-
-  color: #fff;
-
-  font-size: 15px;
-
-  font-weight: 600;
-
+  border: 0;
+  border-radius: 12px;
+  background: ${colors.red};
+  color: ${colors.white};
+  font-size: 0.9rem;
+  font-weight: 700;
   cursor: pointer;
-
   overflow: hidden;
-
   isolation: isolate;
-
   transition:
-    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-    color 0.25s ease,
+    color 0.3s ease,
+    transform 0.25s ease,
     box-shadow 0.25s ease;
 
   &::before {
     content: "";
-
     position: absolute;
-
     left: var(--mouse-x, 50%);
     top: var(--mouse-y, 50%);
-
-    width: 20px;
-
-    height: 20px;
-
+    width: 25px;
+    height: 25px;
     border-radius: 50%;
-
-    background: #111;
-
+    background: ${colors.yellow};
     transform:
       translate(-50%, -50%)
       scale(0);
-
-    transition:
-      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-
-    z-index: 0;
-
     pointer-events: none;
+    z-index: 0;
+    transition:
+      transform 0.55s
+      cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .buttonContent {
     position: relative;
-
     z-index: 2;
   }
 
   &:hover {
-    color: #fff;
-
-    transform: translateY(-3px);
-
+    color: ${colors.black};
+    transform: translateY(-2px);
     box-shadow:
-      0 10px 22px
-      rgba(123, 30, 58, 0.3);
+      0 8px 20px
+      rgba(131, 22, 20, 0.22);
+  }
 
-    &::before {
-      transform:
-        translate(-50%, -50%)
-        scale(15);
-    }
+  &:hover::before {
+    transform:
+      translate(-50%, -50%)
+      scale(10);
   }
 
   &:active {
-    transform:
-      translateY(0)
-      scale(0.97);
-
-    transition:
-      transform 0.08s ease;
+    transform: scale(0.97);
   }
 
-  &:focus {
-    outline: none;
-  }
-
-  @media (max-width: 400px) {
+  @media (max-width: 420px) {
     width: 100%;
   }
 `;

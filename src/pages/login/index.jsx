@@ -1,4 +1,3 @@
-
 import {
   useLayoutEffect,
   useRef,
@@ -6,9 +5,7 @@ import {
 } from "react";
 
 import { useNavigate } from "react-router-dom";
-
 import { gsap } from "gsap";
-
 import { salvarUsuarioLogado } from "../../utils/auth";
 
 import {
@@ -57,14 +54,15 @@ export default function Login() {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
-  const [confirmarSenha, setConfirmarSenha] =
-    useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
+
+  const [codigo, setCodigo] = useState("");
+  const [codigoEnviado, setCodigoEnviado] = useState(false);
+  const [codigoVerificado, setCodigoVerificado] = useState(false);
 
   const [novaSenha, setNovaSenha] = useState("");
-  const [
-    confirmarNovaSenha,
-    setConfirmarNovaSenha,
-  ] = useState("");
+  const [confirmarNovaSenha, setConfirmarNovaSenha] =
+    useState("");
 
   const [erro, setErro] = useState("");
   const [sucesso, setSucesso] = useState("");
@@ -92,6 +90,9 @@ export default function Login() {
     setMostrarEsqueciSenha,
   ] = useState(false);
 
+  const [senhaRedefinida, setSenhaRedefinida] =
+    useState(false);
+
   const isLogin = mode === "login";
   const isRedefinir = mode === "redefinir";
 
@@ -103,15 +104,10 @@ export default function Login() {
 
   function handleButtonMove(event) {
     const button = event.currentTarget;
+    const rect = button.getBoundingClientRect();
 
-    const rect =
-      button.getBoundingClientRect();
-
-    const x =
-      event.clientX - rect.left;
-
-    const y =
-      event.clientY - rect.top;
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
 
     button.style.setProperty(
       "--mouse-x",
@@ -137,9 +133,7 @@ export default function Login() {
 
     const ctx = gsap.context(() => {
       const columns =
-        page.querySelectorAll(
-          ".music-column"
-        );
+        page.querySelectorAll(".music-column");
 
       columns.forEach(
         (column, columnIndex) => {
@@ -152,15 +146,14 @@ export default function Login() {
             opacity: 0,
           });
 
-          const initialHeight =
-            Math.floor(
-              2 +
-                Math.random() *
-                  Math.max(
-                    1,
-                    pixels.length - 2
-                  )
-            );
+          const initialHeight = Math.floor(
+            2 +
+              Math.random() *
+                Math.max(
+                  1,
+                  pixels.length - 2
+                )
+          );
 
           for (
             let i = 0;
@@ -185,15 +178,14 @@ export default function Login() {
           }
 
           const animate = () => {
-            const height =
-              Math.floor(
-                2 +
-                  Math.random() *
-                    Math.max(
-                      1,
-                      pixels.length - 1
-                    )
-              );
+            const height = Math.floor(
+              2 +
+                Math.random() *
+                  Math.max(
+                    1,
+                    pixels.length - 1
+                  )
+            );
 
             pixels.forEach(
               (pixel, index) => {
@@ -347,13 +339,6 @@ export default function Login() {
 
     if (!panel) return;
 
-    /*
-      O React já atualizou a classe
-      is-login / is-cadastro.
-
-      Só agora removemos o transform
-      aplicado pelo GSAP.
-    */
     gsap.set(panel, {
       clearProps: "transform",
     });
@@ -361,7 +346,7 @@ export default function Login() {
 
   /*
   ============================================================
-  ELEMENTOS ANIMÁVEIS DO FORMULÁRIO
+  ELEMENTOS ANIMÁVEIS
   ============================================================
   */
 
@@ -371,6 +356,55 @@ export default function Login() {
     return page.querySelectorAll(
       ".form-title, .form-input, .form-feedback, .login-button, .bottom-link"
     );
+  }
+
+  /*
+  ============================================================
+  LIMPAR RECUPERAÇÃO
+  ============================================================
+  */
+
+  function limparRecuperacao() {
+    setCodigo("");
+    setCodigoEnviado(false);
+    setCodigoVerificado(false);
+    setNovaSenha("");
+    setConfirmarNovaSenha("");
+    setSenhaRedefinida(false);
+  }
+
+  /*
+  ============================================================
+  VOLTAR PARA LOGIN
+  ============================================================
+  */
+
+  function voltarParaLogin() {
+    setNome("");
+    setConfirmarSenha("");
+
+    setCodigo("");
+    setCodigoEnviado(false);
+    setCodigoVerificado(false);
+
+    setNovaSenha("");
+    setConfirmarNovaSenha("");
+
+    setMostrarEsqueciSenha(false);
+
+    setSenhaRedefinida(false);
+
+    setErro("");
+    setSucesso("");
+
+    /*
+      IMPORTANTE:
+      NÃO limpamos email nem senha.
+      Assim eles continuam preenchidos
+      quando o usuário voltar para o login.
+    */
+
+    changeMode("login");
   }
 
   /*
@@ -418,6 +452,10 @@ export default function Login() {
     setSucesso("");
     setMostrarEsqueciSenha(false);
 
+    if (newMode !== "redefinir") {
+      setSenhaRedefinida(false);
+    }
+
     animationRef.current = true;
 
     const goingToLogin =
@@ -457,12 +495,6 @@ export default function Login() {
       },
     });
 
-    /*
-    ------------------------------------------------------------
-    1. Esconde conteúdo do painel
-    ------------------------------------------------------------
-    */
-
     tl.to(
       panelContent,
       {
@@ -472,12 +504,6 @@ export default function Login() {
         ease: "power2.in",
       }
     );
-
-    /*
-    ------------------------------------------------------------
-    2. Esconde formulário atual
-    ------------------------------------------------------------
-    */
 
     tl.to(
       currentElements,
@@ -491,24 +517,12 @@ export default function Login() {
       "<"
     );
 
-    /*
-    ------------------------------------------------------------
-    3. Calcula deslocamento do painel
-    ------------------------------------------------------------
-    */
-
     const travel =
       direction === 1
         ? cardRect.width -
           panelRect.width -
           currentPanelLeft
         : -currentPanelLeft;
-
-    /*
-    ------------------------------------------------------------
-    4. Move o painel
-    ------------------------------------------------------------
-    */
 
     tl.to(
       panel,
@@ -520,22 +534,9 @@ export default function Login() {
       "-=0.01"
     );
 
-    /*
-    ------------------------------------------------------------
-    5. MUITO IMPORTANTE:
-       troca o modo ANTES de limpar o transform.
-    ------------------------------------------------------------
-    */
-
     tl.add(() => {
       setMode(newMode);
     });
-
-    /*
-    ------------------------------------------------------------
-    6. Espera o React atualizar o DOM.
-    ------------------------------------------------------------
-    */
 
     tl.call(() => {
       requestAnimationFrame(() => {
@@ -557,12 +558,6 @@ export default function Login() {
         });
       });
     });
-
-    /*
-    ------------------------------------------------------------
-    7. Mostra novamente o conteúdo do painel
-    ------------------------------------------------------------
-    */
 
     tl.to(
       panelContent,
@@ -586,6 +581,26 @@ export default function Login() {
 
     setErro("");
     setSucesso("");
+
+    /*
+    ------------------------------------------------------------
+    VOLTAR PARA LOGIN
+    ------------------------------------------------------------
+    */
+
+    if (
+      mode === "redefinir" &&
+      senhaRedefinida
+    ) {
+      voltarParaLogin();
+      return;
+    }
+
+    /*
+    ------------------------------------------------------------
+    CADASTRO
+    ------------------------------------------------------------
+    */
 
     if (mode === "cadastro") {
       if (senha !== confirmarSenha) {
@@ -624,6 +639,10 @@ export default function Login() {
           return;
         }
 
+        setNome("");
+        setSenha("");
+        setConfirmarSenha("");
+
         changeMode("login");
       } catch (err) {
         console.error(err);
@@ -632,7 +651,140 @@ export default function Login() {
           "Não foi possível conectar ao servidor."
         );
       }
-    } else if (mode === "redefinir") {
+
+      return;
+    }
+
+    /*
+    ------------------------------------------------------------
+    RECUPERAÇÃO / REDEFINIÇÃO
+    ------------------------------------------------------------
+    */
+
+    if (mode === "redefinir") {
+      /*
+      ----------------------------------------------------------
+      GERAR CÓDIGO
+      ----------------------------------------------------------
+      */
+
+      if (!codigoEnviado) {
+        if (!email) {
+          setErro(
+            "Informe seu email."
+          );
+          return;
+        }
+
+        try {
+          const res = await fetch(
+            "http://localhost:3001/solicitar-codigo",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json",
+              },
+
+              body: JSON.stringify({
+                email,
+              }),
+            }
+          );
+
+          const data =
+            await res.json();
+
+          if (!res.ok) {
+            setErro(
+              data.erro ||
+                "Não foi possível gerar o código."
+            );
+            return;
+          }
+
+          setCodigoEnviado(true);
+
+          setSucesso(
+            "Código gerado! Verifique o terminal do servidor."
+          );
+        } catch (err) {
+          console.error(err);
+
+          setErro(
+            "Não foi possível conectar ao servidor."
+          );
+        }
+
+        return;
+      }
+
+      /*
+      ----------------------------------------------------------
+      VERIFICAR CÓDIGO
+      ----------------------------------------------------------
+      */
+
+      if (!codigoVerificado) {
+        if (!codigo) {
+          setErro(
+            "Informe o código de recuperação."
+          );
+          return;
+        }
+
+        try {
+          const res = await fetch(
+            "http://localhost:3001/verificar-codigo",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json",
+              },
+
+              body: JSON.stringify({
+                email,
+                codigo,
+              }),
+            }
+          );
+
+          const data =
+            await res.json();
+
+          if (!res.ok) {
+            setErro(
+              data.erro ||
+                "Código inválido."
+            );
+            return;
+          }
+
+          setCodigoVerificado(true);
+
+          setSucesso(
+            "Código confirmado! Agora crie sua nova senha."
+          );
+        } catch (err) {
+          console.error(err);
+
+          setErro(
+            "Não foi possível conectar ao servidor."
+          );
+        }
+
+        return;
+      }
+
+      /*
+      ----------------------------------------------------------
+      REDEFINIR SENHA
+      ----------------------------------------------------------
+      */
+
       if (
         novaSenha !==
         confirmarNovaSenha
@@ -656,6 +808,7 @@ export default function Login() {
 
             body: JSON.stringify({
               email,
+              codigo,
               novaSenha,
             }),
           }
@@ -671,12 +824,22 @@ export default function Login() {
           return;
         }
 
-        setSucesso(
-          "Senha redefinida com sucesso! Você já pode fazer login."
-        );
+        /*
+        --------------------------------------------------------
+        GUARDA A NOVA SENHA PARA O LOGIN
+        --------------------------------------------------------
+        */
+
+        setSenha(novaSenha);
 
         setNovaSenha("");
         setConfirmarNovaSenha("");
+
+        setSenhaRedefinida(true);
+
+        setSucesso(
+          "Senha redefinida com sucesso! Agora você pode voltar para o login."
+        );
       } catch (err) {
         console.error(err);
 
@@ -684,71 +847,83 @@ export default function Login() {
           "Não foi possível conectar ao servidor."
         );
       }
-    } else {
-      try {
-        const res = await fetch(
-          "http://localhost:3001/login",
-          {
-            method: "POST",
 
-            headers: {
-              "Content-Type":
-                "application/json",
-            },
+      return;
+    }
 
-            body: JSON.stringify({
-              email,
-              senha,
-            }),
-          }
-        );
+    /*
+    ------------------------------------------------------------
+    LOGIN
+    ------------------------------------------------------------
+    */
 
-        const data = await res.json();
+    try {
+      const res = await fetch(
+        "http://localhost:3001/login",
+        {
+          method: "POST",
 
-        if (!res.ok) {
-          setErro(
-            data.erro ||
-              "Email ou senha inválidos."
-          );
-          return;
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+
+          body: JSON.stringify({
+            email,
+            senha,
+          }),
         }
+      );
 
-        salvarUsuarioLogado({
-          nome: data.nome,
-          tipo: data.tipo,
-          email,
-          token: data.token,
+      const data = await res.json();
+
+      if (!res.ok) {
+        setErro(
+          data.erro ||
+            "Email ou senha inválidos."
+        );
+        return;
+      }
+
+      salvarUsuarioLogado({
+        nome: data.nome,
+        tipo: data.tipo,
+        email,
+        token: data.token,
+      });
+
+      localStorage.setItem(
+        "token",
+        data.token
+      );
+
+      if (
+        data.tipo ===
+        "matematico"
+      ) {
+        navigate("/mat", {
+          state: {
+            aba: "notas",
+          },
         });
-        localStorage.setItem("token", data.token);
-
-        if (
-          data.tipo ===
-          "matematico"
-        ) {
-          navigate("/mat", {
-            state: {
-              aba: "notas",
-            },
-          });
-        } else if (
-          data.tipo ===
-          "organizador"
-        ) {
-          navigate(
-            "/adm/inicioadm"
-          );
-        } else {
-          navigate(
-            "/usuario/home"
-          );
-        }
-      } catch (err) {
-        console.error(err);
-
-        setErro(
-          "Não foi possível conectar ao servidor."
+      } else if (
+        data.tipo ===
+        "organizador"
+      ) {
+        navigate(
+          "/adm/inicioadm"
+        );
+      } else {
+        navigate(
+          "/usuario/home"
         );
       }
+    } catch (err) {
+      console.error(err);
+
+      setErro(
+        "Não foi possível conectar ao servidor."
+      );
     }
   }
 
@@ -944,6 +1119,7 @@ export default function Login() {
                   handleSubmit
                 }
               >
+
                 {mode === "cadastro" && (
                   <InputWrapper className="form-input">
                     <InputLabel>
@@ -962,6 +1138,12 @@ export default function Login() {
                   </InputWrapper>
                 )}
 
+                {/*
+                ------------------------------------------------
+                EMAIL
+                ------------------------------------------------
+                */}
+
                 <InputWrapper className="form-input">
                   <InputLabel>
                     Email
@@ -977,6 +1159,12 @@ export default function Login() {
                     }
                   />
                 </InputWrapper>
+
+                {/*
+                ------------------------------------------------
+                SENHA LOGIN
+                ------------------------------------------------
+                */}
 
                 {mode !==
                   "redefinir" &&
@@ -1010,6 +1198,12 @@ export default function Login() {
                     }
                   )}
 
+                {/*
+                ------------------------------------------------
+                ESQUECI MINHA SENHA
+                ------------------------------------------------
+                */}
+
                 {mode === "login" &&
                   mostrarEsqueciSenha && (
                     <ForgotPassword
@@ -1028,6 +1222,12 @@ export default function Login() {
                     </ForgotPassword>
                   )}
 
+                {/*
+                ------------------------------------------------
+                CONFIRMAR SENHA CADASTRO
+                ------------------------------------------------
+                */}
+
                 {mode ===
                   "cadastro" &&
                   renderPassword(
@@ -1038,26 +1238,66 @@ export default function Login() {
                     setMostrarConfirmarSenha
                   )}
 
-                {mode ===
-                  "redefinir" && (
-                  <>
-                    {renderPassword(
-                      "Nova senha",
-                      novaSenha,
-                      setNovaSenha,
-                      mostrarNovaSenha,
-                      setMostrarNovaSenha
-                    )}
+                {/*
+                ------------------------------------------------
+                RECUPERAÇÃO
+                ------------------------------------------------
+                */}
 
-                    {renderPassword(
-                      "Confirmar nova senha",
-                      confirmarNovaSenha,
-                      setConfirmarNovaSenha,
-                      mostrarConfirmarNovaSenha,
-                      setMostrarConfirmarNovaSenha
-                    )}
-                  </>
-                )}
+                {mode ===
+                  "redefinir" &&
+                  !senhaRedefinida && (
+                    <>
+                      {codigoEnviado && (
+                        <InputWrapper className="form-input">
+                          <InputLabel>
+                            Código de recuperação
+                          </InputLabel>
+
+                          <Input
+                            type="text"
+                            inputMode="numeric"
+                            maxLength={6}
+                            value={codigo}
+                            onChange={(e) =>
+                              setCodigo(
+                                e.target.value.replace(
+                                  /\D/g,
+                                  ""
+                                )
+                              )
+                            }
+                          />
+                        </InputWrapper>
+                      )}
+
+                      {codigoVerificado && (
+                        <>
+                          {renderPassword(
+                            "Nova senha",
+                            novaSenha,
+                            setNovaSenha,
+                            mostrarNovaSenha,
+                            setMostrarNovaSenha
+                          )}
+
+                          {renderPassword(
+                            "Confirmar nova senha",
+                            confirmarNovaSenha,
+                            setConfirmarNovaSenha,
+                            mostrarConfirmarNovaSenha,
+                            setMostrarConfirmarNovaSenha
+                          )}
+                        </>
+                      )}
+                    </>
+                  )}
+
+                {/*
+                ------------------------------------------------
+                MENSAGENS
+                ------------------------------------------------
+                */}
 
                 {erro && (
                   <ErrorMessage className="form-feedback">
@@ -1071,6 +1311,12 @@ export default function Login() {
                   </SuccessMessage>
                 )}
 
+                {/*
+                ------------------------------------------------
+                BOTÃO
+                ------------------------------------------------
+                */}
+
                 <Button
                   type="submit"
                   className="login-button"
@@ -1079,6 +1325,7 @@ export default function Login() {
                   }
                 >
                   <span className="button-content">
+
                     {mode === "login" &&
                       "Entrar"}
 
@@ -1087,9 +1334,31 @@ export default function Login() {
 
                     {mode ===
                       "redefinir" &&
+                      !senhaRedefinida &&
+                      !codigoEnviado &&
+                      "Gerar código"}
+
+                    {mode ===
+                      "redefinir" &&
+                      !senhaRedefinida &&
+                      codigoEnviado &&
+                      !codigoVerificado &&
+                      "Verificar código"}
+
+                    {mode ===
+                      "redefinir" &&
+                      !senhaRedefinida &&
+                      codigoVerificado &&
                       "Redefinir senha"}
+
+                    {mode ===
+                      "redefinir" &&
+                      senhaRedefinida &&
+                      "Voltar para login"}
+
                   </span>
                 </Button>
+
               </Form>
 
             </FormContent>
@@ -1099,4 +1368,3 @@ export default function Login() {
     </>
   );
 }
-
