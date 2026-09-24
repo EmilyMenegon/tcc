@@ -33,6 +33,7 @@ export default function Layout() {
   const navRef = useRef(null);
   const indicatorRef = useRef(null);
   const hoveredItemRef = useRef(null);
+
   const links = [
     {
       label: "Início",
@@ -423,10 +424,6 @@ export default function Layout() {
   return (
     <Header ref={headerRef}>
 
-      {/* =================================================
-          NAVBAR
-      ================================================= */}
-
       <Navbar>
 
         {/* =================================================
@@ -453,11 +450,7 @@ export default function Layout() {
           onMouseLeave={handleNavMouseLeave}
         >
 
-          {/* INDICADOR PRETO */}
-
           <span ref={indicatorRef} />
-
-          {/* LINKS */}
 
           {links.map((link) => (
             <NavItem
@@ -475,7 +468,7 @@ export default function Layout() {
         </NavCenter>
 
         {/* =================================================
-            PERFIL - LADO DIREITO
+            PERFIL - LADO DIREITO / ESQUERDO NO MOBILE
         ================================================= */}
 
         <ProfileIcon

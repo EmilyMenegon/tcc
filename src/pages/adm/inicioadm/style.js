@@ -134,9 +134,9 @@ export const Header = styled.header`
 ============================================================ */
 
 export const Badge = styled.div`
-  width: fit-content;
+ width: fit-content;
 
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 
   padding: 9px 15px;
 
@@ -152,19 +152,21 @@ export const Badge = styled.div`
 
   color: #fff;
 
-  font-size: .72rem;
+ font-size: 1.0rem;
 
   font-weight: 800;
 
   letter-spacing: 1.2px;
 
   box-shadow:
-    0 8px 20px rgba(0, 0, 0, .12);
+    0 8px 20px
+    rgba(0, 0, 0, .12);
+
+  animation:
+    ${fadeUp} .7s ease both;
+
 
   @media (max-width: 768px) {
-    margin-left: auto;
-    margin-right: auto;
-
     font-size: .68rem;
   }
 `;
@@ -645,7 +647,7 @@ export const RegulationButton = styled.button`
   background:
     ${({ $variant }) =>
       $variant === "yellow"
-        ? "#f9be06"
+        ? "#ffdb53"
         : "#111"};
 
   color:

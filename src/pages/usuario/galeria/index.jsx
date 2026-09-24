@@ -9,6 +9,7 @@ import {
   FiImage,
   FiChevronLeft,
   FiChevronRight,
+  FiCalendar,
 } from "react-icons/fi";
 
 import {
@@ -29,6 +30,13 @@ import {
   ModalImage,
   CloseButton,
   NavButton,
+  YearsWrapper,
+  YearsContainer,
+  YearArrow,
+  YearCard,
+  YearIcon,
+  YearNumber,
+  YearDescription,
 } from "./style";
 
 
@@ -70,12 +78,93 @@ export default function Galeria() {
 
   const [carregando, setCarregando] = useState(true);
 
+  const [anoInicial, setAnoInicial] = useState(2026);
+  const [anoSelecionado, setAnoSelecionado] = useState(2026);
+
+  const anosVisiveis = Array.from(
+    { length: 3 },
+    (_, index) => anoInicial + index
+  );
+
+
+  /*
+  ==========================================
+  DESCOBRIR ANO DA FOTO
+  ==========================================
+  */
+
+  function descobrirAno(foto) {
+    const valor =
+      foto?.ano ??
+      foto?.created_at ??
+      foto?.createdAt ??
+      foto?.data_publicacao ??
+      foto?.dataPublicacao ??
+      foto?.data ??
+      foto?.date;
+
+    if (!valor) return 2026;
+
+    if (
+      typeof valor === "number" &&
+      valor >= 2000 &&
+      valor <= 2100
+    ) {
+      return valor;
+    }
+
+    const dataConvertida = new Date(valor);
+
+    if (!Number.isNaN(dataConvertida.getTime())) {
+      return dataConvertida.getFullYear();
+    }
+
+    const numero = Number(valor);
+
+    return numero >= 2000 && numero <= 2100 ? numero : 2026;
+  }
+
+
+  const fotosDoAno = fotos.filter(
+    (foto) => descobrirAno(foto) === anoSelecionado
+  );
 
   const imagemSelecionada =
     indiceAtual !== null &&
-    fotos[indiceAtual]
-      ? fotos[indiceAtual]
+    fotosDoAno[indiceAtual]
+      ? fotosDoAno[indiceAtual]
       : null;
+
+
+  function quantidadePorAno(ano) {
+    return fotos.filter((foto) => descobrirAno(foto) === ano).length;
+  }
+
+
+  /*
+  ==========================================
+  NAVEGAÇÃO ENTRE ANOS
+  ==========================================
+  */
+
+  function avancarAnos() {
+    const novoAno = anoInicial + 3;
+    setAnoInicial(novoAno);
+    setAnoSelecionado(novoAno);
+    setIndiceAtual(null);
+  }
+
+  function voltarAnos() {
+    const novoAno = Math.max(2026, anoInicial - 3);
+    setAnoInicial(novoAno);
+    setAnoSelecionado(novoAno);
+    setIndiceAtual(null);
+  }
+
+  function selecionarAno(ano) {
+    setAnoSelecionado(ano);
+    setIndiceAtual(null);
+  }
 
 
   /*
@@ -123,7 +212,7 @@ export default function Galeria() {
 
   function abrirImagem(foto) {
 
-    const indice = fotos.findIndex(
+    const indice = fotosDoAno.findIndex(
       (item) => item.id === foto.id
     );
 
@@ -155,7 +244,7 @@ export default function Galeria() {
 
     if (
       indiceAtual === null ||
-      fotos.length === 0
+      fotosDoAno.length === 0
     ) {
 
       return;
@@ -166,7 +255,7 @@ export default function Galeria() {
 
       if (atual === 0) {
 
-        return fotos.length - 1;
+        return fotosDoAno.length - 1;
 
       }
 
@@ -187,7 +276,7 @@ export default function Galeria() {
 
     if (
       indiceAtual === null ||
-      fotos.length === 0
+      fotosDoAno.length === 0
     ) {
 
       return;
@@ -197,7 +286,7 @@ export default function Galeria() {
     setIndiceAtual((atual) => {
 
       if (
-        atual === fotos.length - 1
+        atual === fotosDoAno.length - 1
       ) {
 
         return 0;
@@ -269,7 +358,7 @@ export default function Galeria() {
   }, [
     imagemSelecionada,
     indiceAtual,
-    fotos,
+    fotosDoAno,
   ]);
 
 
@@ -295,6 +384,67 @@ export default function Galeria() {
         </Header>
 
 
+        {/* ==========================================
+            CARDS DE ANOS
+        ========================================== */}
+
+        <YearsWrapper>
+          <YearArrow
+            type="button"
+            onClick={voltarAnos}
+            onMouseMove={handleButtonMouseMove}
+            disabled={anoInicial === 2026}
+            aria-label="Anos anteriores"
+          >
+            <span className="buttonContent">
+              <FiChevronLeft />
+            </span>
+          </YearArrow>
+
+          <YearsContainer>
+            {anosVisiveis.map((ano) => {
+              const quantidade = quantidadePorAno(ano);
+              const ativo = anoSelecionado === ano;
+
+              return (
+                <YearCard
+                  key={ano}
+                  type="button"
+                  $active={ativo}
+                  onClick={() => selecionarAno(ano)}
+                  onMouseMove={handleButtonMouseMove}
+                >
+                  <YearIcon $active={ativo}>
+                    <FiCalendar />
+                  </YearIcon>
+
+                  <YearNumber $active={ativo}>{ano}</YearNumber>
+
+                  <YearDescription $active={ativo}>
+                    {quantidade === 0
+                      ? "Nenhum arquivo"
+                      : quantidade === 1
+                      ? "1 arquivo"
+                      : `${quantidade} arquivos`}
+                  </YearDescription>
+                </YearCard>
+              );
+            })}
+          </YearsContainer>
+
+          <YearArrow
+            type="button"
+            onClick={avancarAnos}
+            onMouseMove={handleButtonMouseMove}
+            aria-label="Próximos anos"
+          >
+            <span className="buttonContent">
+              <FiChevronRight />
+            </span>
+          </YearArrow>
+        </YearsWrapper>
+
+
         <Gallery>
 
           {carregando ? (
@@ -311,7 +461,7 @@ export default function Galeria() {
 
             </EmptyState>
 
-          ) : fotos.length === 0 ? (
+          ) : fotosDoAno.length === 0 ? (
 
             <EmptyState>
 
@@ -324,14 +474,15 @@ export default function Galeria() {
               </EmptyTitle>
 
               <EmptyText>
-                No momento não existem arquivos publicados na galeria.
+                Não existem arquivos publicados na galeria em{" "}
+                {anoSelecionado}.
               </EmptyText>
 
             </EmptyState>
 
           ) : (
 
-            fotos.map((foto) => (
+            fotosDoAno.map((foto) => (
 
               <Card
                 key={foto.id}
@@ -447,7 +598,7 @@ export default function Galeria() {
                 BOTÃO ANTERIOR
             ====================================== */}
 
-            {fotos.length > 1 && (
+            {fotosDoAno.length > 1 && (
 
               <NavButton
 
@@ -533,7 +684,7 @@ export default function Galeria() {
                 BOTÃO PRÓXIMO
             ====================================== */}
 
-            {fotos.length > 1 && (
+            {fotosDoAno.length > 1 && (
 
               <NavButton
 

@@ -516,6 +516,9 @@ export const PageCard = styled.article`
     min-height:
       480px;
 
+    grid-template-columns:
+      1fr;
+
   }
 
 
@@ -802,6 +805,29 @@ export const PageSide = styled.div`
         25px
         22px
         20px;
+
+    }
+
+  }
+      @media (max-width: 700px) {
+
+    width:
+      100%;
+
+    grid-column:
+      1;
+
+    &.right-page {
+
+      display:
+        none;
+
+    }
+
+    &.turning-page {
+
+      display:
+        none;
 
     }
 

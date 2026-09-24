@@ -102,6 +102,8 @@ export const Navbar = styled.nav`
     padding: 6px 8px;
 
     gap: 8px;
+
+    justify-content: flex-start;
   }
 
   @media (max-width: 500px) {
@@ -136,10 +138,6 @@ export const Logo = styled(Link)`
 
   z-index: 5;
 
-  /*
-    Área interna maior para a imagem.
-    A imagem nunca ultrapassa a navbar.
-  */
   padding: 5px;
 
   img {
@@ -149,19 +147,10 @@ export const Logo = styled(Link)`
 
     display: block;
 
-    /*
-      Mostra a imagem INTEIRA.
-      Não corta nenhum lado.
-    */
     object-fit: contain;
 
     object-position: center;
 
-    /*
-      IMPORTANTE:
-      Não usar scale aqui, pois poderia
-      fazer a imagem ultrapassar o espaço.
-    */
     transform: none;
 
     max-width: 100%;
@@ -181,10 +170,6 @@ export const Logo = styled(Link)`
     border-radius: 15px;
   }
 
-  /* =================================================
-     1200px
-  ================================================= */
-
   @media (max-width: 1200px) {
     width: 165px;
 
@@ -192,10 +177,6 @@ export const Logo = styled(Link)`
 
     padding: 4px;
   }
-
-  /* =================================================
-     1000px
-  ================================================= */
 
   @media (max-width: 1000px) {
     width: 140px;
@@ -210,26 +191,9 @@ export const Logo = styled(Link)`
   ================================================= */
 
   @media (max-width: 700px) {
-    width: 105px;
-
-    height: 52px;
-
-    padding: 3px;
-  }
-
-  /* =================================================
-     MOBILE PEQUENO
-  ================================================= */
-
-  @media (max-width: 500px) {
-    width: 92px;
-
-    height: 48px;
-
-    padding: 2px;
+    display: none;
   }
 `;
-
 
 /* =====================================================
    NAV CENTER
@@ -257,10 +221,6 @@ export const NavCenter = styled.div`
   position: relative;
 
   isolation: isolate;
-
-  /* =================================================
-     INDICADOR PRETO
-  ================================================= */
 
   & > span {
     position: absolute;
@@ -309,10 +269,6 @@ export const NavCenter = styled.div`
 
     padding: 0 3px;
   }
-
-  /* =================================================
-     MOBILE
-  ================================================= */
 
   @media (max-width: 700px) {
     position: absolute;
@@ -541,10 +497,18 @@ export const ProfileIcon = styled(Link)`
     }
   }
 
+  /* =================================================
+     MOBILE
+  ================================================= */
+
   @media (max-width: 700px) {
     width: 52px;
 
     height: 52px;
+
+    margin-right: auto;
+
+    order: -1;
 
     svg {
       font-size: 19px;
