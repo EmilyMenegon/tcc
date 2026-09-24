@@ -1,12 +1,9 @@
-import styled, { css } from "styled-components";
 
+import styled, { css } from "styled-components";
 
 /*
 ==========================================
 EFEITO DOS BOTÕES
-
-A bolinha nasce exatamente na posição
-do cursor.
 ==========================================
 */
 
@@ -18,18 +15,9 @@ const ButtonEffect = css`
 
   isolation: isolate;
 
-  /*
-  Posição inicial do cursor.
-  */
-
   --mouse-x: 50%;
-
   --mouse-y: 50%;
 
-
-  /*
-  CÍRCULO DA ANIMAÇÃO
-  */
 
   &::before {
 
@@ -49,20 +37,9 @@ const ButtonEffect = css`
 
     background: #ffdb53;
 
-    /*
-    O círculo começa pequeno.
-    */
-
     transform:
       translate(-50%, -50%)
       scale(0);
-
-    /*
-    A posição acompanha o mouse
-    instantaneamente.
-
-    A expansão é animada.
-    */
 
     transition:
       transform 0.5s
@@ -80,11 +57,6 @@ const ButtonEffect = css`
   }
 
 
-  /*
-  Quando o mouse está dentro do botão,
-  a bolinha cresce.
-  */
-
   &:hover::before {
 
     transform:
@@ -93,11 +65,6 @@ const ButtonEffect = css`
 
   }
 
-
-  /*
-  Texto e ícones ficam acima
-  da animação.
-  */
 
   svg,
   span {
@@ -214,6 +181,7 @@ export const Header = styled.header`
 
 
 export const Title = styled.h1`
+
   margin: 0 0 14px;
 
   color: #831614;
@@ -231,7 +199,9 @@ export const Title = styled.h1`
 
   line-height: 1.05;
 
+
   @media (max-width: 768px) {
+
     font-size:
       clamp(
         2.5rem,
@@ -240,14 +210,21 @@ export const Title = styled.h1`
       );
 
     letter-spacing: -1.5px;
+
   }
+
 
   @media (max-width: 480px) {
+
     font-size: 2.3rem;
+
   }
+
 `;
 
+
 export const Subtitle = styled.p`
+
   width: 100%;
 
   max-width: 700px;
@@ -256,20 +233,34 @@ export const Subtitle = styled.p`
 
   color: #777;
 
-   font-size: 1.55rem;
+  font-size: 1.55rem;
 
   line-height: 1.6;
 
   text-align: center;
 
+
   @media (max-width: 768px) {
+
     font-size: 1.1rem;
+
   }
 
+
   @media (max-width: 480px) {
+
     font-size: 1rem;
+
   }
+
 `;
+
+
+/*
+==========================================
+GALERIA
+==========================================
+*/
 
 export const Gallery = styled.section`
 
@@ -378,7 +369,7 @@ export const Card = styled.article`
   &:focus-visible {
 
     outline:
-      3px solid #f9be06;
+      3px solid #ffdb53;
 
     outline-offset:
       4px;
@@ -505,7 +496,7 @@ export const EmptyIcon = styled.div`
       .15
     );
 
-  color: #f9be06;
+  color: #ffdb53;
 
   font-size: 30px;
 
@@ -761,7 +752,7 @@ export const CloseButton = styled.button`
 
   &:hover {
 
-    background: #f9be06;
+    background: #ffdb53;
 
     color: #000000;
 
@@ -863,7 +854,7 @@ export const NavButton = styled.button`
 
   &:hover {
 
-    background: #f9be06;
+    background: #ffdb53;
 
     color: #000000;
 
@@ -895,6 +886,737 @@ export const NavButton = styled.button`
       height: 20px;
 
     }
+
+  }
+
+`;
+
+
+/*
+==========================================
+CARDS DE ANOS
+==========================================
+*/
+
+export const YearsWrapper = styled.div`
+
+  width: 100%;
+
+  margin: 40px auto 60px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 16px;
+
+  box-sizing: border-box;
+
+
+  @media (max-width: 700px) {
+
+    gap: 8px;
+
+    margin:
+      30px auto
+      45px;
+
+  }
+
+
+  @media (max-width: 480px) {
+
+    gap: 6px;
+
+    margin:
+      25px auto
+      38px;
+
+  }
+
+`;
+
+
+/*
+==========================================
+CONTAINER DOS ANOS
+==========================================
+*/
+
+export const YearsContainer = styled.div`
+
+  width: auto;
+
+  max-width: 100%;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 14px;
+
+  min-width: 0;
+
+  box-sizing: border-box;
+
+
+  @media (max-width: 900px) {
+
+    gap: 10px;
+
+  }
+
+
+  @media (max-width: 700px) {
+
+    width: 100%;
+
+    gap: 6px;
+
+  }
+
+
+  @media (max-width: 480px) {
+
+    gap: 4px;
+
+  }
+
+`;
+
+
+/*
+==========================================
+SETA DOS ANOS
+==========================================
+*/
+
+export const YearArrow = styled.button`
+
+  position: relative;
+
+  width: 44px;
+
+  height: 44px;
+
+  flex-shrink: 0;
+
+  padding: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border: none;
+
+  border-radius: 12px;
+
+  background: #831614;
+
+  color: #ffffff;
+
+  cursor: pointer;
+
+  overflow: hidden;
+
+  isolation: isolate;
+
+  transition:
+    transform .25s
+      cubic-bezier(.22, 1, .36, 1),
+    box-shadow .25s ease,
+    opacity .2s ease;
+
+
+  &::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: var(--mouse-x, 50%);
+
+    top: var(--mouse-y, 50%);
+
+    width: 18px;
+
+    height: 18px;
+
+    border-radius: 50%;
+
+    background: #f9be06;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    transition:
+      transform .55s
+        cubic-bezier(.16, 1, .3, 1);
+
+    z-index: -1;
+
+    pointer-events: none;
+
+  }
+
+
+  svg {
+
+    position: relative;
+
+    z-index: 2;
+
+    width: 20px;
+
+    height: 20px;
+
+    stroke-width: 2.5;
+
+  }
+
+
+  &:hover:not(:disabled) {
+
+    color: #111111;
+
+    transform:
+      translateY(-2px);
+
+    box-shadow:
+      0 8px 18px
+        rgba(131, 22, 20, .2);
+
+
+    &::before {
+
+      transform:
+        translate(-50%, -50%)
+        scale(8);
+
+    }
+
+  }
+
+
+  &:active:not(:disabled) {
+
+    transform: scale(.94);
+
+  }
+
+
+  &:disabled {
+
+    opacity: .25;
+
+    cursor: not-allowed;
+
+    box-shadow: none;
+
+  }
+
+
+  &:focus-visible {
+
+    outline:
+      2px solid #f9be06;
+
+    outline-offset: 3px;
+
+  }
+
+
+  @media (max-width: 700px) {
+
+    width: 34px;
+
+    height: 42px;
+
+    border-radius: 10px;
+
+
+    svg {
+
+      width: 17px;
+
+      height: 17px;
+
+    }
+
+  }
+
+
+  @media (max-width: 480px) {
+
+    width: 30px;
+
+    height: 38px;
+
+    border-radius: 9px;
+
+
+    svg {
+
+      width: 16px;
+
+      height: 16px;
+
+    }
+
+  }
+
+
+  @media (max-width: 380px) {
+
+    width: 27px;
+
+    height: 36px;
+
+
+    svg {
+
+      width: 15px;
+
+      height: 15px;
+
+    }
+
+  }
+
+`;
+
+
+/*
+==========================================
+YEAR CARD
+==========================================
+*/
+
+export const YearCard = styled.button`
+
+  position: relative;
+
+  width: 230px;
+
+  height: 155px;
+
+  flex: 1 1 0;
+
+  max-width: 230px;
+
+  min-width: 0;
+
+  padding: 20px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 12px;
+
+  box-sizing: border-box;
+
+  border:
+    2px solid
+      ${({ $active }) =>
+        $active
+          ? "#831614"
+          : "#eeeeee"};
+
+  border-radius: 22px;
+
+  background:
+    ${({ $active }) =>
+      $active
+        ? "#831614"
+        : "#ffffff"};
+
+  color:
+    ${({ $active }) =>
+      $active
+        ? "#ffffff"
+        : "#111111"};
+
+  font-family: inherit;
+
+  cursor: pointer;
+
+  overflow: hidden;
+
+  isolation: isolate;
+
+  transition:
+    transform .3s
+      cubic-bezier(.22, 1, .36, 1),
+    border-color .25s ease,
+    background .25s ease,
+    box-shadow .3s ease;
+
+
+  &::before {
+
+    content: "";
+
+    position: absolute;
+
+    left: var(--mouse-x, 50%);
+
+    top: var(--mouse-y, 50%);
+
+    width: 35px;
+
+    height: 35px;
+
+    border-radius: 50%;
+
+    background: #ffdb53;
+
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+
+    transition:
+      transform .65s
+        cubic-bezier(.16, 1, .3, 1);
+
+    z-index: -1;
+
+    pointer-events: none;
+
+  }
+
+
+  &:hover {
+
+    transform:
+      translateY(-8px);
+
+    border-color: #831614;
+
+    box-shadow:
+      0 18px 35px
+        rgba(131, 22, 20, .16);
+
+
+    &::before {
+
+      transform:
+        translate(-50%, -50%)
+        scale(11);
+
+    }
+
+  }
+
+
+  &:active {
+
+    transform:
+      translateY(-3px)
+      scale(.98);
+
+  }
+
+
+  &:focus-visible {
+
+    outline:
+      3px solid #f9be06;
+
+    outline-offset: 4px;
+
+  }
+
+
+  @media (max-width: 900px) {
+
+    width: 200px;
+
+    height: 140px;
+
+    padding: 17px;
+
+  }
+
+
+  /*
+  ==========================================
+  TABLET / MOBILE
+  ==========================================
+  */
+
+  @media (max-width: 700px) {
+
+    width: 100%;
+
+    max-width: none;
+
+    height: 115px;
+
+    padding: 10px 6px;
+
+    border-radius: 17px;
+
+    gap: 7px;
+
+  }
+
+
+  @media (max-width: 480px) {
+
+    height: 100px;
+
+    padding: 8px 4px;
+
+    border-radius: 15px;
+
+    gap: 5px;
+
+  }
+
+
+  @media (max-width: 380px) {
+
+    height: 90px;
+
+    padding: 6px 3px;
+
+    border-radius: 13px;
+
+    gap: 4px;
+
+  }
+
+`;
+
+
+/*
+==========================================
+YEAR ICON
+==========================================
+*/
+
+export const YearIcon = styled.div`
+
+  width: 48px;
+
+  height: 48px;
+
+  flex-shrink: 0;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    ${({ $active }) =>
+      $active
+        ? "#ffdb53"
+        : "rgba(249, 190, 6, .22)"};
+
+  color: #831614;
+
+  font-size: 22px;
+
+  transition:
+    transform .3s ease,
+    background .25s ease;
+
+
+  ${YearCard}:hover & {
+
+    transform:
+      scale(1.12)
+      rotate(2deg);
+
+  }
+
+
+  @media (max-width: 900px) {
+
+    width: 43px;
+
+    height: 43px;
+
+    font-size: 20px;
+
+  }
+
+
+  @media (max-width: 700px) {
+
+    width: 34px;
+
+    height: 34px;
+
+    font-size: 16px;
+
+  }
+
+
+  @media (max-width: 480px) {
+
+    width: 30px;
+
+    height: 30px;
+
+    font-size: 14px;
+
+  }
+
+
+  @media (max-width: 380px) {
+
+    width: 27px;
+
+    height: 27px;
+
+    font-size: 13px;
+
+  }
+
+`;
+
+
+/*
+==========================================
+YEAR NUMBER
+==========================================
+*/
+
+export const YearNumber = styled.strong`
+
+  position: relative;
+
+  z-index: 2;
+
+  color:
+    ${({ $active }) =>
+      $active
+        ? "#ffffff"
+        : "#831614"};
+
+  font-size: 2rem;
+
+  font-weight: 850;
+
+  line-height: 1;
+
+  transition:
+    color .25s ease,
+    transform .3s ease;
+
+
+  ${YearCard}:hover & {
+
+    color: #111111;
+
+    transform: scale(1.05);
+
+  }
+
+
+  @media (max-width: 900px) {
+
+    font-size: 1.8rem;
+
+  }
+
+
+  @media (max-width: 700px) {
+
+    font-size: 1.35rem;
+
+  }
+
+
+  @media (max-width: 480px) {
+
+    font-size: 1.15rem;
+
+  }
+
+
+  @media (max-width: 380px) {
+
+    font-size: 1rem;
+
+  }
+
+`;
+
+
+/*
+==========================================
+YEAR DESCRIPTION
+==========================================
+*/
+
+export const YearDescription = styled.span`
+
+  position: relative;
+
+  z-index: 2;
+
+  color:
+    ${({ $active }) =>
+      $active
+        ? "rgba(255, 255, 255, .72)"
+        : "#999999"};
+
+  font-size: 10px;
+
+  font-weight: 500;
+
+  line-height: 1.2;
+
+  text-align: center;
+
+  white-space: nowrap;
+
+  transition:
+    color .25s ease;
+
+
+  ${YearCard}:hover & {
+
+    color: #5e4900;
+
+  }
+
+
+  @media (max-width: 700px) {
+
+    font-size: 8px;
+
+  }
+
+
+  @media (max-width: 480px) {
+
+    font-size: 7px;
+
+  }
+
+
+  @media (max-width: 380px) {
+
+    font-size: 6.5px;
 
   }
 

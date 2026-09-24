@@ -216,13 +216,13 @@ export const Buttons = styled.div`
 
 export const PrimaryButton = styled.button`
   position: relative;
-  min-height: 64px;
-  padding: 18px 32px;
+  min-height: 76px;
+  padding: 22px 42px;
   border: none;
-  border-radius: 12px;
+  border-radius: 14px;
   background: #ffdb53;
   color: #000;
-  font-size: 1rem;
+  font-size: 1.15rem;
   font-weight: 700;
   cursor: pointer;
   overflow: hidden;

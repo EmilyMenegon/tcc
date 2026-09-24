@@ -46,7 +46,6 @@ export const Header = styled.header`
   }
 `;
 
-
 // =========================================================
 // NAVBAR
 // =========================================================
@@ -62,7 +61,6 @@ export const Navbar = styled.nav`
 
   display: flex;
 
-  
   font-family:
     "Poppins",
     sans-serif;
@@ -168,6 +166,9 @@ export const Navbar = styled.nav`
   }
 `;
 
+// =========================================================
+// LOGO
+// =========================================================
 
 export const Logo = styled(Link)`
   width: 190px;
@@ -222,9 +223,6 @@ export const Logo = styled(Link)`
     border-radius: 15px;
   }
 
-  /* =================================================
-     1200px
-  ================================================= */
 
   @media (max-width: 1200px) {
     width: 165px;
@@ -234,9 +232,6 @@ export const Logo = styled(Link)`
     padding: 4px;
   }
 
-  /* =================================================
-     1000px
-  ================================================= */
 
   @media (max-width: 1000px) {
     width: 140px;
@@ -246,31 +241,15 @@ export const Logo = styled(Link)`
     padding: 4px;
   }
 
+
   /* =================================================
      MOBILE
   ================================================= */
 
   @media (max-width: 700px) {
-    width: 105px;
-
-    height: 52px;
-
-    padding: 3px;
-  }
-
-  /* =================================================
-     MOBILE PEQUENO
-  ================================================= */
-
-  @media (max-width: 500px) {
-    width: 92px;
-
-    height: 48px;
-
-    padding: 2px;
+    display: none;
   }
 `;
-
 
 // =========================================================
 // NAV CENTER
@@ -296,7 +275,6 @@ export const NavCenter = styled.div`
 
   box-sizing: border-box;
 
-  
   font-family:
     "Poppins",
     sans-serif;
@@ -447,7 +425,6 @@ export const NavCenter = styled.div`
   }
 `;
 
-
 // =========================================================
 // NAV ITEM
 // =========================================================
@@ -466,7 +443,6 @@ export const NavItem = styled(NavLink)`
 
   align-items: center;
 
-  
   font-family:
     "Poppins",
     sans-serif;
@@ -569,7 +545,6 @@ export const NavItem = styled(NavLink)`
     }
   }
 `;
-
 
 // =========================================================
 // PROFILE ICON
@@ -681,6 +656,10 @@ export const ProfileIcon = styled(Link)`
 
     height: 52px;
 
+    order: -1;
+
+    margin-right: auto;
+
     svg {
       font-size: 19px;
     }
@@ -697,7 +676,6 @@ export const ProfileIcon = styled(Link)`
     }
   }
 `;
-
 
 // =========================================================
 // PROFILE PHOTO
@@ -719,7 +697,6 @@ export const ProfilePhoto = styled.img`
   pointer-events: none;
 `;
 
-
 // =========================================================
 // MENU BUTTON
 // =========================================================
@@ -733,7 +710,6 @@ export const MenuButton = styled.button`
 
   flex-shrink: 0;
 
-  
   font-family:
     "Poppins",
     sans-serif;
