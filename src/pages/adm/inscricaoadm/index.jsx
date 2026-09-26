@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
-
 import { jsPDF } from "jspdf";
-
 import Layoutadm from "../../../components/layoutadm";
-
 import { getAuthHeaders } from "../../../utils/auth";
-
 import {
   FiEdit,
   FiTrash2,
@@ -19,7 +15,6 @@ import {
   FiChevronRight,
   FiCalendar,
 } from "react-icons/fi";
-
 import {
   Page,
   Content,
@@ -74,7 +69,6 @@ import {
   CancelButton,
   ConfirmButton,
   WarningBox,
-
   // CARDS DE ANOS
   YearsWrapper,
   YearsContainer,
@@ -87,30 +81,19 @@ import {
 
 export default function Inscricaoadm() {
   const [turno, setTurno] = useState("Todos");
-
   const [inscricoes, setInscricoes] = useState([]);
-
   const [carregando, setCarregando] = useState(true);
-
   const [erro, setErro] = useState("");
-
-  const [inscricaoEditando, setInscricaoEditando] =
-    useState(null);
-
-  const [inscricaoExcluir, setInscricaoExcluir] =
-    useState(null);
-
-  const [confirmacaoExclusao, setConfirmacaoExclusao] =
-    useState("");
+  const [inscricaoEditando, setInscricaoEditando] = useState(null);
+  const [inscricaoExcluir, setInscricaoExcluir] = useState(null);
+  const [confirmacaoExclusao, setConfirmacaoExclusao] = useState("");
 
   // =====================================================
   // ANO
   // =====================================================
 
   const [anoInicial, setAnoInicial] = useState(2026);
-
-  const [anoSelecionado, setAnoSelecionado] =
-    useState(2026);
+  const [anoSelecionado, setAnoSelecionado] = useState(2026);
 
   const anosVisiveis = Array.from(
     { length: 3 },
@@ -151,10 +134,7 @@ export default function Inscricaoadm() {
       // Caso venha como string "2026"
       const numero = Number(valor);
 
-      if (
-        numero >= 2000 &&
-        numero <= 2100
-      ) {
+      if (numero >= 2000 && numero <= 2100) {
         return numero;
       }
     }
@@ -169,25 +149,12 @@ export default function Inscricaoadm() {
 
   const handleButtonMouseMove = (e) => {
     const button = e.currentTarget;
+    const rect = button.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
 
-    const rect =
-      button.getBoundingClientRect();
-
-    const x =
-      e.clientX - rect.left;
-
-    const y =
-      e.clientY - rect.top;
-
-    button.style.setProperty(
-      "--mouse-x",
-      `${x}px`
-    );
-
-    button.style.setProperty(
-      "--mouse-y",
-      `${y}px`
-    );
+    button.style.setProperty("--mouse-x", `${x}px`);
+    button.style.setProperty("--mouse-y", `${y}px`);
   };
 
   // =====================================================
@@ -200,7 +167,6 @@ export default function Inscricaoadm() {
 
   function buscarInscricoes() {
     setCarregando(true);
-
     setErro("");
 
     fetch("http://localhost:3001/inscricoes", {
@@ -208,26 +174,17 @@ export default function Inscricaoadm() {
     })
       .then((res) => {
         if (!res.ok) {
-          throw new Error(
-            "Erro ao buscar inscrições."
-          );
+          throw new Error("Erro ao buscar inscrições.");
         }
 
         return res.json();
       })
       .then((data) => {
-        setInscricoes(
-          Array.isArray(data)
-            ? data
-            : []
-        );
+        setInscricoes(Array.isArray(data) ? data : []);
       })
       .catch((error) => {
         console.error(error);
-
-        setErro(
-          "Não foi possível carregar as inscrições."
-        );
+        setErro("Não foi possível carregar as inscrições.");
       })
       .finally(() => {
         setCarregando(false);
@@ -242,28 +199,20 @@ export default function Inscricaoadm() {
     const novoAno = anoInicial + 3;
 
     setAnoInicial(novoAno);
-
     setAnoSelecionado(novoAno);
-
     setTurno("Todos");
   }
 
   function voltarAnos() {
-    const novoAno = Math.max(
-      2026,
-      anoInicial - 3
-    );
+    const novoAno = Math.max(2026, anoInicial - 3);
 
     setAnoInicial(novoAno);
-
     setAnoSelecionado(novoAno);
-
     setTurno("Todos");
   }
 
   function selecionarAno(ano) {
     setAnoSelecionado(ano);
-
     setTurno("Todos");
   }
 
@@ -271,12 +220,9 @@ export default function Inscricaoadm() {
   // INSCRIÇÕES DO ANO SELECIONADO
   // =====================================================
 
-  const inscricoesDoAno =
-    inscricoes.filter(
-      (inscricao) =>
-        descobrirAno(inscricao) ===
-        anoSelecionado
-    );
+  const inscricoesDoAno = inscricoes.filter(
+    (inscricao) => descobrirAno(inscricao) === anoSelecionado
+  );
 
   // =====================================================
   // FILTRO POR TURNO
@@ -284,19 +230,15 @@ export default function Inscricaoadm() {
 
   const inscricoesFiltradas =
     turno === "Todos"
-      ? [...inscricoesDoAno].sort(
-          (a, b) =>
-            (a.nome_poeta || "").localeCompare(
-              b.nome_poeta || "",
-              "pt-BR",
-              {
-                sensitivity: "base",
-              }
-            )
+      ? [...inscricoesDoAno].sort((a, b) =>
+          (a.nome_poeta || "").localeCompare(
+            b.nome_poeta || "",
+            "pt-BR",
+            { sensitivity: "base" }
+          )
         )
       : inscricoesDoAno.filter(
-          (inscricao) =>
-            inscricao.turno === turno
+          (inscricao) => inscricao.turno === turno
         );
 
   // =====================================================
@@ -305,8 +247,7 @@ export default function Inscricaoadm() {
 
   function quantidadePorAno(ano) {
     return inscricoes.filter(
-      (inscricao) =>
-        descobrirAno(inscricao) === ano
+      (inscricao) => descobrirAno(inscricao) === ano
     ).length;
   }
 
@@ -314,55 +255,38 @@ export default function Inscricaoadm() {
   // ESTATÍSTICAS
   // =====================================================
 
-  const totalTodos =
-    inscricoesDoAno.length;
+  const totalTodos = inscricoesDoAno.length;
 
-  const totalManha =
-    inscricoesDoAno.filter(
-      (item) =>
-        item.turno === "Manhã"
-    ).length;
+  const totalManha = inscricoesDoAno.filter(
+    (item) => item.turno === "Manhã"
+  ).length;
 
-  const totalTarde =
-    inscricoesDoAno.filter(
-      (item) =>
-        item.turno === "Tarde"
-    ).length;
+  const totalTarde = inscricoesDoAno.filter(
+    (item) => item.turno === "Tarde"
+  ).length;
 
-  const totalNoite =
-    inscricoesDoAno.filter(
-      (item) =>
-        item.turno === "Noite"
-    ).length;
+  const totalNoite = inscricoesDoAno.filter(
+    (item) => item.turno === "Noite"
+  ).length;
 
   // =====================================================
   // GERAR PDF
   // =====================================================
 
   function baixarPDF() {
-    if (
-      !inscricoesFiltradas ||
-      inscricoesFiltradas.length === 0
-    ) {
-      setErro(
-        "Não existem alunos inscritos para gerar o PDF."
-      );
-
+    if (!inscricoesFiltradas || inscricoesFiltradas.length === 0) {
+      setErro("Não existem alunos inscritos para gerar o PDF.");
       return;
     }
 
     try {
-      const alunos =
-        [...inscricoesFiltradas].sort(
-          (a, b) =>
-            (a.nome_poeta || "").localeCompare(
-              b.nome_poeta || "",
-              "pt-BR",
-              {
-                sensitivity: "base",
-              }
-            )
-        );
+      const alunos = [...inscricoesFiltradas].sort((a, b) =>
+        (a.nome_poeta || "").localeCompare(
+          b.nome_poeta || "",
+          "pt-BR",
+          { sensitivity: "base" }
+        )
+      );
 
       const doc = new jsPDF({
         orientation: "landscape",
@@ -370,52 +294,24 @@ export default function Inscricaoadm() {
         format: "a4",
       });
 
-      const dataAtual =
-        new Date();
+      const dataAtual = new Date();
 
-      const dataFormatada =
-        dataAtual.toLocaleDateString(
-          "pt-BR"
-        );
+      const dataFormatada = dataAtual.toLocaleDateString("pt-BR");
 
-      const horaFormatada =
-        dataAtual.toLocaleTimeString(
-          "pt-BR",
-          {
-            hour: "2-digit",
-            minute: "2-digit",
-          }
-        );
+      const horaFormatada = dataAtual.toLocaleTimeString("pt-BR", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
 
       // =====================================================
       // CABEÇALHO
       // =====================================================
 
-      doc.setFillColor(
-        131,
-        22,
-        20
-      );
+      doc.setFillColor(131, 22, 20);
+      doc.rect(0, 0, 297, 35, "F");
 
-      doc.rect(
-        0,
-        0,
-        297,
-        35,
-        "F"
-      );
-
-      doc.setTextColor(
-        255,
-        255,
-        255
-      );
-
-      doc.setFont(
-        "helvetica",
-        "bold"
-      );
-
+      doc.setTextColor(255, 255, 255);
+      doc.setFont("helvetica", "bold");
       doc.setFontSize(20);
 
       doc.text(
@@ -424,11 +320,7 @@ export default function Inscricaoadm() {
         16
       );
 
-      doc.setFont(
-        "helvetica",
-        "normal"
-      );
-
+      doc.setFont("helvetica", "normal");
       doc.setFontSize(10);
 
       doc.text(
@@ -443,26 +335,15 @@ export default function Inscricaoadm() {
         `Gerado em ${dataFormatada} às ${horaFormatada}`,
         279,
         24,
-        {
-          align: "right",
-        }
+        { align: "right" }
       );
 
       // =====================================================
       // RESUMO
       // =====================================================
 
-      doc.setTextColor(
-        60,
-        60,
-        60
-      );
-
-      doc.setFont(
-        "helvetica",
-        "bold"
-      );
-
+      doc.setTextColor(60, 60, 60);
+      doc.setFont("helvetica", "bold");
       doc.setFontSize(12);
 
       doc.text(
@@ -476,7 +357,6 @@ export default function Inscricaoadm() {
       // =====================================================
 
       const margemEsquerda = 18;
-
       const larguraTotal = 261;
 
       const colunas = [
@@ -487,26 +367,22 @@ export default function Inscricaoadm() {
         },
         {
           titulo: "ALUNO",
-          x:
-            margemEsquerda + 12,
+          x: margemEsquerda + 12,
           largura: 85,
         },
         {
           titulo: "TURMA",
-          x:
-            margemEsquerda + 97,
+          x: margemEsquerda + 97,
           largura: 45,
         },
         {
           titulo: "CURSO",
-          x:
-            margemEsquerda + 142,
+          x: margemEsquerda + 142,
           largura: 65,
         },
         {
           titulo: "TURNO",
-          x:
-            margemEsquerda + 207,
+          x: margemEsquerda + 207,
           largura: 54,
         },
       ];
@@ -518,12 +394,7 @@ export default function Inscricaoadm() {
       // =====================================================
 
       const desenharCabecalho = () => {
-        doc.setFillColor(
-          131,
-          22,
-          20
-        );
-
+        doc.setFillColor(131, 22, 20);
         doc.rect(
           margemEsquerda,
           y,
@@ -532,28 +403,17 @@ export default function Inscricaoadm() {
           "F"
         );
 
-        doc.setTextColor(
-          255,
-          255,
-          255
-        );
-
-        doc.setFont(
-          "helvetica",
-          "bold"
-        );
-
+        doc.setTextColor(255, 255, 255);
+        doc.setFont("helvetica", "bold");
         doc.setFontSize(9);
 
-        colunas.forEach(
-          (coluna) => {
-            doc.text(
-              coluna.titulo,
-              coluna.x + 3,
-              y + 6.5
-            );
-          }
-        );
+        colunas.forEach((coluna) => {
+          doc.text(
+            coluna.titulo,
+            coluna.x + 3,
+            y + 6.5
+          );
+        });
 
         y += 10;
       };
@@ -564,125 +424,79 @@ export default function Inscricaoadm() {
       // ALUNOS
       // =====================================================
 
-      alunos.forEach(
-        (aluno, index) => {
-          if (y > 185) {
-            doc.addPage();
-
-            y = 18;
-
-            desenharCabecalho();
-          }
-
-          const alturaLinha = 11;
-
-          if (index % 2 === 0) {
-            doc.setFillColor(
-              253,
-              253,
-              253
-            );
-          } else {
-            doc.setFillColor(
-              255,
-              251,
-              237
-            );
-          }
-
-          doc.rect(
-            margemEsquerda,
-            y,
-            larguraTotal,
-            alturaLinha,
-            "F"
-          );
-
-          doc.setDrawColor(
-            230,
-            230,
-            230
-          );
-
-          doc.line(
-            margemEsquerda,
-            y + alturaLinha,
-            margemEsquerda +
-              larguraTotal,
-            y + alturaLinha
-          );
-
-          doc.setTextColor(
-            50,
-            50,
-            50
-          );
-
-          doc.setFont(
-            "helvetica",
-            "normal"
-          );
-
-          doc.setFontSize(8.5);
-
-          const nome =
-            aluno.nome_poeta ||
-            "-";
-
-          const turma =
-            aluno.turma ||
-            "-";
-
-          const curso =
-            aluno.curso ||
-            "-";
-
-          const turnoAluno =
-            aluno.turno ||
-            "-";
-
-          doc.text(
-            String(index + 1),
-            colunas[0].x + 3,
-            y + 7
-          );
-
-          doc.text(
-            nome.substring(
-              0,
-              48
-            ),
-            colunas[1].x + 3,
-            y + 7
-          );
-
-          doc.text(
-            turma.substring(
-              0,
-              25
-            ),
-            colunas[2].x + 3,
-            y + 7
-          );
-
-          doc.text(
-            curso.substring(
-              0,
-              35
-            ),
-            colunas[3].x + 3,
-            y + 7
-          );
-
-          doc.text(
-            turnoAluno,
-            colunas[4].x + 3,
-            y + 7
-          );
-
-          y += alturaLinha;
+      alunos.forEach((aluno, index) => {
+        if (y > 185) {
+          doc.addPage();
+          y = 18;
+          desenharCabecalho();
         }
-      );
+
+        const alturaLinha = 11;
+
+        if (index % 2 === 0) {
+          doc.setFillColor(253, 253, 253);
+        } else {
+          doc.setFillColor(255, 251, 237);
+        }
+
+        doc.rect(
+          margemEsquerda,
+          y,
+          larguraTotal,
+          alturaLinha,
+          "F"
+        );
+
+        doc.setDrawColor(230, 230, 230);
+
+        doc.line(
+          margemEsquerda,
+          y + alturaLinha,
+          margemEsquerda + larguraTotal,
+          y + alturaLinha
+        );
+
+        doc.setTextColor(50, 50, 50);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(8.5);
+
+        const nome = aluno.nome_poeta || "-";
+        const turma = aluno.turma || "-";
+        const curso = aluno.curso || "-";
+        const turnoAluno = aluno.turno || "-";
+
+        doc.text(
+          String(index + 1),
+          colunas[0].x + 3,
+          y + 7
+        );
+
+        doc.text(
+          nome.substring(0, 48),
+          colunas[1].x + 3,
+          y + 7
+        );
+
+        doc.text(
+          turma.substring(0, 25),
+          colunas[2].x + 3,
+          y + 7
+        );
+
+        doc.text(
+          curso.substring(0, 35),
+          colunas[3].x + 3,
+          y + 7
+        );
+
+        doc.text(
+          turnoAluno,
+          colunas[4].x + 3,
+          y + 7
+        );
+
+        y += alturaLinha;
+      });
 
       // =====================================================
       // RODAPÉ
@@ -698,18 +512,9 @@ export default function Inscricaoadm() {
       ) {
         doc.setPage(pagina);
 
-        doc.setFont(
-          "helvetica",
-          "normal"
-        );
-
+        doc.setFont("helvetica", "normal");
         doc.setFontSize(8);
-
-        doc.setTextColor(
-          130,
-          130,
-          130
-        );
+        doc.setTextColor(130, 130, 130);
 
         doc.text(
           "Sistema de organização do Slam",
@@ -721,9 +526,7 @@ export default function Inscricaoadm() {
           `Página ${pagina} de ${totalPaginas}`,
           279,
           202,
-          {
-            align: "right",
-          }
+          { align: "right" }
         );
       }
 
@@ -739,14 +542,9 @@ export default function Inscricaoadm() {
 
       doc.save(nomeArquivo);
     } catch (error) {
-      console.error(
-        "Erro ao gerar PDF:",
-        error
-      );
+      console.error("Erro ao gerar PDF:", error);
 
-      setErro(
-        "Não foi possível gerar o PDF."
-      );
+      setErro("Não foi possível gerar o PDF.");
     }
   }
 
@@ -771,25 +569,23 @@ export default function Inscricaoadm() {
         }
       );
 
-      const data =
-        await res.json();
+      const data = await res.json();
 
       if (!res.ok) {
         setErro(
           data.erro ||
-            "Erro ao excluir inscrição."
+          "Erro ao excluir inscrição."
         );
 
         return;
       }
 
-      setInscricoes(
-        (atual) =>
-          atual.filter(
-            (i) =>
-              i.id_inscricoes !==
-              inscricaoExcluir.id_inscricoes
-          )
+      setInscricoes((atual) =>
+        atual.filter(
+          (i) =>
+            i.id_inscricoes !==
+            inscricaoExcluir.id_inscricoes
+        )
       );
 
       fecharModalExclusao();
@@ -816,56 +612,44 @@ export default function Inscricaoadm() {
         `http://localhost:3001/inscricao/${inscricaoEditando.id_inscricoes}`,
         {
           method: "PUT",
-
           headers: {
-            "Content-Type":
-              "application/json",
-
+            "Content-Type": "application/json",
             ...getAuthHeaders(),
           },
-
           body: JSON.stringify({
             nome_poeta:
               inscricaoEditando.nome_poeta,
-
             turma:
               inscricaoEditando.turma,
-
             turno:
               inscricaoEditando.turno,
-
             curso:
               inscricaoEditando.curso,
           }),
         }
       );
 
-      const data =
-        await res.json();
+      const data = await res.json();
 
       if (!res.ok) {
         setErro(
           data.erro ||
-            "Erro ao salvar alterações."
+          "Erro ao salvar alterações."
         );
 
         return;
       }
 
-      setInscricoes(
-        (atual) =>
-          atual.map(
-            (i) =>
-              i.id_inscricoes ===
-              inscricaoEditando.id_inscricoes
-                ? inscricaoEditando
-                : i
-          )
+      setInscricoes((atual) =>
+        atual.map((i) =>
+          i.id_inscricoes ===
+          inscricaoEditando.id_inscricoes
+            ? inscricaoEditando
+            : i
+        )
       );
 
-      setInscricaoEditando(
-        null
-      );
+      setInscricaoEditando(null);
     } catch (err) {
       console.error(err);
 
@@ -880,13 +664,8 @@ export default function Inscricaoadm() {
   // =====================================================
 
   function fecharModalExclusao() {
-    setInscricaoExcluir(
-      null
-    );
-
-    setConfirmacaoExclusao(
-      ""
-    );
+    setInscricaoExcluir(null);
+    setConfirmacaoExclusao("");
   }
 
   function obterInicial(nome) {
@@ -900,9 +679,7 @@ export default function Inscricaoadm() {
       .toUpperCase();
   }
 
-  function abrirEdicao(
-    inscricao
-  ) {
+  function abrirEdicao(inscricao) {
     setErro("");
 
     setInscricaoEditando({
@@ -910,18 +687,18 @@ export default function Inscricaoadm() {
     });
   }
 
-  function abrirExclusao(
-    inscricao
-  ) {
+  function abrirExclusao(inscricao) {
+    if (inscricao.atribuido_evento) {
+      setErro(
+        `Não é possível excluir ${inscricao.nome_poeta} porque o poeta já está atribuído ao evento "${inscricao.evento_nome}".`
+      );
+
+      return;
+    }
+
     setErro("");
-
-    setInscricaoExcluir(
-      inscricao
-    );
-
-    setConfirmacaoExclusao(
-      ""
-    );
+    setInscricaoExcluir(inscricao);
+    setConfirmacaoExclusao("");
   }
 
   // =====================================================
@@ -940,9 +717,7 @@ export default function Inscricaoadm() {
             </Title>
 
             <Subtitle>
-              Gerencie as inscrições e
-              informações dos alunos
-              participantes.
+              Gerencie as inscrições e informações dos alunos participantes.
             </Subtitle>
           </TitleArea>
 
@@ -958,8 +733,7 @@ export default function Inscricaoadm() {
                 </StatNumber>
 
                 <StatLabel>
-                  Inscrições em{" "}
-                  {anoSelecionado}
+                  Inscrições em {anoSelecionado}
                 </StatLabel>
               </StatContent>
             </StatCard>
@@ -974,12 +748,8 @@ export default function Inscricaoadm() {
           <YearArrow
             type="button"
             onClick={voltarAnos}
-            onMouseMove={
-              handleButtonMouseMove
-            }
-            disabled={
-              anoInicial === 2026
-            }
+            onMouseMove={handleButtonMouseMove}
+            disabled={anoInicial === 2026}
             aria-label="Anos anteriores"
           >
             <span className="buttonContent">
@@ -988,74 +758,47 @@ export default function Inscricaoadm() {
           </YearArrow>
 
           <YearsContainer>
-            {anosVisiveis.map(
-              (ano) => {
-                const quantidade =
-                  quantidadePorAno(
-                    ano
-                  );
+            {anosVisiveis.map((ano) => {
+              const quantidade =
+                quantidadePorAno(ano);
 
-                const ativo =
-                  anoSelecionado ===
-                  ano;
+              const ativo =
+                anoSelecionado === ano;
 
-                return (
-                  <YearCard
-                    key={ano}
-                    type="button"
-                    $active={ativo}
-                    onClick={() =>
-                      selecionarAno(
-                        ano
-                      )
-                    }
-                    onMouseMove={
-                      handleButtonMouseMove
-                    }
-                  >
-                    <YearIcon
-                      $active={
-                        ativo
-                      }
-                    >
-                      <FiCalendar />
-                    </YearIcon>
+              return (
+                <YearCard
+                  key={ano}
+                  $active={ativo}
+                  onClick={() =>
+                    selecionarAno(ano)
+                  }
+                  onMouseMove={
+                    handleButtonMouseMove
+                  }
+                >
+                  <YearIcon $active={ativo}>
+                    <FiCalendar />
+                  </YearIcon>
 
-                    <YearNumber
-                      $active={
-                        ativo
-                      }
-                    >
-                      {ano}
-                    </YearNumber>
+                  <YearNumber $active={ativo}>
+                    {ano}
+                  </YearNumber>
 
-                    <YearDescription
-                      $active={
-                        ativo
-                      }
-                    >
-                      {quantidade ===
-                      0
-                        ? "Nenhuma inscrição"
-                        : quantidade ===
-                          1
-                        ? "1 inscrição"
-                        : `${quantidade} inscrições`}
-                    </YearDescription>
-                  </YearCard>
-                );
-              }
-            )}
+                  <YearDescription $active={ativo}>
+                    {quantidade}{" "}
+                    {quantidade === 1
+                      ? "inscrição"
+                      : "inscrições"}
+                  </YearDescription>
+                </YearCard>
+              );
+            })}
           </YearsContainer>
 
           <YearArrow
             type="button"
-            onClick={
-              avancarAnos
-            }
-            onMouseMove={
-              handleButtonMouseMove
-            }
+            onClick={avancarAnos}
+            onMouseMove={handleButtonMouseMove}
             aria-label="Próximos anos"
           >
             <span className="buttonContent">
@@ -1065,147 +808,102 @@ export default function Inscricaoadm() {
         </YearsWrapper>
 
         {/* =====================================================
-            FILTROS DE TURNO
+            FILTROS
         ===================================================== */}
 
         <FilterContainer>
-          {[
-            {
-              nome: "Todos",
-              quantidade:
-                totalTodos,
-            },
-            {
-              nome: "Manhã",
-              quantidade:
-                totalManha,
-            },
-            {
-              nome: "Tarde",
-              quantidade:
-                totalTarde,
-            },
-            {
-              nome: "Noite",
-              quantidade:
-                totalNoite,
-            },
-          ].map(
-            (item) => (
-              <FilterButton
-                key={item.nome}
-                $active={
-                  turno ===
-                  item.nome
-                }
-                onClick={() =>
-                  setTurno(
-                    item.nome
-                  )
-                }
-                onMouseMove={
-                  handleButtonMouseMove
-                }
-              >
-                <span>
-                  {item.nome}
-                </span>
+          <FilterButton
+            type="button"
+            $active={turno === "Todos"}
+            onClick={() => setTurno("Todos")}
+          >
+            Todos
+            <span>{totalTodos}</span>
+          </FilterButton>
 
-                <strong>
-                  {
-                    item.quantidade
-                  }
-                </strong>
-              </FilterButton>
-            )
-          )}
+          <FilterButton
+            type="button"
+            $active={turno === "Manhã"}
+            onClick={() => setTurno("Manhã")}
+          >
+            Manhã
+            <span>{totalManha}</span>
+          </FilterButton>
+
+          <FilterButton
+            type="button"
+            $active={turno === "Tarde"}
+            onClick={() => setTurno("Tarde")}
+          >
+            Tarde
+            <span>{totalTarde}</span>
+          </FilterButton>
+
+          <FilterButton
+            type="button"
+            $active={turno === "Noite"}
+            onClick={() => setTurno("Noite")}
+          >
+            Noite
+            <span>{totalNoite}</span>
+          </FilterButton>
         </FilterContainer>
 
         {erro && (
           <ErrorMessage>
-            <FiAlertTriangle />
-
-            <span>
-              {erro}
-            </span>
+            {erro}
           </ErrorMessage>
         )}
 
-        {carregando ? (
-          <LoadingState>
-            <Spinner />
+        {/* =====================================================
+            TABELA
+        ===================================================== */}
 
-            <span>
-              Carregando
-              inscrições...
-            </span>
-          </LoadingState>
-        ) : (
-          <TableContainer>
-            <TableHeader>
-              <TableHeaderInfo>
-                <TableTitle>
-                  Alunos inscritos
-                </TableTitle>
+        <TableContainer>
+          <TableHeader>
+            <TableHeaderInfo>
+              <TableTitle>
+                Inscrições
+              </TableTitle>
 
-                <TableDescription>
-                  {inscricoesFiltradas.length ===
-                  1
-                    ? "1 aluno encontrado"
-                    : `${inscricoesFiltradas.length} alunos encontrados`}
-                </TableDescription>
-              </TableHeaderInfo>
+              <TableDescription>
+                Lista de alunos inscritos no ano selecionado.
+              </TableDescription>
+            </TableHeaderInfo>
 
-              <DownloadButton
-                type="button"
-                onClick={
-                  baixarPDF
-                }
-                onMouseMove={
-                  handleButtonMouseMove
-                }
-                title="Baixar lista de alunos em PDF"
-                aria-label="Baixar lista de alunos em PDF"
-              >
-                <FiDownload />
+            <DownloadButton
+              type="button"
+              onClick={baixarPDF}
+              onMouseMove={handleButtonMouseMove}
+            >
+              <FiDownload />
+              Baixar PDF
+            </DownloadButton>
+          </TableHeader>
 
-                <span>
-                  Baixar PDF
-                </span>
-              </DownloadButton>
-            </TableHeader>
-
+          {carregando ? (
+            <LoadingState>
+              <Spinner />
+              <span>
+                Carregando inscrições...
+              </span>
+            </LoadingState>
+          ) : (
             <TableWrapper>
               <Table>
                 <thead>
                   <tr>
-                    <th>
-                      Aluno
-                    </th>
-
-                    <th>
-                      Turma
-                    </th>
-
-                    <th>
-                      Curso
-                    </th>
-
-                    <th>
-                      Turno
-                    </th>
-
-                    <th>
-                      Ações
-                    </th>
+                    <th>Aluno</th>
+                    <th>Turma</th>
+                    <th>Curso</th>
+                    <th>Turno</th>
+                    <th>Ações</th>
                   </tr>
                 </thead>
 
                 <tbody>
                   {inscricoesFiltradas.map(
-                    (
-                      inscricao
-                    ) => (
+                    (inscricao) => (
                       <tr
                         key={
                           inscricao.id_inscricoes
@@ -1225,6 +923,13 @@ export default function Inscricaoadm() {
                                   inscricao.nome_poeta
                                 }
                               </StudentName>
+
+                              <small>
+                                Inscrição #
+                                {
+                                  inscricao.id_inscricoes
+                                }
+                              </small>
                             </StudentInfo>
                           </StudentCell>
                         </td>
@@ -1240,7 +945,6 @@ export default function Inscricaoadm() {
                         <td>
                           <Badge $type="course">
                             <FiBookOpen />
-
                             {
                               inscricao.curso
                             }
@@ -1254,7 +958,6 @@ export default function Inscricaoadm() {
                             }
                           >
                             <span />
-
                             {
                               inscricao.turno
                             }
@@ -1283,16 +986,37 @@ export default function Inscricaoadm() {
                             <ActionButton
                               type="button"
                               $variant="delete"
-                              title="Excluir inscrição"
-                              aria-label={`Excluir ${inscricao.nome_poeta}`}
-                              onClick={() =>
+                              title={
+                                inscricao.atribuido_evento
+                                  ? `Não é possível excluir: poeta atribuído ao evento "${inscricao.evento_nome}"`
+                                  : "Excluir inscrição"
+                              }
+                              aria-label={
+                                inscricao.atribuido_evento
+                                  ? `Não é possível excluir ${inscricao.nome_poeta} porque está atribuído a um evento`
+                                  : `Excluir ${inscricao.nome_poeta}`
+                              }
+                              onClick={() => {
+                                if (
+                                  inscricao.atribuido_evento
+                                ) {
+                                  setErro(
+                                    `Não é possível excluir ${inscricao.nome_poeta} porque o poeta já está atribuído ao evento "${inscricao.evento_nome}".`
+                                  );
+
+                                  return;
+                                }
+
                                 abrirExclusao(
                                   inscricao
-                                )
-                              }
+                                );
+                              }}
                               onMouseMove={
                                 handleButtonMouseMove
                               }
+                              disabled={Boolean(
+                                inscricao.atribuido_evento
+                              )}
                             >
                               <FiTrash2 />
                             </ActionButton>
@@ -1312,16 +1036,13 @@ export default function Inscricaoadm() {
                           </EmptyIcon>
 
                           <EmptyTitle>
-                            Nenhuma
-                            inscrição
-                            encontrada
+                            Nenhuma inscrição encontrada
                           </EmptyTitle>
 
                           <EmptyText>
-                            {turno ===
-                            "Todos"
-                              ? `Não existem alunos inscritos em ${anoSelecionado}.`
-                              : `Não existem alunos inscritos no turno da ${turno.toLowerCase()} em ${anoSelecionado}.`}
+                            Não existem inscrições
+                            para os filtros
+                            selecionados.
                           </EmptyText>
                         </EmptyState>
                       </td>
@@ -1330,8 +1051,8 @@ export default function Inscricaoadm() {
                 </tbody>
               </Table>
             </TableWrapper>
-          </TableContainer>
-        )}
+          )}
+        </TableContainer>
       </Content>
 
       {/* =====================================================
@@ -1359,8 +1080,7 @@ export default function Inscricaoadm() {
                 </ModalTitle>
 
                 <ModalDescription>
-                  Atualize os dados
-                  do aluno abaixo.
+                  Atualize os dados do aluno.
                 </ModalDescription>
               </div>
 
@@ -1383,7 +1103,7 @@ export default function Inscricaoadm() {
             <Form>
               <FormGroup>
                 <Label>
-                  Nome do aluno
+                  Nome do poeta
                 </Label>
 
                 <Input
@@ -1393,15 +1113,13 @@ export default function Inscricaoadm() {
                   }
                   onChange={(e) =>
                     setInscricaoEditando(
-                      {
-                        ...inscricaoEditando,
+                      (atual) => ({
+                        ...atual,
                         nome_poeta:
-                          e.target
-                            .value,
-                      }
+                          e.target.value,
+                      })
                     )
                   }
-                  placeholder="Nome completo"
                 />
               </FormGroup>
 
@@ -1410,83 +1128,21 @@ export default function Inscricaoadm() {
                   Turma
                 </Label>
 
-                <Select
+                <Input
                   value={
                     inscricaoEditando.turma ||
                     ""
                   }
                   onChange={(e) =>
                     setInscricaoEditando(
-                      {
-                        ...inscricaoEditando,
+                      (atual) => ({
+                        ...atual,
                         turma:
-                          e.target
-                            .value,
-                      }
+                          e.target.value,
+                      })
                     )
                   }
-                >
-                  <option value="">
-                    Selecione a
-                    turma
-                  </option>
-
-                  <option value="1º ano">
-                    1º ano
-                  </option>
-
-                  <option value="2º ano">
-                    2º ano
-                  </option>
-
-                  <option value="3º ano">
-                    3º ano
-                  </option>
-                </Select>
-              </FormGroup>
-
-              <FormGroup>
-                <Label>
-                  Curso
-                </Label>
-
-                <Select
-                  value={
-                    inscricaoEditando.curso ||
-                    ""
-                  }
-                  onChange={(e) =>
-                    setInscricaoEditando(
-                      {
-                        ...inscricaoEditando,
-                        curso:
-                          e.target
-                            .value,
-                      }
-                    )
-                  }
-                >
-                  <option value="">
-                    Selecione o
-                    curso
-                  </option>
-
-                  <option value="Informática">
-                    Informática
-                  </option>
-
-                  <option value="Marketing">
-                    Marketing
-                  </option>
-
-                  <option value="Administração">
-                    Administração
-                  </option>
-
-                  <option value="Humanas">
-                    Humanas
-                  </option>
-                </Select>
+                />
               </FormGroup>
 
               <FormGroup>
@@ -1501,15 +1157,18 @@ export default function Inscricaoadm() {
                   }
                   onChange={(e) =>
                     setInscricaoEditando(
-                      {
-                        ...inscricaoEditando,
+                      (atual) => ({
+                        ...atual,
                         turno:
-                          e.target
-                            .value,
-                      }
+                          e.target.value,
+                      })
                     )
                   }
                 >
+                  <option value="">
+                    Selecione
+                  </option>
+
                   <option value="Manhã">
                     Manhã
                   </option>
@@ -1524,6 +1183,28 @@ export default function Inscricaoadm() {
                 </Select>
               </FormGroup>
 
+              <FormGroup>
+                <Label>
+                  Curso
+                </Label>
+
+                <Input
+                  value={
+                    inscricaoEditando.curso ||
+                    ""
+                  }
+                  onChange={(e) =>
+                    setInscricaoEditando(
+                      (atual) => ({
+                        ...atual,
+                        curso:
+                          e.target.value,
+                      })
+                    )
+                  }
+                />
+              </FormGroup>
+
               <ModalButtons>
                 <CancelButton
                   type="button"
@@ -1532,18 +1213,13 @@ export default function Inscricaoadm() {
                       null
                     )
                   }
-                  onMouseMove={
-                    handleButtonMouseMove
-                  }
                 >
                   Cancelar
                 </CancelButton>
 
                 <SaveButton
                   type="button"
-                  onClick={
-                    salvarEdicao
-                  }
+                  onClick={salvarEdicao}
                   onMouseMove={
                     handleButtonMouseMove
                   }
@@ -1579,8 +1255,7 @@ export default function Inscricaoadm() {
                 </ModalTitle>
 
                 <ModalDescription>
-                  Esta ação precisa
-                  ser confirmada.
+                  Esta ação precisa ser confirmada.
                 </ModalDescription>
               </div>
 
@@ -1607,17 +1282,15 @@ export default function Inscricaoadm() {
                 </strong>
 
                 <p>
-                  Você está prestes
-                  a excluir a
+                  Você está prestes a excluir a
                   inscrição de{" "}
                   <strong>
                     {
                       inscricaoExcluir.nome_poeta
                     }
                   </strong>
-                  . O usuário
-                  voltará a ser
-                  aluno comum.
+                  . O usuário voltará a ser aluno
+                  comum.
                 </p>
               </div>
             </WarningBox>
@@ -1633,18 +1306,16 @@ export default function Inscricaoadm() {
                 </Label>
 
                 <Input
-                  type="text"
-                  placeholder="Digite excluir"
                   value={
                     confirmacaoExclusao
                   }
                   onChange={(e) =>
                     setConfirmacaoExclusao(
-                      e.target
-                        .value
+                      e.target.value
                     )
                   }
-                  autoComplete="off"
+                  placeholder="Digite excluir"
+                  autoFocus
                 />
               </FormGroup>
 
@@ -1653,9 +1324,6 @@ export default function Inscricaoadm() {
                   type="button"
                   onClick={
                     fecharModalExclusao
-                  }
-                  onMouseMove={
-                    handleButtonMouseMove
                   }
                 >
                   Cancelar
@@ -1674,6 +1342,7 @@ export default function Inscricaoadm() {
                     "excluir"
                   }
                 >
+                  <FiTrash2 />
                   Excluir inscrição
                 </ConfirmButton>
               </ModalButtons>

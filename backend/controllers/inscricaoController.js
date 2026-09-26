@@ -63,7 +63,9 @@ export function buscarInscricaoPorEmail(req, res) {
   const { email } = req.params;
 
   const usuario = db
-    .prepare("SELECT inscricao_id FROM usuario WHERE email = ?")
+    .prepare(
+      "SELECT inscricao_id FROM usuario WHERE email = ?"
+    )
     .get(email);
 
   if (!usuario || !usuario.inscricao_id) {
@@ -83,9 +85,37 @@ export function buscarInscricaoPorEmail(req, res) {
 
 export function listarInscricoes(req, res) {
   const inscricoes = db
-    .prepare(
-      "SELECT * FROM inscricoes ORDER BY id_inscricoes"
-    )
+    .prepare(`
+      SELECT
+        i.*,
+
+        CASE
+          WHEN EXISTS (
+            SELECT 1
+            FROM usuario u
+            JOIN participantes_evento pe
+              ON pe.usuario_id = u.id
+            WHERE u.inscricao_id = i.id_inscricoes
+          )
+          THEN 1
+          ELSE 0
+        END AS atribuido_evento,
+
+        (
+          SELECT e.nome
+          FROM usuario u
+          JOIN participantes_evento pe
+            ON pe.usuario_id = u.id
+          JOIN evento e
+            ON e.id_evento = pe.evento_id
+          WHERE u.inscricao_id = i.id_inscricoes
+          ORDER BY e.id_evento
+          LIMIT 1
+        ) AS evento_nome
+
+      FROM inscricoes i
+      ORDER BY i.id_inscricoes
+    `)
     .all();
 
   res.json(inscricoes);
@@ -132,35 +162,78 @@ export function atualizarInscricao(req, res) {
 export function excluirInscricao(req, res) {
   const { id } = req.params;
 
-  /*
-   * Remove primeiro os vínculos com eventos.
-   */
-  db.prepare(
-    "DELETE FROM participantes_evento WHERE usuario_id IN (SELECT id FROM usuario WHERE inscricao_id = ?)"
-  ).run(id);
+  const inscricao = db
+    .prepare(`
+      SELECT
+        i.id_inscricoes,
+        i.nome_poeta,
+        u.id AS usuario_id
+      FROM inscricoes i
+      LEFT JOIN usuario u
+        ON u.inscricao_id = i.id_inscricoes
+      WHERE i.id_inscricoes = ?
+    `)
+    .get(id);
 
-  const info = db
-    .prepare(
-      "DELETE FROM inscricoes WHERE id_inscricoes = ?"
-    )
-    .run(id);
-
-  if (info.changes === 0) {
+  if (!inscricao) {
     return res.status(404).json({
       erro: "Inscrição não encontrada.",
     });
   }
 
-  db.prepare(
-    `UPDATE usuario
-     SET tipo_usuario = 'aluno',
-         inscricao_id = NULL
-     WHERE inscricao_id = ?`
-  ).run(id);
+  if (inscricao.usuario_id) {
+    const participante = db
+      .prepare(`
+        SELECT
+          pe.id,
+          e.nome
+        FROM participantes_evento pe
+        JOIN evento e
+          ON e.id_evento = pe.evento_id
+        WHERE pe.usuario_id = ?
+        LIMIT 1
+      `)
+      .get(inscricao.usuario_id);
 
-  res.status(200).json({
-    mensagem: "Inscrição excluída com sucesso!",
-  });
+    if (participante) {
+      return res.status(400).json({
+        erro:
+          `Não é possível excluir esta inscrição porque o poeta ` +
+          `já está atribuído ao evento "${participante.nome}".`,
+      });
+    }
+  }
+
+  try {
+    const info = db
+      .prepare(
+        "DELETE FROM inscricoes WHERE id_inscricoes = ?"
+      )
+      .run(id);
+
+    if (info.changes === 0) {
+      return res.status(404).json({
+        erro: "Inscrição não encontrada.",
+      });
+    }
+
+    db.prepare(`
+      UPDATE usuario
+      SET tipo_usuario = 'aluno',
+          inscricao_id = NULL
+      WHERE inscricao_id = ?
+    `).run(id);
+
+    res.status(200).json({
+      mensagem: "Inscrição excluída com sucesso!",
+    });
+  } catch (err) {
+    console.error(err);
+
+    res.status(500).json({
+      erro: "Erro ao excluir inscrição.",
+    });
+  }
 }
 
 export function listarPoetas(req, res) {
