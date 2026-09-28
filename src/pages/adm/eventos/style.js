@@ -131,28 +131,48 @@ export const Subtitle = styled.p`
   }
 `;
 
+/* =====================================================
+   ANOS
+===================================================== */
+
 export const YearsWrapper = styled.div`
   width: 100%;
-  margin: 0 auto 60px;
+  margin: 70px auto 90px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 18px;
+  box-sizing: border-box;
+
+  @media (max-width: 900px) {
+    gap: 12px;
+  }
 
   @media (max-width: 600px) {
-    gap: 8px;
-    margin-bottom: 35px;
+    gap: 7px;
+    margin: 55px auto 35px;
+  }
+
+  @media (max-width: 430px) {
+    gap: 5px;
   }
 `;
 
 export const YearsContainer = styled.div`
-  display: flex;
-  align-items: center;
+  width: 100%;
+  max-width: 1000px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
   justify-content: center;
-  gap: 14px;
+  gap: 18px;
+
+  @media (max-width: 900px) {
+    gap: 12px;
+  }
 
   @media (max-width: 700px) {
-    gap: 8px;
+    gap: 9px;
   }
 
   @media (max-width: 520px) {
@@ -160,10 +180,14 @@ export const YearsContainer = styled.div`
   }
 `;
 
+/* =====================================================
+   SETAS DOS ANOS
+===================================================== */
+
 export const YearArrow = styled.button`
   position: relative;
-  width: 44px;
-  height: 44px;
+  width: 46px;
+  height: 46px;
   flex-shrink: 0;
   padding: 0;
   display: flex;
@@ -172,11 +196,14 @@ export const YearArrow = styled.button`
   border: none;
   border-radius: 12px;
   background: ${COLORS.primary};
-  color: #fff;
+  color: #ffffff;
   cursor: pointer;
   overflow: hidden;
   isolation: isolate;
-  transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s ease, opacity .2s ease;
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s ease,
+    opacity 0.2s ease;
 
   &::before {
     content: "";
@@ -188,7 +215,7 @@ export const YearArrow = styled.button`
     border-radius: 50%;
     background: ${COLORS.yellow};
     transform: translate(-50%, -50%) scale(0);
-    transition: transform .55s cubic-bezier(.16, 1, .3, 1);
+    transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: -1;
     pointer-events: none;
   }
@@ -196,15 +223,15 @@ export const YearArrow = styled.button`
   svg {
     position: relative;
     z-index: 2;
-    width: 20px;
-    height: 20px;
+    width: 21px;
+    height: 21px;
     stroke-width: 2.5;
   }
 
   &:hover:not(:disabled) {
-    color: #111;
+    color: #111111;
     transform: translateY(-2px);
-    box-shadow: 0 8px 18px rgba(131, 22, 20, .2);
+    box-shadow: 0 8px 18px rgba(131, 22, 20, 0.2);
 
     &::before {
       transform: translate(-50%, -50%) scale(8);
@@ -212,11 +239,11 @@ export const YearArrow = styled.button`
   }
 
   &:active:not(:disabled) {
-    transform: scale(.94);
+    transform: scale(0.94);
   }
 
   &:disabled {
-    opacity: .25;
+    opacity: 0.25;
     cursor: not-allowed;
     box-shadow: none;
   }
@@ -236,29 +263,48 @@ export const YearArrow = styled.button`
       height: 18px;
     }
   }
+
+  @media (max-width: 430px) {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
 `;
 
 export const YearCard = styled.button`
   position: relative;
-  width: 230px;
-  height: 155px;
-  flex-shrink: 0;
+  width: 100%;
+  min-width: 0;
+  height: 175px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 13px;
   box-sizing: border-box;
-  border: 2px solid ${({ $active }) => ($active ? COLORS.primary : "#eee")};
+  border: 2px solid
+    ${({ $active }) =>
+      $active ? COLORS.primary : "#eeeeee"};
   border-radius: 22px;
-  background: ${({ $active }) => ($active ? COLORS.primary : "#fff")};
-  color: ${({ $active }) => ($active ? "#fff" : "#111")};
+  background: ${({ $active }) =>
+    $active ? COLORS.primary : "#ffffff"};
+  color: ${({ $active }) =>
+    $active ? "#ffffff" : "#111111"};
   font-family: inherit;
   cursor: pointer;
   overflow: hidden;
   isolation: isolate;
-  transition: transform .3s cubic-bezier(.22, 1, .36, 1), border-color .25s ease, background .25s ease, box-shadow .3s ease;
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.3s ease;
 
   &::before {
     content: "";
@@ -270,7 +316,8 @@ export const YearCard = styled.button`
     border-radius: 50%;
     background: ${COLORS.yellow};
     transform: translate(-50%, -50%) scale(0);
-    transition: transform .65s cubic-bezier(.16, 1, .3, 1);
+    transition:
+      transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: -1;
     pointer-events: none;
   }
@@ -278,7 +325,7 @@ export const YearCard = styled.button`
   &:hover {
     transform: translateY(-8px);
     border-color: ${COLORS.primary};
-    box-shadow: 0 18px 35px rgba(131, 22, 20, .16);
+    box-shadow: 0 18px 35px rgba(131, 22, 20, 0.16);
 
     &::before {
       transform: translate(-50%, -50%) scale(11);
@@ -286,7 +333,7 @@ export const YearCard = styled.button`
   }
 
   &:active {
-    transform: translateY(-3px) scale(.98);
+    transform: translateY(-3px) scale(0.98);
   }
 
   &:focus-visible {
@@ -295,81 +342,93 @@ export const YearCard = styled.button`
   }
 
   @media (max-width: 900px) {
-    width: 200px;
-    height: 140px;
+    height: 155px;
+    padding: 17px;
+    border-radius: 20px;
   }
 
   @media (max-width: 700px) {
-    width: 165px;
-    height: 120px;
-    padding: 15px;
-    border-radius: 19px;
+    height: 135px;
+    padding: 13px;
+    border-radius: 17px;
     gap: 9px;
   }
 
   @media (max-width: 520px) {
-    width: 140px;
-    height: 105px;
-    padding: 12px;
-    border-radius: 16px;
+    height: 115px;
+    padding: 10px;
+    border-radius: 15px;
+    gap: 7px;
   }
 
   @media (max-width: 390px) {
-    width: 120px;
-    height: 95px;
-    padding: 9px;
-    border-radius: 14px;
+    height: 105px;
+    padding: 8px;
+    border-radius: 13px;
   }
 `;
 
 export const YearIcon = styled.div`
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
   background: ${({ $active }) =>
-    $active ? COLORS.yellow : "rgba(255, 219, 83, .22)"};
+    $active
+      ? COLORS.yellow
+      : "rgba(255, 219, 83, 0.22)"};
   color: ${COLORS.primary};
-  font-size: 22px;
-  transition: transform .3s ease, background .25s ease;
+  font-size: 23px;
+  transition:
+    transform 0.3s ease,
+    background 0.25s ease;
 
   ${YearCard}:hover & {
     transform: scale(1.12) rotate(2deg);
   }
 
   @media (max-width: 900px) {
-    width: 43px;
-    height: 43px;
-    font-size: 20px;
+    width: 46px;
+    height: 46px;
+    font-size: 21px;
   }
 
   @media (max-width: 700px) {
-    width: 38px;
-    height: 38px;
+    width: 40px;
+    height: 40px;
     font-size: 18px;
   }
 
   @media (max-width: 520px) {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     font-size: 15px;
+  }
+
+  @media (max-width: 390px) {
+    width: 30px;
+    height: 30px;
+    font-size: 13px;
   }
 `;
 
 export const YearNumber = styled.strong`
   position: relative;
   z-index: 2;
-  color: ${({ $active }) => ($active ? "#fff" : COLORS.primary)};
-  font-size: 2rem;
+  color: ${({ $active }) =>
+    $active ? "#ffffff" : COLORS.primary};
+  font-size: 2.1rem;
   font-weight: 850;
   line-height: 1;
-  transition: color .25s ease, transform .3s ease;
+  transition:
+    color 0.25s ease,
+    transform 0.3s ease;
 
   ${YearCard}:hover & {
-    color: #111;
+    color: #111111;
     transform: scale(1.05);
   }
 
@@ -378,31 +437,39 @@ export const YearNumber = styled.strong`
   }
 
   @media (max-width: 700px) {
-    font-size: 1.5rem;
+    font-size: 1.55rem;
   }
 
   @media (max-width: 520px) {
-    font-size: 1.25rem;
+    font-size: 1.3rem;
   }
 
   @media (max-width: 390px) {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
   }
 `;
 
 export const YearDescription = styled.span`
   position: relative;
   z-index: 2;
-  color: ${({ $active }) => ($active ? "rgba(255, 255, 255, .72)" : "#999")};
+  color: ${({ $active }) =>
+    $active
+      ? "rgba(255,255,255,0.72)"
+      : "#999999"};
   font-size: 10px;
   font-weight: 500;
   line-height: 1.2;
   text-align: center;
   white-space: nowrap;
-  transition: color .25s ease;
+  transition: color 0.25s ease;
 
   ${YearCard}:hover & {
     color: #5e4900;
+  }
+
+  @media (max-width: 600px) {
+    font-size: 9px;
+    white-space: normal;
   }
 
   @media (max-width: 520px) {
@@ -569,20 +636,96 @@ export const EventFooter = styled.div`
 
 export const AccessButton = styled.button`
   ${ButtonEffect}
+
   flex: 1;
-  min-height: 38px;
+
+  min-height: 42px;
+
   border: none;
-  border-radius: 9px;
+
+  border-radius: 10px;
+
   background: #831614;
+
   color: #ffdb53;
-  font-family: "Poppins";
+
+  font-family: "Poppins", sans-serif;
+
+  font-size: 13px;
+
   font-weight: 700;
+
   cursor: pointer;
-  transition: .2s;
+
+  transition:
+    transform .25s cubic-bezier(.22, 1, .36, 1),
+    box-shadow .3s ease,
+    color .3s ease;
+
+  /* círculo amarelo da animação */
+  &::before {
+    background: #ffdb53;
+
+    width: 30px;
+    height: 30px;
+
+    transition:
+      transform .6s cubic-bezier(.16, 1, .3, 1);
+  }
 
   &:hover {
-    background: #ffdb53;
     color: #831614;
+
+    transform: translateY(-3px);
+
+    box-shadow:
+      0 10px 24px rgba(131, 22, 20, .25);
+  }
+
+  &:hover::before {
+    transform:
+      translate(-50%, -50%)
+      scale(18);
+  }
+
+  .buttonContent {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    width: 100%;
+    height: 100%;
+  }
+
+  svg {
+    position: relative;
+    z-index: 2;
+
+    transition:
+      transform .3s cubic-bezier(.16, 1, .3, 1);
+  }
+
+  &:hover svg {
+    transform: translateX(5px);
+  }
+
+  &:active {
+    transform:
+      translateY(0)
+      scale(.97);
+
+    transition:
+      transform .08s ease;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #ffdb53;
+    outline-offset: 3px;
   }
 `;
 
@@ -757,29 +900,103 @@ export const ModalTitle = styled.h2`
 
 export const CloseButton = styled.button`
   ${ButtonEffect}
-  width: 40px;
-  height: 40px;
+
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
   border: none;
+
   border-radius: 50%;
+
   background: #f4f4f4;
+
   color: #444;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   cursor: pointer;
-  transition: .2s;
+
+  transition:
+    transform .25s cubic-bezier(.22, 1, .36, 1),
+    box-shadow .3s ease,
+    color .3s ease,
+    background .3s ease;
+
+  /* Círculo amarelo que se expande */
+  &::before {
+    width: 20px;
+    height: 20px;
+
+    background: #ffdb53;
+
+    transition:
+      transform .6s cubic-bezier(.16, 1, .3, 1);
+  }
+
+  .buttonContent {
+    position: relative;
+    z-index: 2;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
   svg {
-    transition: transform .3s ease;
+    position: relative;
+    z-index: 2;
+
+    transition:
+      transform .35s cubic-bezier(.16, 1, .3, 1),
+      color .25s ease;
   }
 
   &:hover {
-    background: #ffdb53;
+    background: #f4f4f4;
+
     color: #831614;
+
+    transform: translateY(-3px);
+
+    box-shadow:
+      0 10px 22px rgba(131, 22, 20, .20);
+  }
+
+  &:hover::before {
+    transform:
+      translate(-50%, -50%)
+      scale(10);
   }
 
   &:hover svg {
     transform: rotate(90deg);
+  }
+
+  &:active {
+    transform:
+      translateY(0)
+      scale(.94);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #831614;
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 600px) {
+    width: 38px;
+    height: 38px;
   }
 `;
 

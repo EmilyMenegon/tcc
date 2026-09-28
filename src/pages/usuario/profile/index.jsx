@@ -1,8 +1,19 @@
 import { useEffect, useState } from "react";
-
 import { useNavigate } from "react-router-dom";
 
-import { FaEye, FaEyeSlash, FaArrowLeft } from "react-icons/fa";
+import {
+  FaEye,
+  FaEyeSlash,
+  FaArrowLeft,
+  FaUser,
+  FaEnvelope,
+  FaLock,
+  FaCamera,
+  FaShieldAlt,
+  FaSignOutAlt,
+  FaCheck,
+  FaTimes,
+} from "react-icons/fa";
 
 import {
   getUsuarioLogado,
@@ -15,29 +26,46 @@ import {
   GlobalStyle,
   Page,
   BackButton,
-  Container,
   PixelArea,
   Pixel01,
   Pixel02,
   Pixel03,
-  ProfileBox,
+  Container,
+  Header,
+  HeaderTitle,
+  HeaderSubtitle,
+  ProfileCard,
+  AvatarArea,
   AvatarWrapper,
   Avatar,
-  EditButton,
+  CameraButton,
+  ProfileInfo,
   UserName,
   UserEmail,
+  StatusBadge,
+  Section,
+  SectionHeader,
+  SectionIcon,
+  SectionTitle,
+  SectionDescription,
+  FieldsGrid,
   Field,
   Label,
+  InputWrapper,
+  InputIcon,
   Input,
   PasswordBox,
+  PasswordIcon,
+  CodeBox,
   SaveButton,
+  CancelButton,
   LogoutLink,
   Aviso,
   AvisoSucesso,
   ModalOverlay,
   Modal,
+  ModalIcon,
   ModalButtons,
-  CancelButton,
   ConfirmButton,
 } from "./style";
 
@@ -76,16 +104,27 @@ export default function Profile() {
         headers: getAuthHeaders(),
       }
     )
-      .then((res) => res.json())
+      .then(async (res) => {
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(
+            data.erro || "Não foi possível carregar o perfil."
+          );
+        }
+
+        return data;
+      })
       .then((data) => {
-        setNome(data.nome);
-        setEmailAtual(data.email);
+        setNome(data.nome || "");
+        setEmailAtual(data.email || "");
 
         if (data.foto) {
           setPhoto(data.foto);
         }
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error(err);
         setErro("Não foi possível carregar o perfil.");
       });
   }, []);
@@ -102,15 +141,27 @@ export default function Profile() {
   };
 
   const handlePhotoChange = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
 
     if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      setErro("Selecione uma imagem válida.");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setErro("A imagem deve ter no máximo 5 MB.");
+      return;
+    }
 
     const reader = new FileReader();
 
     reader.onload = () => {
       setPhoto(reader.result);
       setFotoBase64(reader.result);
+      setErro("");
+      setSucesso("");
     };
 
     reader.onerror = () => {
@@ -172,6 +223,11 @@ export default function Profile() {
 
     if (!codigo.trim()) {
       setErro("Digite o código de confirmação.");
+      return;
+    }
+
+    if (codigo.length !== 6) {
+      setErro("O código deve possuir 6 dígitos.");
       return;
     }
 
@@ -245,19 +301,21 @@ export default function Profile() {
       return;
     }
 
-    /*
-     * Se houver alteração de email ou senha,
-     * primeiro solicita o código de confirmação.
-     */
+    if (nome.trim().length < 2) {
+      setErro("O nome precisa ter pelo menos 2 caracteres.");
+      return;
+    }
+
+    if (novoEmail.trim() && !novoEmail.includes("@")) {
+      setErro("Digite um email válido.");
+      return;
+    }
+
     if (novoEmail.trim() || novaSenha) {
       await solicitarCodigo();
       return;
     }
 
-    /*
-     * Nome e foto continuam sendo salvos
-     * normalmente, sem código.
-     */
     try {
       const res = await fetch(
         `http://localhost:3001/perfil/${encodeURIComponent(
@@ -314,7 +372,11 @@ export default function Profile() {
       <GlobalStyle />
 
       <Page>
-        <BackButton to="/usuario/home">
+        <BackButton
+          to="/usuario/home"
+          aria-label="Voltar para a página inicial"
+          onMouseMove={handleButtonMouseMove}
+        >
           <FaArrowLeft />
         </BackButton>
 
@@ -325,141 +387,270 @@ export default function Profile() {
         </PixelArea>
 
         <Container>
-          <ProfileBox>
-            <AvatarWrapper>
-              <Avatar src={photo} alt="Foto de perfil" />
+          <Header>
+            <HeaderTitle>Meu perfil</HeaderTitle>
 
-              <EditButton onMouseMove={handleButtonMouseMove}>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handlePhotoChange}
-                />
+            <HeaderSubtitle>
+              Gerencie suas informações pessoais e sua conta.
+            </HeaderSubtitle>
+          </Header>
 
-                <span className="buttonContent">
-                  Editar
-                </span>
-              </EditButton>
-            </AvatarWrapper>
-          </ProfileBox>
+          <ProfileCard>
+            <AvatarArea>
+              <AvatarWrapper>
+                <Avatar src={photo} alt="Foto de perfil" />
 
-          <UserName>{nome}</UserName>
-          <UserEmail>{emailAtual}</UserEmail>
+                <CameraButton
+                  htmlFor="profile-photo"
+                  onMouseMove={handleButtonMouseMove}
+                  aria-label="Alterar foto de perfil"
+                >
+                  <FaCamera />
 
-          <Field>
-            <Label>Nome</Label>
+                  <input
+                    id="profile-photo"
+                    type="file"
+                    accept="image/png,image/jpeg,image/webp"
+                    onChange={handlePhotoChange}
+                  />
+                </CameraButton>
+              </AvatarWrapper>
+            </AvatarArea>
 
-            <Input
-              type="text"
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
-            />
-          </Field>
+            <ProfileInfo>
+              <UserName>
+                {nome || "Usuário"}
+              </UserName>
 
-          <Field>
-            <Label>Email atual</Label>
+              <UserEmail>
+                {emailAtual || "Carregando email..."}
+              </UserEmail>
 
-            <Input
-              type="email"
-              value={emailAtual}
-              readOnly
-              disabled
-            />
-          </Field>
+              <StatusBadge>
+                <span />
+                Conta ativa
+              </StatusBadge>
+            </ProfileInfo>
+          </ProfileCard>
 
-          <Field>
-            <Label>
-              Novo email (deixe em branco para manter o atual)
-            </Label>
+          <Section>
+            <SectionHeader>
+              <SectionIcon>
+                <FaUser />
+              </SectionIcon>
 
-            <Input
-              type="email"
-              value={novoEmail}
-              onChange={(e) => setNovoEmail(e.target.value)}
-            />
-          </Field>
+              <div>
+                <SectionTitle>
+                  Informações pessoais
+                </SectionTitle>
 
-          <Field>
-            <Label>
-              Nova senha (deixe em branco para manter a atual)
-            </Label>
+                <SectionDescription>
+                  Atualize as informações básicas do seu perfil.
+                </SectionDescription>
+              </div>
+            </SectionHeader>
 
-            <PasswordBox>
-              <Input
-                type={showPassword ? "text" : "password"}
-                value={novaSenha}
-                onChange={(e) => setNovaSenha(e.target.value)}
-              />
+            <FieldsGrid>
+              <Field>
+                <Label>Nome completo</Label>
 
-              <span
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? (
-                  <FaEyeSlash size={18} />
-                ) : (
-                  <FaEye size={18} />
-                )}
-              </span>
-            </PasswordBox>
-          </Field>
+                <InputWrapper>
+                  <InputIcon>
+                    <FaUser />
+                  </InputIcon>
+
+                  <Input
+                    type="text"
+                    value={nome}
+                    onChange={(e) => setNome(e.target.value)}
+                    placeholder="Digite seu nome"
+                  />
+                </InputWrapper>
+              </Field>
+
+              <Field>
+                <Label>Email atual</Label>
+
+                <InputWrapper disabled>
+                  <InputIcon>
+                    <FaEnvelope />
+                  </InputIcon>
+
+                  <Input
+                    type="email"
+                    value={emailAtual}
+                    readOnly
+                    disabled
+                  />
+                </InputWrapper>
+
+                <small>
+                  Este é o email atualmente vinculado à conta.
+                </small>
+              </Field>
+            </FieldsGrid>
+          </Section>
+
+          <Section>
+            <SectionHeader>
+              <SectionIcon>
+                <FaShieldAlt />
+              </SectionIcon>
+
+              <div>
+                <SectionTitle>
+                  Segurança da conta
+                </SectionTitle>
+
+                <SectionDescription>
+                  Altere seu email ou senha com segurança.
+                </SectionDescription>
+              </div>
+            </SectionHeader>
+
+            <FieldsGrid>
+              <Field>
+                <Label>Novo email</Label>
+
+                <InputWrapper>
+                  <InputIcon>
+                    <FaEnvelope />
+                  </InputIcon>
+
+                  <Input
+                    type="email"
+                    value={novoEmail}
+                    onChange={(e) => setNovoEmail(e.target.value)}
+                    placeholder="Digite um novo email"
+                  />
+                </InputWrapper>
+
+                <small>
+                  Deixe em branco para manter o email atual.
+                </small>
+              </Field>
+
+              <Field>
+                <Label>Nova senha</Label>
+
+                <PasswordBox>
+                  <InputIcon>
+                    <FaLock />
+                  </InputIcon>
+
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    value={novaSenha}
+                    onChange={(e) =>
+                      setNovaSenha(e.target.value)
+                    }
+                    placeholder="Digite uma nova senha"
+                  />
+
+                  <PasswordIcon
+                    type="button"
+                    onClick={() =>
+                      setShowPassword(!showPassword)
+                    }
+                    aria-label={
+                      showPassword
+                        ? "Ocultar senha"
+                        : "Mostrar senha"
+                    }
+                  >
+                    {showPassword ? (
+                      <FaEyeSlash />
+                    ) : (
+                      <FaEye />
+                    )}
+                  </PasswordIcon>
+                </PasswordBox>
+
+                <small>
+                  Deixe em branco para manter a senha atual.
+                </small>
+              </Field>
+            </FieldsGrid>
+          </Section>
 
           {codigoEnviado && (
-            <Field>
-              <Label>Código de confirmação</Label>
+            <CodeBox>
+              <div className="codeHeader">
+                <div className="codeIcon">
+                  <FaShieldAlt />
+                </div>
 
-              <Input
-                type="text"
-                value={codigo}
-                onChange={(e) =>
-                  setCodigo(
-                    e.target.value.replace(/\D/g, "").slice(0, 6)
-                  )
-                }
-                placeholder="Digite o código de 6 dígitos"
-                inputMode="numeric"
-                maxLength={6}
-              />
+                <div>
+                  <h3>Confirme sua alteração</h3>
 
-              <SaveButton
-                type="button"
-                onClick={verificarCodigo}
-                onMouseMove={handleButtonMouseMove}
-                disabled={
-                  verificandoCodigo || codigo.length !== 6
-                }
-              >
-                <span className="buttonContent">
-                  {verificandoCodigo
-                    ? "Verificando..."
-                    : "Confirmar código"}
-                </span>
-              </SaveButton>
+                  <p>
+                    Digite o código de 6 dígitos gerado pelo
+                    sistema para confirmar as alterações.
+                  </p>
+                </div>
+              </div>
 
-              <CancelButton
-                type="button"
-                onClick={cancelarCodigo}
-                onMouseMove={handleButtonMouseMove}
-              >
-                <span className="buttonContent">
-                  Cancelar
-                </span>
-              </CancelButton>
-            </Field>
+              <Field>
+                <Label>Código de confirmação</Label>
+
+                <Input
+                  type="text"
+                  value={codigo}
+                  onChange={(e) =>
+                    setCodigo(
+                      e.target.value
+                        .replace(/\D/g, "")
+                        .slice(0, 6)
+                    )
+                  }
+                  placeholder="000000"
+                  inputMode="numeric"
+                  maxLength={6}
+                />
+              </Field>
+
+              <div className="codeButtons">
+                <CancelButton
+                  type="button"
+                  onClick={cancelarCodigo}
+                  onMouseMove={handleButtonMouseMove}
+                >
+                  <span className="buttonContent">
+                    <FaTimes />
+                    Cancelar
+                  </span>
+                </CancelButton>
+
+                <SaveButton
+                  type="button"
+                  onClick={verificarCodigo}
+                  onMouseMove={handleButtonMouseMove}
+                  disabled={
+                    verificandoCodigo ||
+                    codigo.length !== 6
+                  }
+                >
+                  <span className="buttonContent">
+                    <FaCheck />
+
+                    {verificandoCodigo
+                      ? "Verificando..."
+                      : "Confirmar código"}
+                  </span>
+                </SaveButton>
+              </div>
+            </CodeBox>
           )}
 
           {erro && (
-            <Aviso onMouseMove={handleButtonMouseMove}>
-              <span className="avisoContent">
-                {erro}
-              </span>
+            <Aviso>
+              <span>{erro}</span>
             </Aviso>
           )}
 
           {sucesso && (
-            <AvisoSucesso onMouseMove={handleButtonMouseMove}>
-              <span className="avisoContent">
-                {sucesso}
-              </span>
+            <AvisoSucesso>
+              <span>{sucesso}</span>
             </AvisoSucesso>
           )}
 
@@ -471,6 +662,8 @@ export default function Profile() {
               disabled={carregandoCodigo}
             >
               <span className="buttonContent">
+                <FaCheck />
+
                 {carregandoCodigo
                   ? "Gerando código..."
                   : "Salvar alterações"}
@@ -479,8 +672,10 @@ export default function Profile() {
           )}
 
           <LogoutLink
+            type="button"
             onClick={() => setShowLogoutModal(true)}
           >
+            <FaSignOutAlt />
             Sair da conta
           </LogoutLink>
         </Container>
@@ -488,10 +683,16 @@ export default function Profile() {
         {showLogoutModal && (
           <ModalOverlay>
             <Modal>
-              <h3>Sair da conta</h3>
+              <ModalIcon>
+                <FaSignOutAlt />
+              </ModalIcon>
+
+              <h3>Sair da conta?</h3>
 
               <p>
                 Tem certeza que deseja sair da sua conta?
+                Você precisará fazer login novamente para
+                acessar seu perfil.
               </p>
 
               <ModalButtons>
@@ -500,6 +701,7 @@ export default function Profile() {
                   onMouseMove={handleButtonMouseMove}
                 >
                   <span className="buttonContent">
+                    <FaTimes />
                     Cancelar
                   </span>
                 </CancelButton>
@@ -509,6 +711,7 @@ export default function Profile() {
                   onMouseMove={handleButtonMouseMove}
                 >
                   <span className="buttonContent">
+                    <FaSignOutAlt />
                     Sim, sair
                   </span>
                 </ConfirmButton>

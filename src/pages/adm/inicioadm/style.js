@@ -79,7 +79,7 @@ export const Badge = styled.div`
   align-items: center;
   gap: 9px;
   border-radius: 30px;
-  background: #831614;
+  background: #111;
   color: #fff;
   font-size: 1rem;
   font-weight: 800;
@@ -102,7 +102,7 @@ export const BadgeDot = styled.span`
 
 export const Title = styled.h1`
   margin: 0 0 14px;
-  color: #831614;
+  color: #111;
   font-size: clamp(2.8rem, 5vw, 4.8rem);
   font-weight: 900;
   letter-spacing: -2px;

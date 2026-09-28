@@ -718,13 +718,13 @@ export const Image = styled.img`
 export const PixelOne = styled.img`
   position: absolute;
 
-  width: 75px;
+  width: 150px;
 
   height: auto;
 
   top: 27%;
 
-  left: -9%;
+  left: -15%;
 
   z-index: 7;
 
@@ -772,7 +772,7 @@ export const PixelOne = styled.img`
 export const PixelTwo = styled.img`
   position: absolute;
 
-  width: 68px;
+ width: 150px;
 
   height: auto;
 
@@ -828,7 +828,7 @@ export const PixelTwo = styled.img`
 export const PixelThree = styled.img`
   position: absolute;
 
-  width: 78px;
+ width: 150px;
 
   height: auto;
 

@@ -25,17 +25,17 @@ export const Page = styled.div`
 `;
 
 export const Content = styled.main`
-  width: min(94%, 1480px);
+  width: min(97%, 1650px);
   margin: 35px auto 55px;
   box-sizing: border-box;
 
   @media (max-width: 1100px) {
-    width: 94%;
+    width: 96%;
     margin-top: 30px;
   }
 
   @media (max-width: 700px) {
-    width: 92%;
+    width: 94%;
     margin: 22px auto 40px;
   }
 `;
@@ -199,8 +199,10 @@ export const FilterButton = styled.button`
   gap: 10px;
   border: none;
   border-radius: 9px;
-  background: ${({ $active }) => ($active ? COLORS.primary : "transparent")};
-  color: ${({ $active }) => ($active ? "#ffffff" : "#666666")};
+  background: ${({ $active }) =>
+    $active ? COLORS.primary : "transparent"};
+  color: ${({ $active }) =>
+    $active ? "#ffffff" : "#666666"};
   font-family: inherit;
   font-size: 16px;
   font-weight: 650;
@@ -258,7 +260,8 @@ export const FilterButton = styled.button`
     border-radius: 50%;
     background: ${({ $active }) =>
       $active ? "rgba(255,255,255,0.16)" : "#f1f1f1"};
-    color: ${({ $active }) => ($active ? "#ffffff" : "#777777")};
+    color: ${({ $active }) =>
+      $active ? "#ffffff" : "#777777"};
     font-size: 12px;
     font-weight: 700;
   }
@@ -326,18 +329,22 @@ export const Spinner = styled.div`
   animation: ${spin} 0.8s linear infinite;
 `;
 
+/* =====================================================
+   TABELA
+===================================================== */
+
 export const TableContainer = styled.section`
   width: 100%;
   background: #ffffff;
   border: 1px solid ${COLORS.border};
-  border-radius: 18px;
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.075);
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.075);
 `;
 
 export const TableHeader = styled.div`
-  min-height: 76px;
-  padding: 18px 24px;
+  min-height: 88px;
+  padding: 20px 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -347,34 +354,42 @@ export const TableHeader = styled.div`
 
   @media (max-width: 600px) {
     padding: 16px 17px;
-    min-height: 68px;
+    min-height: 70px;
   }
 `;
 
 export const TableHeaderInfo = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
   min-width: 0;
 `;
 
 export const TableTitle = styled.h2`
   margin: 0;
   color: #252525;
-  font-size: 17px;
+  font-size: 19px;
   font-weight: 700;
+
+  @media (max-width: 600px) {
+    font-size: 16px;
+  }
 `;
 
 export const TableDescription = styled.p`
   margin: 0;
   color: #999999;
-  font-size: 12px;
+  font-size: 13px;
+
+  @media (max-width: 600px) {
+    font-size: 11px;
+  }
 `;
 
 export const DownloadButton = styled.button`
   position: relative;
-  min-height: 40px;
-  padding: 0 15px;
+  min-height: 44px;
+  padding: 0 17px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -468,7 +483,7 @@ export const TableWrapper = styled.div`
   scrollbar-color: #d9b72c #f5f5f5;
 
   &::-webkit-scrollbar {
-    height: 7px;
+    height: 8px;
   }
 
   &::-webkit-scrollbar-track {
@@ -483,7 +498,7 @@ export const TableWrapper = styled.div`
 
 export const Table = styled.table`
   width: 100%;
-  min-width: 850px;
+  min-width: 1050px;
   border-collapse: collapse;
   table-layout: fixed;
 
@@ -492,14 +507,14 @@ export const Table = styled.table`
   }
 
   th {
-    height: 52px;
-    padding: 0 22px;
+    height: 60px;
+    padding: 0 27px;
     color: #ffffff;
     text-align: left;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.7px;
+    letter-spacing: 0.75px;
     white-space: nowrap;
 
     &:last-child {
@@ -508,10 +523,10 @@ export const Table = styled.table`
   }
 
   td {
-    height: 78px;
-    padding: 10px 22px;
+    height: 92px;
+    padding: 12px 27px;
     color: #333333;
-    font-size: 13px;
+    font-size: 14px;
     border-bottom: 1px solid #eeeeee;
     vertical-align: middle;
     white-space: nowrap;
@@ -533,22 +548,22 @@ export const Table = styled.table`
 
   th:nth-child(1),
   td:nth-child(1) {
-    width: 31%;
+    width: 32%;
   }
 
   th:nth-child(2),
   td:nth-child(2) {
-    width: 15%;
+    width: 16%;
   }
 
   th:nth-child(3),
   td:nth-child(3) {
-    width: 22%;
+    width: 21%;
   }
 
   th:nth-child(4),
   td:nth-child(4) {
-    width: 17%;
+    width: 16%;
   }
 
   th:nth-child(5),
@@ -556,30 +571,46 @@ export const Table = styled.table`
     width: 15%;
   }
 
-  @media (max-width: 900px) {
-    min-width: 800px;
+  @media (max-width: 1100px) {
+    min-width: 980px;
 
     th {
-      padding: 0 16px;
+      padding: 0 22px;
     }
 
     td {
-      padding: 9px 16px;
+      padding: 11px 22px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    min-width: 900px;
+
+    th {
+      height: 55px;
+      padding: 0 18px;
+      font-size: 11px;
+    }
+
+    td {
+      height: 84px;
+      padding: 10px 18px;
+      font-size: 13px;
     }
   }
 
   @media (max-width: 600px) {
-    min-width: 760px;
+    min-width: 850px;
 
     th {
-      height: 48px;
-      padding: 0 13px;
+      height: 50px;
+      padding: 0 14px;
       font-size: 10px;
     }
 
     td {
-      height: 66px;
-      padding: 8px 13px;
+      height: 74px;
+      padding: 8px 14px;
       font-size: 12px;
     }
   }
@@ -588,13 +619,13 @@ export const Table = styled.table`
 export const StudentCell = styled.div`
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   min-width: 0;
 `;
 
 export const StudentAvatar = styled.div`
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
@@ -602,32 +633,43 @@ export const StudentAvatar = styled.div`
   border-radius: 50%;
   background: linear-gradient(135deg, ${COLORS.yellow}, #f5c62d);
   color: #5e4900;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 750;
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+
+  @media (max-width: 600px) {
+    width: 39px;
+    height: 39px;
+    font-size: 13px;
+  }
 `;
 
 export const StudentInfo = styled.div`
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 `;
 
 export const StudentName = styled.span`
   display: block;
-  max-width: 250px;
+  max-width: 300px;
   overflow: hidden;
   text-overflow: ellipsis;
   color: #222;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 650;
   line-height: 1.3;
+
+  @media (max-width: 600px) {
+    max-width: 250px;
+    font-size: 12px;
+  }
 `;
 
 export const Badge = styled.span`
-  min-height: 28px;
-  padding: 0 10px;
+  min-height: 30px;
+  padding: 0 11px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -640,12 +682,18 @@ export const Badge = styled.span`
   border: 1px solid
     ${({ $type }) =>
       $type === "course" ? "#e9e9ea" : "#f2df8c"};
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
 
   svg {
     font-size: 13px;
+  }
+
+  @media (max-width: 600px) {
+    min-height: 27px;
+    padding: 0 9px;
+    font-size: 10px;
   }
 `;
 
@@ -654,13 +702,13 @@ export const TurnoBadge = styled.span`
   align-items: center;
   gap: 7px;
   color: #555;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   white-space: nowrap;
 
   span {
-    width: 7px;
-    height: 7px;
+    width: 8px;
+    height: 8px;
     flex-shrink: 0;
     border-radius: 50%;
     background: ${({ $turno }) => {
@@ -670,6 +718,15 @@ export const TurnoBadge = styled.span`
       return "#999";
     }};
   }
+
+  @media (max-width: 600px) {
+    font-size: 11px;
+
+    span {
+      width: 7px;
+      height: 7px;
+    }
+  }
 `;
 
 export const Actions = styled.div`
@@ -677,12 +734,16 @@ export const Actions = styled.div`
   align-items: center;
   justify-content: center;
   gap: 14px;
+
+  @media (max-width: 600px) {
+    gap: 10px;
+  }
 `;
 
 export const ActionButton = styled.button`
   position: relative;
-  width: 32px;
-  height: 32px;
+  width: 35px;
+  height: 35px;
   padding: 0;
   display: flex;
   align-items: center;
@@ -720,8 +781,8 @@ export const ActionButton = styled.button`
   svg {
     position: relative;
     z-index: 2;
-    width: 18px;
-    height: 18px;
+    width: 19px;
+    height: 19px;
     stroke-width: 2;
   }
 
@@ -754,6 +815,16 @@ export const ActionButton = styled.button`
 
   &:disabled::before {
     display: none;
+  }
+
+  @media (max-width: 600px) {
+    width: 31px;
+    height: 31px;
+
+    svg {
+      width: 17px;
+      height: 17px;
+    }
   }
 `;
 
@@ -1229,35 +1300,48 @@ export const WarningBox = styled.div`
   }
 `;
 
+/* =====================================================
+   ANOS
+===================================================== */
+
 export const YearsWrapper = styled.div`
   width: 100%;
-
   margin: 70px auto 90px;
-
   display: flex;
-
   align-items: center;
   justify-content: center;
+  gap: 18px;
+  box-sizing: border-box;
 
-  gap: 16px;
+  @media (max-width: 900px) {
+    gap: 12px;
+  }
 
   @media (max-width: 600px) {
-    gap: 8px;
+    gap: 7px;
+    margin: 55px auto 35px;
+  }
 
-    margin-bottom: 25px;
+  @media (max-width: 430px) {
+    gap: 5px;
   }
 `;
 
 export const YearsContainer = styled.div`
-  display: flex;
-
-  align-items: center;
+  width: 100%;
+  max-width: 1000px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
   justify-content: center;
+  gap: 18px;
 
-  gap: 14px;
+  @media (max-width: 900px) {
+    gap: 12px;
+  }
 
   @media (max-width: 700px) {
-    gap: 8px;
+    gap: 9px;
   }
 
   @media (max-width: 520px) {
@@ -1271,101 +1355,55 @@ export const YearsContainer = styled.div`
 
 export const YearArrow = styled.button`
   position: relative;
-
-  width: 44px;
-  height: 44px;
-
+  width: 46px;
+  height: 46px;
   flex-shrink: 0;
-
   padding: 0;
-
   display: flex;
-
   align-items: center;
   justify-content: center;
-
   border: none;
-
   border-radius: 12px;
-
   background: ${COLORS.primary};
-
   color: #ffffff;
-
   cursor: pointer;
-
   overflow: hidden;
-
   isolation: isolate;
-
   transition:
-    transform 0.25s
-      cubic-bezier(
-        0.22,
-        1,
-        0.36,
-        1
-      ),
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
     box-shadow 0.25s ease,
     opacity 0.2s ease;
 
   &::before {
     content: "";
-
     position: absolute;
-
     left: var(--mouse-x, 50%);
     top: var(--mouse-y, 50%);
-
     width: 18px;
     height: 18px;
-
     border-radius: 50%;
-
     background: ${COLORS.yellow};
-
-    transform:
-      translate(-50%, -50%)
-      scale(0);
-
-    transition:
-      transform 0.55s
-      cubic-bezier(
-        0.16,
-        1,
-        0.3,
-        1
-      );
-
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: -1;
-
     pointer-events: none;
   }
 
   svg {
     position: relative;
-
     z-index: 2;
-
-    width: 20px;
-    height: 20px;
-
+    width: 21px;
+    height: 21px;
     stroke-width: 2.5;
   }
 
   &:hover:not(:disabled) {
     color: #111111;
-
     transform: translateY(-2px);
-
-    box-shadow:
-      0 8px 18px
-      rgba(131, 22, 20, 0.2);
+    box-shadow: 0 8px 18px rgba(131, 22, 20, 0.2);
 
     &::before {
-      transform:
-        translate(-50%, -50%)
-        scale(8);
+      transform: translate(-50%, -50%) scale(8);
     }
   }
 
@@ -1375,23 +1413,18 @@ export const YearArrow = styled.button`
 
   &:disabled {
     opacity: 0.25;
-
     cursor: not-allowed;
-
     box-shadow: none;
   }
 
   &:focus-visible {
-    outline: 2px solid
-      ${COLORS.yellow};
-
+    outline: 2px solid ${COLORS.yellow};
     outline-offset: 3px;
   }
 
   @media (max-width: 700px) {
     width: 38px;
     height: 38px;
-
     border-radius: 10px;
 
     svg {
@@ -1399,81 +1432,72 @@ export const YearArrow = styled.button`
       height: 18px;
     }
   }
+
+  @media (max-width: 430px) {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
 `;
 
 export const YearCard = styled.button`
   position: relative;
-  width: 230px;
-  height: 155px;
-  flex-shrink: 0;
+  width: 100%;
+  min-width: 0;
+  height: 175px;
   padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 13px;
   box-sizing: border-box;
-
-  border: 2px solid ${({ $active }) =>
-    $active ? COLORS.primary : "#eeeeee"};
-
+  border: 2px solid
+    ${({ $active }) =>
+      $active ? COLORS.primary : "#eeeeee"};
   border-radius: 22px;
-
   background: ${({ $active }) =>
     $active ? COLORS.primary : "#ffffff"};
-
   color: ${({ $active }) =>
     $active ? "#ffffff" : "#111111"};
-
   font-family: inherit;
   cursor: pointer;
   overflow: hidden;
   isolation: isolate;
-
   transition:
     transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
     border-color 0.25s ease,
     background 0.25s ease,
     box-shadow 0.3s ease;
 
-  /* ANIMAÇÃO AMARELA SEGUINDO O MOUSE */
   &::before {
     content: "";
-
     position: absolute;
-
     left: var(--mouse-x, 50%);
     top: var(--mouse-y, 50%);
-
     width: 35px;
     height: 35px;
-
     border-radius: 50%;
-
     background: ${COLORS.yellow};
-
     transform: translate(-50%, -50%) scale(0);
-
     transition:
       transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-
     z-index: -1;
     pointer-events: none;
   }
 
-  /* MANTÉM A ANIMAÇÃO AO PASSAR O MOUSE */
   &:hover {
     transform: translateY(-8px);
-
     border-color: ${COLORS.primary};
-
-    box-shadow:
-      0 18px 35px rgba(131, 22, 20, 0.16);
+    box-shadow: 0 18px 35px rgba(131, 22, 20, 0.16);
 
     &::before {
-      transform:
-        translate(-50%, -50%)
-        scale(11);
+      transform: translate(-50%, -50%) scale(11);
     }
   }
 
@@ -1487,55 +1511,46 @@ export const YearCard = styled.button`
   }
 
   @media (max-width: 900px) {
-    width: 200px;
-    height: 140px;
+    height: 155px;
+    padding: 17px;
+    border-radius: 20px;
   }
 
   @media (max-width: 700px) {
-    width: 165px;
-    height: 120px;
-    padding: 15px;
-    border-radius: 19px;
+    height: 135px;
+    padding: 13px;
+    border-radius: 17px;
     gap: 9px;
   }
 
   @media (max-width: 520px) {
-    width: 140px;
-    height: 105px;
-    padding: 12px;
-    border-radius: 16px;
+    height: 115px;
+    padding: 10px;
+    border-radius: 15px;
+    gap: 7px;
   }
 
   @media (max-width: 390px) {
-    width: 120px;
-    height: 95px;
-    padding: 9px;
-    border-radius: 14px;
+    height: 105px;
+    padding: 8px;
+    border-radius: 13px;
   }
 `;
 
-
 export const YearIcon = styled.div`
-  width: 48px;
-  height: 48px;
-
+  width: 52px;
+  height: 52px;
   flex-shrink: 0;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 50%;
-
   background: ${({ $active }) =>
     $active
       ? COLORS.yellow
       : "rgba(255, 219, 83, 0.22)"};
-
   color: ${COLORS.primary};
-
-  font-size: 22px;
-
+  font-size: 23px;
   transition:
     transform 0.3s ease,
     background 0.25s ease;
@@ -1545,37 +1560,38 @@ export const YearIcon = styled.div`
   }
 
   @media (max-width: 900px) {
-    width: 43px;
-    height: 43px;
-    font-size: 20px;
+    width: 46px;
+    height: 46px;
+    font-size: 21px;
   }
 
   @media (max-width: 700px) {
-    width: 38px;
-    height: 38px;
+    width: 40px;
+    height: 40px;
     font-size: 18px;
   }
 
   @media (max-width: 520px) {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     font-size: 15px;
   }
-`;
 
+  @media (max-width: 390px) {
+    width: 30px;
+    height: 30px;
+    font-size: 13px;
+  }
+`;
 
 export const YearNumber = styled.strong`
   position: relative;
   z-index: 2;
-
   color: ${({ $active }) =>
     $active ? "#ffffff" : COLORS.primary};
-
-  font-size: 2rem;
+  font-size: 2.1rem;
   font-weight: 850;
-
   line-height: 1;
-
   transition:
     color 0.25s ease,
     transform 0.3s ease;
@@ -1590,43 +1606,39 @@ export const YearNumber = styled.strong`
   }
 
   @media (max-width: 700px) {
-    font-size: 1.5rem;
+    font-size: 1.55rem;
   }
 
   @media (max-width: 520px) {
-    font-size: 1.25rem;
+    font-size: 1.3rem;
   }
 
   @media (max-width: 390px) {
-    font-size: 1.1rem;
+    font-size: 1.15rem;
   }
 `;
 
 export const YearDescription = styled.span`
   position: relative;
-
   z-index: 2;
-
   color: ${({ $active }) =>
     $active
       ? "rgba(255,255,255,0.72)"
       : "#999999"};
-
   font-size: 10px;
-
   font-weight: 500;
-
   line-height: 1.2;
-
   text-align: center;
-
   white-space: nowrap;
-
-  transition:
-    color 0.25s ease;
+  transition: color 0.25s ease;
 
   ${YearCard}:hover & {
     color: #5e4900;
+  }
+
+  @media (max-width: 600px) {
+    font-size: 9px;
+    white-space: normal;
   }
 
   @media (max-width: 520px) {

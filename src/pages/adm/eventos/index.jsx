@@ -22,6 +22,7 @@ import {
   TitleArea,
   Title,
   Subtitle,
+
   YearsWrapper,
   YearsContainer,
   YearArrow,
@@ -29,6 +30,7 @@ import {
   YearIcon,
   YearNumber,
   YearDescription,
+  
   Cards,
   EventCard,
   EventImage,
