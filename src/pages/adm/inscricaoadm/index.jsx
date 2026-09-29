@@ -3,81 +3,149 @@ import { jsPDF } from "jspdf";
 import Layoutadm from "../../../components/layoutadm";
 import { getAuthHeaders } from "../../../utils/auth";
 import {
-  FiEdit,
-  FiTrash2,
-  FiUsers,
-  FiBookOpen,
-  FiSearch,
-  FiX,
-  FiAlertTriangle,
-  FiDownload,
-  FiChevronLeft,
-  FiChevronRight,
-  FiCalendar,
+  FiEdit, FiTrash2, FiUsers, FiBookOpen, FiSearch, FiX,
+  FiAlertTriangle, FiDownload, FiChevronLeft, FiChevronRight,
+  FiCalendar, FiClock
 } from "react-icons/fi";
 import {
-  Page,
-  Content,
-  Header,
-  TitleArea,
-  Title,
-  Subtitle,
-  Stats,
-  StatCard,
-  StatIcon,
-  StatContent,
-  StatNumber,
-  StatLabel,
-  FilterContainer,
-  FilterButton,
-  TableContainer,
-  TableHeader,
-  TableHeaderInfo,
-  TableTitle,
-  TableDescription,
-  DownloadButton,
-  TableWrapper,
-  Table,
-  StudentCell,
-  StudentAvatar,
-  StudentInfo,
-  StudentName,
-  Badge,
-  TurnoBadge,
-  Actions,
-  ActionButton,
-  EmptyState,
-  EmptyIcon,
-  EmptyTitle,
-  EmptyText,
-  LoadingState,
-  Spinner,
-  ErrorMessage,
-  ModalOverlay,
-  Modal,
-  ModalHeader,
-  ModalTitle,
-  ModalClose,
-  ModalDescription,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Select,
-  ModalButtons,
-  SaveButton,
-  CancelButton,
-  ConfirmButton,
-  WarningBox,
-  // CARDS DE ANOS
-  YearsWrapper,
-  YearsContainer,
-  YearArrow,
-  YearCard,
-  YearIcon,
-  YearNumber,
-  YearDescription,
+  Page, Content, Header, TitleArea, Title, Subtitle, FilterContainer,
+  FilterButton, TableContainer, TableHeader, TableHeaderInfo, TableTitle,
+  TableDescription, DownloadButton, TableWrapper, Table, StudentCell,
+  StudentAvatar, StudentInfo, StudentName, Badge, TurnoBadge, Actions,
+  ActionButton, EmptyState, EmptyIcon, EmptyTitle, EmptyText, LoadingState,
+  Spinner, ErrorMessage, ModalOverlay, Modal, ModalHeader, ModalTitle,
+  ModalClose, ModalDescription, Form, FormGroup, Label, Input, Select,
+  ModalButtons, SaveButton, CancelButton, ConfirmButton, WarningBox,
+  YearsWrapper, YearsContainer, YearArrow, YearCard, YearIcon, YearNumber,
+  YearDescription, Bloco, BlocoHeader, BlocoIcone, BlocoInfo, BlocoTitulo,
+  BlocoDescricao
 } from "./style";
+
+const API_URL = "http://localhost:3001";
+const ANO_MINIMO = 2026;
+
+function descobrirAno(inscricao) {
+  const valor = inscricao?.ano ?? inscricao?.created_at ?? inscricao?.createdAt ?? inscricao?.data_inscricao ?? inscricao?.dataInscricao ?? inscricao?.data ?? inscricao?.date;
+  if (valor) {
+    if (typeof valor === "number" && valor >= 2000 && valor <= 2100) return valor;
+    const dataConvertida = new Date(valor);
+    if (!Number.isNaN(dataConvertida.getTime())) return dataConvertida.getFullYear();
+    const numero = Number(valor);
+    if (numero >= 2000 && numero <= 2100) return numero;
+  }
+  return ANO_MINIMO;
+}
+
+function obterInicial(nome) {
+  return nome ? nome.trim().charAt(0).toUpperCase() : "?";
+}
+
+function ordenarPorNome(lista) {
+  return [...lista].sort((a, b) => (a.nome_poeta || "").localeCompare(b.nome_poeta || "", "pt-BR", { sensitivity: "base" }));
+}
+
+const handleButtonMouseMove = (e) => {
+  const button = e.currentTarget, rect = button.getBoundingClientRect();
+  button.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+  button.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+};
+
+function gerarPDF({ alunos, anoSelecionado, turno }) {
+  const lista = ordenarPorNome(alunos);
+  const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
+  const dataAtual = new Date();
+  const dataFormatada = dataAtual.toLocaleDateString("pt-BR");
+  const horaFormatada = dataAtual.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+
+  doc.setFillColor(131, 22, 20);
+  doc.rect(0, 0, 297, 35, "F");
+  doc.setTextColor(255, 255, 255);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(20);
+  doc.text(`Alunos inscritos - ${anoSelecionado}`, 18, 16);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.text(turno === "Todos" ? "Lista de inscrições" : `Lista de inscrições - ${turno}`, 18, 24);
+  doc.text(`Gerado em ${dataFormatada} às ${horaFormatada}`, 279, 24, { align: "right" });
+  doc.setTextColor(60, 60, 60);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(12);
+  doc.text(`Total de alunos: ${lista.length}`, 18, 47);
+
+  const margemEsquerda = 18, larguraTotal = 261;
+  const colunas = [
+    { titulo: "Nº", x: margemEsquerda, largura: 12 },
+    { titulo: "ALUNO", x: margemEsquerda + 12, largura: 85 },
+    { titulo: "TURMA", x: margemEsquerda + 97, largura: 45 },
+    { titulo: "CURSO", x: margemEsquerda + 142, largura: 65 },
+    { titulo: "TURNO", x: margemEsquerda + 207, largura: 54 }
+  ];
+  let y = 55;
+
+  const desenharCabecalho = () => {
+    doc.setFillColor(131, 22, 20);
+    doc.rect(margemEsquerda, y, larguraTotal, 10, "F");
+    doc.setTextColor(255, 255, 255);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9);
+    colunas.forEach((coluna) => doc.text(coluna.titulo, coluna.x + 3, y + 6.5));
+    y += 10;
+  };
+
+  desenharCabecalho();
+
+  lista.forEach((aluno, index) => {
+    if (y > 185) {
+      doc.addPage();
+      y = 18;
+      desenharCabecalho();
+    }
+
+    const alturaLinha = 11;
+    doc.setFillColor(index % 2 === 0 ? 253 : 255, index % 2 === 0 ? 253 : 251, index % 2 === 0 ? 253 : 237);
+    doc.rect(margemEsquerda, y, larguraTotal, alturaLinha, "F");
+    doc.setDrawColor(230, 230, 230);
+    doc.line(margemEsquerda, y + alturaLinha, margemEsquerda + larguraTotal, y + alturaLinha);
+    doc.setTextColor(50, 50, 50);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8.5);
+    doc.text(String(index + 1), colunas[0].x + 3, y + 7);
+    doc.text((aluno.nome_poeta || "-").substring(0, 48), colunas[1].x + 3, y + 7);
+    doc.text((aluno.turma || "-").substring(0, 25), colunas[2].x + 3, y + 7);
+    doc.text((aluno.curso || "-").substring(0, 35), colunas[3].x + 3, y + 7);
+    doc.text(aluno.turno || "-", colunas[4].x + 3, y + 7);
+    y += alturaLinha;
+  });
+
+  const totalPaginas = doc.internal.getNumberOfPages();
+
+  for (let pagina = 1; pagina <= totalPaginas; pagina++) {
+    doc.setPage(pagina);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(130, 130, 130);
+    doc.text("Sistema de organização do Slam", 18, 202);
+    doc.text(`Página ${pagina} de ${totalPaginas}`, 279, 202, { align: "right" });
+  }
+
+  const nomeArquivo = `alunos-inscritos-${anoSelecionado}-${dataFormatada.replace(/\//g, "-")}.pdf`;
+  doc.save(nomeArquivo);
+}
+
+function BlocoPagina({ icone, titulo, descricao, children }) {
+  return (
+    <Bloco>
+      <BlocoHeader>
+        <BlocoIcone>{icone}</BlocoIcone>
+        <BlocoInfo>
+          <BlocoTitulo>{titulo}</BlocoTitulo>
+          <BlocoDescricao>{descricao}</BlocoDescricao>
+        </BlocoInfo>
+      </BlocoHeader>
+      {children}
+    </Bloco>
+  );
+}
 
 export default function Inscricaoadm() {
   const [turno, setTurno] = useState("Todos");
@@ -87,79 +155,9 @@ export default function Inscricaoadm() {
   const [inscricaoEditando, setInscricaoEditando] = useState(null);
   const [inscricaoExcluir, setInscricaoExcluir] = useState(null);
   const [confirmacaoExclusao, setConfirmacaoExclusao] = useState("");
-
-  // =====================================================
-  // ANO
-  // =====================================================
-
-  const [anoInicial, setAnoInicial] = useState(2026);
-  const [anoSelecionado, setAnoSelecionado] = useState(2026);
-
-  const anosVisiveis = Array.from(
-    { length: 3 },
-    (_, index) => anoInicial + index
-  );
-
-  // =====================================================
-  // DESCOBRIR ANO DA INSCRIÇÃO
-  // =====================================================
-
-  function descobrirAno(inscricao) {
-    const valor =
-      inscricao?.ano ??
-      inscricao?.created_at ??
-      inscricao?.createdAt ??
-      inscricao?.data_inscricao ??
-      inscricao?.dataInscricao ??
-      inscricao?.data ??
-      inscricao?.date;
-
-    if (valor) {
-      // Se já for um número, usa diretamente
-      if (
-        typeof valor === "number" &&
-        valor >= 2000 &&
-        valor <= 2100
-      ) {
-        return valor;
-      }
-
-      // Caso seja uma data
-      const dataConvertida = new Date(valor);
-
-      if (!Number.isNaN(dataConvertida.getTime())) {
-        return dataConvertida.getFullYear();
-      }
-
-      // Caso venha como string "2026"
-      const numero = Number(valor);
-
-      if (numero >= 2000 && numero <= 2100) {
-        return numero;
-      }
-    }
-
-    // Caso a inscrição não tenha ano
-    return 2026;
-  }
-
-  // =====================================================
-  // ANIMAÇÃO DOS BOTÕES
-  // =====================================================
-
-  const handleButtonMouseMove = (e) => {
-    const button = e.currentTarget;
-    const rect = button.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    button.style.setProperty("--mouse-x", `${x}px`);
-    button.style.setProperty("--mouse-y", `${y}px`);
-  };
-
-  // =====================================================
-  // BUSCAR INSCRIÇÕES
-  // =====================================================
+  const [anoInicial, setAnoInicial] = useState(ANO_MINIMO);
+  const [anoSelecionado, setAnoSelecionado] = useState(ANO_MINIMO);
+  const anosVisiveis = Array.from({ length: 3 }, (_, i) => anoInicial + i);
 
   useEffect(() => {
     buscarInscricoes();
@@ -168,44 +166,28 @@ export default function Inscricaoadm() {
   function buscarInscricoes() {
     setCarregando(true);
     setErro("");
-
-    fetch("http://localhost:3001/inscricoes", {
-      headers: getAuthHeaders(),
-    })
+    fetch(`${API_URL}/inscricoes`, { headers: getAuthHeaders() })
       .then((res) => {
-        if (!res.ok) {
-          throw new Error("Erro ao buscar inscrições.");
-        }
-
+        if (!res.ok) throw new Error("Erro ao buscar inscrições.");
         return res.json();
       })
-      .then((data) => {
-        setInscricoes(Array.isArray(data) ? data : []);
-      })
+      .then((data) => setInscricoes(Array.isArray(data) ? data : []))
       .catch((error) => {
         console.error(error);
         setErro("Não foi possível carregar as inscrições.");
       })
-      .finally(() => {
-        setCarregando(false);
-      });
+      .finally(() => setCarregando(false));
   }
-
-  // =====================================================
-  // NAVEGAÇÃO DOS ANOS
-  // =====================================================
 
   function avancarAnos() {
     const novoAno = anoInicial + 3;
-
     setAnoInicial(novoAno);
     setAnoSelecionado(novoAno);
     setTurno("Todos");
   }
 
   function voltarAnos() {
-    const novoAno = Math.max(2026, anoInicial - 3);
-
+    const novoAno = Math.max(ANO_MINIMO, anoInicial - 3);
     setAnoInicial(novoAno);
     setAnoSelecionado(novoAno);
     setTurno("Todos");
@@ -216,834 +198,205 @@ export default function Inscricaoadm() {
     setTurno("Todos");
   }
 
-  // =====================================================
-  // INSCRIÇÕES DO ANO SELECIONADO
-  // =====================================================
-
-  const inscricoesDoAno = inscricoes.filter(
-    (inscricao) => descobrirAno(inscricao) === anoSelecionado
-  );
-
-  // =====================================================
-  // FILTRO POR TURNO
-  // =====================================================
-
-  const inscricoesFiltradas =
-    turno === "Todos"
-      ? [...inscricoesDoAno].sort((a, b) =>
-          (a.nome_poeta || "").localeCompare(
-            b.nome_poeta || "",
-            "pt-BR",
-            { sensitivity: "base" }
-          )
-        )
-      : inscricoesDoAno.filter(
-          (inscricao) => inscricao.turno === turno
-        );
-
-  // =====================================================
-  // QUANTIDADE DE CADA ANO
-  // =====================================================
+  const inscricoesDoAno = inscricoes.filter((i) => descobrirAno(i) === anoSelecionado);
+  const inscricoesFiltradas = turno === "Todos" ? ordenarPorNome(inscricoesDoAno) : inscricoesDoAno.filter((i) => i.turno === turno);
 
   function quantidadePorAno(ano) {
-    return inscricoes.filter(
-      (inscricao) => descobrirAno(inscricao) === ano
-    ).length;
+    return inscricoes.filter((i) => descobrirAno(i) === ano).length;
   }
 
-  // =====================================================
-  // ESTATÍSTICAS
-  // =====================================================
-
-  const totalTodos = inscricoesDoAno.length;
-
-  const totalManha = inscricoesDoAno.filter(
-    (item) => item.turno === "Manhã"
-  ).length;
-
-  const totalTarde = inscricoesDoAno.filter(
-    (item) => item.turno === "Tarde"
-  ).length;
-
-  const totalNoite = inscricoesDoAno.filter(
-    (item) => item.turno === "Noite"
-  ).length;
-
-  // =====================================================
-  // GERAR PDF
-  // =====================================================
+  const opcoesTurno = [
+    { valor: "Todos", total: inscricoesDoAno.length },
+    { valor: "Manhã", total: inscricoesDoAno.filter((i) => i.turno === "Manhã").length },
+    { valor: "Tarde", total: inscricoesDoAno.filter((i) => i.turno === "Tarde").length },
+    { valor: "Noite", total: inscricoesDoAno.filter((i) => i.turno === "Noite").length }
+  ];
 
   function baixarPDF() {
-    if (!inscricoesFiltradas || inscricoesFiltradas.length === 0) {
+    if (!inscricoesFiltradas?.length) {
       setErro("Não existem alunos inscritos para gerar o PDF.");
       return;
     }
-
     try {
-      const alunos = [...inscricoesFiltradas].sort((a, b) =>
-        (a.nome_poeta || "").localeCompare(
-          b.nome_poeta || "",
-          "pt-BR",
-          { sensitivity: "base" }
-        )
-      );
-
-      const doc = new jsPDF({
-        orientation: "landscape",
-        unit: "mm",
-        format: "a4",
-      });
-
-      const dataAtual = new Date();
-
-      const dataFormatada = dataAtual.toLocaleDateString("pt-BR");
-
-      const horaFormatada = dataAtual.toLocaleTimeString("pt-BR", {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-
-      // =====================================================
-      // CABEÇALHO
-      // =====================================================
-
-      doc.setFillColor(131, 22, 20);
-      doc.rect(0, 0, 297, 35, "F");
-
-      doc.setTextColor(255, 255, 255);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(20);
-
-      doc.text(
-        `Alunos inscritos - ${anoSelecionado}`,
-        18,
-        16
-      );
-
-      doc.setFont("helvetica", "normal");
-      doc.setFontSize(10);
-
-      doc.text(
-        turno === "Todos"
-          ? "Lista de inscrições"
-          : `Lista de inscrições - ${turno}`,
-        18,
-        24
-      );
-
-      doc.text(
-        `Gerado em ${dataFormatada} às ${horaFormatada}`,
-        279,
-        24,
-        { align: "right" }
-      );
-
-      // =====================================================
-      // RESUMO
-      // =====================================================
-
-      doc.setTextColor(60, 60, 60);
-      doc.setFont("helvetica", "bold");
-      doc.setFontSize(12);
-
-      doc.text(
-        `Total de alunos: ${alunos.length}`,
-        18,
-        47
-      );
-
-      // =====================================================
-      // CONFIGURAÇÃO DA TABELA
-      // =====================================================
-
-      const margemEsquerda = 18;
-      const larguraTotal = 261;
-
-      const colunas = [
-        {
-          titulo: "Nº",
-          x: margemEsquerda,
-          largura: 12,
-        },
-        {
-          titulo: "ALUNO",
-          x: margemEsquerda + 12,
-          largura: 85,
-        },
-        {
-          titulo: "TURMA",
-          x: margemEsquerda + 97,
-          largura: 45,
-        },
-        {
-          titulo: "CURSO",
-          x: margemEsquerda + 142,
-          largura: 65,
-        },
-        {
-          titulo: "TURNO",
-          x: margemEsquerda + 207,
-          largura: 54,
-        },
-      ];
-
-      let y = 55;
-
-      // =====================================================
-      // CABEÇALHO DA TABELA
-      // =====================================================
-
-      const desenharCabecalho = () => {
-        doc.setFillColor(131, 22, 20);
-        doc.rect(
-          margemEsquerda,
-          y,
-          larguraTotal,
-          10,
-          "F"
-        );
-
-        doc.setTextColor(255, 255, 255);
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(9);
-
-        colunas.forEach((coluna) => {
-          doc.text(
-            coluna.titulo,
-            coluna.x + 3,
-            y + 6.5
-          );
-        });
-
-        y += 10;
-      };
-
-      desenharCabecalho();
-
-      // =====================================================
-      // ALUNOS
-      // =====================================================
-
-      alunos.forEach((aluno, index) => {
-        if (y > 185) {
-          doc.addPage();
-          y = 18;
-          desenharCabecalho();
-        }
-
-        const alturaLinha = 11;
-
-        if (index % 2 === 0) {
-          doc.setFillColor(253, 253, 253);
-        } else {
-          doc.setFillColor(255, 251, 237);
-        }
-
-        doc.rect(
-          margemEsquerda,
-          y,
-          larguraTotal,
-          alturaLinha,
-          "F"
-        );
-
-        doc.setDrawColor(230, 230, 230);
-
-        doc.line(
-          margemEsquerda,
-          y + alturaLinha,
-          margemEsquerda + larguraTotal,
-          y + alturaLinha
-        );
-
-        doc.setTextColor(50, 50, 50);
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(8.5);
-
-        const nome = aluno.nome_poeta || "-";
-        const turma = aluno.turma || "-";
-        const curso = aluno.curso || "-";
-        const turnoAluno = aluno.turno || "-";
-
-        doc.text(
-          String(index + 1),
-          colunas[0].x + 3,
-          y + 7
-        );
-
-        doc.text(
-          nome.substring(0, 48),
-          colunas[1].x + 3,
-          y + 7
-        );
-
-        doc.text(
-          turma.substring(0, 25),
-          colunas[2].x + 3,
-          y + 7
-        );
-
-        doc.text(
-          curso.substring(0, 35),
-          colunas[3].x + 3,
-          y + 7
-        );
-
-        doc.text(
-          turnoAluno,
-          colunas[4].x + 3,
-          y + 7
-        );
-
-        y += alturaLinha;
-      });
-
-      // =====================================================
-      // RODAPÉ
-      // =====================================================
-
-      const totalPaginas =
-        doc.internal.getNumberOfPages();
-
-      for (
-        let pagina = 1;
-        pagina <= totalPaginas;
-        pagina++
-      ) {
-        doc.setPage(pagina);
-
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(8);
-        doc.setTextColor(130, 130, 130);
-
-        doc.text(
-          "Sistema de organização do Slam",
-          18,
-          202
-        );
-
-        doc.text(
-          `Página ${pagina} de ${totalPaginas}`,
-          279,
-          202,
-          { align: "right" }
-        );
-      }
-
-      // =====================================================
-      // DOWNLOAD
-      // =====================================================
-
-      const nomeArquivo =
-        `alunos-inscritos-${anoSelecionado}-${dataFormatada.replace(
-          /\//g,
-          "-"
-        )}.pdf`;
-
-      doc.save(nomeArquivo);
+      gerarPDF({ alunos: inscricoesFiltradas, anoSelecionado, turno });
     } catch (error) {
       console.error("Erro ao gerar PDF:", error);
-
       setErro("Não foi possível gerar o PDF.");
     }
   }
 
-  // =====================================================
-  // EXCLUIR
-  // =====================================================
-
-  async function excluirInscricao() {
-    if (
-      confirmacaoExclusao.toLowerCase() !==
-      "excluir"
-    ) {
-      return;
-    }
-
-    try {
-      const res = await fetch(
-        `http://localhost:3001/inscricao/${inscricaoExcluir.id_inscricoes}`,
-        {
-          method: "DELETE",
-          headers: getAuthHeaders(),
-        }
-      );
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setErro(
-          data.erro ||
-          "Erro ao excluir inscrição."
-        );
-
-        return;
-      }
-
-      setInscricoes((atual) =>
-        atual.filter(
-          (i) =>
-            i.id_inscricoes !==
-            inscricaoExcluir.id_inscricoes
-        )
-      );
-
-      fecharModalExclusao();
-    } catch (err) {
-      console.error(err);
-
-      setErro(
-        "Não foi possível conectar ao servidor."
-      );
-    }
+  function abrirEdicao(inscricao) {
+    setErro("");
+    setInscricaoEditando({ ...inscricao });
   }
 
-  // =====================================================
-  // EDITAR
-  // =====================================================
+  function alterarCampoEdicao(campo, valor) {
+    setInscricaoEditando((atual) => ({ ...atual, [campo]: valor }));
+  }
 
   async function salvarEdicao() {
-    if (!inscricaoEditando) {
-      return;
-    }
-
+    if (!inscricaoEditando) return;
     try {
-      const res = await fetch(
-        `http://localhost:3001/inscricao/${inscricaoEditando.id_inscricoes}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            ...getAuthHeaders(),
-          },
-          body: JSON.stringify({
-            nome_poeta:
-              inscricaoEditando.nome_poeta,
-            turma:
-              inscricaoEditando.turma,
-            turno:
-              inscricaoEditando.turno,
-            curso:
-              inscricaoEditando.curso,
-          }),
-        }
-      );
-
+      const res = await fetch(`${API_URL}/inscricao/${inscricaoEditando.id_inscricoes}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json", ...getAuthHeaders() },
+        body: JSON.stringify({
+          nome_poeta: inscricaoEditando.nome_poeta,
+          turma: inscricaoEditando.turma,
+          turno: inscricaoEditando.turno,
+          curso: inscricaoEditando.curso
+        })
+      });
       const data = await res.json();
 
       if (!res.ok) {
-        setErro(
-          data.erro ||
-          "Erro ao salvar alterações."
-        );
-
+        setErro(data.erro || "Erro ao salvar alterações.");
         return;
       }
 
-      setInscricoes((atual) =>
-        atual.map((i) =>
-          i.id_inscricoes ===
-          inscricaoEditando.id_inscricoes
-            ? inscricaoEditando
-            : i
-        )
-      );
-
+      setInscricoes((atual) => atual.map((i) => i.id_inscricoes === inscricaoEditando.id_inscricoes ? inscricaoEditando : i));
       setInscricaoEditando(null);
     } catch (err) {
       console.error(err);
-
-      setErro(
-        "Não foi possível conectar ao servidor."
-      );
+      setErro("Não foi possível conectar ao servidor.");
     }
   }
 
-  // =====================================================
-  // MODAIS
-  // =====================================================
+  function abrirExclusao(inscricao) {
+    if (inscricao.atribuido_evento) {
+      setErro(`Não é possível excluir ${inscricao.nome_poeta} porque o poeta já está atribuído ao evento "${inscricao.evento_nome}".`);
+      return;
+    }
+    setErro("");
+    setInscricaoExcluir(inscricao);
+    setConfirmacaoExclusao("");
+  }
 
   function fecharModalExclusao() {
     setInscricaoExcluir(null);
     setConfirmacaoExclusao("");
   }
 
-  function obterInicial(nome) {
-    if (!nome) {
-      return "?";
+  async function excluirInscricao() {
+    if (confirmacaoExclusao.toLowerCase() !== "excluir") return;
+    try {
+      const res = await fetch(`${API_URL}/inscricao/${inscricaoExcluir.id_inscricoes}`, {
+        method: "DELETE",
+        headers: getAuthHeaders()
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setErro(data.erro || "Erro ao excluir inscrição.");
+        return;
+      }
+
+      setInscricoes((atual) => atual.filter((i) => i.id_inscricoes !== inscricaoExcluir.id_inscricoes));
+      fecharModalExclusao();
+    } catch (err) {
+      console.error(err);
+      setErro("Não foi possível conectar ao servidor.");
     }
-
-    return nome
-      .trim()
-      .charAt(0)
-      .toUpperCase();
   }
-
-  function abrirEdicao(inscricao) {
-    setErro("");
-
-    setInscricaoEditando({
-      ...inscricao,
-    });
-  }
-
-  function abrirExclusao(inscricao) {
-    if (inscricao.atribuido_evento) {
-      setErro(
-        `Não é possível excluir ${inscricao.nome_poeta} porque o poeta já está atribuído ao evento "${inscricao.evento_nome}".`
-      );
-
-      return;
-    }
-
-    setErro("");
-    setInscricaoExcluir(inscricao);
-    setConfirmacaoExclusao("");
-  }
-
-  // =====================================================
-  // RENDER
-  // =====================================================
 
   return (
     <Page>
       <Layoutadm />
-
       <Content>
         <Header>
           <TitleArea>
-            <Title>
-              Inscrições dos Alunos
-            </Title>
-
-            <Subtitle>
-              Gerencie as inscrições e informações dos alunos participantes.
-            </Subtitle>
+            <Title>Inscrições dos Alunos</Title>
+            <Subtitle>Gerencie as inscrições e informações dos alunos participantes.</Subtitle>
           </TitleArea>
-
-          <Stats>
-            <StatCard>
-              <StatIcon $color="#831614">
-                <FiUsers />
-              </StatIcon>
-
-              <StatContent>
-                <StatNumber>
-                  {inscricoesDoAno.length}
-                </StatNumber>
-
-                <StatLabel>
-                  Inscrições em {anoSelecionado}
-                </StatLabel>
-              </StatContent>
-            </StatCard>
-          </Stats>
         </Header>
 
-        {/* =====================================================
-            CARDS DOS ANOS
-        ===================================================== */}
+        <BlocoPagina icone={<FiCalendar />} titulo="Ano das inscrições" descricao="Escolha o ano que deseja visualizar.">
+          <YearsWrapper>
+            <YearArrow type="button" onClick={voltarAnos} onMouseMove={handleButtonMouseMove} disabled={anoInicial === ANO_MINIMO} aria-label="Anos anteriores">
+              <span className="buttonContent"><FiChevronLeft /></span>
+            </YearArrow>
+            <YearsContainer>
+              {anosVisiveis.map((ano) => {
+                const quantidade = quantidadePorAno(ano), ativo = anoSelecionado === ano;
+                return (
+                  <YearCard key={ano} $active={ativo} onClick={() => selecionarAno(ano)} onMouseMove={handleButtonMouseMove}>
+                    <YearIcon $active={ativo}><FiCalendar /></YearIcon>
+                    <YearNumber $active={ativo}>{ano}</YearNumber>
+                    <YearDescription $active={ativo}>{quantidade} {quantidade === 1 ? "inscrição" : "inscrições"}</YearDescription>
+                  </YearCard>
+                );
+              })}
+            </YearsContainer>
+            <YearArrow type="button" onClick={avancarAnos} onMouseMove={handleButtonMouseMove} aria-label="Próximos anos">
+              <span className="buttonContent"><FiChevronRight /></span>
+            </YearArrow>
+          </YearsWrapper>
+        </BlocoPagina>
 
-        <YearsWrapper>
-          <YearArrow
-            type="button"
-            onClick={voltarAnos}
-            onMouseMove={handleButtonMouseMove}
-            disabled={anoInicial === 2026}
-            aria-label="Anos anteriores"
-          >
-            <span className="buttonContent">
-              <FiChevronLeft />
-            </span>
-          </YearArrow>
+        <BlocoPagina icone={<FiClock />} titulo="Filtrar por turno" descricao="Veja os alunos inscritos por período do dia.">
+          <FilterContainer>
+            {opcoesTurno.map((opcao) => (
+              <FilterButton key={opcao.valor} type="button" $active={turno === opcao.valor} onClick={() => setTurno(opcao.valor)} onMouseMove={handleButtonMouseMove} aria-pressed={turno === opcao.valor}>
+                <span>{opcao.valor}</span><strong>{opcao.total}</strong>
+              </FilterButton>
+            ))}
+          </FilterContainer>
+        </BlocoPagina>
 
-          <YearsContainer>
-            {anosVisiveis.map((ano) => {
-              const quantidade =
-                quantidadePorAno(ano);
-
-              const ativo =
-                anoSelecionado === ano;
-
-              return (
-                <YearCard
-                  key={ano}
-                  $active={ativo}
-                  onClick={() =>
-                    selecionarAno(ano)
-                  }
-                  onMouseMove={
-                    handleButtonMouseMove
-                  }
-                >
-                  <YearIcon $active={ativo}>
-                    <FiCalendar />
-                  </YearIcon>
-
-                  <YearNumber $active={ativo}>
-                    {ano}
-                  </YearNumber>
-
-                  <YearDescription $active={ativo}>
-                    {quantidade}{" "}
-                    {quantidade === 1
-                      ? "inscrição"
-                      : "inscrições"}
-                  </YearDescription>
-                </YearCard>
-              );
-            })}
-          </YearsContainer>
-
-          <YearArrow
-            type="button"
-            onClick={avancarAnos}
-            onMouseMove={handleButtonMouseMove}
-            aria-label="Próximos anos"
-          >
-            <span className="buttonContent">
-              <FiChevronRight />
-            </span>
-          </YearArrow>
-        </YearsWrapper>
-
-        {/* =====================================================
-            FILTROS
-        ===================================================== */}
-
-        <FilterContainer>
-          <FilterButton
-            type="button"
-            $active={turno === "Todos"}
-            onClick={() => setTurno("Todos")}
-          >
-            Todos
-            <span>{totalTodos}</span>
-          </FilterButton>
-
-          <FilterButton
-            type="button"
-            $active={turno === "Manhã"}
-            onClick={() => setTurno("Manhã")}
-          >
-            Manhã
-            <span>{totalManha}</span>
-          </FilterButton>
-
-          <FilterButton
-            type="button"
-            $active={turno === "Tarde"}
-            onClick={() => setTurno("Tarde")}
-          >
-            Tarde
-            <span>{totalTarde}</span>
-          </FilterButton>
-
-          <FilterButton
-            type="button"
-            $active={turno === "Noite"}
-            onClick={() => setTurno("Noite")}
-          >
-            Noite
-            <span>{totalNoite}</span>
-          </FilterButton>
-        </FilterContainer>
-
-        {erro && (
-          <ErrorMessage>
-            {erro}
-          </ErrorMessage>
-        )}
-
-        {/* =====================================================
-            TABELA
-        ===================================================== */}
+        {erro && <ErrorMessage>{erro}</ErrorMessage>}
 
         <TableContainer>
           <TableHeader>
             <TableHeaderInfo>
-              <TableTitle>
-                Inscrições
-              </TableTitle>
-
-              <TableDescription>
-                Lista de alunos inscritos no ano selecionado.
-              </TableDescription>
+              <TableTitle>Inscrições</TableTitle>
+              <TableDescription>Lista de alunos inscritos no ano selecionado.</TableDescription>
             </TableHeaderInfo>
-
-            <DownloadButton
-              type="button"
-              onClick={baixarPDF}
-              onMouseMove={handleButtonMouseMove}
-            >
-              <FiDownload />
-              Baixar PDF
+            <DownloadButton type="button" onClick={baixarPDF} onMouseMove={handleButtonMouseMove}>
+              <FiDownload />Baixar PDF
             </DownloadButton>
           </TableHeader>
 
           {carregando ? (
-            <LoadingState>
-              <Spinner />
-              <span>
-                Carregando inscrições...
-              </span>
-            </LoadingState>
+            <LoadingState><Spinner /><span>Carregando inscrições...</span></LoadingState>
           ) : (
             <TableWrapper>
               <Table>
                 <thead>
-                  <tr>
-                    <th>Aluno</th>
-                    <th>Turma</th>
-                    <th>Curso</th>
-                    <th>Turno</th>
-                    <th>Ações</th>
-                  </tr>
+                  <tr><th>Aluno</th><th>Turma</th><th>Curso</th><th>Turno</th><th>Ações</th></tr>
                 </thead>
-
                 <tbody>
-                  {inscricoesFiltradas.map(
-                    (inscricao) => (
-                      <tr
-                        key={
-                          inscricao.id_inscricoes
-                        }
-                      >
+                  {inscricoesFiltradas.map((inscricao) => {
+                    const bloqueado = Boolean(inscricao.atribuido_evento);
+                    return (
+                      <tr key={inscricao.id_inscricoes}>
                         <td>
                           <StudentCell>
-                            <StudentAvatar>
-                              {obterInicial(
-                                inscricao.nome_poeta
-                              )}
-                            </StudentAvatar>
-
+                            <StudentAvatar>{obterInicial(inscricao.nome_poeta)}</StudentAvatar>
                             <StudentInfo>
-                              <StudentName>
-                                {
-                                  inscricao.nome_poeta
-                                }
-                              </StudentName>
-
-                              <small>
-                                Inscrição #
-                                {
-                                  inscricao.id_inscricoes
-                                }
-                              </small>
+                              <StudentName>{inscricao.nome_poeta}</StudentName>
+                              <small>Inscrição #{inscricao.id_inscricoes}</small>
                             </StudentInfo>
                           </StudentCell>
                         </td>
-
-                        <td>
-                          <Badge>
-                            {
-                              inscricao.turma
-                            }
-                          </Badge>
-                        </td>
-
-                        <td>
-                          <Badge $type="course">
-                            <FiBookOpen />
-                            {
-                              inscricao.curso
-                            }
-                          </Badge>
-                        </td>
-
-                        <td>
-                          <TurnoBadge
-                            $turno={
-                              inscricao.turno
-                            }
-                          >
-                            <span />
-                            {
-                              inscricao.turno
-                            }
-                          </TurnoBadge>
-                        </td>
-
+                        <td><Badge>{inscricao.turma}</Badge></td>
+                        <td><Badge $type="course"><FiBookOpen />{inscricao.curso}</Badge></td>
+                        <td><TurnoBadge $turno={inscricao.turno}><span />{inscricao.turno}</TurnoBadge></td>
                         <td>
                           <Actions>
-                            <ActionButton
-                              type="button"
-                              $variant="edit"
-                              title="Editar inscrição"
-                              aria-label={`Editar ${inscricao.nome_poeta}`}
-                              onClick={() =>
-                                abrirEdicao(
-                                  inscricao
-                                )
-                              }
-                              onMouseMove={
-                                handleButtonMouseMove
-                              }
-                            >
-                              <FiEdit />
-                            </ActionButton>
-
-                            <ActionButton
-                              type="button"
-                              $variant="delete"
-                              title={
-                                inscricao.atribuido_evento
-                                  ? `Não é possível excluir: poeta atribuído ao evento "${inscricao.evento_nome}"`
-                                  : "Excluir inscrição"
-                              }
-                              aria-label={
-                                inscricao.atribuido_evento
-                                  ? `Não é possível excluir ${inscricao.nome_poeta} porque está atribuído a um evento`
-                                  : `Excluir ${inscricao.nome_poeta}`
-                              }
-                              onClick={() => {
-                                if (
-                                  inscricao.atribuido_evento
-                                ) {
-                                  setErro(
-                                    `Não é possível excluir ${inscricao.nome_poeta} porque o poeta já está atribuído ao evento "${inscricao.evento_nome}".`
-                                  );
-
-                                  return;
-                                }
-
-                                abrirExclusao(
-                                  inscricao
-                                );
-                              }}
-                              onMouseMove={
-                                handleButtonMouseMove
-                              }
-                              disabled={Boolean(
-                                inscricao.atribuido_evento
-                              )}
-                            >
-                              <FiTrash2 />
-                            </ActionButton>
+                            <ActionButton type="button" $variant="edit" title="Editar inscrição" aria-label={`Editar ${inscricao.nome_poeta}`} onClick={() => abrirEdicao(inscricao)} onMouseMove={handleButtonMouseMove}><FiEdit /></ActionButton>
+                            <ActionButton type="button" $variant="delete" title={bloqueado ? `Não é possível excluir: poeta atribuído ao evento "${inscricao.evento_nome}"` : "Excluir inscrição"} aria-label={bloqueado ? `Não é possível excluir ${inscricao.nome_poeta} porque está atribuído a um evento` : `Excluir ${inscricao.nome_poeta}`} onClick={() => abrirExclusao(inscricao)} onMouseMove={handleButtonMouseMove} disabled={bloqueado}><FiTrash2 /></ActionButton>
                           </Actions>
                         </td>
                       </tr>
-                    )
-                  )}
-
-                  {inscricoesFiltradas.length ===
-                    0 && (
+                    );
+                  })}
+                  {!inscricoesFiltradas.length && (
                     <tr>
                       <td colSpan={5}>
                         <EmptyState>
-                          <EmptyIcon>
-                            <FiSearch />
-                          </EmptyIcon>
-
-                          <EmptyTitle>
-                            Nenhuma inscrição encontrada
-                          </EmptyTitle>
-
-                          <EmptyText>
-                            Não existem inscrições
-                            para os filtros
-                            selecionados.
-                          </EmptyText>
+                          <EmptyIcon><FiSearch /></EmptyIcon>
+                          <EmptyTitle>Nenhuma inscrição encontrada</EmptyTitle>
+                          <EmptyText>Não existem inscrições para os filtros selecionados.</EmptyText>
                         </EmptyState>
                       </td>
                     </tr>
@@ -1055,295 +408,76 @@ export default function Inscricaoadm() {
         </TableContainer>
       </Content>
 
-      {/* =====================================================
-          MODAL DE EDIÇÃO
-      ===================================================== */}
-
       {inscricaoEditando && (
-        <ModalOverlay
-          onMouseDown={(e) => {
-            if (
-              e.target ===
-              e.currentTarget
-            ) {
-              setInscricaoEditando(
-                null
-              );
-            }
-          }}
-        >
+        <ModalOverlay onMouseDown={(e) => { if (e.target === e.currentTarget) setInscricaoEditando(null); }}>
           <Modal>
             <ModalHeader>
               <div>
-                <ModalTitle>
-                  Editar inscrição
-                </ModalTitle>
-
-                <ModalDescription>
-                  Atualize os dados do aluno.
-                </ModalDescription>
+                <ModalTitle>Editar inscrição</ModalTitle>
+                <ModalDescription>Atualize os dados do aluno.</ModalDescription>
               </div>
-
-              <ModalClose
-                type="button"
-                onClick={() =>
-                  setInscricaoEditando(
-                    null
-                  )
-                }
-                onMouseMove={
-                  handleButtonMouseMove
-                }
-                aria-label="Fechar"
-              >
-                <FiX />
-              </ModalClose>
+              <ModalClose type="button" onClick={() => setInscricaoEditando(null)} onMouseMove={handleButtonMouseMove} aria-label="Fechar"><FiX /></ModalClose>
             </ModalHeader>
 
             <Form>
               <FormGroup>
-                <Label>
-                  Nome do poeta
-                </Label>
-
-                <Input
-                  value={
-                    inscricaoEditando.nome_poeta ||
-                    ""
-                  }
-                  onChange={(e) =>
-                    setInscricaoEditando(
-                      (atual) => ({
-                        ...atual,
-                        nome_poeta:
-                          e.target.value,
-                      })
-                    )
-                  }
-                />
+                <Label>Nome do poeta</Label>
+                <Input value={inscricaoEditando.nome_poeta || ""} onChange={(e) => alterarCampoEdicao("nome_poeta", e.target.value)} />
               </FormGroup>
-
               <FormGroup>
-                <Label>
-                  Turma
-                </Label>
-
-                <Input
-                  value={
-                    inscricaoEditando.turma ||
-                    ""
-                  }
-                  onChange={(e) =>
-                    setInscricaoEditando(
-                      (atual) => ({
-                        ...atual,
-                        turma:
-                          e.target.value,
-                      })
-                    )
-                  }
-                />
+                <Label>Turma</Label>
+                <Input value={inscricaoEditando.turma || ""} onChange={(e) => alterarCampoEdicao("turma", e.target.value)} />
               </FormGroup>
-
               <FormGroup>
-                <Label>
-                  Turno
-                </Label>
-
-                <Select
-                  value={
-                    inscricaoEditando.turno ||
-                    ""
-                  }
-                  onChange={(e) =>
-                    setInscricaoEditando(
-                      (atual) => ({
-                        ...atual,
-                        turno:
-                          e.target.value,
-                      })
-                    )
-                  }
-                >
-                  <option value="">
-                    Selecione
-                  </option>
-
-                  <option value="Manhã">
-                    Manhã
-                  </option>
-
-                  <option value="Tarde">
-                    Tarde
-                  </option>
-
-                  <option value="Noite">
-                    Noite
-                  </option>
+                <Label>Turno</Label>
+                <Select value={inscricaoEditando.turno || ""} onChange={(e) => alterarCampoEdicao("turno", e.target.value)}>
+                  <option value="">Selecione</option>
+                  <option value="Manhã">Manhã</option>
+                  <option value="Tarde">Tarde</option>
+                  <option value="Noite">Noite</option>
                 </Select>
               </FormGroup>
-
               <FormGroup>
-                <Label>
-                  Curso
-                </Label>
-
-                <Input
-                  value={
-                    inscricaoEditando.curso ||
-                    ""
-                  }
-                  onChange={(e) =>
-                    setInscricaoEditando(
-                      (atual) => ({
-                        ...atual,
-                        curso:
-                          e.target.value,
-                      })
-                    )
-                  }
-                />
+                <Label>Curso</Label>
+                <Input value={inscricaoEditando.curso || ""} onChange={(e) => alterarCampoEdicao("curso", e.target.value)} />
               </FormGroup>
-
               <ModalButtons>
-                <CancelButton
-                  type="button"
-                  onClick={() =>
-                    setInscricaoEditando(
-                      null
-                    )
-                  }
-                >
-                  Cancelar
-                </CancelButton>
-
-                <SaveButton
-                  type="button"
-                  onClick={salvarEdicao}
-                  onMouseMove={
-                    handleButtonMouseMove
-                  }
-                >
-                  Salvar alterações
-                </SaveButton>
+                <CancelButton type="button" onClick={() => setInscricaoEditando(null)}>Cancelar</CancelButton>
+                <SaveButton type="button" onClick={salvarEdicao} onMouseMove={handleButtonMouseMove}>Salvar alterações</SaveButton>
               </ModalButtons>
             </Form>
           </Modal>
         </ModalOverlay>
       )}
 
-      {/* =====================================================
-          MODAL DE EXCLUSÃO
-      ===================================================== */}
-
       {inscricaoExcluir && (
-        <ModalOverlay
-          onMouseDown={(e) => {
-            if (
-              e.target ===
-              e.currentTarget
-            ) {
-              fecharModalExclusao();
-            }
-          }}
-        >
+        <ModalOverlay onMouseDown={(e) => { if (e.target === e.currentTarget) fecharModalExclusao(); }}>
           <Modal>
             <ModalHeader>
               <div>
-                <ModalTitle $danger>
-                  Excluir inscrição
-                </ModalTitle>
-
-                <ModalDescription>
-                  Esta ação precisa ser confirmada.
-                </ModalDescription>
+                <ModalTitle $danger>Excluir inscrição</ModalTitle>
+                <ModalDescription>Esta ação precisa ser confirmada.</ModalDescription>
               </div>
-
-              <ModalClose
-                type="button"
-                onClick={
-                  fecharModalExclusao
-                }
-                onMouseMove={
-                  handleButtonMouseMove
-                }
-                aria-label="Fechar"
-              >
-                <FiX />
-              </ModalClose>
+              <ModalClose type="button" onClick={fecharModalExclusao} onMouseMove={handleButtonMouseMove} aria-label="Fechar"><FiX /></ModalClose>
             </ModalHeader>
 
             <WarningBox>
               <FiAlertTriangle />
-
               <div>
-                <strong>
-                  Atenção
-                </strong>
-
-                <p>
-                  Você está prestes a excluir a
-                  inscrição de{" "}
-                  <strong>
-                    {
-                      inscricaoExcluir.nome_poeta
-                    }
-                  </strong>
-                  . O usuário voltará a ser aluno
-                  comum.
-                </p>
+                <strong>Atenção</strong>
+                <p>Você está prestes a excluir a inscrição de <strong>{inscricaoExcluir.nome_poeta}</strong>. O usuário voltará a ser aluno comum.</p>
               </div>
             </WarningBox>
 
             <Form>
               <FormGroup>
-                <Label>
-                  Digite{" "}
-                  <strong>
-                    excluir
-                  </strong>{" "}
-                  para confirmar
-                </Label>
-
-                <Input
-                  value={
-                    confirmacaoExclusao
-                  }
-                  onChange={(e) =>
-                    setConfirmacaoExclusao(
-                      e.target.value
-                    )
-                  }
-                  placeholder="Digite excluir"
-                  autoFocus
-                />
+                <Label>Digite <strong>excluir</strong> para confirmar</Label>
+                <Input value={confirmacaoExclusao} onChange={(e) => setConfirmacaoExclusao(e.target.value)} placeholder="Digite excluir" autoFocus />
               </FormGroup>
-
               <ModalButtons>
-                <CancelButton
-                  type="button"
-                  onClick={
-                    fecharModalExclusao
-                  }
-                >
-                  Cancelar
-                </CancelButton>
-
-                <ConfirmButton
-                  type="button"
-                  onClick={
-                    excluirInscricao
-                  }
-                  onMouseMove={
-                    handleButtonMouseMove
-                  }
-                  disabled={
-                    confirmacaoExclusao.toLowerCase() !==
-                    "excluir"
-                  }
-                >
-                  <FiTrash2 />
-                  Excluir inscrição
+                <CancelButton type="button" onClick={fecharModalExclusao}>Cancelar</CancelButton>
+                <ConfirmButton type="button" onClick={excluirInscricao} onMouseMove={handleButtonMouseMove} disabled={confirmacaoExclusao.toLowerCase() !== "excluir"}>
+                  <FiTrash2 />Excluir inscrição
                 </ConfirmButton>
               </ModalButtons>
             </Form>
