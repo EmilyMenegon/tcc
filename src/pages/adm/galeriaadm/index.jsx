@@ -10,6 +10,8 @@ import {
   FiChevronLeft,
   FiChevronRight,
   FiCalendar,
+  FiStar,
+  FiFolderPlus,
 } from "react-icons/fi";
 import {
   Page,
@@ -17,14 +19,30 @@ import {
   Header,
   Title,
   Subtitle,
+  Bloco,
+  BlocoHeader,
+  BlocoIcone,
+  BlocoInfo,
+  BlocoTitulo,
+  BlocoDescricao,
+  BlocoContador,
   Gallery,
+  FixedGallery,
   Card,
   ImageBox,
+  PinBadge,
+  SlotVazio,
   EmptyState,
   EmptyIcon,
   EmptyTitle,
   EmptyText,
+  ErrorMessage,
   FloatingButton,
+  AddMenuBackdrop,
+  AddMenu,
+  AddMenuItem,
+  AddMenuIcon,
+  AddMenuText,
   Modal,
   ModalContent,
   ModalImage,
@@ -36,7 +54,6 @@ import {
   ModalButtons,
   CancelButton,
   ConfirmButton,
-  
   YearsWrapper,
   YearsContainer,
   YearArrow,
@@ -46,6 +63,10 @@ import {
   YearDescription,
 } from "./style";
 
+const API_URL = "http://localhost:3001";
+const ANO_MINIMO = 2026;
+const LIMITE_FIXADAS = 5;
+
 function ehVideo(arquivoBase64) {
   return (
     typeof arquivoBase64 === "string" &&
@@ -53,67 +74,121 @@ function ehVideo(arquivoBase64) {
   );
 }
 
+function ehFixada(foto) {
+  return Boolean(foto?.fixada);
+}
+
+function descobrirAno(foto) {
+  const valor =
+    foto?.ano ??
+    foto?.created_at ??
+    foto?.createdAt ??
+    foto?.data_publicacao ??
+    foto?.dataPublicacao ??
+    foto?.data ??
+    foto?.date;
+
+  if (!valor) return ANO_MINIMO;
+
+  if (typeof valor === "number" && valor >= 2000 && valor <= 2100) {
+    return valor;
+  }
+
+  const dataConvertida = new Date(valor);
+
+  if (!Number.isNaN(dataConvertida.getTime())) {
+    return dataConvertida.getFullYear();
+  }
+
+  const numero = Number(valor);
+
+  return numero >= 2000 && numero <= 2100 ? numero : ANO_MINIMO;
+}
+
+function arquivoParaBase64(arquivo) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(arquivo);
+  });
+}
+
+const handleButtonMouseMove = (event) => {
+  const button = event.currentTarget;
+  const rect = button.getBoundingClientRect();
+
+  button.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`);
+  button.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`);
+};
+
+function BlocoPagina({ icone, titulo, descricao, extra, children }) {
+  return (
+    <Bloco>
+      <BlocoHeader>
+        <BlocoIcone>{icone}</BlocoIcone>
+        <BlocoInfo>
+          <BlocoTitulo>{titulo}</BlocoTitulo>
+          <BlocoDescricao>{descricao}</BlocoDescricao>
+        </BlocoInfo>
+        {extra}
+      </BlocoHeader>
+      {children}
+    </Bloco>
+  );
+}
+
+function MidiaThumb({ foto, alt }) {
+  return ehVideo(foto.imagem) ? (
+    <VideoThumb src={foto.imagem} />
+  ) : (
+    <img src={foto.imagem} alt={alt} loading="lazy" />
+  );
+}
+
 export default function Galeriaadm() {
-  const [indiceAtual, setIndiceAtual] = useState(null);
-  const [imagemParaExcluir, setImagemParaExcluir] = useState(null);
   const [fotos, setFotos] = useState([]);
   const [erro, setErro] = useState("");
   const [enviando, setEnviando] = useState(false);
   const [carregando, setCarregando] = useState(true);
 
-  const fileInputRef = useRef(null);
-  const [anoInicial, setAnoInicial] = useState(2026);
-  const [anoSelecionado, setAnoSelecionado] = useState(2026);
+  // { lista: "fixadas" | "album", indice: number } ou null
+  const [visualizando, setVisualizando] = useState(null);
+  const [imagemParaExcluir, setImagemParaExcluir] = useState(null);
+  const [menuAberto, setMenuAberto] = useState(false);
 
-  const anosVisiveis = Array.from(
-    { length: 3 },
-    (_, index) => anoInicial + index
+  const [anoInicial, setAnoInicial] = useState(ANO_MINIMO);
+  const [anoSelecionado, setAnoSelecionado] = useState(ANO_MINIMO);
+
+  const fileInputRef = useRef(null);
+  const tipoUploadRef = useRef("album");
+
+  const anosVisiveis = Array.from({ length: 3 }, (_, i) => anoInicial + i);
+
+  /* ---------- Listas derivadas ---------- */
+
+  const fotosFixadas = fotos.filter(ehFixada);
+  const fotosAlbum = fotos.filter((foto) => !ehFixada(foto));
+  const fotosDoAno = fotosAlbum.filter(
+    (foto) => descobrirAno(foto) === anoSelecionado
   );
 
-  function descobrirAno(foto) {
-    const valor =
-      foto?.ano ??
-      foto?.created_at ??
-      foto?.createdAt ??
-      foto?.data_publicacao ??
-      foto?.dataPublicacao ??
-      foto?.data ??
-      foto?.date;
+  const vagasFixadas = Math.max(0, LIMITE_FIXADAS - fotosFixadas.length);
+  const slotsVazios = Array.from({ length: vagasFixadas });
 
-    if (!valor) return 2026;
+  const listaAberta =
+    visualizando?.lista === "fixadas" ? fotosFixadas : fotosDoAno;
 
-    if (
-      typeof valor === "number" &&
-      valor >= 2000 &&
-      valor <= 2100
-    ) {
-      return valor;
-    }
+  const imagemSelecionada =
+    visualizando && listaAberta[visualizando.indice]
+      ? listaAberta[visualizando.indice]
+      : null;
 
-    const dataConvertida = new Date(valor);
-
-    if (!Number.isNaN(dataConvertida.getTime())) {
-      return dataConvertida.getFullYear();
-    }
-
-    const numero = Number(valor);
-
-    return numero >= 2000 && numero <= 2100 ? numero : 2026;
+  function quantidadePorAno(ano) {
+    return fotosAlbum.filter((foto) => descobrirAno(foto) === ano).length;
   }
 
-  const handleButtonMouseMove = (event) => {
-    const button = event.currentTarget;
-    const rect = button.getBoundingClientRect();
-
-    button.style.setProperty(
-      "--mouse-x",
-      `${event.clientX - rect.left}px`
-    );
-    button.style.setProperty(
-      "--mouse-y",
-      `${event.clientY - rect.top}px`
-    );
-  };
+  /* ---------- Carregamento ---------- */
 
   useEffect(() => {
     carregarFotos();
@@ -122,9 +197,7 @@ export default function Galeriaadm() {
   function carregarFotos() {
     setCarregando(true);
 
-    fetch("http://localhost:3001/galeria", {
-      headers: getAuthHeaders(),
-    })
+    fetch(`${API_URL}/galeria`, { headers: getAuthHeaders() })
       .then((res) => res.json())
       .then((data) => {
         setFotos(Array.isArray(data) ? data : []);
@@ -137,55 +210,64 @@ export default function Galeriaadm() {
       });
   }
 
+  /* ---------- Anos ---------- */
+
   function avancarAnos() {
     const novoAno = anoInicial + 3;
     setAnoInicial(novoAno);
     setAnoSelecionado(novoAno);
-    setIndiceAtual(null);
+    setVisualizando(null);
   }
 
   function voltarAnos() {
-    const novoAno = Math.max(2026, anoInicial - 3);
+    const novoAno = Math.max(ANO_MINIMO, anoInicial - 3);
     setAnoInicial(novoAno);
     setAnoSelecionado(novoAno);
-    setIndiceAtual(null);
+    setVisualizando(null);
   }
 
   function selecionarAno(ano) {
     setAnoSelecionado(ano);
-    setIndiceAtual(null);
+    setVisualizando(null);
   }
 
-  const fotosDoAno = fotos.filter(
-    (foto) => descobrirAno(foto) === anoSelecionado
-  );
+  /* ---------- Adicionar ---------- */
 
-  const imagemSelecionada =
-    indiceAtual !== null && fotosDoAno[indiceAtual]
-      ? fotosDoAno[indiceAtual]
-      : null;
-
-  function quantidadePorAno(ano) {
-    return fotos.filter((foto) => descobrirAno(foto) === ano).length;
+  function alternarMenu() {
+    setMenuAberto((aberto) => !aberto);
   }
 
-  const abrirGaleria = () => {
+  function escolherTipo(tipo) {
+    if (tipo === "fixada" && vagasFixadas === 0) return;
+
+    tipoUploadRef.current = tipo;
+    setMenuAberto(false);
+    setErro("");
     fileInputRef.current?.click();
-  };
-
-  function arquivoParaBase64(arquivo) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsDataURL(arquivo);
-    });
   }
 
   const adicionarImagem = async (e) => {
-    const arquivos = Array.from(e.target.files);
+    let arquivos = Array.from(e.target.files);
+    const fixada = tipoUploadRef.current === "fixada";
 
     if (!arquivos.length) return;
+
+    let aviso = "";
+
+    if (fixada) {
+      if (vagasFixadas === 0) {
+        setErro(`O limite de ${LIMITE_FIXADAS} imagens fixadas já foi atingido.`);
+        e.target.value = "";
+        return;
+      }
+
+      if (arquivos.length > vagasFixadas) {
+        arquivos = arquivos.slice(0, vagasFixadas);
+        aviso = `Só havia ${vagasFixadas} ${
+          vagasFixadas === 1 ? "vaga" : "vagas"
+        } para imagens fixadas. Os arquivos excedentes foram ignorados.`;
+      }
+    }
 
     setErro("");
     setEnviando(true);
@@ -197,7 +279,7 @@ export default function Galeriaadm() {
         arquivos.map((arquivo) => arquivoParaBase64(arquivo))
       );
 
-      const res = await fetch("http://localhost:3001/galeria", {
+      const res = await fetch(`${API_URL}/galeria`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -206,6 +288,7 @@ export default function Galeriaadm() {
         body: JSON.stringify({
           email: usuarioLogado.email,
           fotos: base64s,
+          fixada,
         }),
       });
 
@@ -216,7 +299,13 @@ export default function Galeriaadm() {
         return;
       }
 
-      setFotos((prev) => [...data, ...prev]);
+      const novas = (Array.isArray(data) ? data : []).map((foto) => ({
+        ...foto,
+        fixada: fixada ? 1 : 0,
+      }));
+
+      setFotos((prev) => [...novas, ...prev]);
+      if (aviso) setErro(aviso);
     } catch (err) {
       console.error(err);
       setErro(
@@ -228,32 +317,37 @@ export default function Galeriaadm() {
     }
   };
 
-  function abrirImagem(foto) {
-    const indice = fotosDoAno.findIndex(
-      (item) => item.id === foto.id
-    );
-    setIndiceAtual(indice);
+  /* ---------- Visualização ---------- */
+
+  function abrirImagem(lista, foto) {
+    const origem = lista === "fixadas" ? fotosFixadas : fotosDoAno;
+    const indice = origem.findIndex((item) => item.id === foto.id);
+    if (indice >= 0) setVisualizando({ lista, indice });
   }
 
   function fecharImagem() {
-    setIndiceAtual(null);
+    setVisualizando(null);
   }
 
   function irParaAnterior() {
-    if (indiceAtual === null || fotosDoAno.length === 0) return;
+    if (!visualizando || listaAberta.length === 0) return;
 
-    setIndiceAtual((atual) =>
-      atual === 0 ? fotosDoAno.length - 1 : atual - 1
-    );
+    setVisualizando((atual) => ({
+      ...atual,
+      indice: atual.indice === 0 ? listaAberta.length - 1 : atual.indice - 1,
+    }));
   }
 
   function irParaProxima() {
-    if (indiceAtual === null || fotosDoAno.length === 0) return;
+    if (!visualizando || listaAberta.length === 0) return;
 
-    setIndiceAtual((atual) =>
-      atual === fotosDoAno.length - 1 ? 0 : atual + 1
-    );
+    setVisualizando((atual) => ({
+      ...atual,
+      indice: atual.indice === listaAberta.length - 1 ? 0 : atual.indice + 1,
+    }));
   }
+
+  /* ---------- Exclusão ---------- */
 
   const pedirExclusao = (foto) => {
     setImagemParaExcluir(foto);
@@ -267,13 +361,10 @@ export default function Galeriaadm() {
     if (!imagemParaExcluir) return;
 
     try {
-      const res = await fetch(
-        `http://localhost:3001/galeria/${imagemParaExcluir.id}`,
-        {
-          method: "DELETE",
-          headers: getAuthHeaders(),
-        }
-      );
+      const res = await fetch(`${API_URL}/galeria/${imagemParaExcluir.id}`, {
+        method: "DELETE",
+        headers: getAuthHeaders(),
+      });
 
       if (!res.ok) throw new Error();
 
@@ -282,7 +373,7 @@ export default function Galeriaadm() {
       );
 
       if (imagemSelecionada?.id === imagemParaExcluir.id) {
-        setIndiceAtual(null);
+        setVisualizando(null);
       }
     } catch {
       setErro("Não foi possível excluir o arquivo.");
@@ -290,6 +381,8 @@ export default function Galeriaadm() {
       setImagemParaExcluir(null);
     }
   };
+
+  /* ---------- Teclado ---------- */
 
   useEffect(() => {
     function handleKeyDown(event) {
@@ -302,7 +395,10 @@ export default function Galeriaadm() {
         if (event.key === "Escape") fecharImagem();
         if (event.key === "ArrowLeft") irParaAnterior();
         if (event.key === "ArrowRight") irParaProxima();
+        return;
       }
+
+      if (menuAberto && event.key === "Escape") setMenuAberto(false);
     }
 
     window.addEventListener("keydown", handleKeyDown);
@@ -310,12 +406,39 @@ export default function Galeriaadm() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [
-    imagemSelecionada,
-    imagemParaExcluir,
-    indiceAtual,
-    fotosDoAno,
-  ]);
+  }, [imagemSelecionada, imagemParaExcluir, visualizando, listaAberta, menuAberto]);
+
+  /* ---------- Render ---------- */
+
+  function renderCard(foto, lista, fixada = false) {
+    return (
+      <Card key={foto.id}>
+        <ImageBox onClick={() => abrirImagem(lista, foto)}>
+          <MidiaThumb foto={foto} alt="Imagem da galeria" />
+        </ImageBox>
+
+        {fixada && (
+          <PinBadge>
+            <FiStar />
+            Fixada
+          </PinBadge>
+        )}
+
+        <DeleteButton
+          type="button"
+          onMouseMove={handleButtonMouseMove}
+          onClick={(event) => {
+            event.stopPropagation();
+            pedirExclusao(foto);
+          }}
+          aria-label="Excluir arquivo"
+          title="Excluir arquivo"
+        >
+          <FiTrash2 />
+        </DeleteButton>
+      </Card>
+    );
+  }
 
   return (
     <Page>
@@ -329,133 +452,193 @@ export default function Galeriaadm() {
           </Subtitle>
         </Header>
 
-        <YearsWrapper>
-          <YearArrow
-            type="button"
-            onClick={voltarAnos}
-            onMouseMove={handleButtonMouseMove}
-            disabled={anoInicial === 2026}
-            aria-label="Anos anteriores"
-          >
-            <span className="buttonContent">
-              <FiChevronLeft />
-            </span>
-          </YearArrow>
-
-          <YearsContainer>
-            {anosVisiveis.map((ano) => {
-              const quantidade = quantidadePorAno(ano);
-              const ativo = anoSelecionado === ano;
-
-              return (
-                <YearCard
-                  key={ano}
-                  type="button"
-                  $active={ativo}
-                  onClick={() => selecionarAno(ano)}
-                  onMouseMove={handleButtonMouseMove}
-                >
-                  <YearIcon $active={ativo}>
-                    <FiCalendar />
-                  </YearIcon>
-
-                  <YearNumber $active={ativo}>{ano}</YearNumber>
-
-                  <YearDescription $active={ativo}>
-                    {quantidade === 0
-                      ? "Nenhum arquivo"
-                      : quantidade === 1
-                      ? "1 arquivo"
-                      : `${quantidade} arquivos`}
-                  </YearDescription>
-                </YearCard>
-              );
-            })}
-          </YearsContainer>
-
-          <YearArrow
-            type="button"
-            onClick={avancarAnos}
-            onMouseMove={handleButtonMouseMove}
-            aria-label="Próximos anos"
-          >
-            <span className="buttonContent">
-              <FiChevronRight />
-            </span>
-          </YearArrow>
-        </YearsWrapper>
-
-        {erro && (
-          <p
-            style={{
-              textAlign: "center",
-              color: "#d62828",
-              marginBottom: 20,
-            }}
-          >
-            {erro}
-          </p>
-        )}
-
-        <Gallery>
+        <BlocoPagina
+          icone={<FiStar />}
+          titulo="Imagens fixadas"
+          descricao="Estas imagens também aparecem na tela inicial, antes do login."
+          extra={
+            <BlocoContador $cheio={vagasFixadas === 0}>
+              {fotosFixadas.length}/{LIMITE_FIXADAS}
+            </BlocoContador>
+          }
+        >
           {carregando ? (
             <EmptyState>
               <EmptyIcon>
                 <FiImage />
               </EmptyIcon>
-              <EmptyTitle>Carregando galeria...</EmptyTitle>
-            </EmptyState>
-          ) : fotosDoAno.length === 0 ? (
-            <EmptyState>
-              <EmptyIcon>
-                <FiImage />
-              </EmptyIcon>
-              <EmptyTitle>
-                Nenhuma foto ou vídeo disponível
-              </EmptyTitle>
-              <EmptyText>
-                Não existem arquivos publicados na galeria em{" "}
-                {anoSelecionado}.
-              </EmptyText>
+              <EmptyTitle>Carregando imagens...</EmptyTitle>
             </EmptyState>
           ) : (
-            fotosDoAno.map((foto) => (
-              <Card key={foto.id}>
-                <ImageBox onClick={() => abrirImagem(foto)}>
-                  {ehVideo(foto.imagem) ? (
-                    <VideoThumb src={foto.imagem} />
-                  ) : (
-                    <img
-                      src={foto.imagem}
-                      alt="Imagem da galeria"
-                      loading="lazy"
-                    />
-                  )}
-                </ImageBox>
+            <FixedGallery>
+              {fotosFixadas.map((foto) => renderCard(foto, "fixadas", true))}
 
-                <DeleteButton
+              {slotsVazios.map((_, index) => (
+                <SlotVazio
+                  key={`vaga-${index}`}
                   type="button"
                   onMouseMove={handleButtonMouseMove}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    pedirExclusao(foto);
-                  }}
-                  aria-label="Excluir arquivo"
-                  title="Excluir arquivo"
+                  onClick={() => escolherTipo("fixada")}
+                  aria-label="Adicionar imagem fixada"
                 >
-                  <FiTrash2 />
-                </DeleteButton>
-              </Card>
-            ))
+                  <FiPlus />
+                  <span>Vaga livre</span>
+                </SlotVazio>
+              ))}
+            </FixedGallery>
           )}
-        </Gallery>
+        </BlocoPagina>
+
+        <BlocoPagina
+          icone={<FiCalendar />}
+          titulo="Ano do álbum"
+          descricao="Escolha o ano que deseja visualizar."
+        >
+          <YearsWrapper>
+            <YearArrow
+              type="button"
+              onClick={voltarAnos}
+              onMouseMove={handleButtonMouseMove}
+              disabled={anoInicial === ANO_MINIMO}
+              aria-label="Anos anteriores"
+            >
+              <span className="buttonContent">
+                <FiChevronLeft />
+              </span>
+            </YearArrow>
+
+            <YearsContainer>
+              {anosVisiveis.map((ano) => {
+                const quantidade = quantidadePorAno(ano);
+                const ativo = anoSelecionado === ano;
+
+                return (
+                  <YearCard
+                    key={ano}
+                    type="button"
+                    $active={ativo}
+                    onClick={() => selecionarAno(ano)}
+                    onMouseMove={handleButtonMouseMove}
+                  >
+                    <YearIcon $active={ativo}>
+                      <FiCalendar />
+                    </YearIcon>
+
+                    <YearNumber $active={ativo}>{ano}</YearNumber>
+
+                    <YearDescription $active={ativo}>
+                      {quantidade === 0
+                        ? "Nenhum arquivo"
+                        : quantidade === 1
+                        ? "1 arquivo"
+                        : `${quantidade} arquivos`}
+                    </YearDescription>
+                  </YearCard>
+                );
+              })}
+            </YearsContainer>
+
+            <YearArrow
+              type="button"
+              onClick={avancarAnos}
+              onMouseMove={handleButtonMouseMove}
+              aria-label="Próximos anos"
+            >
+              <span className="buttonContent">
+                <FiChevronRight />
+              </span>
+            </YearArrow>
+          </YearsWrapper>
+        </BlocoPagina>
+
+        {erro && <ErrorMessage>{erro}</ErrorMessage>}
+
+        <BlocoPagina
+          icone={<FiImage />}
+          titulo={`Álbum de ${anoSelecionado}`}
+          descricao="Fotos e vídeos publicados na galeria do ano selecionado."
+          extra={
+            <BlocoContador>
+              {fotosDoAno.length}{" "}
+              {fotosDoAno.length === 1 ? "arquivo" : "arquivos"}
+            </BlocoContador>
+          }
+        >
+          <Gallery>
+            {carregando ? (
+              <EmptyState>
+                <EmptyIcon>
+                  <FiImage />
+                </EmptyIcon>
+                <EmptyTitle>Carregando galeria...</EmptyTitle>
+              </EmptyState>
+            ) : fotosDoAno.length === 0 ? (
+              <EmptyState>
+                <EmptyIcon>
+                  <FiImage />
+                </EmptyIcon>
+                <EmptyTitle>Nenhuma foto ou vídeo disponível</EmptyTitle>
+                <EmptyText>
+                  Não existem arquivos publicados no álbum de {anoSelecionado}.
+                </EmptyText>
+              </EmptyState>
+            ) : (
+              fotosDoAno.map((foto) => renderCard(foto, "album"))
+            )}
+          </Gallery>
+        </BlocoPagina>
       </Content>
+
+      {menuAberto && <AddMenuBackdrop onClick={() => setMenuAberto(false)} />}
+
+      {menuAberto && (
+        <AddMenu role="menu">
+          <AddMenuItem
+            type="button"
+            role="menuitem"
+            onMouseMove={handleButtonMouseMove}
+            onClick={() => escolherTipo("album")}
+          >
+            <AddMenuIcon>
+              <FiFolderPlus />
+            </AddMenuIcon>
+            <AddMenuText>
+              <strong>Adicionar ao álbum do ano</strong>
+              <small>Foto ou vídeo entra na galeria de um ano.</small>
+            </AddMenuText>
+          </AddMenuItem>
+
+          <AddMenuItem
+            type="button"
+            role="menuitem"
+            onMouseMove={handleButtonMouseMove}
+            onClick={() => escolherTipo("fixada")}
+            disabled={vagasFixadas === 0}
+          >
+            <AddMenuIcon>
+              <FiStar />
+            </AddMenuIcon>
+            <AddMenuText>
+              <strong>Adicionar imagem fixada</strong>
+              <small>
+                {vagasFixadas === 0
+                  ? `Limite de ${LIMITE_FIXADAS} imagens atingido.`
+                  : `Aparece na tela inicial. ${vagasFixadas} ${
+                      vagasFixadas === 1 ? "vaga livre" : "vagas livres"
+                    }.`}
+              </small>
+            </AddMenuText>
+          </AddMenuItem>
+        </AddMenu>
+      )}
 
       <FloatingButton
         type="button"
+        $open={menuAberto}
         onMouseMove={handleButtonMouseMove}
-        onClick={abrirGaleria}
+        onClick={alternarMenu}
         aria-label="Adicionar imagens ou vídeos"
+        aria-expanded={menuAberto}
         title="Adicionar imagens ou vídeos"
         disabled={enviando}
       >
@@ -491,7 +674,7 @@ export default function Galeriaadm() {
               <FiX />
             </CloseButton>
 
-            {fotosDoAno.length > 1 && (
+            {listaAberta.length > 1 && (
               <NavButton
                 type="button"
                 $direction="left"
@@ -529,7 +712,7 @@ export default function Galeriaadm() {
               />
             )}
 
-            {fotosDoAno.length > 1 && (
+            {listaAberta.length > 1 && (
               <NavButton
                 type="button"
                 $direction="right"
@@ -560,7 +743,9 @@ export default function Galeriaadm() {
             <h3>Excluir arquivo</h3>
 
             <p>
-              Tem certeza que deseja excluir este arquivo?
+              {ehFixada(imagemParaExcluir)
+                ? "Tem certeza que deseja excluir esta imagem fixada? Ela também deixará de aparecer na tela inicial."
+                : "Tem certeza que deseja excluir este arquivo?"}
             </p>
 
             <ModalButtons>
@@ -569,9 +754,7 @@ export default function Galeriaadm() {
                 onMouseMove={handleButtonMouseMove}
                 onClick={cancelarExclusao}
               >
-                <span className="buttonContent">
-                  Cancelar
-                </span>
+                <span className="buttonContent">Cancelar</span>
               </CancelButton>
 
               <ConfirmButton
@@ -579,9 +762,7 @@ export default function Galeriaadm() {
                 onMouseMove={handleButtonMouseMove}
                 onClick={confirmarExclusao}
               >
-                <span className="buttonContent">
-                  Sim, excluir
-                </span>
+                <span className="buttonContent">Sim, excluir</span>
               </ConfirmButton>
             </ModalButtons>
           </DeleteModal>

@@ -5,6 +5,7 @@ const COLORS = {
   primaryDark: "#65100f",
   yellow: "#ffdb53",
   yellowDark: "#e3b900",
+  danger: "#d62828",
 };
 
 const ButtonEffect = css`
@@ -40,30 +41,33 @@ const ButtonEffect = css`
   }
 `;
 
+/* =====================================================
+   PÁGINA
+===================================================== */
+
 export const Page = styled.div`
   width: 100%;
   min-height: 100vh;
   background: #fff;
   font-family: "Poppins", sans-serif;
-  color: #000;
+  color: #1c1c1c;
   overflow-x: hidden;
+  box-sizing: border-box;
 `;
 
 export const Content = styled.main`
-  width: 90%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 35px 0 100px;
+  width: min(97%, 1650px);
+  margin: 35px auto 120px;
   box-sizing: border-box;
 
-  @media (max-width: 768px) {
-    width: 92%;
-    padding: 25px 0 80px;
+  @media (max-width: 1100px) {
+    width: 96%;
+    margin-top: 30px;
   }
 
-  @media (max-width: 480px) {
-    width: 90%;
-    padding: 20px 0 70px;
+  @media (max-width: 700px) {
+    width: 94%;
+    margin: 22px auto 100px;
   }
 `;
 
@@ -74,15 +78,15 @@ export const Header = styled.header`
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 25px;
 
   @media (max-width: 600px) {
-    margin-bottom: 28px;
+    margin-bottom: 20px;
   }
 `;
 
 export const Title = styled.h1`
-  margin: 0 0 14px;
+  margin: 0 0 10px;
   color: #831614;
   font-size: clamp(2.8rem, 5vw, 4.8rem);
   font-weight: 900;
@@ -102,7 +106,7 @@ export const Title = styled.h1`
 export const Subtitle = styled.p`
   width: 100%;
   max-width: 700px;
-  margin: 10px auto 0;
+  margin: 8px auto 0;
   color: #777;
   font-size: 1.55rem;
   line-height: 1.6;
@@ -117,7 +121,141 @@ export const Subtitle = styled.p`
   }
 `;
 
-export const Gallery = styled.section`
+/* =====================================================
+   BLOCOS (mesma interface da página de Inscrições)
+===================================================== */
+
+export const Bloco = styled.section`
+  width: 100%;
+  margin-bottom: 28px;
+  padding: 28px 30px 32px;
+  box-sizing: border-box;
+  background: #fff;
+  border: 2px solid #d2d2d2;
+  border-radius: 20px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, .10), 0 3px 8px rgba(0, 0, 0, .045);
+
+  @media (max-width: 900px) {
+    padding: 24px 21px 28px;
+  }
+
+  @media (max-width: 600px) {
+    margin-bottom: 20px;
+    padding: 19px 14px 22px;
+    border-radius: 16px;
+  }
+`;
+
+export const BlocoHeader = styled.div`
+  margin-bottom: 25px;
+  padding-bottom: 19px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 2px solid #ddd;
+
+  @media (max-width: 600px) {
+    margin-bottom: 19px;
+    padding-bottom: 14px;
+    gap: 11px;
+  }
+`;
+
+export const BlocoIcone = styled.div`
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: #fff5c9;
+  border: 1px solid #e5ce73;
+  color: ${COLORS.primary};
+  font-size: 21px;
+
+  @media (max-width: 600px) {
+    width: 38px;
+    height: 38px;
+    font-size: 17px;
+  }
+`;
+
+export const BlocoInfo = styled.div`
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
+export const BlocoTitulo = styled.h2`
+  margin: 0;
+  color: #252525;
+  font-size: 24px;
+  font-weight: 750;
+
+  @media (max-width: 600px) {
+    font-size: 19px;
+  }
+`;
+
+export const BlocoDescricao = styled.p`
+  margin: 0;
+  color: #777;
+  font-size: 16px;
+  line-height: 1.45;
+
+  @media (max-width: 600px) {
+    font-size: 13px;
+  }
+`;
+
+export const BlocoContador = styled.span`
+  margin-left: auto;
+  flex-shrink: 0;
+  min-height: 34px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: ${({ $cheio }) => ($cheio ? "#fff0f0" : "#fff5c9")};
+  border: 1px solid ${({ $cheio }) => ($cheio ? "#e7bcbc" : "#e5ce73")};
+  color: ${({ $cheio }) => ($cheio ? COLORS.danger : "#735c00")};
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+
+  @media (max-width: 600px) {
+    min-height: 28px;
+    padding: 0 10px;
+    font-size: 12px;
+  }
+`;
+
+export const ErrorMessage = styled.div`
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto 20px;
+  padding: 15px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-sizing: border-box;
+  background: #fff0f0;
+  border: 1px solid #e7bcbc;
+  border-radius: 10px;
+  color: ${COLORS.danger};
+  font-size: 15px;
+  text-align: center;
+`;
+
+/* =====================================================
+   GRADES E CARDS
+===================================================== */
+
+export const Gallery = styled.div`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -137,6 +275,27 @@ export const Gallery = styled.section`
   @media (max-width: 500px) {
     grid-template-columns: 1fr;
     gap: 20px;
+  }
+`;
+
+export const FixedGallery = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+
+  @media (max-width: 1100px) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  @media (max-width: 750px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  @media (max-width: 500px) {
+    grid-template-columns: 1fr;
   }
 `;
 
@@ -184,6 +343,94 @@ export const ImageBox = styled.div`
   &:hover img,
   &:hover video {
     transform: scale(1.07);
+  }
+`;
+
+export const PinBadge = styled.span`
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  min-height: 28px;
+  padding: 0 11px 0 9px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  background: rgba(255, 219, 83, .96);
+  color: #5e4900;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, .18);
+  pointer-events: none;
+  z-index: 5;
+
+  svg {
+    width: 13px;
+    height: 13px;
+  }
+`;
+
+export const SlotVazio = styled.button`
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-sizing: border-box;
+  border: 2px dashed #d5d5d5;
+  border-radius: 18px;
+  background: #fafafa;
+  color: #999;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform .3s cubic-bezier(.22, 1, .36, 1), border-color .25s ease, color .25s ease, box-shadow .3s ease;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: ${COLORS.yellow};
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform .65s cubic-bezier(.16, 1, .3, 1);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  &:hover {
+    transform: translateY(-6px);
+    border-color: ${COLORS.yellowDark};
+    color: #111;
+    box-shadow: 0 14px 28px rgba(131, 22, 20, .14);
+
+    &::before {
+      transform: translate(-50%, -50%) scale(12);
+    }
+  }
+
+  &:active {
+    transform: translateY(-2px) scale(.98);
+  }
+
+  &:focus-visible {
+    outline: 3px solid ${COLORS.yellow};
+    outline-offset: 3px;
   }
 `;
 
@@ -235,8 +482,8 @@ export const DeleteButton = styled.button`
 
 export const EmptyState = styled.div`
   grid-column: 1 / -1;
-  min-height: 320px;
-  padding: 50px 25px;
+  min-height: 250px;
+  padding: 35px 20px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -249,32 +496,37 @@ export const EmptyState = styled.div`
 `;
 
 export const EmptyIcon = styled.div`
-  width: 70px;
-  height: 70px;
-  margin-bottom: 18px;
+  width: 62px;
+  height: 62px;
+  margin-bottom: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: rgba(249, 190, 6, .15);
-  color: #ffdb53;
-  font-size: 30px;
+  background: #fff5c9;
+  border: 1px solid #e5ce73;
+  color: #a27e00;
+  font-size: 27px;
 `;
 
-export const EmptyTitle = styled.h2`
-  margin: 0 0 8px;
+export const EmptyTitle = styled.h3`
+  margin: 0 0 6px;
   color: #333;
-  font-size: 22px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 750;
 `;
 
 export const EmptyText = styled.p`
   max-width: 450px;
   margin: 0;
-  color: #888;
-  font-size: 14px;
+  color: #777;
+  font-size: 15px;
   line-height: 1.6;
 `;
+
+/* =====================================================
+   BOTÃO FLUTUANTE + MENU DE ADICIONAR
+===================================================== */
 
 export const FloatingButton = styled.button`
   ${ButtonEffect}
@@ -307,6 +559,7 @@ export const FloatingButton = styled.button`
   svg {
     width: 30px;
     height: 30px;
+    transform: rotate(${({ $open }) => ($open ? "45deg" : "0deg")});
     transition: transform .3s ease;
   }
 
@@ -318,7 +571,7 @@ export const FloatingButton = styled.button`
   }
 
   &:hover svg {
-    transform: rotate(90deg);
+    transform: rotate(${({ $open }) => ($open ? "135deg" : "90deg")});
   }
 
   &:active {
@@ -343,6 +596,150 @@ export const FloatingButton = styled.button`
     }
   }
 `;
+
+export const AddMenuBackdrop = styled.div`
+  position: fixed;
+  inset: 0;
+  z-index: 98;
+  background: transparent;
+`;
+
+export const AddMenu = styled.div`
+  position: fixed;
+  right: 35px;
+  bottom: 120px;
+  width: 340px;
+  max-width: calc(100vw - 40px);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-sizing: border-box;
+  background: #fff;
+  border: 2px solid #d2d2d2;
+  border-radius: 18px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, .18), 0 3px 8px rgba(0, 0, 0, .06);
+  transform-origin: bottom right;
+  animation: menuAparecer .22s cubic-bezier(.22, 1, .36, 1);
+  z-index: 99;
+
+  @keyframes menuAparecer {
+    from {
+      opacity: 0;
+      transform: translateY(10px) scale(.96);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @media (max-width: 600px) {
+    right: 20px;
+    bottom: 100px;
+  }
+`;
+
+export const AddMenuIcon = styled.div`
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  background: #fff5c9;
+  border: 1px solid #e5ce73;
+  color: ${COLORS.primary};
+  font-size: 19px;
+  transition: background .25s ease;
+`;
+
+export const AddMenuText = styled.div`
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  text-align: left;
+
+  strong {
+    color: #252525;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+
+  small {
+    color: #777;
+    font-size: 12.5px;
+    line-height: 1.4;
+  }
+`;
+
+export const AddMenuItem = styled.button`
+  position: relative;
+  width: 100%;
+  padding: 11px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 12px;
+  background: #fff;
+  font-family: inherit;
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform .25s cubic-bezier(.22, 1, .36, 1), box-shadow .25s ease;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: ${COLORS.yellow};
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform .6s cubic-bezier(.16, 1, .3, 1);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(131, 22, 20, .14);
+
+    &::before {
+      transform: translate(-50%, -50%) scale(18);
+    }
+
+    ${AddMenuIcon} {
+      background: #fff;
+    }
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(.98);
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${COLORS.yellowDark};
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+  }
+`;
+
+/* =====================================================
+   VISUALIZADOR
+===================================================== */
 
 export const Modal = styled.div`
   position: fixed;
@@ -495,6 +892,10 @@ export const NavButton = styled.button`
     }
   }
 `;
+
+/* =====================================================
+   MODAL DE EXCLUSÃO
+===================================================== */
 
 export const DeleteModalOverlay = styled.div`
   position: fixed;
@@ -704,13 +1105,14 @@ export const ConfirmButton = styled.button`
     width: 100%;
   }
 `;
+
 /* =====================================================
    ANOS
 ===================================================== */
 
 export const YearsWrapper = styled.div`
   width: 100%;
-  margin: 70px auto 90px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -723,7 +1125,6 @@ export const YearsWrapper = styled.div`
 
   @media (max-width: 600px) {
     gap: 7px;
-    margin: 55px auto 35px;
   }
 
   @media (max-width: 430px) {
@@ -752,10 +1153,6 @@ export const YearsContainer = styled.div`
     gap: 6px;
   }
 `;
-
-/* =====================================================
-   SETAS DOS ANOS
-===================================================== */
 
 export const YearArrow = styled.button`
   position: relative;
@@ -862,13 +1259,10 @@ export const YearCard = styled.button`
   gap: 13px;
   box-sizing: border-box;
   border: 2px solid
-    ${({ $active }) =>
-      $active ? COLORS.primary : "#eeeeee"};
+    ${({ $active }) => ($active ? COLORS.primary : "#eeeeee")};
   border-radius: 22px;
-  background: ${({ $active }) =>
-    $active ? COLORS.primary : "#ffffff"};
-  color: ${({ $active }) =>
-    $active ? "#ffffff" : "#111111"};
+  background: ${({ $active }) => ($active ? COLORS.primary : "#ffffff")};
+  color: ${({ $active }) => ($active ? "#ffffff" : "#111111")};
   font-family: inherit;
   cursor: pointer;
   overflow: hidden;
@@ -889,8 +1283,7 @@ export const YearCard = styled.button`
     border-radius: 50%;
     background: ${COLORS.yellow};
     transform: translate(-50%, -50%) scale(0);
-    transition:
-      transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: -1;
     pointer-events: none;
   }
@@ -950,9 +1343,7 @@ export const YearIcon = styled.div`
   justify-content: center;
   border-radius: 50%;
   background: ${({ $active }) =>
-    $active
-      ? COLORS.yellow
-      : "rgba(255, 219, 83, 0.22)"};
+    $active ? COLORS.yellow : "rgba(255, 219, 83, 0.22)"};
   color: ${COLORS.primary};
   font-size: 23px;
   transition:
@@ -991,8 +1382,7 @@ export const YearIcon = styled.div`
 export const YearNumber = styled.strong`
   position: relative;
   z-index: 2;
-  color: ${({ $active }) =>
-    $active ? "#ffffff" : COLORS.primary};
+  color: ${({ $active }) => ($active ? "#ffffff" : COLORS.primary)};
   font-size: 2.1rem;
   font-weight: 850;
   line-height: 1;
@@ -1026,9 +1416,7 @@ export const YearDescription = styled.span`
   position: relative;
   z-index: 2;
   color: ${({ $active }) =>
-    $active
-      ? "rgba(255,255,255,0.72)"
-      : "#999999"};
+    $active ? "rgba(255,255,255,0.72)" : "#999999"};
   font-size: 10px;
   font-weight: 500;
   line-height: 1.2;

@@ -330,7 +330,7 @@ export default function TelaInicial() {
       setGalleryLoading(true);
 
       // rota pública: sem headers de autenticação
-      const response = await fetch(`${API_URL}/galeria`);
+      const response = await fetch(`${API_URL}/galeria/fixadas`);
 
       if (!response.ok) {
         throw new Error(`Erro HTTP ${response.status}`);

@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import Layoutadm from "../../../components/layoutadm";
 
 import {
@@ -9,7 +8,6 @@ import {
   FaCalendarAlt,
   FaImages,
   FaArrowRight,
-  FaCog,
   FaCheckCircle,
   FaEye,
   FaUpload,
@@ -25,298 +23,152 @@ import {
   Highlight,
   Description,
   CardsGrid,
+  CardLink,
   Card,
+  CardHeader,
   CardIcon,
-  CardContent,
+  CardInfo,
   CardTitle,
   CardDescription,
+  CardStatus,
+  CardBody,
+  FileBox,
+  FileIcon,
+  FileInfo,
+  FileLabel,
+  FileName,
+  ButtonsRow,
+  CardFooter,
   CardAction,
   DecorativeCircle,
   Pixel,
   RegulationButton,
 } from "./style";
 
+/* ============================================================
+   CARDS DE NAVEGAÇÃO
+============================================================ */
+
+const cards = [
+  {
+    title: "Inscrições",
+    description:
+      "Visualize, acompanhe e gerencie as inscrições dos participantes.",
+    icon: <FaClipboardList />,
+    path: "/adm/inscricaoadm",
+  },
+  {
+    title: "Mural",
+    description:
+      "Publique e gerencie os avisos e informações exibidos aos usuários.",
+    icon: <FaBullhorn />,
+    path: "/adm/muraladm",
+  },
+  {
+    title: "Eventos",
+    description: "Cadastre, edite e organize os eventos do Slam Interescolar.",
+    icon: <FaCalendarAlt />,
+    path: "/adm/eventos",
+  },
+  {
+    title: "Galeria",
+    description: "Adicione e gerencie fotos e imagens dos eventos.",
+    icon: <FaImages />,
+    path: "/adm/galeriaadm",
+  },
+];
 
 export default function Inicioadm() {
-
   const fileInputRef = useRef(null);
-
 
   /* ============================================================
      BOTÃO LÍQUIDO
   ============================================================ */
 
   function handleButtonMove(event) {
-
     const button = event.currentTarget;
-
     const rect = button.getBoundingClientRect();
 
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-
-    button.style.setProperty(
-      "--mouse-x",
-      `${x}px`
-    );
-
-    button.style.setProperty(
-      "--mouse-y",
-      `${y}px`
-    );
-
+    button.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`);
+    button.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`);
   }
-
 
   /* ============================================================
      REGULAMENTO ATUAL
   ============================================================ */
 
   const [regulamento, setRegulamento] = useState(() => {
-
-    const salvo =
-      localStorage.getItem("regulamento_slam");
-
+    const salvo = localStorage.getItem("regulamento_slam");
     return salvo || "/regulamento.pdf";
-
   });
 
-
-  const [nomeRegulamento, setNomeRegulamento] =
-    useState(() => {
-
-      const nome =
-        localStorage.getItem("regulamento_nome");
-
-      return nome || "Regulamento-Slam-Interescolar.pdf";
-
-    });
-
-
-  /* ============================================================
-     ABRIR SELETOR DE PDF
-  ============================================================ */
+  const [nomeRegulamento, setNomeRegulamento] = useState(() => {
+    const nome = localStorage.getItem("regulamento_nome");
+    return nome || "Regulamento-Slam-Interescolar.pdf";
+  });
 
   const abrirSeletor = () => {
-
     fileInputRef.current?.click();
-
   };
 
-
-  /* ============================================================
-     TROCAR REGULAMENTO
-  ============================================================ */
-
   const handleRegulamentoChange = (e) => {
-
     const file = e.target.files?.[0];
 
     if (!file) return;
-
-
-    /* ==========================================================
-       VERIFICA SE É PDF
-    ========================================================== */
 
     if (
       file.type !== "application/pdf" &&
       !file.name.toLowerCase().endsWith(".pdf")
     ) {
-
-      alert(
-        "Selecione apenas um arquivo PDF."
-      );
-
+      alert("Selecione apenas um arquivo PDF.");
       e.target.value = "";
-
       return;
-
     }
-
-
-    /* ==========================================================
-       LÊ O PDF
-    ========================================================== */
 
     const reader = new FileReader();
 
-
     reader.onload = () => {
-
       try {
-
         const resultado = reader.result;
 
-
-        /* ======================================================
-           SALVA O NOVO REGULAMENTO
-        ====================================================== */
-
-        localStorage.setItem(
-          "regulamento_slam",
-          resultado
-        );
-
-
-        localStorage.setItem(
-          "regulamento_nome",
-          file.name
-        );
-
-
-        /* ======================================================
-           ATUALIZA A TELA
-        ====================================================== */
+        localStorage.setItem("regulamento_slam", resultado);
+        localStorage.setItem("regulamento_nome", file.name);
 
         setRegulamento(resultado);
-
         setNomeRegulamento(file.name);
 
-
-        alert(
-          "Regulamento atualizado com sucesso!"
-        );
-
+        alert("Regulamento atualizado com sucesso!");
       } catch (error) {
-
         console.error(error);
-
-        alert(
-          "Não foi possível salvar o regulamento."
-        );
-
+        alert("Não foi possível salvar o regulamento.");
       }
-
     };
-
 
     reader.onerror = () => {
-
-      alert(
-        "Erro ao carregar o arquivo PDF."
-      );
-
+      alert("Erro ao carregar o arquivo PDF.");
     };
-
 
     reader.readAsDataURL(file);
 
-
-    /* Permite selecionar o mesmo arquivo novamente */
-
+    // Permite selecionar o mesmo arquivo novamente
     e.target.value = "";
-
   };
 
-
-  /* ============================================================
-     CARDS
-  ============================================================ */
-
-  const cards = [
-
-    {
-      title: "Mudar regulamento",
-
-      description:
-        "Veja o regulamento atual e substitua o PDF disponibilizado para os usuários.",
-
-      icon: <FaFileAlt />,
-
-      featured: true,
-
-      regulation: true,
-    },
-
-
-    {
-      title: "Inscrições",
-
-      description:
-        "Visualize, acompanhe e gerencie as inscrições dos participantes.",
-
-      icon: <FaClipboardList />,
-
-      path: "/adm/inscricaoadm",
-    },
-
-
-    {
-      title: "Mural",
-
-      description:
-        "Publique e gerencie os avisos e informações exibidos aos usuários.",
-
-      icon: <FaBullhorn />,
-
-      path: "/adm/muraladm",
-    },
-
-
-    {
-      title: "Eventos",
-
-      description:
-        "Cadastre, edite e organize os eventos do Slam Interescolar.",
-
-      icon: <FaCalendarAlt />,
-
-      path: "/adm/eventos",
-    },
-
-
-    {
-      title: "Galeria",
-
-      description:
-        "Adicione e gerencie fotos e imagens dos eventos.",
-
-      icon: <FaImages />,
-
-      path: "/adm/galeriaadm",
-    },
-
-  ];
-
-
   return (
-
     <Page>
-
       <Layoutadm />
-
-
-      {/* ========================================================
-          INPUT ESCONDIDO
-      ======================================================== */}
 
       <input
         ref={fileInputRef}
         type="file"
         accept="application/pdf,.pdf"
         onChange={handleRegulamentoChange}
-        style={{
-          display: "none",
-        }}
+        style={{ display: "none" }}
       />
 
-
       <Main>
-
-
-        {/* ======================================================
-            ELEMENTOS DECORATIVOS
-        ====================================================== */}
-
-        <DecorativeCircle
-          $size="55px"
-          $top="12%"
-          $right="7%"
-          $duration="5s"
-        />
-
-
+        {/* Elementos decorativos do fundo da página */}
+        <DecorativeCircle $size="55px" $top="12%" $right="7%" $duration="5s" />
         <DecorativeCircle
           $size="30px"
           $top="45%"
@@ -324,8 +176,6 @@ export default function Inicioadm() {
           $duration="4s"
           $delay=".5s"
         />
-
-
         <DecorativeCircle
           $size="22px"
           $bottom="10%"
@@ -333,7 +183,6 @@ export default function Inicioadm() {
           $duration="4.5s"
           $delay="1s"
         />
-
 
         <Pixel
           src="/pixel01.png"
@@ -345,7 +194,6 @@ export default function Inicioadm() {
           $animation="one"
         />
 
-
         <Pixel
           src="/pixel02.png"
           alt=""
@@ -356,315 +204,116 @@ export default function Inicioadm() {
           $animation="two"
         />
 
-
-        {/* ======================================================
-            HEADER
-        ====================================================== */}
-
         <Header>
-
           <Badge>
-
             <BadgeDot />
-
             PAINEL ADMINISTRATIVO
-
           </Badge>
 
-
           <Title>
-
             Olá, <Highlight>Organizador!</Highlight>
-
           </Title>
 
-
           <Description>
-
             Gerencie as principais informações do{" "}
-
-            <strong>
-              Slam Interescolar ETECAMP
-            </strong>
-
+            <strong>Slam Interescolar ETECAMP</strong>
             <br />
-
             Escolha uma das opções abaixo para começar.
-
           </Description>
-
         </Header>
 
-
-        {/* ======================================================
-            CARDS
-        ====================================================== */}
-
         <CardsGrid>
+          {/* ====================================================
+              REGULAMENTO (card em destaque, largura total)
+          ==================================================== */}
+          <Card $featured style={{ animationDelay: "0.15s" }}>
+            <CardHeader>
+              <CardIcon>
+                <FaFileAlt />
+              </CardIcon>
 
-          {cards.map((card, index) => {
+              <CardInfo>
+                <CardTitle>Regulamento</CardTitle>
+                <CardDescription>
+                  Veja o regulamento atual e substitua o PDF disponibilizado
+                  para os usuários.
+                </CardDescription>
+              </CardInfo>
 
+              <CardStatus>
+                <FaCheckCircle />
+                Disponível para usuários
+              </CardStatus>
+            </CardHeader>
 
-            /* ==================================================
-               CARD DO REGULAMENTO
-            ================================================== */
+            <CardBody>
+              <FileBox>
+                <FileIcon>
+                  <FaFileAlt />
+                </FileIcon>
 
-            if (card.regulation) {
+                <FileInfo>
+                  <FileLabel>Regulamento atual</FileLabel>
+                  <FileName title={nomeRegulamento}>{nomeRegulamento}</FileName>
+                </FileInfo>
+              </FileBox>
 
-              return (
-
-                <Card
-                  key={card.title}
-                  $featured={card.featured}
-                  style={{
-                    animationDelay:
-                      `${0.15 + index * 0.08}s`,
-                  }}
+              <ButtonsRow>
+                <RegulationButton
+                  as="a"
+                  href={regulamento}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  $variant="dark"
+                  onPointerMove={handleButtonMove}
                 >
+                  <span className="button-content">
+                    <FaEye />
+                    Ver atual
+                  </span>
+                </RegulationButton>
 
-
-                  {/* ==================================================
-                      ÍCONE
-                  ================================================== */}
-
-                  <CardIcon
-                    $featured={card.featured}
-                  >
-
-                    <FaFileAlt />
-
-                  </CardIcon>
-
-
-                  {/* ==================================================
-                      CONTEÚDO
-                  ================================================== */}
-
-                  <CardContent>
-
-                    <CardTitle>
-
-                      Regulamento
-
-                    </CardTitle>
-
-
-                    <CardDescription>
-
-                      Regulamento atual:
-
-                      <br />
-
-                      <strong
-                        style={{
-                          color: "#111",
-                          wordBreak: "break-word",
-                        }}
-                      >
-
-                        {nomeRegulamento}
-
-                      </strong>
-
-                    </CardDescription>
-
-
-                    {/* ==================================================
-                        BOTÕES DO REGULAMENTO
-                    ================================================== */}
-
-                    <div
-                      style={{
-                        display: "flex",
-                        flexWrap: "wrap",
-                        gap: "10px",
-                        marginTop: "18px",
-                      }}
-                    >
-
-
-                      {/* ==================================================
-                          VER REGULAMENTO
-                      ================================================== */}
-
-                      <a
-                        href={regulamento}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                          textDecoration: "none",
-                        }}
-                      >
-
-                        <RegulationButton
-                          type="button"
-                          $variant="dark"
-                          onPointerMove={
-                            handleButtonMove
-                          }
-                        >
-
-                          <span className="button-content">
-
-                            <FaEye />
-
-                            Ver atual
-
-                          </span>
-
-                        </RegulationButton>
-
-                      </a>
-
-
-                      {/* ==================================================
-                          TROCAR REGULAMENTO
-                      ================================================== */}
-
-                      <RegulationButton
-                        type="button"
-                        $variant="yellow"
-                        onClick={abrirSeletor}
-                        onPointerMove={
-                          handleButtonMove
-                        }
-                      >
-
-                        <span className="button-content">
-
-                          <FaUpload />
-
-                          Trocar PDF
-
-                        </span>
-
-                      </RegulationButton>
-
-                    </div>
-
-                  </CardContent>
-
-
-                  {/* ==================================================
-                      STATUS
-                  ================================================== */}
-
-                  <CardAction
-                    $featured={card.featured}
-                  >
-
-                    <span>
-
-                      <FaCheckCircle
-                        style={{
-                          marginRight: "6px",
-                          color: "#28a745",
-                        }}
-                      />
-
-                      Disponível para usuários
-
-                    </span>
-
-                  </CardAction>
-
-
-                </Card>
-
-              );
-
-            }
-
-
-            /* ==================================================
-               OUTROS CARDS
-            ================================================== */
-
-            return (
-
-              <Link
-                to={card.path}
-                key={card.title}
-                style={{
-                  textDecoration: "none",
-                }}
-              >
-
-                <Card
-                  $featured={card.featured}
-                  style={{
-                    animationDelay:
-                      `${0.15 + index * 0.08}s`,
-                  }}
+                <RegulationButton
+                  type="button"
+                  $variant="yellow"
+                  onClick={abrirSeletor}
+                  onPointerMove={handleButtonMove}
                 >
+                  <span className="button-content">
+                    <FaUpload />
+                    Trocar PDF
+                  </span>
+                </RegulationButton>
+              </ButtonsRow>
+            </CardBody>
+          </Card>
 
-                  <CardIcon
-                    $featured={card.featured}
-                  >
+          {/* ====================================================
+              DEMAIS CARDS
+          ==================================================== */}
+          {cards.map((card, index) => (
+            <CardLink to={card.path} key={card.title}>
+              <Card style={{ animationDelay: `${0.23 + index * 0.08}s` }}>
+                <CardHeader>
+                  <CardIcon>{card.icon}</CardIcon>
 
-                    {card.icon}
+                  <CardInfo>
+                    <CardTitle>{card.title}</CardTitle>
+                    <CardDescription>{card.description}</CardDescription>
+                  </CardInfo>
+                </CardHeader>
 
-                  </CardIcon>
-
-
-                  <CardContent>
-
-                    <CardTitle>
-
-                      {card.title}
-
-                    </CardTitle>
-
-
-                    <CardDescription>
-
-                      {card.description}
-
-                    </CardDescription>
-
-                  </CardContent>
-
-
-                  <CardAction
-                    $featured={card.featured}
-                  >
-
-                    <span>
-                      Acessar
-                    </span>
-
+                <CardFooter>
+                  <CardAction>
+                    <span>Acessar</span>
                     <FaArrowRight />
-
                   </CardAction>
-
-                </Card>
-
-              </Link>
-
-            );
-
-          })}
-
+                </CardFooter>
+              </Card>
+            </CardLink>
+          ))}
         </CardsGrid>
-
-
-        {/* ======================================================
-            RODAPÉ
-        ====================================================== */}
-
-        <div
-          style={{
-            marginTop: "30px",
-          }}
-        >
-
-        </div>
-
-
       </Main>
-
     </Page>
-
   );
-
 }
