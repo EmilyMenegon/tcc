@@ -110,6 +110,7 @@ export const GlobalStyle = createGlobalStyle`
 
 export const Page = styled.main`
   position: relative;
+
   width: 100%;
   min-height: 100vh;
   min-height: 100dvh;
@@ -137,21 +138,6 @@ export const Page = styled.main`
   overflow-x: hidden;
   isolation: isolate;
 
-  &::after {
-    content: "";
-
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    height: 6px;
-
-    background: ${colors.red};
-
-    z-index: 50;
-  }
-
   @media (max-width: 700px) {
     padding: 88px 20px 55px;
   }
@@ -163,9 +149,11 @@ export const Page = styled.main`
 
 export const PixelArea = styled.div`
   position: absolute;
+
   inset: 0;
 
   pointer-events: none;
+
   z-index: 1;
 `;
 
@@ -267,6 +255,7 @@ export const BackButton = styled(Link)`
   justify-content: center;
 
   border-radius: 50%;
+
   border: 2px solid rgba(255, 255, 255, 0.65);
 
   background: ${colors.yellow};
@@ -326,6 +315,7 @@ export const BackButton = styled(Link)`
 
   &:hover {
     color: ${colors.white};
+
     transform: translateY(-3px);
 
     box-shadow:
@@ -422,7 +412,7 @@ export const ProfileCard = styled.div`
   display: flex;
   align-items: center;
 
-  gap: 38px;
+  gap: 42px;
 
   padding: 38px 40px;
 
@@ -478,7 +468,7 @@ export const ProfileCard = styled.div`
 
     text-align: center;
 
-    gap: 22px;
+    gap: 24px;
 
     padding: 32px 24px;
   }
@@ -492,6 +482,8 @@ export const AvatarArea = styled.div`
   position: relative;
 
   z-index: 2;
+
+  flex: 0 0 auto;
 `;
 
 export const AvatarWrapper = styled.div`
@@ -535,14 +527,18 @@ export const Avatar = styled.img`
   border: 5px solid ${colors.white};
 `;
 
+/* ============================================================
+   BOTÃO DA FOTO
+============================================================ */
+
 export const CameraButton = styled.label`
   position: absolute;
 
-  right: -6px;
-  bottom: 2px;
+  right: -13px;
+  bottom: -7px;
 
-  width: 48px;
-  height: 48px;
+  width: 72px;
+  height: 72px;
 
   display: flex;
   align-items: center;
@@ -553,21 +549,29 @@ export const CameraButton = styled.label`
   background: ${colors.red};
   color: ${colors.white};
 
-  border: 4px solid ${colors.white};
+  border: 5px solid ${colors.white};
 
   cursor: pointer;
 
   overflow: hidden;
+  isolation: isolate;
+
+  box-shadow:
+    0 7px 18px rgba(0, 0, 0, 0.22);
 
   transition:
     transform 0.25s ease,
-    background 0.25s ease;
+    background 0.25s ease,
+    box-shadow 0.25s ease;
 
   svg {
     position: relative;
+
     z-index: 2;
 
-    font-size: 18px;
+    font-size: 28px;
+
+    transition: transform 0.25s ease;
   }
 
   input {
@@ -582,8 +586,8 @@ export const CameraButton = styled.label`
     left: var(--mouse-x, 50%);
     top: var(--mouse-y, 50%);
 
-    width: 30px;
-    height: 30px;
+    width: 42px;
+    height: 42px;
 
     border-radius: 50%;
 
@@ -596,12 +600,17 @@ export const CameraButton = styled.label`
     transition:
       transform 0.5s
       cubic-bezier(0.16, 1, 0.3, 1);
+
+    z-index: 1;
   }
 
   &:hover {
     color: ${colors.black};
 
-    transform: translateY(-2px);
+    transform: translateY(-4px) scale(1.04);
+
+    box-shadow:
+      0 11px 24px rgba(0, 0, 0, 0.25);
   }
 
   &:hover::before {
@@ -610,12 +619,23 @@ export const CameraButton = styled.label`
       scale(4);
   }
 
+  &:hover svg {
+    transform: scale(1.08);
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+
   @media (max-width: 600px) {
-    width: 43px;
-    height: 43px;
+    right: -10px;
+    bottom: -5px;
+
+    width: 64px;
+    height: 64px;
 
     svg {
-      font-size: 16px;
+      font-size: 24px;
     }
   }
 `;
@@ -626,16 +646,28 @@ export const CameraButton = styled.label`
 
 export const ProfileInfo = styled.div`
   position: relative;
+
   z-index: 2;
 
   min-width: 0;
 
+  flex: 1;
+
   display: flex;
   flex-direction: column;
+
+  justify-content: center;
+
   align-items: flex-start;
+
+  text-align: left;
 
   @media (max-width: 600px) {
     align-items: center;
+
+    text-align: center;
+
+    width: 100%;
   }
 `;
 
@@ -660,38 +692,6 @@ export const UserEmail = styled.p`
 
   word-break: break-word;
   overflow-wrap: anywhere;
-`;
-
-export const StatusBadge = styled.div`
-  margin-top: 16px;
-
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-
-  padding: 8px 14px;
-
-  border-radius: 50px;
-
-  background: rgba(46, 125, 50, 0.08);
-
-  color: ${colors.green};
-
-  font-size: 0.85rem;
-
-  font-weight: 700;
-
-  span {
-    width: 9px;
-    height: 9px;
-
-    border-radius: 50%;
-
-    background: ${colors.green};
-
-    box-shadow:
-      0 0 0 3px rgba(46, 125, 50, 0.1);
-  }
 `;
 
 /* ============================================================
@@ -1086,7 +1086,6 @@ export const CodeBox = styled.div`
 
 /* ============================================================
    AVISOS
-   MANTIDOS NO TAMANHO ORIGINAL
 ============================================================ */
 
 export const Aviso = styled.div`
@@ -1239,6 +1238,7 @@ export const SaveButton = styled.button`
 
   &:focus-visible {
     outline: 2px solid ${colors.red};
+
     outline-offset: 3px;
   }
 `;

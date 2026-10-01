@@ -42,7 +42,6 @@ import {
   ProfileInfo,
   UserName,
   UserEmail,
-  StatusBadge,
   Section,
   SectionHeader,
   SectionIcon,
@@ -418,18 +417,11 @@ export default function Profile() {
             </AvatarArea>
 
             <ProfileInfo>
-              <UserName>
-                {nome || "Usuário"}
-              </UserName>
+              <UserName>{nome || "Usuário"}</UserName>
 
               <UserEmail>
                 {emailAtual || "Carregando email..."}
               </UserEmail>
-
-              <StatusBadge>
-                <span />
-                Conta ativa
-              </StatusBadge>
             </ProfileInfo>
           </ProfileCard>
 
