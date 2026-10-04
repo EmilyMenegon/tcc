@@ -14,6 +14,7 @@ import {
 } from "react-icons/fi";
 
 import Layout from "../../../components/Layout";
+import { descobrirAno, ANO_MINIMO } from "../../../utils/ano";
 
 import {
   Page,
@@ -77,41 +78,13 @@ import {
 } from "./style";
 
 const API_URL = "http://localhost:3001";
-const ANO_MINIMO = 2026;
+
+// No evento, o ano vem da data do próprio evento (não da data de criação).
+const CAMPOS_ANO_EVENTO = ["data", "data_evento"];
 
 /* ============================================================
    FUNÇÕES AUXILIARES
 ============================================================ */
-
-function descobrirAno(evento) {
-  const valor =
-    evento?.data ?? evento?.ano ?? evento?.created_at ?? evento?.createdAt;
-
-  if (!valor) return ANO_MINIMO;
-
-  if (typeof valor === "number" && valor >= 2000 && valor <= 2100) {
-    return valor;
-  }
-
-  // formato "YYYY-MM-DD" (evita problema de fuso horário)
-  if (typeof valor === "string") {
-    const match = valor.match(/^(\d{4})-\d{2}-\d{2}/);
-
-    if (match) {
-      return Number(match[1]);
-    }
-  }
-
-  const dataConvertida = new Date(valor);
-
-  if (!Number.isNaN(dataConvertida.getTime())) {
-    return dataConvertida.getFullYear();
-  }
-
-  const numero = Number(valor);
-
-  return numero >= 2000 && numero <= 2100 ? numero : ANO_MINIMO;
-}
 
 function formatarData(dataEvento) {
   if (!dataEvento) return "";
@@ -177,11 +150,13 @@ export default function EventosUsuario() {
   const anosVisiveis = Array.from({ length: 3 }, (_, index) => anoInicial + index);
 
   const eventosDoAno = eventos.filter(
-    (evento) => descobrirAno(evento) === anoSelecionado
+    (evento) => descobrirAno(evento, CAMPOS_ANO_EVENTO) === anoSelecionado
   );
 
   function quantidadePorAno(ano) {
-    return eventos.filter((evento) => descobrirAno(evento) === ano).length;
+    return eventos.filter(
+      (evento) => descobrirAno(evento, CAMPOS_ANO_EVENTO) === ano
+    ).length;
   }
 
   /* ---------- Navegação entre anos ---------- */

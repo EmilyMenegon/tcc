@@ -29,7 +29,8 @@ db.exec(`
     nome_poeta TEXT NOT NULL,
     turma TEXT NOT NULL,
     turno TEXT NOT NULL,
-    curso TEXT NOT NULL
+    curso TEXT NOT NULL,
+    criado_em TEXT NOT NULL DEFAULT (datetime('now'))
   )
 `);
 
@@ -37,7 +38,8 @@ db.exec(`
   CREATE TABLE IF NOT EXISTS galeria (
     id_fotos INTEGER PRIMARY KEY AUTOINCREMENT,
     anexo TEXT NOT NULL,
-    usuario_id INTEGER NOT NULL
+    usuario_id INTEGER NOT NULL,
+    criado_em TEXT NOT NULL DEFAULT (datetime('now'))
   )
 `);
 
@@ -209,5 +211,29 @@ db.exec(`
     FOREIGN KEY (usuario_id) REFERENCES usuario (id)
   )
 `);
+
+/*
+ * ANO / DATA DE CRIAÇÃO
+ *
+ * Bancos criados antes desta alteração não têm "criado_em" em
+ * inscricoes e galeria. O SQLite não aceita DEFAULT datetime('now')
+ * dentro do ALTER TABLE, então a coluna entra sem default e os
+ * registros antigos são preenchidos aqui (com a data de hoje).
+ *
+ * Os INSERTs dos controllers gravam criado_em explicitamente.
+ */
+function adicionarCriadoEm(tabela) {
+  const colunas = db.prepare(`PRAGMA table_info(${tabela})`).all();
+
+  if (colunas.some((coluna) => coluna.name === "criado_em")) return;
+
+  db.exec(`ALTER TABLE ${tabela} ADD COLUMN criado_em TEXT`);
+  db.exec(
+    `UPDATE ${tabela} SET criado_em = datetime('now') WHERE criado_em IS NULL`
+  );
+}
+
+adicionarCriadoEm("inscricoes");
+adicionarCriadoEm("galeria");
 
 export default db;

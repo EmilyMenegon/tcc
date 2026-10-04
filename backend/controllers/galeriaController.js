@@ -8,11 +8,11 @@ if (!colunas.some((c) => c.name === "fixada")) {
   db.exec("ALTER TABLE galeria ADD COLUMN fixada INTEGER NOT NULL DEFAULT 0");
 }
 
-// Usada pelo ADM: devolve tudo, com o campo "fixada"
+// Usada pelo ADM: devolve tudo, com o campo "fixada" e a data de publicação
 export function listarFotos(req, res) {
   const fotos = db
     .prepare(
-      "SELECT id_fotos, anexo, fixada FROM galeria ORDER BY id_fotos DESC"
+      "SELECT id_fotos, anexo, fixada, criado_em FROM galeria ORDER BY id_fotos DESC"
     )
     .all();
 
@@ -20,6 +20,7 @@ export function listarFotos(req, res) {
     id: foto.id_fotos,
     imagem: foto.anexo,
     fixada: foto.fixada,
+    criado_em: foto.criado_em,
   }));
 
   res.json(resultado);
@@ -79,17 +80,21 @@ export function adicionarFotos(req, res) {
   }
 
   const stmt = db.prepare(
-    "INSERT INTO galeria (anexo, usuario_id, fixada) VALUES (?, ?, ?)"
+    "INSERT INTO galeria (anexo, usuario_id, fixada, criado_em) VALUES (?, ?, ?, ?)"
   );
+
+  // mesma data para todas as fotos enviadas juntas
+  const criadoEm = db.prepare("SELECT datetime('now') AS agora").get().agora;
 
   const novasFotos = [];
 
   for (const base64 of fotos) {
-    const info = stmt.run(base64, usuario.id, ehFixada ? 1 : 0);
+    const info = stmt.run(base64, usuario.id, ehFixada ? 1 : 0, criadoEm);
     novasFotos.push({
       id: info.lastInsertRowid,
       imagem: base64,
       fixada: ehFixada ? 1 : 0,
+      criado_em: criadoEm,
     });
   }
 

@@ -28,8 +28,8 @@ export function criarInscricao(req, res) {
   try {
     const stmtInscricao = db.prepare(
       `INSERT INTO inscricoes
-       (nome_poeta, turma, turno, curso)
-       VALUES (?, ?, ?, ?)`
+       (nome_poeta, turma, turno, curso, criado_em)
+       VALUES (?, ?, ?, ?, datetime('now'))`
     );
 
     const info = stmtInscricao.run(

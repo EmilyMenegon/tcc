@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { jsPDF } from "jspdf";
 import Layoutadm from "../../../components/layoutadm";
 import { getAuthHeaders } from "../../../utils/auth";
+import { descobrirAno, ANO_MINIMO } from "../../../utils/ano";
 import {
   FiEdit, FiTrash2, FiUsers, FiBookOpen, FiSearch, FiX,
   FiAlertTriangle, FiDownload, FiChevronLeft, FiChevronRight,
@@ -22,19 +23,6 @@ import {
 } from "./style";
 
 const API_URL = "http://localhost:3001";
-const ANO_MINIMO = 2026;
-
-function descobrirAno(inscricao) {
-  const valor = inscricao?.ano ?? inscricao?.created_at ?? inscricao?.createdAt ?? inscricao?.data_inscricao ?? inscricao?.dataInscricao ?? inscricao?.data ?? inscricao?.date;
-  if (valor) {
-    if (typeof valor === "number" && valor >= 2000 && valor <= 2100) return valor;
-    const dataConvertida = new Date(valor);
-    if (!Number.isNaN(dataConvertida.getTime())) return dataConvertida.getFullYear();
-    const numero = Number(valor);
-    if (numero >= 2000 && numero <= 2100) return numero;
-  }
-  return ANO_MINIMO;
-}
 
 function obterInicial(nome) {
   return nome ? nome.trim().charAt(0).toUpperCase() : "?";

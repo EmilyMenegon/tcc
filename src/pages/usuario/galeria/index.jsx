@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Layout from "../../../components/Layout";
 import VideoThumb from "../../../components/VideoThumb";
+import { descobrirAno, ANO_MINIMO } from "../../../utils/ano";
 import {
   FiX,
   FiImage,
@@ -47,7 +48,6 @@ import {
 } from "./style";
 
 const API_URL = "http://localhost:3001";
-const ANO_MINIMO = 2026;
 
 function ehVideo(arquivoBase64) {
   return (
@@ -58,33 +58,6 @@ function ehVideo(arquivoBase64) {
 
 function ehFixada(foto) {
   return Boolean(foto?.fixada);
-}
-
-function descobrirAno(foto) {
-  const valor =
-    foto?.ano ??
-    foto?.created_at ??
-    foto?.createdAt ??
-    foto?.data_publicacao ??
-    foto?.dataPublicacao ??
-    foto?.data ??
-    foto?.date;
-
-  if (!valor) return ANO_MINIMO;
-
-  if (typeof valor === "number" && valor >= 2000 && valor <= 2100) {
-    return valor;
-  }
-
-  const dataConvertida = new Date(valor);
-
-  if (!Number.isNaN(dataConvertida.getTime())) {
-    return dataConvertida.getFullYear();
-  }
-
-  const numero = Number(valor);
-
-  return numero >= 2000 && numero <= 2100 ? numero : ANO_MINIMO;
 }
 
 const handleButtonMouseMove = (event) => {

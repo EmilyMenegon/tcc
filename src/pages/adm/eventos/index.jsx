@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Layoutadm from "../../../components/Layoutadm";
 import { getAuthHeaders } from "../../../utils/auth";
+import { descobrirAno, ANO_MINIMO } from "../../../utils/ano";
 
 import {
   FiPlus,
@@ -115,6 +116,9 @@ import {
 
 const API_URL = "http://localhost:3001";
 
+// No evento, o ano vem da data do próprio evento (não da data de criação).
+const CAMPOS_ANO_EVENTO = ["data", "data_evento"];
+
 /* =====================================================
    API
 ===================================================== */
@@ -213,9 +217,9 @@ export default function Eventos() {
     setParticipantesSelecionados,
   ] = useState([]);
 
-  const [anoInicial, setAnoInicial] = useState(2026);
+  const [anoInicial, setAnoInicial] = useState(ANO_MINIMO);
   const [anoSelecionado, setAnoSelecionado] =
-    useState(2026);
+    useState(ANO_MINIMO);
 
   const anosVisiveis = Array.from(
     { length: 3 },
@@ -628,30 +632,6 @@ export default function Eventos() {
     )}`;
   }
 
-  function descobrirAno(evento) {
-    const valor = evento?.data;
-
-    if (!valor) return 2026;
-
-    const dataConvertida =
-      new Date(valor);
-
-    if (
-      !Number.isNaN(
-        dataConvertida.getTime()
-      )
-    ) {
-      return dataConvertida.getFullYear();
-    }
-
-    const numero = Number(valor);
-
-    return numero >= 2000 &&
-      numero <= 2100
-      ? numero
-      : 2026;
-  }
-
   /* =====================================================
      ANOS
   ===================================================== */
@@ -667,7 +647,7 @@ export default function Eventos() {
 
   function voltarAnos() {
     const novoAno = Math.max(
-      2026,
+      ANO_MINIMO,
       anoInicial - 3
     );
 
@@ -683,15 +663,20 @@ export default function Eventos() {
   function quantidadePorAno(ano) {
     return eventos.filter(
       (evento) =>
-        descobrirAno(evento) === ano
+        descobrirAno(
+          evento,
+          CAMPOS_ANO_EVENTO
+        ) === ano
     ).length;
   }
 
   const eventosDoAno =
     eventos.filter(
       (evento) =>
-        descobrirAno(evento) ===
-        anoSelecionado
+        descobrirAno(
+          evento,
+          CAMPOS_ANO_EVENTO
+        ) === anoSelecionado
     );
 
   /* =====================================================
@@ -769,7 +754,7 @@ export default function Eventos() {
                 handleButtonMouseMove
               }
               disabled={
-                anoInicial === 2026
+                anoInicial === ANO_MINIMO
               }
               aria-label="Anos anteriores"
             >
@@ -992,31 +977,31 @@ export default function Eventos() {
                           </span>
                         </AccessButton>
 
-                     <Actions>
-  <button
-    type="button"
-    onClick={(e) => {
-      e.stopPropagation();
-      abrirEdicao(evento);
-    }}
-    onMouseMove={handleButtonMouseMove}
-    aria-label="Editar evento"
-  >
-    <FiEdit />
-  </button>
+                        <Actions>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              abrirEdicao(evento);
+                            }}
+                            onMouseMove={handleButtonMouseMove}
+                            aria-label="Editar evento"
+                          >
+                            <FiEdit />
+                          </button>
 
-  <button
-    type="button"
-    onClick={(e) => {
-      e.stopPropagation();
-      abrirConfirmacaoExclusao(evento);
-    }}
-    onMouseMove={handleButtonMouseMove}
-    aria-label="Excluir evento"
-  >
-    <FiTrash2 />
-  </button>
-</Actions>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              abrirConfirmacaoExclusao(evento);
+                            }}
+                            onMouseMove={handleButtonMouseMove}
+                            aria-label="Excluir evento"
+                          >
+                            <FiTrash2 />
+                          </button>
+                        </Actions>
                       </EventFooter>
                     </EventContent>
                   </EventCard>
