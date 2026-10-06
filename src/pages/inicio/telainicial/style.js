@@ -115,13 +115,17 @@ export const SocialIcon = styled.a`
   align-items: center;
   justify-content: center;
   color: #111;
-  font-size: 1.7rem;
+  font-size: 2.3rem;
   text-decoration: none;
   transition: 0.25s ease;
- 
+
   &:hover {
     color: #831614;
     transform: translateY(-3px);
+  }
+
+  @media (max-width: 768px) {
+    font-size: 2rem;
   }
 `;
  
@@ -161,17 +165,18 @@ export const LeftSide = styled.div`
  
 export const BigText = styled.h1`
   padding: 20px;
-  margin: 0 0 25px;
+  margin: 0 0 0px;
   color: #111;
   font-size: clamp(2.5rem, 4vw, 4.5rem);
   line-height: 1.15;
   font-weight: 900;
  
   span {
-  padding: 10px;
-    color: #ffdb53;
-    font-family: "Lost in South";
-    font-weight: 400;
+    padding: 10px;
+  color: #ffdb53;
+  font-family: "Lost in South";
+  font-weight: 400;
+  font-size: 1.20em;
   }
  
   @media (max-width: 768px) {
@@ -186,8 +191,8 @@ export const BigText = styled.h1`
 export const SmallText = styled.p`
   width: 85%;
   margin: 0 0 30px;
-  color: #444;
-  font-size: 1.05rem;
+  color: #777;
+  font-size: 1.55rem;
   line-height: 1.7;
  
   @media (max-width: 768px) {
@@ -306,23 +311,23 @@ export const PixelImage = styled.img`
   z-index: 3;
  
   &.hero-pixel-01 {
-    width: 100px;
+    width: 150px;
     height: 100px;
-    top: 7%;
+    top: -15%;
     left: 16%;
   }
  
   &.hero-pixel-02 {
-    width: 100px;
+    width: 150px;
     height: 100px;
     top: 27%;
-    right: 3%;
+    right: -7%;
   }
  
   &.hero-pixel-03 {
-    width: 120px;
+    width: 150px;
     height: 120px;
-    bottom: -13%;
+    bottom: -20%;
     left: 16%;
   }
  
@@ -409,9 +414,11 @@ export const AboutTitle = styled.h2`
   font-size: clamp(3.2rem, 4vw, 5.2rem);
  
   span {
-    color: #ffdb53;
-    font-family: "Lost in South";
-    font-weight: 400;
+     padding: 10px;
+  color: #ffdb53;
+  font-family: "Lost in South";
+  font-weight: 400;
+  font-size: 1.20em;
   }
 `;
  
@@ -436,14 +443,24 @@ export const AboutContent = styled.div`
  
 export const AboutText = styled.p`
   margin: 0;
-  color: #333;
+  color: #111;
   font-size: 1.3rem;
   line-height: 1.75;
   text-align: justify;
- 
+
   b {
     color: #111;
     font-weight: 800;
+  }
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+    line-height: 1.55;
   }
 `;
  
@@ -501,7 +518,7 @@ export const AboutGame = styled.div`
 `;
  
 export const AboutBoard = styled.div`
-  width: min(100%, 570px);
+  width: min(100%, 680px);
   aspect-ratio: 1;
   background: #ffdb53;
   padding: 3.5%;
@@ -512,7 +529,7 @@ export const AboutBoard = styled.div`
   position: relative;
   overflow: hidden;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.14);
- 
+
   ${({ $completed }) =>
     $completed &&
     `
@@ -564,11 +581,11 @@ export const AboutLetter = styled.button`
       : "#fff"};
   color: ${({ $active }) =>
     $active ? "#fff" : "#111"};
-  font-size: clamp(0.5rem, 1.6vw, 0.9rem);
+  font-size: clamp(0.8rem, 2vw, 1.25rem);
   font-weight: 800;
   cursor: pointer;
   transition: 0.2s ease;
- 
+
   &:hover {
     background: #831614;
     color: #fff;
@@ -599,9 +616,11 @@ export const SectionTitle = styled.h2`
   z-index: 30;
  
   span {
-    color: #ffdb53;
-    font-family: "Lost in South";
-    font-weight: 400;
+      padding: 10px;
+  color: #ffdb53;
+  font-family: "Lost in South";
+  font-weight: 400;
+  font-size: 1.20em;
   }
 `;
  
@@ -712,7 +731,7 @@ export const FeatureTitle = styled.h3`
 export const FeatureText = styled.p`
   max-width: 190px;
   margin: 0;
-  color: #444;
+  color: #777;
   font-size: 0.9rem;
   line-height: 1.5;
   position: relative;
@@ -772,6 +791,21 @@ export const GalleryViewport = styled.div`
   padding: 0 20px;
   position: relative;
   z-index: 5;
+
+  @media (max-width: 600px) {
+    height: 390px;
+    padding: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    justify-content: flex-start;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 `;
  
 export const GalleryTrack = styled.div`
@@ -784,6 +818,14 @@ export const GalleryTrack = styled.div`
   overflow: visible;
   position: relative;
   z-index: 6;
+
+  @media (max-width: 600px) {
+    width: max-content;
+    min-width: 100%;
+    justify-content: flex-start;
+    gap: 16px;
+    padding: 0 20px;
+  }
 `;
 
 /* =========================================================
@@ -824,20 +866,19 @@ export const GalleryCard = styled.div`
     pointer-events: none;
   }
  
-  @media (max-width: 1100px) {
-    height: 410px;
-    max-width: 250px;
+@media (max-width: 600px) {
+  height: 350px;
+  min-width: calc(100vw - 70px);
+  max-width: calc(100vw - 70px);
+  border-radius: 20px;
+  scroll-snap-align: center;
+  flex: 0 0 calc(100vw - 70px);
+
+  &:hover {
+    transform: none;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   }
- 
-  @media (max-width: 900px) {
-    height: 370px;
-    max-width: 220px;
-  }
- 
-  @media (max-width: 600px) {
-    height: 300px;
-    max-width: 180px;
-    border-radius: 20px;
+}
   }
 `;
  

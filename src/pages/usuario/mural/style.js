@@ -576,7 +576,6 @@ export const EmptyText = styled.p`
 // =====================================================
 // MODAL OVERLAY
 // =====================================================
-
 export const ModalOverlay = styled.div`
   position: fixed;
 
@@ -599,18 +598,19 @@ export const ModalOverlay = styled.div`
       0,
       0,
       0,
-      .72
+      0.70
     );
 
   backdrop-filter:
-    blur(8px);
+    blur(4px);
 
   animation:
-    fadeIn .2s ease;
+    fadeIn
+    0.2s
+    ease;
 
 
   @keyframes fadeIn {
-
     from {
       opacity: 0;
     }
@@ -618,14 +618,11 @@ export const ModalOverlay = styled.div`
     to {
       opacity: 1;
     }
-
   }
 
 
   @media (max-width: 600px) {
-
     padding: 12px;
-
   }
 `;
 
@@ -635,10 +632,6 @@ export const ModalOverlay = styled.div`
 // =====================================================
 
 export const FullPostIt = styled.div`
-  --modal-color:
-    ${({ $color }) =>
-      $color || "#ffdb53"};
-
   position: relative;
 
   width:
@@ -647,77 +640,82 @@ export const FullPostIt = styled.div`
       100%
     );
 
+  min-height: 500px;
+
   max-height:
     calc(
       100vh - 60px
     );
 
+  padding:
+    85px
+    clamp(
+      30px,
+      8vw,
+      90px
+    )
+    50px;
+
   box-sizing: border-box;
 
-  overflow-y: auto;
-
-  border-radius: 25px;
-
   background:
-    var(--modal-color);
+    ${({ $color }) =>
+      $color || "#ffcf70"};
+
+  border-radius: 20px;
 
   box-shadow:
-    0
-    30px
-    80px
+    10px
+    22px
+    50px
     rgba(
       0,
       0,
       0,
-      .35
+      0.30
     );
 
+  overflow-y: auto;
+
   animation:
-    postOpen .3s
-    cubic-bezier(
-      .16,
-      1,
-      .3,
-      1
-    );
+    postOpen
+    0.25s
+    ease;
 
 
   @keyframes postOpen {
-
     from {
-
       opacity: 0;
 
       transform:
-        translateY(25px)
-        scale(.94);
-
+        scale(0.93)
+        translateY(15px);
     }
 
     to {
-
       opacity: 1;
 
       transform:
-        translateY(0)
-        scale(1);
-
+        scale(1)
+        translateY(0);
     }
-
   }
 
 
   @media (max-width: 600px) {
-
     width: 100%;
+
+    min-height: 400px;
 
     max-height:
       calc(
         100vh - 24px
       );
 
-    border-radius: 20px;
-
+    padding:
+      75px
+      25px
+      35px;
   }
 `;
 
@@ -905,43 +903,26 @@ export const FullPostItContent = styled.div`
       100%
     );
 
+  min-height: 100%;
+
   margin: 0 auto;
-
-  padding:
-    25px
-    55px
-    50px;
-
-  box-sizing: border-box;
 
   display: flex;
 
   flex-direction: column;
 
-
-  @media (max-width: 600px) {
-
-    padding:
-      20px
-      25px
-      35px;
-
-  }
+  justify-content: flex-start;
 `;
 
 
 // =====================================================
 // TÍTULO MODAL
 // =====================================================
-
 export const FullPostItTitle = styled.h2`
   margin:
-    0
-    0
-    25px;
+    0 0 35px;
 
-  color:
-    #171717;
+  color: #222222;
 
   font-family:
     "Poppins",
@@ -950,35 +931,35 @@ export const FullPostItTitle = styled.h2`
   font-size:
     clamp(
       2rem,
-      5vw,
-      3.4rem
+      6vw,
+      4rem
     );
 
-  line-height: 1.1;
+  line-height: 1.05;
 
-  font-weight: 900;
+  font-weight: 700;
 
-  letter-spacing:
-    -1.5px;
+  letter-spacing: -1px;
 
   word-break: break-word;
+
+
+  @media (max-width: 600px) {
+    margin-bottom: 25px;
+
+    font-size: 32px;
+  }
 `;
 
 
 // =====================================================
 // MENSAGEM MODAL
 // =====================================================
-
 export const FullPostItMessage = styled.p`
-  margin: 0;
+  margin:
+    0 0 30px;
 
-  color:
-    rgba(
-      20,
-      20,
-      20,
-      .78
-    );
+  color: #292929;
 
   font-family:
     "Poppins",
@@ -986,14 +967,21 @@ export const FullPostItMessage = styled.p`
 
   font-size:
     clamp(
-      1rem,
-      2vw,
-      1.25rem
+      1.1rem,
+      3vw,
+      1.8rem
     );
 
-  line-height: 1.85;
+  line-height: 1.75;
 
   white-space: pre-wrap;
 
   word-break: break-word;
+
+
+  @media (max-width: 600px) {
+    font-size: 18px;
+
+    line-height: 1.65;
+  }
 `;

@@ -757,20 +757,20 @@ export const Cards = styled.section`
   display: grid;
 
   grid-template-columns:
-    repeat(auto-fill, minmax(280px, 1fr));
+    repeat(auto-fill, minmax(360px, 1fr));
 
-  gap: 30px;
+  gap: 34px;
 
   box-sizing: border-box;
 
-  @media (max-width: 1100px) {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
   }
 
-  @media (max-width: 900px) {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+  @media (max-width: 800px) {
+    grid-template-columns: 1fr;
+    gap: 24px;
   }
 
   @media (max-width: 600px) {
@@ -782,17 +782,17 @@ export const Cards = styled.section`
 /* =====================================================
    EVENT CARD
 ===================================================== */
-
 export const EventCard = styled.article`
   position: relative;
 
   width: 100%;
+  min-height: 500px;
 
   background: #fff;
 
   border: 1px solid #d8d8d8;
 
-  border-radius: 17px;
+  border-radius: 20px;
 
   overflow: hidden;
 
@@ -802,8 +802,8 @@ export const EventCard = styled.article`
   flex-direction: column;
 
   box-shadow:
-    0 10px 28px rgba(0,0,0,.09),
-    0 2px 5px rgba(0,0,0,.04);
+    0 12px 32px rgba(0,0,0,.09),
+    0 3px 8px rgba(0,0,0,.04);
 
   transition:
     transform .3s cubic-bezier(.22,1,.36,1),
@@ -816,21 +816,28 @@ export const EventCard = styled.article`
     border-color: #cfcfcf;
 
     box-shadow:
-      0 20px 42px rgba(0,0,0,.14),
-      0 4px 10px rgba(0,0,0,.05);
+      0 22px 45px rgba(0,0,0,.14),
+      0 5px 12px rgba(0,0,0,.05);
   }
 
   &:focus-visible {
     outline: 3px solid ${COLORS.yellow};
-
     outline-offset: 4px;
   }
-`;
 
+  @media (max-width: 800px) {
+    min-height: 480px;
+  }
+
+  @media (max-width: 600px) {
+    min-height: 0;
+    border-radius: 17px;
+  }
+`;
 export const EventImage = styled.div`
   width: 100%;
 
-  height: 175px;
+  height: 220px;
 
   overflow: hidden;
 
@@ -850,15 +857,18 @@ export const EventImage = styled.div`
     transform: scale(1.06);
   }
 
+  @media (max-width: 800px) {
+    height: 200px;
+  }
+
   @media (max-width: 600px) {
-    height: 150px;
+    height: 180px;
   }
 `;
-
 export const EventImagePlaceholder = styled.div`
   width: 100%;
 
-  height: 175px;
+  height: 220px;
 
   display: flex;
   align-items: center;
@@ -868,42 +878,53 @@ export const EventImagePlaceholder = styled.div`
 
   color: #aaa;
 
-  font-size: 40px;
+  font-size: 46px;
+
+  @media (max-width: 800px) {
+    height: 200px;
+  }
 
   @media (max-width: 600px) {
-    height: 150px;
+    height: 180px;
   }
 `;
-
 export const EventContent = styled.div`
-  padding: 21px;
+  padding: 25px;
 
   display: flex;
   flex-direction: column;
 
   flex: 1;
+
+  @media (max-width: 600px) {
+    padding: 20px;
+  }
 `;
 
 export const EventTitle = styled.h2`
-  margin: 0 0 9px;
+  margin: 0 0 10px;
 
   color: #252525;
 
-  font-size: 20px;
+  font-size: 24px;
 
   font-weight: 750;
 
   line-height: 1.3;
+
+  @media (max-width: 600px) {
+    font-size: 21px;
+  }
 `;
 
 export const EventDescription = styled.p`
-  margin: 0 0 16px;
+  margin: 0 0 18px;
 
   color: #777;
 
-  font-size: 14px;
+  font-size: 15px;
 
-  line-height: 1.55;
+  line-height: 1.6;
 
   display: -webkit-box;
 
@@ -912,6 +933,10 @@ export const EventDescription = styled.p`
   -webkit-box-orient: vertical;
 
   overflow: hidden;
+
+  @media (max-width: 600px) {
+    font-size: 14px;
+  }
 `;
 
 export const InfoList = styled.div`
@@ -919,7 +944,7 @@ export const InfoList = styled.div`
 
   flex-direction: column;
 
-  gap: 10px;
+  gap: 12px;
 `;
 
 export const InfoItem = styled.div`
@@ -927,18 +952,18 @@ export const InfoItem = styled.div`
 
   align-items: center;
 
-  gap: 9px;
+  gap: 10px;
 
   color: #555;
 
-  font-size: 13px;
+  font-size: 14px;
 
   svg {
     flex-shrink: 0;
 
     color: ${COLORS.primary};
 
-    font-size: 16px;
+    font-size: 17px;
   }
 
   span {
@@ -950,7 +975,7 @@ export const InfoItem = styled.div`
 
     white-space: nowrap;
   }
-`;
+`;;
 
 /* =====================================================
    EVENT FOOTER

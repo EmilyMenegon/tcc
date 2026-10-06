@@ -45,10 +45,6 @@ import {
   RegulationButton,
 } from "./style";
 
-/* ============================================================
-   CARDS DE NAVEGAÇÃO
-============================================================ */
-
 const cards = [
   {
     title: "Inscrições",
@@ -66,13 +62,15 @@ const cards = [
   },
   {
     title: "Eventos",
-    description: "Cadastre, edite e organize os eventos do Slam Interescolar.",
+    description:
+      "Cadastre, edite e organize os eventos do Slam Interescolar.",
     icon: <FaCalendarAlt />,
     path: "/adm/eventos",
   },
   {
     title: "Galeria",
-    description: "Adicione e gerencie fotos e imagens dos eventos.",
+    description:
+      "Adicione e gerencie fotos e imagens dos eventos.",
     icon: <FaImages />,
     path: "/adm/galeriaadm",
   },
@@ -81,21 +79,20 @@ const cards = [
 export default function Inicioadm() {
   const fileInputRef = useRef(null);
 
-  /* ============================================================
-     BOTÃO LÍQUIDO
-  ============================================================ */
-
   function handleButtonMove(event) {
     const button = event.currentTarget;
     const rect = button.getBoundingClientRect();
 
-    button.style.setProperty("--mouse-x", `${event.clientX - rect.left}px`);
-    button.style.setProperty("--mouse-y", `${event.clientY - rect.top}px`);
-  }
+    button.style.setProperty(
+      "--mouse-x",
+      `${event.clientX - rect.left}px`
+    );
 
-  /* ============================================================
-     REGULAMENTO ATUAL
-  ============================================================ */
+    button.style.setProperty(
+      "--mouse-y",
+      `${event.clientY - rect.top}px`
+    );
+  }
 
   const [regulamento, setRegulamento] = useState(() => {
     const salvo = localStorage.getItem("regulamento_slam");
@@ -150,7 +147,6 @@ export default function Inicioadm() {
 
     reader.readAsDataURL(file);
 
-    // Permite selecionar o mesmo arquivo novamente
     e.target.value = "";
   };
 
@@ -167,8 +163,15 @@ export default function Inicioadm() {
       />
 
       <Main>
-        {/* Elementos decorativos do fundo da página */}
-        <DecorativeCircle $size="55px" $top="12%" $right="7%" $duration="5s" />
+        {/* DECORAÇÕES */}
+
+        <DecorativeCircle
+          $size="55px"
+          $top="12%"
+          $right="7%"
+          $duration="5s"
+        />
+
         <DecorativeCircle
           $size="30px"
           $top="45%"
@@ -176,6 +179,7 @@ export default function Inicioadm() {
           $duration="4s"
           $delay=".5s"
         />
+
         <DecorativeCircle
           $size="22px"
           $bottom="10%"
@@ -190,7 +194,7 @@ export default function Inicioadm() {
           aria-hidden="true"
           $top="17%"
           $right="14%"
-          $size="55px"
+          $size="150px"
           $animation="one"
         />
 
@@ -200,9 +204,11 @@ export default function Inicioadm() {
           aria-hidden="true"
           $bottom="9%"
           $left="8%"
-          $size="55px"
+          $size="150px"
           $animation="two"
         />
+
+        {/* CABEÇALHO */}
 
         <Header>
           <Badge>
@@ -222,11 +228,15 @@ export default function Inicioadm() {
           </Description>
         </Header>
 
+        {/* CARDS */}
+
         <CardsGrid>
-          {/* ====================================================
-              REGULAMENTO (card em destaque, largura total)
-          ==================================================== */}
-          <Card $featured style={{ animationDelay: "0.15s" }}>
+          {/* REGULAMENTO */}
+
+          <Card
+            $featured
+            style={{ animationDelay: "0.15s" }}
+          >
             <CardHeader>
               <CardIcon>
                 <FaFileAlt />
@@ -234,15 +244,16 @@ export default function Inicioadm() {
 
               <CardInfo>
                 <CardTitle>Regulamento</CardTitle>
+
                 <CardDescription>
-                  Veja o regulamento atual e substitua o PDF disponibilizado
-                  para os usuários.
+                  Veja o regulamento atual e substitua o PDF
+                  disponibilizado para os usuários.
                 </CardDescription>
               </CardInfo>
 
               <CardStatus>
                 <FaCheckCircle />
-                Disponível para usuários
+                <span>Disponível para usuários</span>
               </CardStatus>
             </CardHeader>
 
@@ -254,7 +265,10 @@ export default function Inicioadm() {
 
                 <FileInfo>
                   <FileLabel>Regulamento atual</FileLabel>
-                  <FileName title={nomeRegulamento}>{nomeRegulamento}</FileName>
+
+                  <FileName title={nomeRegulamento}>
+                    {nomeRegulamento}
+                  </FileName>
                 </FileInfo>
               </FileBox>
 
@@ -288,18 +302,31 @@ export default function Inicioadm() {
             </CardBody>
           </Card>
 
-          {/* ====================================================
-              DEMAIS CARDS
-          ==================================================== */}
+          {/* OUTROS CARDS */}
+
           {cards.map((card, index) => (
-            <CardLink to={card.path} key={card.title}>
-              <Card style={{ animationDelay: `${0.23 + index * 0.08}s` }}>
+            <CardLink
+              to={card.path}
+              key={card.title}
+            >
+              <Card
+                style={{
+                  animationDelay: `${0.23 + index * 0.08}s`,
+                }}
+              >
                 <CardHeader>
-                  <CardIcon>{card.icon}</CardIcon>
+                  <CardIcon>
+                    {card.icon}
+                  </CardIcon>
 
                   <CardInfo>
-                    <CardTitle>{card.title}</CardTitle>
-                    <CardDescription>{card.description}</CardDescription>
+                    <CardTitle>
+                      {card.title}
+                    </CardTitle>
+
+                    <CardDescription>
+                      {card.description}
+                    </CardDescription>
                   </CardInfo>
                 </CardHeader>
 
