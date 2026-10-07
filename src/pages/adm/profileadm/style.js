@@ -1,6 +1,10 @@
+import styled, {
+  createGlobalStyle,
+  keyframes,
+} from "styled-components";
+ 
 import { Link } from "react-router-dom";
-import styled, { createGlobalStyle, keyframes } from "styled-components";
-
+ 
 const colors = {
   yellow: "#FFDB53",
   yellowStrong: "#F9BE06",
@@ -9,1409 +13,1475 @@ const colors = {
   red: "#831614",
   wine: "#571111",
   black: "#010000",
-  white: "#fff",
-  gray: "#666",
+  white: "#FFFFFF",
+  gray: "#666666",
+  lightGray: "#F5F3E8",
+  border: "#E8DFAF",
+  green: "#2E7D32",
+  error: "#C62828",
 };
-
+ 
+const aparecer = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+ 
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+ 
+const subir = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+ 
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+ 
 const flutuar = keyframes`
   0%,
   100% {
     transform: translateY(0) rotate(0deg);
   }
-
+ 
   50% {
     transform: translateY(-10px) rotate(3deg);
   }
 `;
-
-const aparecer = keyframes`
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.98);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-`;
-
+ 
 export const GlobalStyle = createGlobalStyle`
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
   }
-
+ 
   html,
   body,
   #root {
     width: 100%;
     min-height: 100%;
   }
-
+ 
   html {
     background: ${colors.cream};
   }
-
+ 
   body {
     min-height: 100vh;
-    overflow-x: hidden;
     background: ${colors.cream};
     font-family: "Poppins", sans-serif;
+    color: ${colors.black};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-
+ 
   button,
   input {
     font-family: inherit;
   }
-
+ 
   button {
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
   }
-
+ 
   input {
     -webkit-appearance: none;
     appearance: none;
   }
+ 
+  ::selection {
+    background: ${colors.yellow};
+    color: ${colors.black};
+  }
 `;
-
+ 
+/* ============================================================
+   PAGE
+============================================================ */
+ 
 export const Page = styled.main`
   position: relative;
-
+ 
   width: 100%;
   min-height: 100vh;
   min-height: 100dvh;
-
+ 
   display: flex;
-
-  align-items: center;
   justify-content: center;
-
-  overflow: hidden;
-
-  padding: 40px 20px;
-
-  background: ${colors.cream};
-
-  color: ${colors.black};
-
+  align-items: flex-start;
+ 
+  padding: 95px 35px 100px;
+ 
+  background:
+    radial-gradient(
+      circle at 50% 5%,
+      rgba(255, 219, 83, 0.28) 0,
+      rgba(255, 219, 83, 0.08) 22%,
+      transparent 45%
+    ),
+    linear-gradient(
+      180deg,
+      #f9f2ce 0%,
+      #fff7d0 35%,
+      #ffffff 100%
+    );
+ 
+  overflow-x: hidden;
   isolation: isolate;
-
-  &::before {
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    background:
-      radial-gradient(
-        circle at 50% 15%,
-        rgba(255, 219, 83, 0.16) 0%,
-        rgba(255, 247, 208, 0.08) 28%,
-        rgba(255, 247, 208, 0) 58%
-      ),
-      radial-gradient(
-        circle at 12% 80%,
-        rgba(87, 17, 17, 0.045) 0%,
-        rgba(87, 17, 17, 0) 25%
-      ),
-      radial-gradient(
-        circle at 88% 25%,
-        rgba(131, 22, 20, 0.035) 0%,
-        rgba(131, 22, 20, 0) 24%
-      ),
-      linear-gradient(
-        180deg,
-        #f9f2ce 0%,
-        #fff7d0 42%,
-        #ffffff 100%
-      );
-
-    z-index: -3;
-
-    pointer-events: none;
-  }
-
-  &::after {
-    content: "";
-
-    position: absolute;
-
-    left: 0;
-    right: 0;
-
-    bottom: 0;
-
-    height: 6px;
-
-    background: ${colors.red};
-
-    z-index: 20;
-  }
-
+ 
   @media (max-width: 700px) {
-    padding: 78px 14px 25px;
-
-    align-items: flex-start;
-
-    &::before {
-      background:
-        radial-gradient(
-          circle at 50% 12%,
-          rgba(255, 219, 83, 0.15) 0%,
-          rgba(255, 247, 208, 0) 52%
-        ),
-        linear-gradient(
-          180deg,
-          #f9f2ce 0%,
-          #fff7d0 38%,
-          #ffffff 100%
-        );
-    }
+    padding: 88px 20px 55px;
   }
 `;
-
-
+ 
 /* ============================================================
-   BICHINHOS
+   PIXELS
 ============================================================ */
-
+ 
+export const PixelArea = styled.div`
+  position: absolute;
+ 
+  inset: 0;
+ 
+  pointer-events: none;
+ 
+  z-index: 1;
+`;
+ 
 export const Pixel01 = styled.img`
   position: absolute;
-
-  width: clamp(70px, 10vw, 155px);
-
-  max-height: 20vh;
-
-  top: clamp(20px, 7vh, 70px);
-
-  left: clamp(16px, 5vw, 75px);
-
+ 
+  width: clamp(85px, 11vw, 175px);
+ 
+  top: 80px;
+  left: clamp(12px, 4vw, 70px);
+ 
   object-fit: contain;
-
-  z-index: 3;
-
-  pointer-events: none;
-
+ 
   user-select: none;
-
-  animation:
-    ${flutuar}
-    4s
-    ease-in-out
-    infinite;
-
+ 
+  animation: ${flutuar} 4s ease-in-out infinite;
+ 
   filter:
-    drop-shadow(7px 7px 0 #fff)
-    drop-shadow(10px 10px 0 ${colors.yellow});
-
+    drop-shadow(6px 6px 0 #fff)
+    drop-shadow(9px 9px 0 ${colors.yellow});
+ 
   @media (max-width: 700px) {
-    width: clamp(55px, 17vw, 100px);
-
-    top: 18px;
-
-    left: 8px;
+    width: 82px;
+    top: 25px;
+    left: 5px;
   }
 `;
-
+ 
 export const Pixel02 = styled.img`
   position: absolute;
-
-  width: clamp(75px, 11vw, 175px);
-
-  max-height: 20vh;
-
-  top: clamp(22px, 9vh, 85px);
-
-  right: clamp(16px, 5vw, 75px);
-
+ 
+  width: clamp(90px, 12vw, 185px);
+ 
+  top: 90px;
+  right: clamp(12px, 4vw, 70px);
+ 
   object-fit: contain;
-
-  z-index: 3;
-
-  pointer-events: none;
-
+ 
   user-select: none;
-
+ 
   animation:
     ${flutuar}
     4.6s
     ease-in-out
     infinite
     reverse;
-
+ 
   filter:
-    drop-shadow(-7px 7px 0 #fff)
-    drop-shadow(-10px 10px 0 ${colors.yellow});
-
+    drop-shadow(-6px 6px 0 #fff)
+    drop-shadow(-9px 9px 0 ${colors.yellow});
+ 
   @media (max-width: 700px) {
-    width: clamp(58px, 19vw, 105px);
-
-    top: 22px;
-
-    right: 8px;
+    width: 86px;
+    top: 28px;
+    right: 4px;
   }
 `;
-
+ 
 export const Pixel03 = styled.img`
   position: absolute;
-
-  width: clamp(65px, 9vw, 150px);
-
-  max-height: 20vh;
-
-  bottom: clamp(40px, 10vh, 100px);
-
-  left: clamp(12px, 4vw, 55px);
-
+ 
+  width: clamp(80px, 10vw, 160px);
+ 
+  bottom: 75px;
+  left: clamp(12px, 3vw, 55px);
+ 
   object-fit: contain;
-
-  z-index: 3;
-
-  pointer-events: none;
-
+ 
   user-select: none;
-
-  animation:
-    ${flutuar}
-    5s
-    ease-in-out
-    infinite;
-
+ 
+  animation: ${flutuar} 5s ease-in-out infinite;
+ 
   filter:
-    drop-shadow(7px 7px 0 #fff)
-    drop-shadow(10px 10px 0 ${colors.yellow});
-
+    drop-shadow(6px 6px 0 #fff)
+    drop-shadow(9px 9px 0 ${colors.yellow});
+ 
   @media (max-width: 700px) {
-    width: clamp(50px, 16vw, 95px);
-
-    bottom: 18px;
-
-    left: 2px;
+    width: 76px;
+    bottom: 22px;
+    left: 0;
   }
 `;
-
-
+ 
 /* ============================================================
    VOLTAR
 ============================================================ */
-
+ 
 export const BackButton = styled(Link)`
   position: fixed;
-
-  top: 2%;
-
-  left: 2%;
-
-  width: 58px;
-
-  height: 58px;
-
-  padding: 0;
-
-  border: 0;
-
-  border-radius: 50%;
-
-  background: ${colors.yellow};
-
-  color: ${colors.black};
-
+ 
+  top: 28px;
+  left: 28px;
+ 
+  width: 64px;
+  height: 64px;
+ 
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
+ 
+  border-radius: 50%;
+ 
+  border: 2px solid rgba(255, 255, 255, 0.65);
+ 
+  background: ${colors.yellow};
+  color: ${colors.black};
+ 
   text-decoration: none;
-
+ 
   cursor: pointer;
-
+ 
   overflow: hidden;
-
   isolation: isolate;
-
-  transform: translateZ(0);
-
-  z-index: 999;
-
+ 
+  z-index: 1000;
+ 
   box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.18);
-
+    0 8px 25px rgba(0, 0, 0, 0.15);
+ 
   transition:
+    transform 0.25s ease,
     color 0.3s ease,
-    transform 0.25s ease;
-
+    box-shadow 0.3s ease;
+ 
   &::before {
     content: "";
-
+ 
     position: absolute;
-
+ 
     left: var(--mouse-x, 50%);
-
     top: var(--mouse-y, 50%);
-
-    width: 35px;
-
-    height: 35px;
-
+ 
+    width: 40px;
+    height: 40px;
+ 
     border-radius: 50%;
-
+ 
     background: ${colors.red};
-
+ 
     transform:
       translate(-50%, -50%)
       scale(0);
-
-    pointer-events: none;
-
-    z-index: 0;
-
+ 
     transition:
       transform 0.55s
       cubic-bezier(0.16, 1, 0.3, 1);
+ 
+    z-index: -1;
   }
-
-  .button-content {
+ 
+  svg {
+    font-size: 26px;
+ 
     position: relative;
-
     z-index: 2;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    color: inherit;
+ 
+    transition: transform 0.25s ease;
   }
-
+ 
   &:hover {
     color: ${colors.white};
-
+ 
     transform: translateY(-3px);
+ 
+    box-shadow:
+      0 12px 30px rgba(0, 0, 0, 0.2);
   }
-
+ 
   &:hover::before {
     transform:
       translate(-50%, -50%)
-      scale(3.5);
+      scale(4);
   }
-
+ 
+  &:hover svg {
+    transform: translateX(-3px);
+  }
+ 
   &:active {
-    transform: scale(0.95);
+    transform: scale(0.94);
   }
-
-  svg {
-    font-size: 24px;
-  }
-
-  @media (max-width: 768px) {
-    top: 14px;
-
-    left: 14px;
-
-    width: 48px;
-
-    height: 48px;
-
+ 
+  @media (max-width: 600px) {
+    top: 15px;
+    left: 15px;
+ 
+    width: 52px;
+    height: 52px;
+ 
     svg {
-      font-size: 20px;
-    }
-  }
-
-  @media (max-width: 500px) {
-    top: 10px;
-
-    left: 10px;
-
-    width: 44px;
-
-    height: 44px;
-
-    svg {
-      font-size: 18px;
+      font-size: 21px;
     }
   }
 `;
-
-
+ 
 /* ============================================================
    CONTAINER
 ============================================================ */
-
+ 
 export const Container = styled.div`
   position: relative;
-
-  width: min(92%, 650px);
-
+ 
   z-index: 5;
-
+ 
+  width: min(900px, 100%);
+ 
   display: flex;
-
-  justify-content: center;
-
-  align-items: center;
-
-  animation:
-    ${aparecer}
-    0.6s
-    ease;
-
-  @media (max-width: 700px) {
-    width: 100%;
-  }
-`;
-
-
-/* ============================================================
-   CARD
-============================================================ */
-
-export const ProfileCard = styled.div`
-  position: relative;
-
-  width: 100%;
-
-  padding: 38px 42px 32px;
-
-  background: ${colors.white};
-
-  border-radius: 30px;
-
-  box-shadow:
-    0 25px 65px rgba(0, 0, 0, 0.15),
-    10px 10px 0 ${colors.red};
-
-  overflow: hidden;
-
-  isolation: isolate;
-
-  &::before {
-    content: "";
-
-    position: absolute;
-
-    width: 220px;
-
-    height: 220px;
-
-    top: -145px;
-
-    right: -100px;
-
-    background: ${colors.yellow};
-
-    border-radius: 50%;
-
-    opacity: 0.75;
-
-    z-index: -1;
-  }
-
-  &::after {
-    content: "";
-
-    position: absolute;
-
-    width: 130px;
-
-    height: 8px;
-
-    bottom: 20px;
-
-    left: -35px;
-
-    background: ${colors.red};
-
-    border-radius: 10px;
-
-    transform: rotate(-20deg);
-
-    opacity: 0.85;
-
-    z-index: -1;
-  }
-
-  @media (max-width: 700px) {
-    padding: 30px 22px 28px;
-
-    border-radius: 24px;
-
-    box-shadow:
-      0 20px 45px rgba(0, 0, 0, 0.13),
-      7px 7px 0 ${colors.red};
-  }
-`;
-
-
-/* ============================================================
-   HEADER
-============================================================ */
-
-export const ProfileHeader = styled.div`
-  display: flex;
-
   flex-direction: column;
-
-  align-items: center;
-
-  width: 100%;
-
-  margin-bottom: 28px;
+ 
+  gap: 30px;
+ 
+  animation: ${aparecer} 0.65s ease both;
 `;
-
-
-/* ============================================================
-   AVATAR
-============================================================ */
-
-export const AvatarWrapper = styled.div`
-  position: relative;
-
-  width: 165px;
-
-  height: 165px;
-
-  margin-bottom: 20px;
-
-  @media (max-width: 600px) {
-    width: 135px;
-
-    height: 135px;
-
-    margin-bottom: 16px;
-  }
-`;
-
-export const Avatar = styled.img`
-  width: 100%;
-
-  height: 100%;
-
-  display: block;
-
-  border-radius: 50%;
-
-  object-fit: cover;
-
-  border: 6px solid ${colors.yellow};
-
-  background: ${colors.cream};
-
-  box-shadow:
-    0 10px 25px rgba(0, 0, 0, 0.16);
-`;
-
-
-/* ============================================================
-   EDITAR
-============================================================ */
-
-export const EditButton = styled.label`
-  position: absolute;
-
-  right: -8px;
-
-  bottom: 5px;
-
-  min-width: 78px;
-
-  height: 40px;
-
-  padding: 0 16px;
-
-  border-radius: 20px;
-
-  background: ${colors.red};
-
-  color: ${colors.white};
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  cursor: pointer;
-
-  overflow: hidden;
-
-  isolation: isolate;
-
-  font-size: 13px;
-
-  font-weight: 700;
-
-  box-shadow:
-    4px 4px 0 ${colors.yellow};
-
-  transition:
-    transform 0.25s ease,
-    color 0.25s ease,
-    box-shadow 0.25s ease;
-
-  &::before {
-    content: "";
-
-    position: absolute;
-
-    left: var(--mouse-x, 50%);
-
-    top: var(--mouse-y, 50%);
-
-    width: 25px;
-
-    height: 25px;
-
-    border-radius: 50%;
-
-    background: ${colors.yellow};
-
-    transform:
-      translate(-50%, -50%)
-      scale(0);
-
-    z-index: -1;
-
-    pointer-events: none;
-
-    transition:
-      transform 0.6s
-      cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .button-content {
-    position: relative;
-
-    z-index: 2;
-  }
-
-  &:hover {
-    color: ${colors.black};
-
-    transform: translateY(-3px);
-  }
-
-  &:hover::before {
-    transform:
-      translate(-50%, -50%)
-      scale(7);
-  }
-
-  &:active {
-    transform: scale(0.97);
-  }
-
-  input {
-    display: none;
-  }
-
-  @media (max-width: 600px) {
-    right: -6px;
-
-    bottom: 2px;
-
-    min-width: 70px;
-
-    height: 35px;
-
-    padding: 0 13px;
-
-    font-size: 11px;
-  }
-`;
-
-
-/* ============================================================
-   NOME / EMAIL
-============================================================ */
-
-export const UserName = styled.h2`
-  margin: 0 0 5px;
-
-  color: ${colors.red};
-
-  text-align: center;
-
-  font-size:
-    clamp(1.5rem, 4vw, 2.2rem);
-
-  line-height: 1.15;
-
-  font-weight: 900;
-
-  word-break: break-word;
-
-  overflow-wrap: anywhere;
-`;
-
-export const UserEmail = styled.p`
-  margin: 0;
-
-  color: ${colors.gray};
-
-  text-align: center;
-
-  font-size: 0.92rem;
-
-  word-break: break-word;
-
-  overflow-wrap: anywhere;
-`;
-
-
+ 
 /* ============================================================
    FORM
 ============================================================ */
-
+ 
 export const Form = styled.form`
   width: 100%;
-
+ 
   display: flex;
-
   flex-direction: column;
-
-  gap: 18px;
+ 
+  gap: 30px;
 `;
-
-export const Field = styled.div`
+ 
+/* ============================================================
+   HEADER
+============================================================ */
+ 
+export const Header = styled.header`
+  padding: 8px 6px 12px;
+ 
+  animation: ${subir} 0.55s ease both;
+`;
+ 
+export const HeaderTitle = styled.h1`
+  color: ${colors.red};
+ 
+  font-size: clamp(2.7rem, 6vw, 4rem);
+ 
+  line-height: 1;
+ 
+  font-weight: 900;
+ 
+  letter-spacing: -1.8px;
+`;
+ 
+export const HeaderSubtitle = styled.p`
+  margin-top: 13px;
+ 
+  color: #766c48;
+ 
+  font-size: 1.08rem;
+ 
+  line-height: 1.5;
+ 
+  max-width: 650px;
+`;
+ 
+/* ============================================================
+   PROFILE CARD
+============================================================ */
+ 
+export const ProfileCard = styled.div`
+  position: relative;
+ 
   display: flex;
-
-  flex-direction: column;
-
-  gap: 8px;
-
-  width: 100%;
-`;
-
-export const Label = styled.label`
-  color: #7c7040;
-
-  font-size: 0.76rem;
-
-  font-weight: 600;
-
-  padding-left: 4px;
-`;
-
-
-/* ============================================================
-   INPUTS
-============================================================ */
-
-export const Input = styled.input`
-  display: block;
-
-  width: 100%;
-
-  height: 60px;
-
-  padding: 14px 18px;
-
-  border: 2px solid ${colors.yellow};
-
-  border-radius: 16px;
-
-  outline: none;
-
-  background: ${colors.input};
-
-  color: #111;
-
-  font-size: 0.95rem;
-
-  transition:
-    background 0.25s ease,
-    border-color 0.25s ease,
-    box-shadow 0.25s ease;
-
-  &:hover {
-    background: #fffaf0;
-
-    border-color: ${colors.yellowStrong};
-
-    box-shadow:
-      0 4px 12px
-      rgba(249, 190, 6, 0.1);
-  }
-
-  &:focus {
-    border-color: ${colors.yellowStrong};
-
-    background: #fffbe6;
-
-    box-shadow:
-      0 0 0 3px
-      rgba(255, 219, 83, 0.18);
-  }
-
-  &::placeholder {
-    color: #7c7040;
-
-    opacity: 0.7;
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-
-    opacity: 0.75;
-
-    background: #f7f5e8;
-  }
-
-  @media (max-width: 600px) {
-    height: 56px;
-
-    padding: 13px 16px;
-
-    border-radius: 13px;
-
-    font-size: 0.88rem;
-  }
-`;
-
-
-/* ============================================================
-   SENHA
-============================================================ */
-
-export const PasswordBox = styled.div`
-  position: relative;
-
-  width: 100%;
-
-  ${Input} {
-    padding-right: 55px;
-  }
-
-  span {
-    position: absolute;
-
-    top: 50%;
-
-    right: 17px;
-
-    transform: translateY(-50%);
-
-    width: 30px;
-
-    height: 30px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    color: #888;
-
-    cursor: pointer;
-
-    transition: color 0.2s ease;
-
-    &:hover {
-      color: ${colors.red};
-    }
-  }
-`;
-
-
-/* ============================================================
-   MENSAGENS
-============================================================ */
-
-export const Message = styled.p`
-  width: 100%;
-
-  margin: -2px 0 0;
-
-  font-size: 0.82rem;
-
-  line-height: 1.35;
-
-  text-align: center;
-
-  color: ${({ $error, $success }) =>
-    $error
-      ? "#c62828"
-      : $success
-      ? "#2e7d32"
-      : colors.black};
-`;
-
-
-/* ============================================================
-   SALVAR
-============================================================ */
-
-export const SaveButton = styled.button`
-  position: relative;
-
-  width: 100%;
-
-  height: 58px;
-
-  margin-top: 4px;
-
-  padding: 0 22px;
-
-  border: 0;
-
-  border-radius: 16px;
-
-  background: ${colors.yellow};
-
-  color: ${colors.black};
-
-  font-size: 1rem;
-
-  font-weight: 700;
-
-  cursor: pointer;
-
+  align-items: center;
+ 
+  gap: 42px;
+ 
+  padding: 38px 40px;
+ 
+  background: ${colors.white};
+ 
+  border: 1px solid rgba(131, 22, 20, 0.07);
+ 
+  border-radius: 28px;
+ 
+  box-shadow:
+    0 16px 45px rgba(0, 0, 0, 0.1);
+ 
   overflow: hidden;
-
-  isolation: isolate;
-
-  transform: translateZ(0);
-
-  transition:
-    color 0.3s ease,
-    transform 0.25s ease,
-    box-shadow 0.3s ease;
-
+ 
+  animation: ${subir} 0.65s 0.08s ease both;
+ 
   &::before {
     content: "";
-
+ 
     position: absolute;
-
-    left: var(--mouse-x, 50%);
-
-    top: var(--mouse-y, 50%);
-
-    width: 40px;
-
-    height: 40px;
-
+ 
+    width: 230px;
+    height: 230px;
+ 
+    right: -105px;
+    top: -115px;
+ 
     border-radius: 50%;
-
+ 
+    background: ${colors.yellow};
+ 
+    opacity: 0.45;
+  }
+ 
+  &::after {
+    content: "";
+ 
+    position: absolute;
+ 
+    left: 0;
+    bottom: 0;
+ 
+    width: 120px;
+    height: 6px;
+ 
     background: ${colors.red};
-
+ 
+    border-radius: 0 6px 0 0;
+  }
+ 
+  @media (max-width: 600px) {
+    flex-direction: column;
+ 
+    text-align: center;
+ 
+    gap: 24px;
+ 
+    padding: 32px 24px;
+  }
+`;
+ 
+/* ============================================================
+   AVATAR
+============================================================ */
+ 
+export const AvatarArea = styled.div`
+  position: relative;
+ 
+  z-index: 2;
+ 
+  flex: 0 0 auto;
+`;
+ 
+export const AvatarWrapper = styled.div`
+  position: relative;
+ 
+  width: 160px;
+  height: 160px;
+ 
+  padding: 6px;
+ 
+  border-radius: 50%;
+ 
+  background:
+    linear-gradient(
+      135deg,
+      ${colors.yellow},
+      ${colors.yellowStrong}
+    );
+ 
+  box-shadow:
+    0 8px 22px rgba(131, 22, 20, 0.14);
+ 
+  @media (max-width: 600px) {
+    width: 145px;
+    height: 145px;
+  }
+`;
+ 
+export const Avatar = styled.img`
+  width: 100%;
+  height: 100%;
+ 
+  display: block;
+ 
+  border-radius: 50%;
+ 
+  object-fit: cover;
+ 
+  background: ${colors.cream};
+ 
+  border: 5px solid ${colors.white};
+`;
+ 
+/* ============================================================
+   BOTÃO DA FOTO
+============================================================ */
+ 
+export const CameraButton = styled.label`
+  position: absolute;
+ 
+  right: -13px;
+  bottom: -7px;
+ 
+  width: 72px;
+  height: 72px;
+ 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ 
+  border-radius: 50%;
+ 
+  background: ${colors.red};
+  color: ${colors.white};
+ 
+  border: 5px solid ${colors.white};
+ 
+  cursor: pointer;
+ 
+  overflow: hidden;
+  isolation: isolate;
+ 
+  box-shadow:
+    0 7px 18px rgba(0, 0, 0, 0.22);
+ 
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    box-shadow 0.25s ease;
+ 
+  svg {
+    position: relative;
+ 
+    z-index: 2;
+ 
+    font-size: 28px;
+ 
+    transition: transform 0.25s ease;
+  }
+ 
+  input {
+    display: none;
+  }
+ 
+  &::before {
+    content: "";
+ 
+    position: absolute;
+ 
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+ 
+    width: 42px;
+    height: 42px;
+ 
+    border-radius: 50%;
+ 
+    background: ${colors.yellow};
+ 
     transform:
       translate(-50%, -50%)
       scale(0);
-
+ 
+    transition:
+      transform 0.5s
+      cubic-bezier(0.16, 1, 0.3, 1);
+ 
+    z-index: 1;
+  }
+ 
+  &:hover {
+    color: ${colors.black};
+ 
+    transform: translateY(-4px) scale(1.04);
+ 
+    box-shadow:
+      0 11px 24px rgba(0, 0, 0, 0.25);
+  }
+ 
+  &:hover::before {
+    transform:
+      translate(-50%, -50%)
+      scale(4);
+  }
+ 
+  &:hover svg {
+    transform: scale(1.08);
+  }
+ 
+  &:active {
+    transform: scale(0.96);
+  }
+ 
+  @media (max-width: 600px) {
+    right: -10px;
+    bottom: -5px;
+ 
+    width: 64px;
+    height: 64px;
+ 
+    svg {
+      font-size: 24px;
+    }
+  }
+`;
+ 
+/* ============================================================
+   PROFILE INFO
+============================================================ */
+ 
+export const ProfileInfo = styled.div`
+  position: relative;
+ 
+  z-index: 2;
+ 
+  min-width: 0;
+ 
+  flex: 1;
+ 
+  display: flex;
+  flex-direction: column;
+ 
+  justify-content: center;
+ 
+  align-items: flex-start;
+ 
+  text-align: left;
+ 
+  @media (max-width: 600px) {
+    align-items: center;
+ 
+    text-align: center;
+ 
+    width: 100%;
+  }
+`;
+ 
+export const UserName = styled.h2`
+  color: ${colors.red};
+ 
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+ 
+  line-height: 1.2;
+ 
+  font-weight: 900;
+ 
+  word-break: break-word;
+`;
+ 
+export const UserEmail = styled.p`
+  margin-top: 8px;
+ 
+  color: ${colors.gray};
+ 
+  font-size: 1.05rem;
+ 
+  word-break: break-word;
+  overflow-wrap: anywhere;
+`;
+ 
+/* ============================================================
+   SECTIONS
+============================================================ */
+ 
+export const Section = styled.section`
+  display: flex;
+  flex-direction: column;
+ 
+  gap: 27px;
+ 
+  padding: 35px 36px;
+ 
+  background: ${colors.white};
+ 
+  border: 1px solid rgba(0, 0, 0, 0.055);
+ 
+  border-radius: 26px;
+ 
+  box-shadow:
+    0 12px 35px rgba(0, 0, 0, 0.07);
+ 
+  animation: ${subir} 0.65s ease both;
+ 
+  @media (max-width: 600px) {
+    padding: 28px 22px;
+ 
+    border-radius: 21px;
+  }
+`;
+ 
+export const SectionHeader = styled.div`
+  display: flex;
+  align-items: center;
+ 
+  gap: 17px;
+`;
+ 
+export const SectionIcon = styled.div`
+  flex: 0 0 auto;
+ 
+  width: 54px;
+  height: 54px;
+ 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ 
+  border-radius: 15px;
+ 
+  background: ${colors.cream};
+ 
+  color: ${colors.red};
+ 
+  svg {
+    font-size: 22px;
+  }
+`;
+ 
+export const SectionTitle = styled.h3`
+  color: ${colors.black};
+ 
+  font-size: 1.35rem;
+ 
+  font-weight: 800;
+`;
+ 
+export const SectionDescription = styled.p`
+  margin-top: 5px;
+ 
+  color: #88806a;
+ 
+  font-size: 0.92rem;
+ 
+  line-height: 1.4;
+`;
+ 
+/* ============================================================
+   FIELDS
+============================================================ */
+ 
+export const FieldsGrid = styled.div`
+  display: grid;
+ 
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+ 
+  gap: 25px;
+ 
+  @media (max-width: 620px) {
+    grid-template-columns: 1fr;
+  }
+`;
+ 
+export const Field = styled.div`
+  display: flex;
+  flex-direction: column;
+ 
+  gap: 9px;
+ 
+  width: 100%;
+ 
+  small {
+    padding-left: 4px;
+ 
+    color: #948c75;
+ 
+    font-size: 0.78rem;
+ 
+    line-height: 1.4;
+  }
+`;
+ 
+export const Label = styled.label`
+  padding-left: 4px;
+ 
+  color: #6f6545;
+ 
+  font-size: 0.95rem;
+ 
+  font-weight: 700;
+`;
+ 
+export const InputWrapper = styled.div`
+  position: relative;
+ 
+  width: 100%;
+ 
+  &::after {
+    content: "";
+ 
+    position: absolute;
+ 
+    inset: 0;
+ 
+    border-radius: 15px;
+ 
     pointer-events: none;
-
+ 
+    border: 2px solid transparent;
+ 
+    transition:
+      border-color 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+ 
+  &:focus-within::after {
+    border-color: ${colors.yellowStrong};
+ 
+    box-shadow:
+      0 0 0 3px rgba(255, 219, 83, 0.16);
+  }
+ 
+  &:hover::after {
+    border-color: rgba(249, 190, 6, 0.4);
+  }
+ 
+  &[disabled] {
+    opacity: 0.7;
+  }
+`;
+ 
+export const InputIcon = styled.div`
+  position: absolute;
+ 
+  left: 19px;
+  top: 50%;
+ 
+  transform: translateY(-50%);
+ 
+  width: 24px;
+ 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ 
+  color: #9d9064;
+ 
+  pointer-events: none;
+ 
+  z-index: 3;
+ 
+  svg {
+    font-size: 17px;
+  }
+`;
+ 
+export const Input = styled.input`
+  display: block;
+ 
+  width: 100%;
+  height: 66px;
+ 
+  padding: 0 18px 0 54px;
+ 
+  border: 2px solid ${colors.border};
+ 
+  border-radius: 15px;
+ 
+  outline: none;
+ 
+  background: ${colors.input};
+ 
+  color: #171717;
+ 
+  font-size: 1rem;
+ 
+  transition:
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    transform 0.2s ease;
+ 
+  &:hover {
+    background: #fffaf0;
+ 
+    border-color: ${colors.yellowStrong};
+  }
+ 
+  &:focus {
+    background: #fffef3;
+ 
+    border-color: ${colors.yellowStrong};
+ 
+    box-shadow:
+      0 0 0 3px rgba(255, 219, 83, 0.14);
+  }
+ 
+  &::placeholder {
+    color: #aaa183;
+ 
+    opacity: 0.8;
+  }
+ 
+  &:disabled {
+    cursor: not-allowed;
+ 
+    background: #f2f0e4;
+ 
+    color: #817d70;
+ 
+    border-color: #dedac9;
+  }
+ 
+  @media (max-width: 600px) {
+    height: 62px;
+ 
+    font-size: 0.95rem;
+  }
+`;
+ 
+/* ============================================================
+   AVISOS
+============================================================ */
+ 
+export const Aviso = styled.div`
+  width: 100%;
+ 
+  padding: 12px 15px;
+ 
+  border-radius: 12px;
+ 
+  background: rgba(198, 40, 40, 0.07);
+ 
+  border: 1px solid rgba(198, 40, 40, 0.12);
+ 
+  color: ${colors.error};
+ 
+  font-size: 0.78rem;
+ 
+  line-height: 1.4;
+ 
+  text-align: center;
+ 
+  animation: ${subir} 0.25s ease both;
+`;
+ 
+export const AvisoSucesso = styled.div`
+  width: 100%;
+ 
+  padding: 12px 15px;
+ 
+  border-radius: 12px;
+ 
+  background: rgba(46, 125, 50, 0.08);
+ 
+  border: 1px solid rgba(46, 125, 50, 0.12);
+ 
+  color: ${colors.green};
+ 
+  font-size: 0.78rem;
+ 
+  line-height: 1.4;
+ 
+  text-align: center;
+ 
+  animation: ${subir} 0.25s ease both;
+`;
+ 
+/* ============================================================
+   SALVAR
+============================================================ */
+ 
+export const SaveButton = styled.button`
+  position: relative;
+ 
+  width: 100%;
+  height: 68px;
+ 
+  border: 0;
+ 
+  border-radius: 16px;
+ 
+  background: ${colors.yellow};
+ 
+  color: ${colors.black};
+ 
+  font-size: 1.08rem;
+ 
+  font-weight: 800;
+ 
+  cursor: pointer;
+ 
+  overflow: hidden;
+ 
+  isolation: isolate;
+ 
+  transition:
+    transform 0.25s ease,
+    color 0.3s ease,
+    box-shadow 0.3s ease;
+ 
+  &::before {
+    content: "";
+ 
+    position: absolute;
+ 
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+ 
+    width: 48px;
+    height: 48px;
+ 
+    border-radius: 50%;
+ 
+    background: ${colors.red};
+ 
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+ 
     z-index: 0;
-
+ 
+    pointer-events: none;
+ 
     transition:
       transform 0.65s
       cubic-bezier(0.16, 1, 0.3, 1);
   }
-
-  .button-content {
+ 
+  .buttonContent {
     position: relative;
-
+ 
     z-index: 2;
-
+ 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
+ 
+    gap: 11px;
+ 
     color: inherit;
   }
-
-  &:hover {
-    color: ${colors.white};
-
-    transform: translateY(-3px);
-
-    box-shadow:
-      0 10px 25px
-      rgba(0, 0, 0, 0.17);
+ 
+  svg {
+    font-size: 17px;
   }
-
-  &:hover::before {
+ 
+  &:hover:not(:disabled) {
+    color: ${colors.white};
+ 
+    transform: translateY(-3px);
+ 
+    box-shadow:
+      0 12px 25px rgba(0, 0, 0, 0.14);
+  }
+ 
+  &:hover:not(:disabled)::before {
     transform:
       translate(-50%, -50%)
       scale(18);
   }
-
-  &:active {
-    transform:
-      translateY(1px)
-      scale(0.98);
+ 
+  &:active:not(:disabled) {
+    transform: translateY(1px) scale(0.98);
   }
-
-  &:focus {
-    outline: none;
+ 
+  &:disabled {
+    cursor: not-allowed;
+ 
+    opacity: 0.55;
   }
-
+ 
   &:focus-visible {
-    outline:
-      2px solid ${colors.red};
-
+    outline: 2px solid ${colors.red};
+ 
     outline-offset: 3px;
   }
-
-  @media (max-width: 600px) {
-    height: 54px;
-
-    border-radius: 14px;
-
-    font-size: 0.92rem;
+`;
+ 
+/* ============================================================
+   CANCELAR
+============================================================ */
+ 
+export const CancelButton = styled.button`
+  position: relative;
+ 
+  width: 100%;
+  height: 60px;
+ 
+  border: 2px solid ${colors.yellow};
+ 
+  border-radius: 15px;
+ 
+  background: ${colors.white};
+ 
+  color: ${colors.black};
+ 
+  font-size: 0.98rem;
+ 
+  font-weight: 700;
+ 
+  cursor: pointer;
+ 
+  overflow: hidden;
+ 
+  isolation: isolate;
+ 
+  transition:
+    transform 0.25s ease,
+    color 0.3s ease;
+ 
+  &::before {
+    content: "";
+ 
+    position: absolute;
+ 
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+ 
+    width: 30px;
+    height: 30px;
+ 
+    border-radius: 50%;
+ 
+    background: ${colors.yellow};
+ 
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+ 
+    z-index: 0;
+ 
+    pointer-events: none;
+ 
+    transition:
+      transform 0.55s
+      cubic-bezier(0.16, 1, 0.3, 1);
+  }
+ 
+  .buttonContent {
+    position: relative;
+ 
+    z-index: 2;
+ 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+ 
+    gap: 9px;
+  }
+ 
+  &:hover {
+    transform: translateY(-2px);
+  }
+ 
+  &:hover::before {
+    transform:
+      translate(-50%, -50%)
+      scale(10);
+  }
+ 
+  &:active {
+    transform: scale(0.97);
   }
 `;
-
-
+ 
+/* ============================================================
+   CONFIRMAR
+============================================================ */
+ 
+export const ConfirmButton = styled.button`
+  position: relative;
+ 
+  width: 100%;
+  height: 60px;
+ 
+  border: 0;
+ 
+  border-radius: 15px;
+ 
+  background: ${colors.red};
+ 
+  color: ${colors.white};
+ 
+  font-size: 0.98rem;
+ 
+  font-weight: 700;
+ 
+  cursor: pointer;
+ 
+  overflow: hidden;
+ 
+  isolation: isolate;
+ 
+  transition:
+    transform 0.25s ease,
+    color 0.3s ease,
+    box-shadow 0.3s ease;
+ 
+  &::before {
+    content: "";
+ 
+    position: absolute;
+ 
+    left: var(--mouse-x, 50%);
+    top: var(--mouse-y, 50%);
+ 
+    width: 30px;
+    height: 30px;
+ 
+    border-radius: 50%;
+ 
+    background: ${colors.yellow};
+ 
+    transform:
+      translate(-50%, -50%)
+      scale(0);
+ 
+    z-index: 0;
+ 
+    pointer-events: none;
+ 
+    transition:
+      transform 0.55s
+      cubic-bezier(0.16, 1, 0.3, 1);
+  }
+ 
+  .buttonContent {
+    position: relative;
+ 
+    z-index: 2;
+ 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+ 
+    gap: 9px;
+  }
+ 
+  &:hover {
+    color: ${colors.black};
+ 
+    transform: translateY(-2px);
+ 
+    box-shadow:
+      0 9px 22px rgba(131, 22, 20, 0.2);
+  }
+ 
+  &:hover::before {
+    transform:
+      translate(-50%, -50%)
+      scale(10);
+  }
+ 
+  &:active {
+    transform: scale(0.97);
+  }
+`;
+ 
 /* ============================================================
    SAIR
 ============================================================ */
-
+ 
 export const LogoutLink = styled.button`
   width: 100%;
-
-  margin-top: 17px;
-
+ 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ 
+  gap: 10px;
+ 
+  margin-top: 3px;
+ 
+  padding: 15px;
+ 
   border: 0;
-
+ 
   background: transparent;
-
+ 
   color: ${colors.red};
-
-  font-size: 0.9rem;
-
+ 
+  font-size: 0.98rem;
+ 
   font-weight: 700;
-
+ 
   cursor: pointer;
-
+ 
   transition:
     color 0.2s ease,
     transform 0.2s ease;
-
+ 
+  svg {
+    font-size: 16px;
+  }
+ 
   &:hover {
     color: ${colors.black};
-
+ 
     transform: translateY(-1px);
   }
 `;
-
-
+ 
 /* ============================================================
    MODAL
 ============================================================ */
-
+ 
 export const ModalOverlay = styled.div`
   position: fixed;
-
+ 
   inset: 0;
-
+ 
   width: 100%;
-
   height: 100%;
-
+ 
   display: flex;
-
   align-items: center;
-
   justify-content: center;
-
-  padding: 20px;
-
-  background:
-    rgba(87, 17, 17, 0.35);
-
-  backdrop-filter: blur(4px);
-
+ 
+  padding: 25px;
+ 
+  background: rgba(87, 17, 17, 0.4);
+ 
+  backdrop-filter: blur(7px);
+ 
   z-index: 9999;
+ 
+  animation: ${subir} 0.2s ease both;
 `;
-
+ 
 export const Modal = styled.div`
   position: relative;
-
-  width: 420px;
-
+ 
+  width: 500px;
   max-width: 100%;
-
-  padding: 32px;
-
+ 
+  padding: 40px;
+ 
   background: ${colors.white};
-
-  border-radius: 22px;
-
+ 
+  border-radius: 28px;
+ 
   text-align: center;
-
+ 
   box-shadow:
     8px 8px 0 ${colors.red},
-    0 20px 50px
-    rgba(0, 0, 0, 0.2);
-
-  animation:
-    ${aparecer}
-    0.25s
-    ease;
-
+    0 25px 65px rgba(0, 0, 0, 0.24);
+ 
+  animation: ${aparecer} 0.25s ease both;
+ 
+  overflow: hidden;
+ 
   &::before {
     content: "";
-
+ 
     position: absolute;
-
-    width: 90px;
-
-    height: 90px;
-
-    top: -35px;
-
-    right: -35px;
-
-    background: ${colors.yellow};
-
+ 
+    width: 160px;
+    height: 160px;
+ 
+    top: -85px;
+    right: -65px;
+ 
     border-radius: 50%;
-
-    z-index: -1;
+ 
+    background: ${colors.yellow};
   }
-
+ 
   h3 {
-    margin: 0 0 10px;
-
+    position: relative;
+ 
+    margin: 20px 0 11px;
+ 
     color: ${colors.red};
-
-    font-size: 1.4rem;
-
+ 
+    font-size: 1.6rem;
+ 
     font-weight: 900;
   }
-
+ 
   p {
-    margin: 0 0 25px;
-
+    position: relative;
+ 
+    margin: 0 auto 30px;
+ 
+    max-width: 380px;
+ 
     color: ${colors.gray};
-
-    font-size: 0.92rem;
-
-    line-height: 1.5;
+ 
+    font-size: 0.95rem;
+ 
+    line-height: 1.55;
   }
-
+ 
   @media (max-width: 500px) {
-    padding: 26px 20px;
-
-    border-radius: 18px;
-
+    padding: 30px 20px;
+ 
+    border-radius: 22px;
+ 
     h3 {
-      font-size: 1.2rem;
+      font-size: 1.35rem;
     }
-
+ 
     p {
       font-size: 0.85rem;
     }
   }
 `;
-
-export const ModalButtons = styled.div`
+ 
+export const ModalIcon = styled.div`
+  position: relative;
+ 
+  width: 70px;
+  height: 70px;
+ 
+  margin: 0 auto;
+ 
   display: flex;
-
-  justify-content: center;
-
   align-items: center;
-
-  gap: 12px;
-
-  width: 100%;
-
-  @media (max-width: 420px) {
-    flex-direction: column;
-  }
-`;
-
-
-/* ============================================================
-   CANCELAR
-============================================================ */
-
-export const CancelButton = styled.button`
-  position: relative;
-
-  width: 145px;
-
-  height: 46px;
-
-  border: 2px solid ${colors.yellow};
-
-  border-radius: 12px;
-
+  justify-content: center;
+ 
+  border-radius: 50%;
+ 
   background: ${colors.cream};
-
-  color: ${colors.black};
-
-  font-size: 0.9rem;
-
-  font-weight: 700;
-
-  cursor: pointer;
-
-  overflow: hidden;
-
-  isolation: isolate;
-
-  transition:
-    color 0.3s ease,
-    transform 0.25s ease;
-
-  &::before {
-    content: "";
-
-    position: absolute;
-
-    left: var(--mouse-x, 50%);
-
-    top: var(--mouse-y, 50%);
-
-    width: 25px;
-
-    height: 25px;
-
-    border-radius: 50%;
-
-    background: ${colors.yellow};
-
-    transform:
-      translate(-50%, -50%)
-      scale(0);
-
-    pointer-events: none;
-
-    z-index: 0;
-
-    transition:
-      transform 0.55s
-      cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .button-content {
-    position: relative;
-
-    z-index: 2;
-  }
-
-  &:hover {
-    transform: translateY(-2px);
-  }
-
-  &:hover::before {
-    transform:
-      translate(-50%, -50%)
-      scale(10);
-  }
-
-  &:active {
-    transform: scale(0.97);
-  }
-
-  @media (max-width: 420px) {
-    width: 100%;
+ 
+  color: ${colors.red};
+ 
+  border: 2px solid ${colors.yellow};
+ 
+  svg {
+    font-size: 25px;
   }
 `;
-
-
-/* ============================================================
-   CONFIRMAR
-============================================================ */
-
-export const ConfirmButton = styled.button`
+ 
+export const ModalButtons = styled.div`
   position: relative;
-
-  width: 145px;
-
-  height: 46px;
-
-  border: 0;
-
-  border-radius: 12px;
-
-  background: ${colors.red};
-
-  color: ${colors.white};
-
-  font-size: 0.9rem;
-
-  font-weight: 700;
-
-  cursor: pointer;
-
-  overflow: hidden;
-
-  isolation: isolate;
-
-  transition:
-    color 0.3s ease,
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
-
-  &::before {
-    content: "";
-
-    position: absolute;
-
-    left: var(--mouse-x, 50%);
-
-    top: var(--mouse-y, 50%);
-
-    width: 25px;
-
-    height: 25px;
-
-    border-radius: 50%;
-
-    background: ${colors.yellow};
-
-    transform:
-      translate(-50%, -50%)
-      scale(0);
-
-    pointer-events: none;
-
-    z-index: 0;
-
-    transition:
-      transform 0.55s
-      cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .button-content {
-    position: relative;
-
-    z-index: 2;
-  }
-
-  &:hover {
-    color: ${colors.black};
-
-    transform: translateY(-2px);
-
-    box-shadow:
-      0 8px 20px
-      rgba(131, 22, 20, 0.22);
-  }
-
-  &:hover::before {
-    transform:
-      translate(-50%, -50%)
-      scale(10);
-  }
-
-  &:active {
-    transform: scale(0.97);
-  }
-
+ 
+  display: grid;
+ 
+  grid-template-columns: 1fr 1fr;
+ 
+  gap: 14px;
+ 
+  width: 100%;
+ 
   @media (max-width: 420px) {
-    width: 100%;
+    grid-template-columns: 1fr;
   }
 `;

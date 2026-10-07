@@ -1,38 +1,64 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
+
+import {
+  FaArrowLeft,
+  FaUser,
+  FaEnvelope,
+  FaCamera,
+  FaSignOutAlt,
+  FaCheck,
+  FaTimes,
+} from "react-icons/fa";
+
 import {
   getUsuarioLogado,
   salvarUsuarioLogado,
   logout,
   getAuthHeaders,
 } from "../../../utils/auth";
+
 import {
   GlobalStyle,
   Page,
+  BackButton,
+  PixelArea,
   Pixel01,
   Pixel02,
   Pixel03,
-  BackButton,
   Container,
+  Header,
+  HeaderTitle,
+  HeaderSubtitle,
   ProfileCard,
-  ProfileHeader,
+  AvatarArea,
   AvatarWrapper,
   Avatar,
-  EditButton,
+  CameraButton,
+  ProfileInfo,
   UserName,
   UserEmail,
   Form,
+  Section,
+  SectionHeader,
+  SectionIcon,
+  SectionTitle,
+  SectionDescription,
+  FieldsGrid,
   Field,
   Label,
+  InputWrapper,
+  InputIcon,
   Input,
   SaveButton,
+  CancelButton,
   LogoutLink,
-  Message,
+  Aviso,
+  AvisoSucesso,
   ModalOverlay,
   Modal,
+  ModalIcon,
   ModalButtons,
-  CancelButton,
   ConfirmButton,
 } from "./style";
 
@@ -185,31 +211,40 @@ export default function Profileadm() {
       <GlobalStyle />
 
       <Page>
-        <Pixel01 src="/pixel01.png" alt="" />
-        <Pixel02 src="/pixel02.png" alt="" />
-        <Pixel03 src="/pixel03.png" alt="" />
-
         <BackButton
           to="/adm/inicioadm"
-          onMouseMove={handleButtonMouseMove}
           aria-label="Voltar"
+          onMouseMove={handleButtonMouseMove}
         >
-          <span className="button-content">
-            <FaArrowLeft />
-          </span>
+          <FaArrowLeft />
         </BackButton>
 
+        <PixelArea>
+          <Pixel01 src="/pixel01.png" alt="" />
+          <Pixel02 src="/pixel02.png" alt="" />
+          <Pixel03 src="/pixel03.png" alt="" />
+        </PixelArea>
+
         <Container>
+          <Header>
+            <HeaderTitle>Meu perfil</HeaderTitle>
+
+            <HeaderSubtitle>
+              Gerencie suas informações pessoais e sua conta.
+            </HeaderSubtitle>
+          </Header>
+
           <ProfileCard>
-            <ProfileHeader>
+            <AvatarArea>
               <AvatarWrapper>
                 <Avatar src={photo} alt="Foto de perfil" />
 
-                <EditButton
+                <CameraButton
                   htmlFor="fotoPerfil"
                   onMouseMove={handleButtonMouseMove}
+                  aria-label="Alterar foto de perfil"
                 >
-                  <span className="button-content">Editar</span>
+                  <FaCamera />
 
                   <input
                     id="fotoPerfil"
@@ -217,73 +252,117 @@ export default function Profileadm() {
                     accept="image/*"
                     onChange={handlePhotoChange}
                   />
-                </EditButton>
+                </CameraButton>
               </AvatarWrapper>
+            </AvatarArea>
 
+            <ProfileInfo>
               <UserName>{nome || "Administrador"}</UserName>
-              <UserEmail>{emailAtual}</UserEmail>
-            </ProfileHeader>
 
-            <Form onSubmit={handleSalvar}>
-              <Field>
-                <Label htmlFor="nome">Nome</Label>
-
-                <Input
-                  id="nome"
-                  type="text"
-                  value={nome}
-                  onChange={(e) => {
-                    setNome(e.target.value);
-                    setErro("");
-                    setSucesso("");
-                  }}
-                  placeholder="Digite seu nome"
-                  autoComplete="name"
-                />
-              </Field>
-
-              <Field>
-                <Label htmlFor="email">Email</Label>
-
-                <Input
-                  id="email"
-                  type="email"
-                  value={emailAtual}
-                  disabled
-                  readOnly
-                />
-              </Field>
-
-              {erro && <Message $error>{erro}</Message>}
-
-              {sucesso && <Message $success>{sucesso}</Message>}
-
-              <SaveButton
-                type="submit"
-                onMouseMove={handleButtonMouseMove}
-              >
-                <span className="button-content">
-                  Salvar alterações
-                </span>
-              </SaveButton>
-            </Form>
-
-            <LogoutLink
-              type="button"
-              onClick={() => setShowLogoutModal(true)}
-            >
-              Sair da conta
-            </LogoutLink>
+              <UserEmail>{emailAtual || "Carregando email..."}</UserEmail>
+            </ProfileInfo>
           </ProfileCard>
+
+          <Form onSubmit={handleSalvar}>
+            <Section>
+              <SectionHeader>
+                <SectionIcon>
+                  <FaUser />
+                </SectionIcon>
+
+                <div>
+                  <SectionTitle>Informações pessoais</SectionTitle>
+
+                  <SectionDescription>
+                    Atualize as informações básicas do seu perfil.
+                  </SectionDescription>
+                </div>
+              </SectionHeader>
+
+              <FieldsGrid>
+                <Field>
+                  <Label htmlFor="nome">Nome</Label>
+
+                  <InputWrapper>
+                    <InputIcon>
+                      <FaUser />
+                    </InputIcon>
+
+                    <Input
+                      id="nome"
+                      type="text"
+                      value={nome}
+                      onChange={(e) => {
+                        setNome(e.target.value);
+                        setErro("");
+                        setSucesso("");
+                      }}
+                      placeholder="Digite seu nome"
+                      autoComplete="name"
+                    />
+                  </InputWrapper>
+                </Field>
+
+                <Field>
+                  <Label htmlFor="email">Email</Label>
+
+                  <InputWrapper disabled>
+                    <InputIcon>
+                      <FaEnvelope />
+                    </InputIcon>
+
+                    <Input
+                      id="email"
+                      type="email"
+                      value={emailAtual}
+                      disabled
+                      readOnly
+                    />
+                  </InputWrapper>
+
+                  <small>Este é o email vinculado à conta.</small>
+                </Field>
+              </FieldsGrid>
+            </Section>
+
+            {erro && (
+              <Aviso>
+                <span>{erro}</span>
+              </Aviso>
+            )}
+
+            {sucesso && (
+              <AvisoSucesso>
+                <span>{sucesso}</span>
+              </AvisoSucesso>
+            )}
+
+            <SaveButton type="submit" onMouseMove={handleButtonMouseMove}>
+              <span className="buttonContent">
+                <FaCheck />
+                Salvar alterações
+              </span>
+            </SaveButton>
+          </Form>
+
+          <LogoutLink type="button" onClick={() => setShowLogoutModal(true)}>
+            <FaSignOutAlt />
+            Sair da conta
+          </LogoutLink>
         </Container>
 
         {showLogoutModal && (
           <ModalOverlay>
             <Modal>
+              <ModalIcon>
+                <FaSignOutAlt />
+              </ModalIcon>
+
               <h3>Sair da conta?</h3>
 
               <p>
-                Tem certeza que deseja sair da sua conta?
+                Tem certeza que deseja sair da sua conta? Você precisará fazer
+                login novamente para acessar seu perfil.
               </p>
 
               <ModalButtons>
@@ -292,7 +371,8 @@ export default function Profileadm() {
                   onClick={() => setShowLogoutModal(false)}
                   onMouseMove={handleButtonMouseMove}
                 >
-                  <span className="button-content">
+                  <span className="buttonContent">
+                    <FaTimes />
                     Cancelar
                   </span>
                 </CancelButton>
@@ -302,8 +382,9 @@ export default function Profileadm() {
                   onClick={handleLogout}
                   onMouseMove={handleButtonMouseMove}
                 >
-                  <span className="button-content">
-                    Sair
+                  <span className="buttonContent">
+                    <FaSignOutAlt />
+                    Sim, sair
                   </span>
                 </ConfirmButton>
               </ModalButtons>

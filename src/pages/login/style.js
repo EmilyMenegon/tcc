@@ -698,8 +698,12 @@ export const PanelText = styled.p`
 
   margin-bottom: 7%;
 
-  font-size:
-    clamp(0.8rem, 1vw, 1rem);
+ font-size:
+    clamp(
+      1rem,
+      5.25vw,
+      1.50rem
+    );
 
   line-height: 1.6;
 

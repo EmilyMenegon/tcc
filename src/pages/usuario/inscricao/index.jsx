@@ -1,12 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
 import Layout from "../../../components/layout";
 
-import {
-  FaInstagram,
-  FaEnvelope,
-  FaYoutube,
-  FaCheckCircle,
-} from "react-icons/fa";
+import { FaCheckCircle, FaQuoteLeft } from "react-icons/fa";
 
 import {
   getUsuarioLogado,
@@ -18,10 +14,14 @@ import {
   Page,
   TitleArea,
   Title,
+  Subtitle,
   Container,
   LeftSide,
+  QuoteIcon,
   SectionTitle,
-  InfoText,
+  EqualizerArea,
+  EqualizerColumn,
+  EqualizerPixel,
   RightSide,
   Form,
   InputWrapper,
@@ -30,7 +30,6 @@ import {
   SelectWrapper,
   SelectLabel,
   Select,
-  SocialContainer,
   Button,
   AlreadyBox,
   AlreadyTitle,
@@ -41,10 +40,14 @@ import {
   ModalButtons,
   CancelButton,
   ConfirmButton,
-  Subtitle,
 } from "./style";
 
+const EQUALIZER_COLUMNS = 16;
+const EQUALIZER_ROWS = 10;
+
 export default function Inscricao() {
+  const equalizerRef = useRef(null);
+
   const [nomePoeta, setNomePoeta] = useState("");
   const [turma, setTurma] = useState("");
   const [turno, setTurno] = useState("");
@@ -59,6 +62,69 @@ export default function Inscricao() {
 
   const [showSubmitModal, setShowSubmitModal] = useState(false);
 
+  /*
+   * ============================================================
+   * EQUALIZADOR (mesma animação da página de login)
+   * ============================================================
+   */
+
+  useLayoutEffect(() => {
+    const area = equalizerRef.current;
+
+    if (!area) return;
+
+    let active = true;
+
+    const ctx = gsap.context(() => {
+      const columns = area.querySelectorAll(".music-column");
+
+      columns.forEach((column, columnIndex) => {
+        const pixels = column.querySelectorAll(".music-pixel");
+
+        gsap.set(pixels, { opacity: 0 });
+
+        const initialHeight = Math.floor(
+          2 + Math.random() * Math.max(1, pixels.length - 2)
+        );
+
+        for (let i = 0; i < initialHeight; i++) {
+          gsap.to(pixels[i], {
+            opacity: 0.25 + Math.random() * 0.4,
+            duration: 0.4 + Math.random() * 0.3,
+            delay: columnIndex * 0.015 + i * 0.025,
+            ease: "power2.out",
+          });
+        }
+
+        const animate = () => {
+          if (!active) return;
+
+          const height = Math.floor(
+            2 + Math.random() * Math.max(1, pixels.length - 1)
+          );
+
+          pixels.forEach((pixel, index) => {
+            gsap.to(pixel, {
+              opacity: index < height ? 0.25 + Math.random() * 0.45 : 0,
+              duration: 0.3 + Math.random() * 0.3,
+              ease: "sine.inOut",
+              overwrite: true,
+            });
+          });
+
+          gsap.delayedCall(0.5 + Math.random() * 0.4, animate);
+        };
+
+        gsap.delayedCall(0.7 + Math.random() * 0.4, animate);
+      });
+    }, area);
+
+    return () => {
+      active = false;
+      ctx.revert();
+    };
+  }, []);
+
   useEffect(() => {
     const usuarioLogado = getUsuarioLogado();
 
@@ -67,10 +133,9 @@ export default function Inscricao() {
       return;
     }
 
-    fetch(
-      `http://localhost:3001/inscricao/${usuarioLogado.email}`,
-      { headers: getAuthHeaders() }
-    )
+    fetch(`http://localhost:3001/inscricao/${usuarioLogado.email}`, {
+      headers: getAuthHeaders(),
+    })
       .then((res) => {
         if (!res.ok) throw new Error();
         return res.json();
@@ -96,9 +161,7 @@ export default function Inscricao() {
     const usuarioLogado = getUsuarioLogado();
 
     if (!usuarioLogado?.email) {
-      setErro(
-        "Não foi possível identificar seu usuário. Faça login novamente."
-      );
+      setErro("Não foi possível identificar seu usuário. Faça login novamente.");
       return;
     }
 
@@ -116,30 +179,25 @@ export default function Inscricao() {
     const usuarioLogado = getUsuarioLogado();
 
     try {
-      const res = await fetch(
-        "http://localhost:3001/inscricao",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...getAuthHeaders(),
-          },
-          body: JSON.stringify({
-            email: usuarioLogado.email,
-            nome_poeta: nomePoeta,
-            turma,
-            turno,
-            curso,
-          }),
-        }
-      );
+      const res = await fetch("http://localhost:3001/inscricao", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...getAuthHeaders(),
+        },
+        body: JSON.stringify({
+          email: usuarioLogado.email,
+          nome_poeta: nomePoeta,
+          turma,
+          turno,
+          curso,
+        }),
+      });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setErro(
-          data.erro || "Erro ao realizar inscrição."
-        );
+        setErro(data.erro || "Erro ao realizar inscrição.");
         return;
       }
 
@@ -148,9 +206,7 @@ export default function Inscricao() {
         tipo: data.tipo,
       });
 
-      setSucesso(
-        "Inscrição realizada com sucesso! Você agora é um Poeta."
-      );
+      setSucesso("Inscrição realizada com sucesso! Você agora é um Poeta.");
 
       setInscricao({
         nome_poeta: nomePoeta,
@@ -163,9 +219,7 @@ export default function Inscricao() {
     } catch (err) {
       console.error(err);
 
-      setErro(
-        "Não foi possível conectar ao servidor."
-      );
+      setErro("Não foi possível conectar ao servidor.");
     }
   }
 
@@ -216,8 +270,6 @@ export default function Inscricao() {
     /*
      * Mantém exatamente a última posição
      * do mouse.
-     *
-     * Não colocamos 50% / 50%.
      */
     button.classList.remove("button-hovering");
 
@@ -238,66 +290,41 @@ export default function Inscricao() {
     <Page>
       <Layout />
 
-   <TitleArea>
-  <Title>
-    {jaInscrito
-      ? "Sua inscrição"
-      : "Faça sua inscrição"}
-  </Title>
+      <TitleArea>
+        <Title>{jaInscrito ? "Sua inscrição" : "Faça sua inscrição"}</Title>
 
-  {!jaInscrito && (
-    <Subtitle>
-      Preencha seus dados para participar da competição.
-    </Subtitle>
-  )}
-</TitleArea>
+        {!jaInscrito && (
+          <Subtitle>
+            Preencha seus dados para participar da competição.
+          </Subtitle>
+        )}
+      </TitleArea>
 
       <Container>
         <LeftSide>
           <div className="left-content">
-            <SectionTitle>
-              Contatos
-            </SectionTitle>
+            <QuoteIcon>
+              <FaQuoteLeft />
+            </QuoteIcon>
 
-            <p className="contact-description">
-              Acompanhe o Slam Etecamp e fique por
-              dentro das novidades.
-            </p>
+            <SectionTitle>Vamos fazer acontecer juntos!</SectionTitle>
 
-            <SocialContainer>
-              <InfoText>
-                <div className="icon-box">
-                  <FaInstagram />
-                </div>
-
-                <div className="info-content">
-                  <strong>Instagram</strong>
-                  <p>@seuinstagram</p>
-                </div>
-              </InfoText>
-
-              <InfoText>
-                <div className="icon-box">
-                  <FaEnvelope />
-                </div>
-
-                <div className="info-content">
-                  <strong>Email</strong>
-                  <p>contato@email.com</p>
-                </div>
-              </InfoText>
-
-              <InfoText>
-                <div className="icon-box">
-                  <FaYoutube />
-                </div>
-
-                <div className="info-content">
-                  <strong>YouTube</strong>
-                  <p>Seu Canal</p>
-                </div>
-              </InfoText>
-            </SocialContainer>
+            <EqualizerArea ref={equalizerRef} aria-hidden="true">
+              {Array.from({ length: EQUALIZER_COLUMNS }).map(
+                (_, columnIndex) => (
+                  <EqualizerColumn key={columnIndex} className="music-column">
+                    {Array.from({ length: EQUALIZER_ROWS }).map(
+                      (_, pixelIndex) => (
+                        <EqualizerPixel
+                          key={pixelIndex}
+                          className="music-pixel"
+                        />
+                      )
+                    )}
+                  </EqualizerColumn>
+                )
+              )}
+            </EqualizerArea>
           </div>
         </LeftSide>
 
@@ -313,51 +340,39 @@ export default function Inscricao() {
                 <FaCheckCircle />
               </div>
 
-              <AlreadyTitle>
-                Inscrição já realizada!
-              </AlreadyTitle>
+              <AlreadyTitle>Inscrição já realizada!</AlreadyTitle>
 
               <AlreadyText>
-                Você já está inscrito no Slam Etecamp
-                como Poeta. Boa sorte na competição!
+                Você já está inscrito no Slam Etecamp como Poeta. Boa sorte na
+                competição!
               </AlreadyText>
 
               {inscricao && (
                 <AlreadyDetails>
                   <div className="detail-header">
                     <span />
-                    <strong>
-                      Dados da inscrição
-                    </strong>
+                    <strong>Dados da inscrição</strong>
                     <span />
                   </div>
 
                   <div className="detail-row">
                     <span>Nome</span>
-                    <strong>
-                      {inscricao.nome_poeta}
-                    </strong>
+                    <strong>{inscricao.nome_poeta}</strong>
                   </div>
 
                   <div className="detail-row">
                     <span>Turma</span>
-                    <strong>
-                      {inscricao.turma}
-                    </strong>
+                    <strong>{inscricao.turma}</strong>
                   </div>
 
                   <div className="detail-row">
                     <span>Curso</span>
-                    <strong>
-                      {inscricao.curso}
-                    </strong>
+                    <strong>{inscricao.curso}</strong>
                   </div>
 
                   <div className="detail-row">
                     <span>Turno</span>
-                    <strong>
-                      {inscricao.turno}
-                    </strong>
+                    <strong>{inscricao.turno}</strong>
                   </div>
                 </AlreadyDetails>
               )}
@@ -365,21 +380,14 @@ export default function Inscricao() {
           ) : (
             <div className="form-area">
               <div className="form-header">
-                <h2>
-                  Dados do poeta
-                </h2>
+                <h2>Dados do poeta</h2>
 
-                <p>
-                  Informe seus dados para confirmar
-                  sua participação.
-                </p>
+                <p>Informe seus dados para confirmar sua participação.</p>
               </div>
 
               <Form onSubmit={handleSubmit}>
                 <InputWrapper>
-                  <InputLabel htmlFor="nomePoeta">
-                    Nome completo
-                  </InputLabel>
+                  <InputLabel htmlFor="nomePoeta">Nome completo</InputLabel>
 
                   <Input
                     id="nomePoeta"
@@ -387,121 +395,65 @@ export default function Inscricao() {
                     type="text"
                     placeholder=" "
                     value={nomePoeta}
-                    onChange={(e) =>
-                      setNomePoeta(e.target.value)
-                    }
+                    onChange={(e) => setNomePoeta(e.target.value)}
                   />
                 </InputWrapper>
 
                 <div className="form-row">
                   <SelectWrapper>
-                    <SelectLabel htmlFor="turma">
-                      Turma
-                    </SelectLabel>
+                    <SelectLabel htmlFor="turma">Turma</SelectLabel>
 
                     <Select
                       id="turma"
                       name="turma"
                       value={turma}
-                      onChange={(e) =>
-                        setTurma(e.target.value)
-                      }
+                      onChange={(e) => setTurma(e.target.value)}
                     >
-                      <option value="">
-                        Selecione a turma
-                      </option>
-
-                      <option value="1º ano">
-                        1º ano
-                      </option>
-
-                      <option value="2º ano">
-                        2º ano
-                      </option>
-
-                      <option value="3º ano">
-                        3º ano
-                      </option>
+                      <option value="">Selecione a turma</option>
+                      <option value="1º ano">1º ano</option>
+                      <option value="2º ano">2º ano</option>
+                      <option value="3º ano">3º ano</option>
                     </Select>
                   </SelectWrapper>
 
                   <SelectWrapper>
-                    <SelectLabel htmlFor="curso">
-                      Curso
-                    </SelectLabel>
+                    <SelectLabel htmlFor="curso">Curso</SelectLabel>
 
                     <Select
                       id="curso"
                       name="curso"
                       value={curso}
-                      onChange={(e) =>
-                        setCurso(e.target.value)
-                      }
+                      onChange={(e) => setCurso(e.target.value)}
                     >
-                      <option value="">
-                        Selecione o curso
-                      </option>
-
-                      <option value="Informática">
-                        Informática
-                      </option>
-
-                      <option value="Marketing">
-                        Marketing
-                      </option>
-
-                      <option value="Administração">
-                        Administração
-                      </option>
-
-                      <option value="Humanas">
-                        Humanas
-                      </option>
+                      <option value="">Selecione o curso</option>
+                      <option value="Informática">Informática</option>
+                      <option value="Marketing">Marketing</option>
+                      <option value="Administração">Administração</option>
+                      <option value="Humanas">Humanas</option>
                     </Select>
                   </SelectWrapper>
                 </div>
 
                 <SelectWrapper>
-                  <SelectLabel htmlFor="turno">
-                    Turno
-                  </SelectLabel>
+                  <SelectLabel htmlFor="turno">Turno</SelectLabel>
 
                   <Select
                     id="turno"
                     name="turno"
                     value={turno}
-                    onChange={(e) =>
-                      setTurno(e.target.value)
-                    }
+                    onChange={(e) => setTurno(e.target.value)}
                   >
-                    <option value="">
-                      Selecione o turno
-                    </option>
-
-                    <option value="Manhã">
-                      Manhã
-                    </option>
-
-                    <option value="Tarde">
-                      Tarde
-                    </option>
-
-                    <option value="Noite">
-                      Noite
-                    </option>
+                    <option value="">Selecione o turno</option>
+                    <option value="Manhã">Manhã</option>
+                    <option value="Tarde">Tarde</option>
+                    <option value="Noite">Noite</option>
                   </Select>
                 </SelectWrapper>
 
-                {erro && (
-                  <div className="form-message error">
-                    {erro}
-                  </div>
-                )}
+                {erro && <div className="form-message error">{erro}</div>}
 
                 {sucesso && (
-                  <div className="form-message success">
-                    {sucesso}
-                  </div>
+                  <div className="form-message success">{sucesso}</div>
                 )}
 
                 <Button
@@ -510,9 +462,7 @@ export default function Inscricao() {
                   onMouseMove={handleButtonMouseMove}
                   onMouseLeave={handleButtonMouseLeave}
                 >
-                  <span className="button-content">
-                    Enviar inscrição
-                  </span>
+                  <span className="button-content">Enviar inscrição</span>
                 </Button>
               </Form>
             </div>
@@ -533,14 +483,9 @@ export default function Inscricao() {
               <span>?</span>
             </div>
 
-            <h3>
-              Confirmar inscrição
-            </h3>
+            <h3>Confirmar inscrição</h3>
 
-            <p>
-              Tem certeza de que deseja enviar
-              sua inscrição?
-            </p>
+            <p>Tem certeza de que deseja enviar sua inscrição?</p>
 
             <div className="modal-summary">
               <div>
@@ -562,17 +507,12 @@ export default function Inscricao() {
             <ModalButtons>
               <CancelButton
                 type="button"
-                onClick={() =>
-                  setShowSubmitModal(false)
-                }
+                onClick={() => setShowSubmitModal(false)}
               >
                 Cancelar
               </CancelButton>
 
-              <ConfirmButton
-                type="button"
-                onClick={confirmarInscricao}
-              >
+              <ConfirmButton type="button" onClick={confirmarInscricao}>
                 Sim, enviar
               </ConfirmButton>
             </ModalButtons>
