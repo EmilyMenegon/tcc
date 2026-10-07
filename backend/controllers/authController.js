@@ -6,34 +6,62 @@ import { gerarToken } from "../config/jwt.js";
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const SENHA_MIN = 6;
 const SENHA_MAX = 16;
+const NOME_MAX = 100;
+
+const MAX_TENTATIVAS_CODIGO = 5;
+const VALIDADE_CODIGO_MS = 10 * 60 * 1000;
 
 const recuperacoes = new Map();
 
+function normalizarEmail(email) {
+  return typeof email === "string" ? email.trim().toLowerCase() : "";
+}
+
+function buscarUsuarioPorEmail(email) {
+  // lower() para encontrar também contas antigas cadastradas com maiúsculas
+  return db
+    .prepare("SELECT * FROM usuario WHERE lower(email) = ?")
+    .get(email);
+}
+
 export async function cadastrar(req, res) {
-  const { nome, email, senha } = req.body;
+  const { nome, senha } = req.body;
+  const email = normalizarEmail(req.body.email);
 
   if (!nome || !email || !senha) {
     return res.status(400).json({ erro: "Preencha todos os campos." });
+  }
+
+  if (typeof nome !== "string" || nome.trim().length > NOME_MAX) {
+    return res.status(400).json({ erro: "Nome inválido." });
   }
 
   if (!EMAIL_REGEX.test(email)) {
     return res.status(400).json({ erro: "Digite um email válido." });
   }
 
-  if (senha.length < SENHA_MIN || senha.length > SENHA_MAX) {
+  if (
+    typeof senha !== "string" ||
+    senha.length < SENHA_MIN ||
+    senha.length > SENHA_MAX
+  ) {
     return res.status(400).json({
       erro: `A senha deve ter entre ${SENHA_MIN} e ${SENHA_MAX} caracteres.`,
     });
   }
 
   try {
+    const jaExiste = buscarUsuarioPorEmail(email);
+
+    if (jaExiste) {
+      return res.status(400).json({ erro: "Email já cadastrado." });
+    }
+
     const senhaHash = await bcrypt.hash(senha, 10);
 
-    const stmt = db.prepare(
+    db.prepare(
       "INSERT INTO usuario (nome, email, senha, tipo_usuario) VALUES (?, ?, ?, 'aluno')"
-    );
-
-    stmt.run(nome, email, senhaHash);
+    ).run(nome.trim(), email, senhaHash);
 
     res.status(201).json({
       mensagem: "Usuário cadastrado com sucesso!",
@@ -45,6 +73,8 @@ export async function cadastrar(req, res) {
       });
     }
 
+    console.error(err);
+
     res.status(500).json({
       erro: "Erro ao cadastrar.",
     });
@@ -52,17 +82,16 @@ export async function cadastrar(req, res) {
 }
 
 export async function login(req, res) {
-  const { email, senha } = req.body;
+  const { senha } = req.body;
+  const email = normalizarEmail(req.body.email);
 
-  if (!email || !senha) {
+  if (!email || !senha || typeof senha !== "string") {
     return res.status(400).json({
       erro: "Preencha todos os campos.",
     });
   }
 
-  const usuario = db
-    .prepare("SELECT * FROM usuario WHERE email = ?")
-    .get(email);
+  const usuario = buscarUsuarioPorEmail(email);
 
   if (usuario) {
     const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
@@ -87,7 +116,7 @@ export async function login(req, res) {
   }
 
   const matematico = db
-    .prepare("SELECT * FROM matematico WHERE email = ?")
+    .prepare("SELECT * FROM matematico WHERE lower(email) = ?")
     .get(email);
 
   if (matematico) {
@@ -115,7 +144,7 @@ export async function login(req, res) {
 
 export async function solicitarCodigo(req, res) {
   try {
-    const { email } = req.body;
+    const email = normalizarEmail(req.body.email);
 
     if (!email || !EMAIL_REGEX.test(email)) {
       return res.status(400).json({
@@ -123,24 +152,15 @@ export async function solicitarCodigo(req, res) {
       });
     }
 
-    const emailNormalizado = email.trim().toLowerCase();
+    // Resposta igual para qualquer e-mail, para não revelar quem tem conta.
+    const respostaPadrao = {
+      mensagem: "Se o email estiver cadastrado, um código foi gerado.",
+    };
 
-    const usuario = db
-      .prepare(
-        "SELECT id, nome, email, tipo_usuario FROM usuario WHERE email = ?"
-      )
-      .get(emailNormalizado);
+    const usuario = buscarUsuarioPorEmail(email);
 
-    if (!usuario) {
-      return res.status(404).json({
-        erro: "Email não encontrado.",
-      });
-    }
-
-    if (usuario.tipo_usuario === "organizador") {
-      return res.status(400).json({
-        erro: "Esta conta não possui recuperação de senha.",
-      });
+    if (!usuario || usuario.tipo_usuario === "organizador") {
+      return res.json(respostaPadrao);
     }
 
     const codigo = crypto.randomInt(100000, 1000000).toString();
@@ -148,10 +168,12 @@ export async function solicitarCodigo(req, res) {
 
     recuperacoes.set(usuario.id, {
       codigoHash,
-      expiracao: Date.now() + 10 * 60 * 1000,
+      expiracao: Date.now() + VALIDADE_CODIGO_MS,
       verificado: false,
+      tentativas: 0,
     });
 
+    // O código aparece no console do servidor (não há envio de e-mail).
     console.log("");
     console.log("========================================");
     console.log("       CÓDIGO DE RECUPERAÇÃO");
@@ -163,9 +185,7 @@ export async function solicitarCodigo(req, res) {
     console.log("========================================");
     console.log("");
 
-    return res.json({
-      mensagem: "Código de recuperação gerado.",
-    });
+    return res.json(respostaPadrao);
   } catch (error) {
     console.error("Erro ao gerar código:", error);
 
@@ -175,9 +195,37 @@ export async function solicitarCodigo(req, res) {
   }
 }
 
+// Confere o código e conta as tentativas erradas.
+// Depois de MAX_TENTATIVAS_CODIGO erros, o código é apagado.
+async function conferirCodigo(usuario, codigo) {
+  const recuperacao = usuario ? recuperacoes.get(usuario.id) : null;
+
+  if (!recuperacao) return { ok: false };
+
+  if (Date.now() > recuperacao.expiracao) {
+    recuperacoes.delete(usuario.id);
+    return { ok: false };
+  }
+
+  const valido = await bcrypt.compare(String(codigo), recuperacao.codigoHash);
+
+  if (!valido) {
+    recuperacao.tentativas += 1;
+
+    if (recuperacao.tentativas >= MAX_TENTATIVAS_CODIGO) {
+      recuperacoes.delete(usuario.id);
+    }
+
+    return { ok: false };
+  }
+
+  return { ok: true, recuperacao };
+}
+
 export async function verificarCodigo(req, res) {
   try {
-    const { email, codigo } = req.body;
+    const { codigo } = req.body;
+    const email = normalizarEmail(req.body.email);
 
     if (!email || !codigo) {
       return res.status(400).json({
@@ -185,46 +233,16 @@ export async function verificarCodigo(req, res) {
       });
     }
 
-    const emailNormalizado = email.trim().toLowerCase();
+    const usuario = buscarUsuarioPorEmail(email);
+    const resultado = await conferirCodigo(usuario, codigo);
 
-    const usuario = db
-      .prepare("SELECT id, email FROM usuario WHERE email = ?")
-      .get(emailNormalizado);
-
-    if (!usuario) {
-      return res.status(404).json({
-        erro: "Email não encontrado.",
-      });
-    }
-
-    const recuperacao = recuperacoes.get(usuario.id);
-
-    if (!recuperacao) {
+    if (!resultado.ok) {
       return res.status(400).json({
-        erro: "Nenhum código de recuperação foi solicitado.",
+        erro: "Código inválido ou expirado.",
       });
     }
 
-    if (Date.now() > recuperacao.expiracao) {
-      recuperacoes.delete(usuario.id);
-
-      return res.status(400).json({
-        erro: "O código de recuperação expirou.",
-      });
-    }
-
-    const codigoValido = await bcrypt.compare(
-      String(codigo),
-      recuperacao.codigoHash
-    );
-
-    if (!codigoValido) {
-      return res.status(400).json({
-        erro: "Código de recuperação inválido.",
-      });
-    }
-
-    recuperacao.verificado = true;
+    resultado.recuperacao.verificado = true;
 
     return res.json({
       mensagem: "Código confirmado.",
@@ -240,7 +258,8 @@ export async function verificarCodigo(req, res) {
 
 export async function redefinirSenha(req, res) {
   try {
-    const { email, codigo, novaSenha } = req.body;
+    const { codigo, novaSenha } = req.body;
+    const email = normalizarEmail(req.body.email);
 
     if (!email || !codigo || !novaSenha) {
       return res.status(400).json({
@@ -255,6 +274,7 @@ export async function redefinirSenha(req, res) {
     }
 
     if (
+      typeof novaSenha !== "string" ||
       novaSenha.length < SENHA_MIN ||
       novaSenha.length > SENHA_MAX
     ) {
@@ -263,56 +283,27 @@ export async function redefinirSenha(req, res) {
       });
     }
 
-    const emailNormalizado = email.trim().toLowerCase();
+    const usuario = buscarUsuarioPorEmail(email);
+    const resultado = await conferirCodigo(usuario, codigo);
 
-    const usuario = db
-      .prepare("SELECT id, email FROM usuario WHERE email = ?")
-      .get(emailNormalizado);
-
-    if (!usuario) {
-      return res.status(404).json({
-        erro: "Email não encontrado.",
-      });
-    }
-
-    const recuperacao = recuperacoes.get(usuario.id);
-
-    if (!recuperacao) {
+    if (!resultado.ok) {
       return res.status(400).json({
-        erro: "Solicite um novo código de recuperação.",
+        erro: "Código inválido ou expirado.",
       });
     }
 
-    if (Date.now() > recuperacao.expiracao) {
-      recuperacoes.delete(usuario.id);
-
-      return res.status(400).json({
-        erro: "O código de recuperação expirou.",
-      });
-    }
-
-    if (!recuperacao.verificado) {
+    if (!resultado.recuperacao.verificado) {
       return res.status(400).json({
         erro: "Verifique o código de recuperação antes de alterar a senha.",
       });
     }
 
-    const codigoValido = await bcrypt.compare(
-      String(codigo),
-      recuperacao.codigoHash
-    );
-
-    if (!codigoValido) {
-      return res.status(400).json({
-        erro: "Código de recuperação inválido.",
-      });
-    }
-
     const senhaHash = await bcrypt.hash(novaSenha, 10);
 
-    db.prepare(
-      "UPDATE usuario SET senha = ? WHERE id = ?"
-    ).run(senhaHash, usuario.id);
+    db.prepare("UPDATE usuario SET senha = ? WHERE id = ?").run(
+      senhaHash,
+      usuario.id
+    );
 
     recuperacoes.delete(usuario.id);
 

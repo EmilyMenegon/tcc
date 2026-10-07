@@ -24,6 +24,14 @@ function handleMouseMove(e) {
   button.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
 }
 
+// O servidor só aceita alterações do placar vindas do matemático logado,
+// então o socket precisa se apresentar com o mesmo token das outras requisições.
+function obterToken() {
+  const headers = getAuthHeaders();
+  const authorization = headers.Authorization || headers.authorization || "";
+  return authorization.replace(/^Bearer\s+/i, "");
+}
+
 export default function NotaForm({ visible, nota, onClose, onSave }) {
   const socketRef = useRef(null);
   const [alunos, setAlunos] = useState([]);
@@ -56,7 +64,7 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
 
   useEffect(() => {
     if (!visible) return;
-    const socket = io(API_URL);
+    const socket = io(API_URL, { auth: { token: obterToken() } });
     socketRef.current = socket;
 
     return () => {
@@ -264,15 +272,19 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
   const penalty = computePenalty(Math.floor(elapsed));
   const progress = Math.min(elapsed / LIMIT, 1);
 
+  // O placar só precisa do tempo em segundos inteiros: assim o servidor recebe
+  // uma atualização por segundo, e não uma a cada 50 ms enquanto o cronômetro roda.
+  const tempoSegundos = Math.floor(elapsed);
+
   useEffect(() => {
     if (!visible) return;
 
     socketRef.current?.emit("aoVivoAtualizar", {
       poeta: poetaSelecionado?.nome || "",
       notas: notes.map((n) => (n === "" ? null : Number(n))),
-      tempo: Math.floor(elapsed)
+      tempo: tempoSegundos
     });
-  }, [visible, selectedAluno, notes, elapsed]);
+  }, [visible, selectedAluno, notes, tempoSegundos]);
 
   function handleNoteChange(index, value) {
     if (value !== "" && !/^-?\d*\.?\d*$/.test(value)) return;

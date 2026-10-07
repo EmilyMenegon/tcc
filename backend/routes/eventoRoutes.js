@@ -16,7 +16,13 @@ router.post("/eventos", exigirLogin, exigirTipo(["organizador"]), criarEvento);
 router.put("/eventos/:id", exigirLogin, exigirTipo(["organizador"]), atualizarEvento);
 router.delete("/eventos/:id", exigirLogin, exigirTipo(["organizador"]), excluirEvento);
 
-router.get("/eventos/:id/participantes", exigirLogin, listarParticipantes);
+// Lista de poetas do evento: não precisa ser vista por qualquer aluno logado.
+router.get(
+  "/eventos/:id/participantes",
+  exigirLogin,
+  exigirTipo(["organizador", "matematico"]),
+  listarParticipantes
+);
 router.put("/eventos/:id/participantes", exigirLogin, exigirTipo(["organizador"]), definirParticipantes);
 
 export default router;

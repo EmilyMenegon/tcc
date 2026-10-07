@@ -42,12 +42,35 @@ export function listarFotosFixadas(req, res) {
   );
 }
 
+const MAX_ARQUIVOS_POR_ENVIO = 20;
+
+function arquivoPermitido(arquivo) {
+  return (
+    typeof arquivo === "string" &&
+    (arquivo.startsWith("data:image/") || arquivo.startsWith("data:video/"))
+  );
+}
+
 export function adicionarFotos(req, res) {
-  const { email, fotos, fixada } = req.body;
+  // O e-mail vem do token, não do corpo da requisição.
+  const email = req.usuario.email;
+  const { fotos, fixada } = req.body;
   const ehFixada = fixada === true || fixada === 1 || fixada === "1";
 
-  if (!email || !Array.isArray(fotos) || fotos.length === 0) {
-    return res.status(400).json({ erro: "Envie o email e pelo menos uma foto." });
+  if (!Array.isArray(fotos) || fotos.length === 0) {
+    return res.status(400).json({ erro: "Envie pelo menos uma foto." });
+  }
+
+  if (fotos.length > MAX_ARQUIVOS_POR_ENVIO) {
+    return res.status(400).json({
+      erro: `Envie no máximo ${MAX_ARQUIVOS_POR_ENVIO} arquivos por vez.`,
+    });
+  }
+
+  if (!fotos.every(arquivoPermitido)) {
+    return res.status(400).json({
+      erro: "Envie apenas imagens ou vídeos.",
+    });
   }
 
   const usuario = db

@@ -1,15 +1,42 @@
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import db from "../database.js";
+import { gerarToken } from "../config/jwt.js";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const SENHA_MIN = 6;
 const SENHA_MAX = 16;
+const NOME_MAX = 100;
+const FOTO_MAX_CARACTERES = 10_000_000; // ~7 MB em base64
+
+const MAX_TENTATIVAS_CODIGO = 5;
+const VALIDADE_CODIGO_MS = 10 * 60 * 1000;
 
 const alteracoesPerfil = new Map();
 
+/*
+ * SEGURANÇA: todas as funções abaixo trabalham SEMPRE com o usuário do token
+ * (req.usuario.email). O :email que vem na URL é ignorado, para que ninguém
+ * consiga ler ou alterar o perfil de outra pessoa.
+ */
+
+function nomeValido(nome) {
+  return typeof nome === "string" && nome.trim().length > 0 && nome.trim().length <= NOME_MAX;
+}
+
+function fotoValida(foto) {
+  return (
+    foto === undefined ||
+    foto === null ||
+    foto === "" ||
+    (typeof foto === "string" &&
+      foto.startsWith("data:image/") &&
+      foto.length <= FOTO_MAX_CARACTERES)
+  );
+}
+
 export function buscarPerfil(req, res) {
-  const { email } = req.params;
+  const email = req.usuario.email;
 
   const usuario = db
     .prepare("SELECT nome, email, foto_perfil FROM usuario WHERE email = ?")
@@ -30,12 +57,24 @@ export function buscarPerfil(req, res) {
 
 export async function solicitarCodigoPerfil(req, res) {
   try {
-    const { email } = req.params;
+    const email = req.usuario.email;
     const { nome, senha, novoEmail, foto } = req.body;
 
     if (!nome) {
       return res.status(400).json({
         erro: "Preencha o nome.",
+      });
+    }
+
+    if (!nomeValido(nome)) {
+      return res.status(400).json({
+        erro: "Nome inválido.",
+      });
+    }
+
+    if (!fotoValida(foto)) {
+      return res.status(400).json({
+        erro: "Foto inválida.",
       });
     }
 
@@ -46,7 +85,7 @@ export async function solicitarCodigoPerfil(req, res) {
     }
 
     if (novoEmail) {
-      const emailNormalizado = novoEmail.trim().toLowerCase();
+      const emailNormalizado = String(novoEmail).trim().toLowerCase();
 
       if (!EMAIL_REGEX.test(emailNormalizado)) {
         return res.status(400).json({
@@ -55,7 +94,7 @@ export async function solicitarCodigoPerfil(req, res) {
       }
 
       const emailExistente = db
-        .prepare("SELECT id FROM usuario WHERE email = ? AND email != ?")
+        .prepare("SELECT id FROM usuario WHERE lower(email) = ? AND email != ?")
         .get(emailNormalizado, email);
 
       if (emailExistente) {
@@ -65,7 +104,12 @@ export async function solicitarCodigoPerfil(req, res) {
       }
     }
 
-    if (senha && (senha.length < SENHA_MIN || senha.length > SENHA_MAX)) {
+    if (
+      senha &&
+      (typeof senha !== "string" ||
+        senha.length < SENHA_MIN ||
+        senha.length > SENHA_MAX)
+    ) {
       return res.status(400).json({
         erro: `A senha deve ter entre ${SENHA_MIN} e ${SENHA_MAX} caracteres.`,
       });
@@ -86,11 +130,12 @@ export async function solicitarCodigoPerfil(req, res) {
 
     alteracoesPerfil.set(usuario.id, {
       codigoHash,
-      expiracao: Date.now() + 10 * 60 * 1000,
-      verificado: false,
-      nome,
-      senha: senha || null,
-      novoEmail: novoEmail ? novoEmail.trim().toLowerCase() : null,
+      expiracao: Date.now() + VALIDADE_CODIGO_MS,
+      tentativas: 0,
+      nome: nome.trim(),
+      // a nova senha já fica guardada em hash, nunca em texto puro
+      senhaHash: senha ? await bcrypt.hash(senha, 10) : null,
+      novoEmail: novoEmail ? String(novoEmail).trim().toLowerCase() : null,
       foto: foto || null,
     });
 
@@ -119,7 +164,7 @@ export async function solicitarCodigoPerfil(req, res) {
 
 export async function verificarCodigoPerfil(req, res) {
   try {
-    const { email } = req.params;
+    const email = req.usuario.email;
     const { codigo } = req.body;
 
     if (!codigo) {
@@ -160,18 +205,25 @@ export async function verificarCodigoPerfil(req, res) {
     );
 
     if (!codigoValido) {
+      alteracao.tentativas += 1;
+
+      if (alteracao.tentativas >= MAX_TENTATIVAS_CODIGO) {
+        alteracoesPerfil.delete(usuario.id);
+
+        return res.status(400).json({
+          erro: "Muitas tentativas incorretas. Solicite um novo código.",
+        });
+      }
+
       return res.status(400).json({
         erro: "Código de confirmação inválido.",
       });
     }
 
     const emailFinal = alteracao.novoEmail || usuario.email;
-    const senhaHash = alteracao.senha
-      ? await bcrypt.hash(alteracao.senha, 10)
-      : null;
 
     try {
-      if (alteracao.senha && alteracao.foto) {
+      if (alteracao.senhaHash && alteracao.foto) {
         db.prepare(
           `UPDATE usuario
            SET nome = ?, email = ?, senha = ?, foto_perfil = ?
@@ -179,11 +231,11 @@ export async function verificarCodigoPerfil(req, res) {
         ).run(
           alteracao.nome,
           emailFinal,
-          senhaHash,
+          alteracao.senhaHash,
           alteracao.foto,
           usuario.id
         );
-      } else if (alteracao.senha) {
+      } else if (alteracao.senhaHash) {
         db.prepare(
           `UPDATE usuario
            SET nome = ?, email = ?, senha = ?
@@ -191,7 +243,7 @@ export async function verificarCodigoPerfil(req, res) {
         ).run(
           alteracao.nome,
           emailFinal,
-          senhaHash,
+          alteracao.senhaHash,
           usuario.id
         );
       } else if (alteracao.foto) {
@@ -228,12 +280,23 @@ export async function verificarCodigoPerfil(req, res) {
 
     alteracoesPerfil.delete(usuario.id);
 
-    return res.json({
+    const resposta = {
       mensagem: "Perfil atualizado com sucesso!",
       nome: alteracao.nome,
       email: emailFinal,
       foto: alteracao.foto || null,
-    });
+    };
+
+    // O token carrega o e-mail. Se o e-mail mudou, devolve um token novo
+    // para a sessão continuar funcionando (o front deve guardá-lo).
+    if (emailFinal !== usuario.email) {
+      resposta.token = gerarToken({
+        email: emailFinal,
+        tipo: req.usuario.tipo,
+      });
+    }
+
+    return res.json(resposta);
   } catch (error) {
     console.error("Erro ao verificar código do perfil:", error);
 
@@ -244,12 +307,24 @@ export async function verificarCodigoPerfil(req, res) {
 }
 
 export async function atualizarPerfil(req, res) {
-  const { email: emailAtual } = req.params;
+  const emailAtual = req.usuario.email;
   const { nome, foto } = req.body;
 
   if (!nome) {
     return res.status(400).json({
       erro: "Preencha o nome.",
+    });
+  }
+
+  if (!nomeValido(nome)) {
+    return res.status(400).json({
+      erro: "Nome inválido.",
+    });
+  }
+
+  if (!fotoValida(foto)) {
+    return res.status(400).json({
+      erro: "Foto inválida.",
     });
   }
 
@@ -269,18 +344,18 @@ export async function atualizarPerfil(req, res) {
         `UPDATE usuario
          SET nome = ?, foto_perfil = ?
          WHERE id = ?`
-      ).run(nome, foto, usuario.id);
+      ).run(nome.trim(), foto, usuario.id);
     } else {
       db.prepare(
         `UPDATE usuario
          SET nome = ?
          WHERE id = ?`
-      ).run(nome, usuario.id);
+      ).run(nome.trim(), usuario.id);
     }
 
     return res.json({
       mensagem: "Perfil atualizado com sucesso!",
-      nome,
+      nome: nome.trim(),
       email: usuario.email,
       foto: foto || null,
     });

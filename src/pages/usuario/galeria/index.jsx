@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Layout from "../../../components/Layout";
 import VideoThumb from "../../../components/VideoThumb";
 import { descobrirAno, ANO_MINIMO } from "../../../utils/ano";
+import { getAuthHeaders } from "../../../utils/auth";
 import {
   FiX,
   FiImage,
@@ -130,7 +131,7 @@ export default function Galeriausuario() {
   useEffect(() => {
     let ativo = true;
 
-    fetch(`${API_URL}/galeria`)
+    fetch(`${API_URL}/galeria`, { headers: getAuthHeaders() })
       .then((res) => {
         if (!res.ok) throw new Error();
         return res.json();

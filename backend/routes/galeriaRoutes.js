@@ -14,8 +14,8 @@ const router = Router();
 // PÚBLICO — a Home carrega só as fotos fixadas, sem login
 router.get("/galeria/fixadas", listarFotosFixadas);
 
-// PÚBLICO — usada pelo ADM (devolve tudo, com o campo "fixada")
-router.get("/galeria", listarFotos);
+// PROTEGIDO — álbum completo: só para quem está logado (ADM e alunos)
+router.get("/galeria", exigirLogin, listarFotos);
 
 // PROTEGIDO — somente usuário logado do tipo organizador pode adicionar
 router.post(
