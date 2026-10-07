@@ -1,11 +1,35 @@
 import db from "../database.js";
 
-export function criarInscricao(req, res) {
-  const { email, nome_poeta, turma, turno, curso } = req.body;
+const TURNOS = ["Manhã", "Tarde", "Noite"];
 
-  if (!email || !nome_poeta || !turma || !turno || !curso) {
+function textoValido(valor, max) {
+  return (
+    typeof valor === "string" &&
+    valor.trim().length > 0 &&
+    valor.trim().length <= max
+  );
+}
+
+export function criarInscricao(req, res) {
+  // O e-mail vem do token, nunca do corpo da requisição:
+  // assim ninguém consegue inscrever a conta de outra pessoa.
+  const email = req.usuario.email;
+  const { nome_poeta, turma, turno, curso } = req.body;
+
+  if (!nome_poeta || !turma || !turno || !curso) {
     return res.status(400).json({
       erro: "Preencha todos os campos.",
+    });
+  }
+
+  if (
+    !textoValido(nome_poeta, 100) ||
+    !textoValido(turma, 40) ||
+    !textoValido(curso, 60) ||
+    !TURNOS.includes(turno)
+  ) {
+    return res.status(400).json({
+      erro: "Dados da inscrição inválidos.",
     });
   }
 
@@ -60,7 +84,9 @@ export function criarInscricao(req, res) {
 }
 
 export function buscarInscricaoPorEmail(req, res) {
-  const { email } = req.params;
+  // Só o organizador pode consultar outro e-mail; os demais veem apenas o próprio.
+  const email =
+    req.usuario.tipo === "organizador" ? req.params.email : req.usuario.email;
 
   const usuario = db
     .prepare(
@@ -128,6 +154,17 @@ export function atualizarInscricao(req, res) {
   if (!nome_poeta || !turma || !turno || !curso) {
     return res.status(400).json({
       erro: "Preencha todos os campos.",
+    });
+  }
+
+  if (
+    !textoValido(nome_poeta, 100) ||
+    !textoValido(turma, 40) ||
+    !textoValido(curso, 60) ||
+    !TURNOS.includes(turno)
+  ) {
+    return res.status(400).json({
+      erro: "Dados da inscrição inválidos.",
     });
   }
 

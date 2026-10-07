@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaHome, FaPlus, FaCheckCircle, FaPaperPlane } from "react-icons/fa";
-import { logout } from "../../utils/auth";
+import { logout, getAuthHeaders } from "../../utils/auth";
 import NotaCard from "../../components/notacard";
 import NotaForm from "../../components/notaform";
 import EmptyState from "../../components/EmptyState";
@@ -53,7 +53,9 @@ export default function Mat() {
 
   const loadNotas = useCallback(async () => {
     try {
-      const res = await fetch(`${API_URL}/notas`);
+      const res = await fetch(`${API_URL}/notas`, {
+        headers: getAuthHeaders()
+      });
       const data = await res.json();
       setNotas(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -101,7 +103,8 @@ export default function Mat() {
       const res = await fetch(url, {
         method,
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          ...getAuthHeaders()
         },
         body: JSON.stringify(payload)
       });
@@ -142,7 +145,8 @@ export default function Mat() {
     if (idDelete) {
       try {
         await fetch(`${API_URL}/notas/${idDelete}`, {
-          method: "DELETE"
+          method: "DELETE",
+          headers: getAuthHeaders()
         });
         await loadNotas();
       } catch (err) {
@@ -162,7 +166,10 @@ export default function Mat() {
     try {
       const res = await fetch(
         `${API_URL}/eventos/${eventoId}/notas/publicar`,
-        { method: "PUT" }
+        {
+          method: "PUT",
+          headers: getAuthHeaders()
+        }
       );
 
       const data = await res.json();
@@ -332,4 +339,3 @@ export default function Mat() {
     </>
   );
 }
-
