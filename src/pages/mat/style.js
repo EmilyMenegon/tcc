@@ -384,9 +384,14 @@ export const PublishButton = styled.button`
     transition: transform .65s cubic-bezier(.16, 1, .3, 1);
   }
 
-  svg {
+  svg,
+  span {
     position: relative;
     z-index: 2;
+  }
+
+  svg {
+    flex-shrink: 0;
   }
 
   &:hover:not(:disabled) {

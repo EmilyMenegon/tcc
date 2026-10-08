@@ -70,10 +70,7 @@ export const Valor = styled.span`
 export const Media = styled.span`
   font-size: 20px;
   font-weight: 800;
-  color: ${({ $aprovado }) =>
-    $aprovado
-      ? "#2e7d32"
-      : "#831614"};
+  color: ${({ $aprovado }) => ($aprovado ? "#2e7d32" : "#831614")};
 `;
 
 export const Actions = styled.div`
@@ -142,8 +139,6 @@ export const EditButton = styled.button`
   &:hover {
     background: #ffdb53 !important;
     color: #fff7d0 !important;
-    opacity: 1 !important;
-    filter: none !important;
     transform: scale(1.05) !important;
   }
 
@@ -158,14 +153,12 @@ export const EditButton = styled.button`
   &:focus {
     background: #ffdb53 !important;
     color: #010000 !important;
-    opacity: 1 !important;
     outline: none !important;
   }
 
   &:active {
     background: #571111 !important;
     color: #fff7d0 !important;
-    opacity: 1 !important;
     transform: scale(.98) !important;
   }
 `;
@@ -229,8 +222,6 @@ export const DeleteButton = styled.button`
   &:hover {
     background: #831614 !important;
     color: #831614 !important;
-    opacity: 1 !important;
-    filter: none !important;
     transform: scale(1.05) !important;
   }
 
@@ -245,14 +236,12 @@ export const DeleteButton = styled.button`
   &:focus {
     background: #831614 !important;
     color: #fff7d0 !important;
-    opacity: 1 !important;
     outline: none !important;
   }
 
   &:active {
     background: #010000 !important;
     color: #ffdb53 !important;
-    opacity: 1 !important;
     transform: scale(.98) !important;
   }
 `;

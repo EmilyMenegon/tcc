@@ -37,6 +37,7 @@ const API_URL = "http://localhost:3001";
 function handleMouseMove(e) {
   const button = e.currentTarget;
   const rect = button.getBoundingClientRect();
+
   button.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
   button.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
 }
@@ -56,6 +57,7 @@ export default function Mat() {
       const res = await fetch(`${API_URL}/notas`, {
         headers: getAuthHeaders()
       });
+
       const data = await res.json();
       setNotas(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -118,6 +120,7 @@ export default function Mat() {
       setEditingNota(null);
       setFormVisible(false);
       await loadNotas();
+
       return true;
     } catch (err) {
       console.error(err);
@@ -148,6 +151,7 @@ export default function Mat() {
           method: "DELETE",
           headers: getAuthHeaders()
         });
+
         await loadNotas();
       } catch (err) {
         console.error(err);
@@ -243,9 +247,11 @@ export default function Mat() {
                           disabled={publicando === grupo.eventoId}
                         >
                           <FaPaperPlane />
-                          {publicando === grupo.eventoId
-                            ? "Publicando..."
-                            : `Publicar resultados (${grupo.notas.length})`}
+                          <span>
+                            {publicando === grupo.eventoId
+                              ? "Publicando..."
+                              : `Publicar resultados (${grupo.notas.length})`}
+                          </span>
                         </PublishButton>
                       ))}
                   </EventoGroupHeader>

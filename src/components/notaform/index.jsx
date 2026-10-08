@@ -24,8 +24,6 @@ function handleMouseMove(e) {
   button.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
 }
 
-// O servidor só aceita alterações do placar vindas do matemático logado,
-// então o socket precisa se apresentar com o mesmo token das outras requisições.
 function obterToken() {
   const headers = getAuthHeaders();
   const authorization = headers.Authorization || headers.authorization || "";
@@ -34,6 +32,8 @@ function obterToken() {
 
 export default function NotaForm({ visible, nota, onClose, onSave }) {
   const socketRef = useRef(null);
+  const editando = Boolean(nota);
+
   const [alunos, setAlunos] = useState([]);
   const [buscaAluno, setBuscaAluno] = useState("");
   const [selectedAluno, setSelectedAluno] = useState("");
@@ -55,7 +55,7 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
   const TOLERANCE_END = 190;
 
   function pularPara(segundos) {
-    if (running) return;
+    if (running || editando) return;
     setStartTs(null);
     setRunning(false);
     setAccumulated(segundos);
@@ -64,6 +64,7 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
 
   useEffect(() => {
     if (!visible) return;
+
     const socket = io(API_URL, { auth: { token: obterToken() } });
     socketRef.current = socket;
 
@@ -88,22 +89,20 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
         const data = await res.json();
 
         if (!res.ok) {
-          throw new Error(
-            data.erro || "Não foi possível carregar os participantes."
-          );
+          throw new Error(data.erro || "Não foi possível carregar os participantes.");
         }
 
-        const participantes = Array.isArray(data)
-          ? data.map((participante) => ({
-              id: participante.usuarioId,
-              nome: participante.nome_poeta,
-              turma: participante.turma,
-              turno: participante.turno,
-              curso: participante.curso
-            }))
-          : [];
-
-        setAlunos(participantes);
+        setAlunos(
+          Array.isArray(data)
+            ? data.map((participante) => ({
+                id: participante.usuarioId,
+                nome: participante.nome_poeta,
+                turma: participante.turma,
+                turno: participante.turno,
+                curso: participante.curso
+              }))
+            : []
+        );
       } catch (err) {
         console.error(err);
         setAlunos([]);
@@ -123,9 +122,7 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
         const data = await res.json();
 
         if (!res.ok) {
-          throw new Error(
-            data.erro || "Não foi possível carregar os eventos."
-          );
+          throw new Error(data.erro || "Não foi possível carregar os eventos.");
         }
 
         setEventos(Array.isArray(data) ? data : []);
@@ -140,6 +137,8 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
     if (!visible) return;
 
     if (nota) {
+      const tempoSalvo = Number(nota.tempo) || 0;
+
       setSelectedAluno(String(nota.idAluno || ""));
       setSelectedEvento(String(nota.eventoId || ""));
       setNotes([
@@ -149,11 +148,19 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
         nota.n4 ?? "",
         nota.n5 ?? ""
       ]);
+      setRunning(false);
+      setStartTs(null);
+      setAccumulated(tempoSalvo);
+      setElapsed(tempoSalvo);
     } else {
       setSelectedAluno("");
       setSelectedEvento("");
       setBuscaEvento("");
       setNotes(["", "", "", "", ""]);
+      setRunning(false);
+      setStartTs(null);
+      setAccumulated(0);
+      setElapsed(0);
     }
 
     setBuscaAluno("");
@@ -161,10 +168,6 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
     setMostrarSugestoesEvento(false);
     setResultado(null);
     setError("");
-    setRunning(false);
-    setStartTs(null);
-    setAccumulated(0);
-    setElapsed(0);
   }, [visible, nota]);
 
   useEffect(() => {
@@ -179,10 +182,7 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
 
   const eventosFiltrados = eventos.filter((evento) => {
     if (!buscaEvento.trim()) return true;
-
-    return evento.nome
-      ?.toLowerCase()
-      .includes(buscaEvento.toLowerCase().trim());
+    return evento.nome?.toLowerCase().includes(buscaEvento.toLowerCase().trim());
   });
 
   const alunosFiltrados = alunos.filter((aluno) => {
@@ -233,6 +233,8 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
   }, [running, accumulated, startTs]);
 
   function startTimer() {
+    if (editando) return;
+
     if (running) {
       const current = accumulated + (Date.now() - startTs) / 1000;
       setAccumulated(current);
@@ -246,6 +248,8 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
   }
 
   function resetTimer() {
+    if (editando) return;
+
     setRunning(false);
     setStartTs(null);
     setAccumulated(0);
@@ -263,17 +267,12 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
   function computePenalty(seconds) {
     if (seconds <= TOLERANCE_END) return 0;
 
-    const blocks =
-      Math.floor((seconds - TOLERANCE_END - 1) / 10) + 1;
-
+    const blocks = Math.floor((seconds - TOLERANCE_END - 1) / 10) + 1;
     return blocks * 0.5;
   }
 
   const penalty = computePenalty(Math.floor(elapsed));
   const progress = Math.min(elapsed / LIMIT, 1);
-
-  // O placar só precisa do tempo em segundos inteiros: assim o servidor recebe
-  // uma atualização por segundo, e não uma a cada 50 ms enquanto o cronômetro roda.
   const tempoSegundos = Math.floor(elapsed);
 
   useEffect(() => {
@@ -306,9 +305,7 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
     setError("");
 
     if (elapsed <= 0) {
-      setError(
-        "Inicie e finalize o cronômetro antes de calcular o resultado."
-      );
+      setError("Inicie e finalize o cronômetro antes de calcular o resultado.");
       return;
     }
 
@@ -340,28 +337,17 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
       return;
     }
 
-    const indexed = values.map((value, index) => ({
-      value,
-      index
-    }));
-
+    const indexed = values.map((value, index) => ({ value, index }));
     const sorted = [...indexed].sort((a, b) => a.value - b.value);
     const min = sorted[0];
     const max = sorted[sorted.length - 1];
     const discarded = new Set([min.index, max.index]);
-
-    const kept = indexed.filter(
-      (item) => !discarded.has(item.index)
-    );
+    const kept = indexed.filter((item) => !discarded.has(item.index));
 
     const baseAverage =
-      kept.reduce((sum, item) => sum + item.value, 0) /
-      kept.length;
+      kept.reduce((sum, item) => sum + item.value, 0) / kept.length;
 
-    const finalScore = Math.max(
-      0,
-      baseAverage - penalty
-    );
+    const finalScore = Math.max(0, baseAverage - penalty);
 
     setResultado({
       values,
@@ -379,9 +365,7 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
     }
 
     if (elapsed <= 0) {
-      setError(
-        "O cronômetro precisa ter um tempo registrado antes de salvar."
-      );
+      setError("O cronômetro precisa ter um tempo registrado antes de salvar.");
       return;
     }
 
@@ -432,48 +416,45 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
       <CronometroPage>
         <TopBar>
           <div>
-            <Eyebrow>
-              Regulamento oficial · 3 min + 10s de tolerância
-            </Eyebrow>
+            <Eyebrow>Regulamento oficial · 3 min + 10s de tolerância</Eyebrow>
             <MainTitle>Cronômetro</MainTitle>
           </div>
 
-          <CloseButton
-            onClick={handleFechar}
-            onMouseMove={handleMouseMove}
-          >
+          <CloseButton onClick={handleFechar} onMouseMove={handleMouseMove}>
             <FaTimes />
           </CloseButton>
         </TopBar>
 
         <TimerCard>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: 8,
-              flexWrap: "wrap",
-              marginBottom: 18
-            }}
-          >
-            {[
-              { label: "Normal (do zero)", value: 0 },
-              { label: "Demo (começa em 1 min)", value: 60 },
-              { label: "Demo (começa em 3 min)", value: 180 }
-            ].map((opcao) => (
-              <DemoButton
-                key={opcao.value}
-                type="button"
-                disabled={running}
-                $selected={Math.floor(accumulated) === opcao.value}
-                onClick={() => pularPara(opcao.value)}
-                onMouseMove={handleMouseMove}
-              >
-                <span>{opcao.label}</span>
-              </DemoButton>
-            ))}
-          </div>
+          {!editando && (
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 8,
+                flexWrap: "wrap",
+                marginBottom: 18
+              }}
+            >
+              {[
+                { label: "Normal (do zero)", value: 0 },
+                { label: "Demo (começa em 1 min)", value: 60 },
+                { label: "Demo (começa em 3 min)", value: 180 }
+              ].map((opcao) => (
+                <DemoButton
+                  key={opcao.value}
+                  type="button"
+                  disabled={running}
+                  $selected={Math.floor(accumulated) === opcao.value}
+                  onClick={() => pularPara(opcao.value)}
+                  onMouseMove={handleMouseMove}
+                >
+                  <span>{opcao.label}</span>
+                </DemoButton>
+              ))}
+            </div>
+          )}
 
           <RingWrap>
             <RingSvg viewBox="0 0 220 220">
@@ -492,7 +473,6 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
               <TimeDisplay $penalty={elapsed > TOLERANCE_END}>
                 {formatTime(elapsed)}
               </TimeDisplay>
-
               <ZoneLabel $penalty={elapsed > TOLERANCE_END}>
                 {elapsed <= LIMIT
                   ? "dentro do tempo"
@@ -507,29 +487,27 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
             desconto: -{penalty.toFixed(1).replace(".", ",")} pontos
           </PenaltyBadge>
 
-          <TimerControls>
-            <TimerButton
-              onClick={startTimer}
-              onMouseMove={handleMouseMove}
-              $primary
-            >
-              {running ? <FaStop /> : <FaPlay />}
-              <span>{running ? "Parar" : "Iniciar"}</span>
-            </TimerButton>
+          {!editando && (
+            <TimerControls>
+              <TimerButton
+                onClick={startTimer}
+                onMouseMove={handleMouseMove}
+                $primary
+              >
+                {running ? <FaStop /> : <FaPlay />}
+                <span>{running ? "Parar" : "Iniciar"}</span>
+              </TimerButton>
 
-            <ResetButton
-              onClick={resetTimer}
-              onMouseMove={handleMouseMove}
-            >
-              <FaRedo />
-              <span>Zerar</span>
-            </ResetButton>
-          </TimerControls>
+              <ResetButton onClick={resetTimer} onMouseMove={handleMouseMove}>
+                <FaRedo />
+                <span>Zerar</span>
+              </ResetButton>
+            </TimerControls>
+          )}
         </TimerCard>
 
         <NotesCard>
           <SectionTitle>Notas dos jurados</SectionTitle>
-
           <SectionSub>
             Selecione o evento, o poeta e informe as 5 notas. A maior e a
             menor nota serão descartadas.
@@ -553,33 +531,22 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
               }}
               onFocus={() => setMostrarSugestoesEvento(true)}
               onBlur={() =>
-                setTimeout(
-                  () => setMostrarSugestoesEvento(false),
-                  150
-                )
+                setTimeout(() => setMostrarSugestoesEvento(false), 150)
               }
             />
 
             {mostrarSugestoesEvento && (
               <SuggestionsList>
                 {eventosFiltrados.length === 0 ? (
-                  <SuggestionEmpty>
-                    Nenhum evento encontrado.
-                  </SuggestionEmpty>
+                  <SuggestionEmpty>Nenhum evento encontrado.</SuggestionEmpty>
                 ) : (
                   eventosFiltrados.map((evento) => (
                     <SuggestionItem
                       key={evento.id}
                       type="button"
-                      $selected={
-                        String(evento.id) ===
-                        String(selectedEvento)
-                      }
+                      $selected={String(evento.id) === String(selectedEvento)}
                       onMouseDown={() =>
-                        handleEventoChange(
-                          String(evento.id),
-                          evento.nome
-                        )
+                        handleEventoChange(String(evento.id), evento.nome)
                       }
                       onMouseMove={handleMouseMove}
                     >
@@ -616,14 +583,9 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
                 setSelectedAluno("");
                 setMostrarSugestoes(true);
               }}
-              onFocus={() =>
-                selectedEvento && setMostrarSugestoes(true)
-              }
+              onFocus={() => selectedEvento && setMostrarSugestoes(true)}
               onBlur={() =>
-                setTimeout(
-                  () => setMostrarSugestoes(false),
-                  150
-                )
+                setTimeout(() => setMostrarSugestoes(false), 150)
               }
             />
 
@@ -638,10 +600,7 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
                     <SuggestionItem
                       key={aluno.id}
                       type="button"
-                      $selected={
-                        String(aluno.id) ===
-                        String(selectedAluno)
-                      }
+                      $selected={String(aluno.id) === String(selectedAluno)}
                       onMouseDown={() => {
                         setSelectedAluno(String(aluno.id));
                         setBuscaAluno(aluno.nome);
@@ -651,9 +610,7 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
                     >
                       <span>
                         {aluno.nome}
-                        {aluno.turma
-                          ? ` — ${aluno.turma}`
-                          : ""}
+                        {aluno.turma ? ` — ${aluno.turma}` : ""}
                       </span>
                     </SuggestionItem>
                   ))
@@ -663,16 +620,13 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
           </AutocompleteWrapper>
 
           {!selectedAluno && buscaAluno.trim() && (
-            <ErrorMessage>
-              Selecione um poeta da lista de sugestões.
-            </ErrorMessage>
+            <ErrorMessage>Selecione um poeta da lista de sugestões.</ErrorMessage>
           )}
 
           <NotesGrid>
             {notes.map((value, index) => (
               <NoteField key={index}>
                 <NoteLabel>Jurado {index + 1}</NoteLabel>
-
                 <NoteInput
                   type="number"
                   min="0"
@@ -680,9 +634,7 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
                   step="0.1"
                   inputMode="decimal"
                   value={value}
-                  onChange={(e) =>
-                    handleNoteChange(index, e.target.value)
-                  }
+                  onChange={(e) => handleNoteChange(index, e.target.value)}
                 />
               </NoteField>
             ))}
@@ -708,7 +660,6 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
         {resultado && (
           <ResultsCard>
             <SectionTitle>Resultado</SectionTitle>
-
             <SectionSub>
               Tempo do poeta: {formatTime(elapsed)}
               {resultado.penalty > 0
@@ -727,25 +678,13 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
 
               <tbody>
                 {resultado.values.map((value, index) => {
-                  const isDiscarded =
-                    resultado.discarded.has(index);
+                  const isDiscarded = resultado.discarded.has(index);
 
                   return (
-                    <ResultsRow
-                      key={index}
-                      $discarded={isDiscarded}
-                    >
+                    <ResultsRow key={index} $discarded={isDiscarded}>
                       <td>Jurado {index + 1}</td>
-                      <td>
-                        {value
-                          .toFixed(1)
-                          .replace(".", ",")}
-                      </td>
-                      <td>
-                        {isDiscarded && (
-                          <Tag>Descartada</Tag>
-                        )}
-                      </td>
+                      <td>{value.toFixed(1).replace(".", ",")}</td>
+                      <td>{isDiscarded && <Tag>Descartada</Tag>}</td>
                     </ResultsRow>
                   );
                 })}
@@ -756,18 +695,14 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
               <SummaryRow>
                 <span>Média das 3 notas válidas</span>
                 <SummaryValue>
-                  {resultado.baseAverage
-                    .toFixed(2)
-                    .replace(".", ",")}
+                  {resultado.baseAverage.toFixed(2).replace(".", ",")}
                 </SummaryValue>
               </SummaryRow>
 
               <SummaryRow>
                 <span>Desconto por tempo</span>
                 <SummaryValue $penalty>
-                  -{resultado.penalty
-                    .toFixed(1)
-                    .replace(".", ",")}
+                  -{resultado.penalty.toFixed(1).replace(".", ",")}
                 </SummaryValue>
               </SummaryRow>
             </Summary>
@@ -775,9 +710,7 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
             <FinalRow>
               <FinalLabel>Nota final</FinalLabel>
               <FinalValue>
-                {resultado.finalScore
-                  .toFixed(2)
-                  .replace(".", ",")}
+                {resultado.finalScore.toFixed(2).replace(".", ",")}
               </FinalValue>
             </FinalRow>
 
@@ -786,11 +719,7 @@ export default function NotaForm({ visible, nota, onClose, onSave }) {
               onMouseMove={handleMouseMove}
               disabled={salvando}
             >
-              <span>
-                {salvando
-                  ? "Salvando..."
-                  : "Salvar nota"}
-              </span>
+              <span>{salvando ? "Salvando..." : "Salvar nota"}</span>
             </SaveButton>
           </ResultsCard>
         )}

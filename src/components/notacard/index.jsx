@@ -28,9 +28,7 @@ export default function NotaCard({ nota, onEdit, onDelete }) {
   return (
     <Card>
       <Content>
-        <Aluno>
-          {nota.nomeAluno || "Poeta não encontrado"}
-        </Aluno>
+        <Aluno>{nota.nomeAluno || "Poeta não encontrado"}</Aluno>
 
         {nota.eventoNome && (
           <NotaItem>
@@ -74,25 +72,17 @@ export default function NotaCard({ nota, onEdit, onDelete }) {
 
           <NotaItem>
             <Label>Nota final</Label>
-            <Media $aprovado={aprovado}>
-              {notaFinal.toFixed(1)}
-            </Media>
+            <Media $aprovado={aprovado}>{notaFinal.toFixed(1)}</Media>
           </NotaItem>
         </Notas>
       </Content>
 
       <Actions>
-        <EditButton
-          onClick={() => onEdit(nota)}
-          onMouseMove={handleMouseMove}
-        >
+        <EditButton onClick={() => onEdit(nota)} onMouseMove={handleMouseMove}>
           <FaEdit />
         </EditButton>
 
-        <DeleteButton
-          onClick={() => onDelete(nota.id)}
-          onMouseMove={handleMouseMove}
-        >
+        <DeleteButton onClick={() => onDelete(nota.id)} onMouseMove={handleMouseMove}>
           <FaTrash />
         </DeleteButton>
       </Actions>

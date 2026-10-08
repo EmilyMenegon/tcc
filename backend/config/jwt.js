@@ -1,19 +1,44 @@
 import jwt from "jsonwebtoken";
+import fs from "node:fs";
+import path from "node:path";
+import crypto from "node:crypto";
 
-// Carrega o arquivo .env (Node 20.12+). Se não existir, a checagem abaixo avisa.
-try {
-  process.loadEnvFile();
-} catch {
-  // sem .env
-}
+// A chave de login é criada sozinha na primeira vez que o servidor sobe e
+// fica guardada em backend/.jwt-secret (esse arquivo está no .gitignore).
+const ARQUIVO_CHAVE = path.join(import.meta.dirname, "..", ".jwt-secret");
 
-export const JWT_SECRET = process.env.JWT_SECRET;
+function obterSegredo() {
+  // Opcional: se existir JWT_SECRET num .env, ele tem prioridade.
+  try {
+    process.loadEnvFile();
+  } catch {
+    // sem .env: tudo bem
+  }
 
-if (!JWT_SECRET || JWT_SECRET.length < 32) {
-  throw new Error(
-    "Defina JWT_SECRET (mínimo 32 caracteres) no arquivo .env do back-end."
+  if (process.env.JWT_SECRET && process.env.JWT_SECRET.length >= 32) {
+    return process.env.JWT_SECRET;
+  }
+
+  try {
+    const salva = fs.readFileSync(ARQUIVO_CHAVE, "utf8").trim();
+
+    if (salva.length >= 32) return salva;
+  } catch {
+    // ainda não existe
+  }
+
+  const nova = crypto.randomBytes(48).toString("hex");
+
+  fs.writeFileSync(ARQUIVO_CHAVE, nova, { mode: 0o600 });
+
+  console.log(
+    "Chave de login criada automaticamente em backend/.jwt-secret (não envie ao GitHub)."
   );
+
+  return nova;
 }
+
+export const JWT_SECRET = obterSegredo();
 
 export function gerarToken(payload) {
   return jwt.sign(payload, JWT_SECRET, {

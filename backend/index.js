@@ -2,8 +2,7 @@ import express from "express";
 import cors from "cors";
 import http from "http";
 import { Server } from "socket.io";
-import rateLimit from "express-rate-limit";
-import { verificarToken } from "./middlewares/auth.js"; // também carrega o .env
+import { verificarToken } from "./middlewares/auth.js";
 import authRoutes from "./routes/authRoutes.js";
 import tabelasRoutes from "./routes/tabelasRoutes.js";
 import perfilRoutes from "./routes/perfilRoutes.js";
@@ -18,45 +17,82 @@ const app = express();
 const server = http.createServer(app);
 
 /*
- * Endereços do front-end que podem falar com o back-end.
- * Se o front rodar em outro endereço (outra porta, ou o IP da rede para
- * abrir o placar em outro computador), coloque no .env separado por vírgula:
+ * Quem pode falar com o back-end (CORS).
  *
- * FRONT_URL=http://localhost:5173,http://192.168.0.10:5173
+ * Já funcionam, sem configurar nada:
+ *  - localhost / 127.0.0.1 em qualquer porta;
+ *  - endereços da rede local (192.168.x.x, 10.x.x.x, 172.16-31.x.x), para
+ *    abrir o placar em outro computador na mesma rede.
+ *
+ * Se precisar liberar outro endereço, crie um arquivo .env no backend com:
+ * FRONT_URL=https://meusite.com
  */
-const ORIGENS_PERMITIDAS = (process.env.FRONT_URL || "http://localhost:5173")
+const ORIGENS_EXTRAS = (process.env.FRONT_URL || "")
   .split(",")
-  .map((origem) => origem.trim());
+  .map((origem) => origem.trim())
+  .filter(Boolean);
 
-const io = new Server(server, {
-  cors: { origin: ORIGENS_PERMITIDAS },
-});
+const ORIGEM_LOCAL =
+  /^https?:\/\/(localhost|127\.0\.0\.1|192\.168\.\d{1,3}\.\d{1,3}|10\.\d{1,3}\.\d{1,3}\.\d{1,3}|172\.(1[6-9]|2\d|3[01])\.\d{1,3}\.\d{1,3})(:\d+)?$/;
 
-app.use(cors({ origin: ORIGENS_PERMITIDAS }));
+function origemPermitida(origem) {
+  if (!origem) return true; // chamadas sem Origin (ex.: mesma origem)
+  return ORIGEM_LOCAL.test(origem) || ORIGENS_EXTRAS.includes(origem);
+}
+
+const opcoesCors = {
+  origin: (origem, callback) => callback(null, origemPermitida(origem)),
+};
+
+const io = new Server(server, { cors: opcoesCors });
+
+app.use(cors(opcoesCors));
 
 /* ---------- Limite de tentativas ---------- */
 
-const mensagemLimite = {
-  erro: "Muitas tentativas. Aguarde alguns minutos e tente de novo.",
-};
+/*
+ * Limite de requisições por IP (feito aqui mesmo, sem instalar pacote).
+ * Exemplo: criarLimite(15 * 60 * 1000, 100) = 100 requisições a cada 15 min.
+ */
+function criarLimite(janelaMs, maximo) {
+  const acessos = new Map();
 
-// Login e cadastro (limite mais alto: vários alunos podem usar a mesma rede da escola)
-const limiteLogin = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  limit: 100,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: mensagemLimite,
-});
+  // limpa os registros vencidos de tempos em tempos
+  setInterval(() => {
+    const agora = Date.now();
+
+    for (const [ip, registro] of acessos) {
+      if (registro.reinicia <= agora) acessos.delete(ip);
+    }
+  }, janelaMs).unref();
+
+  return (req, res, next) => {
+    const agora = Date.now();
+
+    let registro = acessos.get(req.ip);
+
+    if (!registro || registro.reinicia <= agora) {
+      registro = { total: 0, reinicia: agora + janelaMs };
+      acessos.set(req.ip, registro);
+    }
+
+    registro.total += 1;
+
+    if (registro.total > maximo) {
+      return res.status(429).json({
+        erro: "Muitas tentativas. Aguarde alguns minutos e tente de novo.",
+      });
+    }
+
+    next();
+  };
+}
+
+// Login e cadastro (limite mais alto: vários alunos usam a mesma rede da escola)
+const limiteLogin = criarLimite(15 * 60 * 1000, 100);
 
 // Recuperação de senha
-const limiteCodigo = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  limit: 20,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: mensagemLimite,
-});
+const limiteCodigo = criarLimite(15 * 60 * 1000, 20);
 
 app.use(["/login", "/cadastro"], limiteLogin);
 app.use(
@@ -82,14 +118,15 @@ app.get("/", (req, res) => {
 });
 
 /*
- * As páginas /tabelas mostram o banco inteiro. Ficam desligadas por padrão.
- * Para usar durante o desenvolvimento, coloque no .env:
+ * As páginas /tabelas mostram o banco inteiro. Elas só abrem na própria
+ * máquina do servidor (veja tabelasRoutes.js).
  *
- * HABILITAR_TABELAS=true
+ * Para desligar de vez (ex.: ao publicar o site num servidor), crie um
+ * arquivo .env no backend com:
  *
- * Mesmo ligadas, só abrem na própria máquina do servidor.
+ * HABILITAR_TABELAS=false
  */
-if (process.env.HABILITAR_TABELAS === "true") {
+if (process.env.HABILITAR_TABELAS !== "false") {
   app.use(tabelasRoutes);
 }
 
@@ -128,7 +165,7 @@ let aoVivo = {
  * Qualquer pessoa (ex.: a TV) pode se conectar e ASSISTIR.
  * Só o matemático logado consegue ALTERAR o placar.
  *
- * No front do matemático, conecte enviando o token:
+ * No front do matemático, a conexão envia o token:
  *   io(API_URL, { auth: { token } })
  */
 io.use((socket, next) => {

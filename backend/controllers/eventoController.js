@@ -145,25 +145,14 @@ export function excluirEvento(req, res) {
   }
 
   try {
-    /*
-     * Primeiro remove os participantes vinculados ao evento.
-     */
     db.prepare(
       "DELETE FROM participantes_evento WHERE evento_id = ?"
     ).run(id);
 
-    /*
-     * Remove também as notas daquele evento.
-     */
     db.prepare(
       "DELETE FROM notas WHERE evento_id = ?"
     ).run(id);
 
-    /*
-     * O evento antigo também poderia estar gravado em
-     * usuario.evento_id. Limpamos para manter compatibilidade
-     * com bancos antigos.
-     */
     db.prepare(
       "UPDATE usuario SET evento_id = NULL WHERE evento_id = ?"
     ).run(id);
@@ -196,10 +185,8 @@ export function listarParticipantes(req, res) {
         i.turno,
         i.curso
       FROM participantes_evento pe
-      JOIN usuario u
-        ON u.id = pe.usuario_id
-      JOIN inscricoes i
-        ON i.id_inscricoes = u.inscricao_id
+      JOIN usuario u ON u.id = pe.usuario_id
+      JOIN inscricoes i ON i.id_inscricoes = u.inscricao_id
       WHERE u.tipo_usuario = 'poeta'
         AND pe.evento_id = ?
       ORDER BY i.nome_poeta
@@ -214,7 +201,7 @@ export function definirParticipantes(req, res) {
   const { usuarioIds } = req.body;
 
   const eventoExistente = db
-    .prepare("SELECT * FROM evento WHERE id_evento = ?")
+    .prepare("SELECT id_evento FROM evento WHERE id_evento = ?")
     .get(id);
 
   if (!eventoExistente) {
@@ -230,34 +217,55 @@ export function definirParticipantes(req, res) {
   }
 
   try {
-    /*
-     * Remove somente os participantes DESTE evento.
-     *
-     * Isso é diferente do sistema antigo.
-     *
-     * Se João estiver:
-     *
-     * Evento 1
-     * Evento 2
-     *
-     * e estivermos editando o Evento 2,
-     * remover João do Evento 2 NÃO remove João do Evento 1.
-     */
+    const poetasComNota = db
+      .prepare(`
+        SELECT DISTINCT usuario_id
+        FROM notas
+        WHERE evento_id = ?
+      `)
+      .all(id)
+      .map((nota) => Number(nota.usuario_id));
+
+    const participantesAtuais = db
+      .prepare(`
+        SELECT usuario_id
+        FROM participantes_evento
+        WHERE evento_id = ?
+      `)
+      .all(id)
+      .map((participante) => Number(participante.usuario_id));
+
+    const idsEnviados = [
+      ...new Set(usuarioIds.map(Number)),
+    ];
+
+    const removidosComNota = participantesAtuais.filter(
+      (usuarioId) =>
+        poetasComNota.includes(usuarioId) &&
+        !idsEnviados.includes(usuarioId)
+    );
+
+    if (removidosComNota.length > 0) {
+      return res.status(400).json({
+        erro: "Não é possível remover poetas que já possuem notas neste evento.",
+      });
+    }
+
     db.prepare(
       "DELETE FROM participantes_evento WHERE evento_id = ?"
     ).run(id);
 
-    if (usuarioIds.length > 0) {
-      const placeholders = usuarioIds.map(() => "?").join(", ");
+    if (idsEnviados.length > 0) {
+      const placeholders = idsEnviados.map(() => "?").join(", ");
 
-      db.prepare(
-        `INSERT OR IGNORE INTO participantes_evento
-         (usuario_id, evento_id)
-         SELECT id, ?
-         FROM usuario
-         WHERE id IN (${placeholders})
-           AND tipo_usuario = 'poeta'`
-      ).run(id, ...usuarioIds);
+      db.prepare(`
+        INSERT OR IGNORE INTO participantes_evento
+          (usuario_id, evento_id)
+        SELECT id, ?
+        FROM usuario
+        WHERE id IN (${placeholders})
+          AND tipo_usuario = 'poeta'
+      `).run(id, ...idsEnviados);
     }
 
     res.json({
